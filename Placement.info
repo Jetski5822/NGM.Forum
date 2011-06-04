@@ -1,0 +1,33 @@
+﻿<Placement>
+    <!-- widget and edit shapes just get default placement -->
+    <!-- edit "shapes" -->
+    <!-- widgets -->
+    <!-- default positioning -->
+    <Match ContentType="Forum">
+      <Match DisplayType="Detail">
+        <Place Parts_Forums_Thread_List="Content"
+               Parts_Forums_Forum_Manage="Content:before"/>
+      </Match>
+      <Match DisplayType="Summary">
+        <Place Parts_Forums_Forum_ThreadCount="Meta:3"
+               Parts_Forums_Forum_PostCount="Meta:3"/>
+      </Match>
+    </Match>
+
+  <Match ContentType="Thread">
+    <Place Parts_Threads_Post_List="Content"/>
+
+    <Match DisplayType="Detail">
+      <Place Parts_Threads_Thread_Manage="Meta:3"/>
+    </Match>  
+    <Match DisplayType="Summary">
+      <Place Parts_Threads_Thread_PostCount="Meta:3"/>
+    </Match>
+  </Match>
+  
+  <Match ContentType="Post">
+    <Match DisplayType="Detail">
+      <Place Parts_Posts_Post_Manage="Meta:3"/>
+    </Match>
+  </Match>
+</Placement>

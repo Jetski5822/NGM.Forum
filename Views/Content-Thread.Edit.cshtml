@@ -1,0 +1,17 @@
+<div class="edit-item">
+    <div class="edit-item-primary">
+        @if (Model.Thread != null && Model.Thread.Content != null) {
+            <div class="edit-item-content">
+                @Display(Model.Thread.Content)
+            </div>
+        }
+    </div>
+    <div class="edit-item-secondary group">
+        @if (Model.Thread != null && Model.Thread.Actions != null) {
+            <div class="edit-item-actions">
+                @Display(Model.Thread.Actions)
+            </div>
+        }
+    </div>
+</div>
+@Display(Model.Post)

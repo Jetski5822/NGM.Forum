@@ -1,0 +1,10 @@
+﻿Name: Forum
+AntiForgery: enabled
+Author: Nicholas Mayne
+Website: https://github.com/Jetski5822/Orchard-Forum
+Version: 0.0.1
+OrchardVersion: 1.1.30
+Description: Introduces a forum module
+FeatureDescription: A basic forum module
+Dependencies: Contents
+Category: Content

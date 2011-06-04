@@ -1,0 +1,7 @@
+@{ Layout.Title = T("New Thread").ToString(); }
+
+@using (Html.BeginFormAntiForgeryPost()) {
+    @Html.ValidationSummary()
+    <p>Inside of Thread Create View</p>
+    @Display(Model)
+}
