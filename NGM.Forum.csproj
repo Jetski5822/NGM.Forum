@@ -156,9 +156,6 @@
     <Content Include="Views\Parts.Posts.Post.Manage.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Content-Thread.Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Views\Items\" />
   </ItemGroup>
   <ItemGroup>
