@@ -76,7 +76,6 @@
     <Compile Include="Services\PostService.cs" />
     <Compile Include="Services\ThreadService.cs" />
     <Compile Include="Shapes.cs" />
-    <Compile Include="ViewModels\PostEditorViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Module.txt" />

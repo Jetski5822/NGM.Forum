@@ -1,19 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Web.Mvc;
 using NGM.Forum.Extensions;
 using NGM.Forum.Models;
 using NGM.Forum.Routing;
 using NGM.Forum.Services;
-using NGM.Forum.ViewModels;
 using Orchard;
 using Orchard.ContentManagement;
-using Orchard.ContentManagement.Aspects;
-using Orchard.ContentManagement.Handlers;
-using Orchard.ContentManagement.MetaData.Builders;
-using Orchard.Core.Common.Fields;
 using Orchard.Core.Common.Models;
-using Orchard.Core.Routable.Models;
 using Orchard.DisplayManagement;
 using Orchard.Localization;
 using Orchard.Mvc;
@@ -82,7 +75,7 @@ namespace NGM.Forum.Controllers {
 
             var thread = _orchardServices.ContentManager.New<ThreadPart>("Thread");
             thread.ForumPart = forum;
-
+            
             _orchardServices.ContentManager.Create(thread, VersionOptions.Draft);
             var model = _orchardServices.ContentManager.UpdateEditor(thread, this);
 

@@ -38,6 +38,7 @@ namespace NGM.Forum {
                     .WithPart("ThreadPart")
                     .WithPart("CommonPart")
                     .WithPart("RoutePart")
+                    .WithPart("BodyPart")
                 );
 
             ContentDefinitionManager.AlterTypeDefinition("Post",
