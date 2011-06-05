@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using NGM.Forum.Extensions;
 using NGM.Forum.Models;
-using NGM.Forum.Routing;
-using NGM.Forum.Services;
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.DisplayManagement;
 using Orchard.Localization;
-using Orchard.Settings;
 using Orchard.Themes;
 using Orchard.UI.Notify;
 
@@ -20,25 +13,10 @@ namespace NGM.Forum.Controllers {
     [ValidateInput(false)]
     public class PostController : Controller, IUpdateModel {
         private readonly IOrchardServices _orchardServices;
-        private readonly IForumService _forumService;
-        private readonly IForumPathConstraint _forumPathConstraint;
-        private readonly IThreadService _threadService;
-        private readonly IPostService _postService;
-        private readonly ISiteService _siteService;
 
         public PostController(IOrchardServices orchardServices, 
-            IForumService forumService,
-            IForumPathConstraint forumPathConstraint,
-            IThreadService threadService,
-            IPostService postService,
-            ISiteService siteService,
             IShapeFactory shapeFactory) {
             _orchardServices = orchardServices;
-            _forumService = forumService;
-            _forumPathConstraint = forumPathConstraint;
-            _threadService = threadService;
-            _postService = postService;
-            _siteService = siteService;
 
             T = NullLocalizer.Instance;
             Shape = shapeFactory;
