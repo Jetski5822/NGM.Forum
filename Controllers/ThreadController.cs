@@ -6,6 +6,7 @@ using NGM.Forum.Routing;
 using NGM.Forum.Services;
 using Orchard;
 using Orchard.ContentManagement;
+using Orchard.ContentManagement.Aspects;
 using Orchard.Core.Common.Models;
 using Orchard.DisplayManagement;
 using Orchard.Localization;
@@ -85,6 +86,7 @@ namespace NGM.Forum.Controllers {
             }
 
             _orchardServices.ContentManager.Publish(thread.ContentItem);
+            _forumPathConstraint.AddPath(thread.As<IRoutableAspect>().Path);
 
             _orchardServices.Notifier.Information(T("Your {0} has been created.", thread.TypeDefinition.DisplayName));
             return Redirect(Url.ViewThread(thread));
