@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using NGM.Forum.Models;
@@ -17,6 +18,8 @@ namespace NGM.Forum.Services {
         IEnumerable<ThreadPart> Get(ForumPart forumPart, VersionOptions versionOptions);
         IEnumerable<ThreadPart> Get(ForumPart forumPart, int skip, int count);
         IEnumerable<ThreadPart> Get(ForumPart forumPart, int skip, int count, VersionOptions versionOptions);
+
+        void CloseThread(ThreadPart threadPart);
     }
 
     [UsedImplicitly]
@@ -53,6 +56,10 @@ namespace NGM.Forum.Services {
 
         public IEnumerable<ThreadPart> Get(ForumPart forumPart, int skip, int count, VersionOptions versionOptions) {
             return GetForumQuery(forumPart, versionOptions).Slice(skip, count).ToList().Select(ci => ContentExtensions.As<ThreadPart>(ci));
+        }
+
+        public void CloseThread(ThreadPart threadPart) {
+            threadPart.IsClosed = true;
         }
 
         private IContentQuery<ContentItem, CommonPartRecord> GetForumQuery(ContentPart<ForumPartRecord> forum, VersionOptions versionOptions) {

@@ -7,11 +7,11 @@ using Orchard.Core.Routable.Services;
 namespace NGM.Forum.Extensions {
     public static class UrlHelperExtensions {
         public static string ForumForAdmin(this UrlHelper urlHelper, ForumPart forumPart) {
-            return urlHelper.Action("Item", "ForumAdmin", new { forumId = forumPart.Id, area = "NGM.Forum" });
+            return urlHelper.Action("Item", "ForumAdmin", new { forumId = forumPart.Id, area = Constants.LocalArea });
         }
 
         public static string ForumCreate(this UrlHelper urlHelper) {
-            return urlHelper.Action("Create", "ForumAdmin", new { area = "NGM.Forum" });
+            return urlHelper.Action("Create", "ForumAdmin", new { area = Constants.LocalArea });
         }
 
         public static string ViewThread(this UrlHelper urlHelper, ThreadPart threadPart) {
@@ -19,11 +19,19 @@ namespace NGM.Forum.Extensions {
         }
 
         public static string CreateThread(this UrlHelper urlHelper, ForumPart forumPart) {
-            return urlHelper.Action("Create", "Thread", new { forumId = forumPart.Id, area = "NGM.Forum" });
+            return urlHelper.Action("Create", "Thread", new { forumId = forumPart.Id, area = Constants.LocalArea });
         }
 
         public static string ReplyPost(this UrlHelper urlHelper, IContent content) {
-            return urlHelper.Action("Create", "Post", new { contentId  = content.Id, area = "NGM.Forum" });
+            return urlHelper.Action("Create", "Post", new { contentId = content.Id, area = Constants.LocalArea });
+        }
+
+        public static string ReplyThread(this UrlHelper urlHelper, ThreadPart threadPart) {
+            return ReplyPost(urlHelper, threadPart);
+        }
+
+        public static string CloseThread(this UrlHelper urlHelper, ThreadPart threadPart) {
+            return urlHelper.Action("Close", "Thread", new { threadId = threadPart.Id, area = Constants.LocalArea });
         }
     }
 }

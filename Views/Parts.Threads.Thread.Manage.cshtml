@@ -1,8 +1,16 @@
 ﻿@using NGM.Forum.Extensions
 @using NGM.Forum.Models
+@{
+    var threadPart = (ThreadPart)Model.ContentPart;
+}
 
 <div class="item-properties actions">
   <p>
-    <a href="@Url.ReplyPost((Orchard.ContentManagement.IContent)Model.ContentPart.ContentItem)" class="create">@T("Reply")</a>
+    @if (!threadPart.IsClosed) {
+        <a href="@Url.ReplyThread(threadPart)" class="create">@T("Reply")</a>
+    }
+    @else (AuthorizedFor(NGM.Forum.Permissions.CloseThread)) {
+        <a href="@Url.CloseThread(threadPart)" class="close">@T("Close")</a>
+    }
   </p>
 </div>

@@ -7,7 +7,6 @@ using NGM.Forum.Services;
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
-using Orchard.Core.Common.Models;
 using Orchard.DisplayManagement;
 using Orchard.Localization;
 using Orchard.Mvc;
@@ -89,6 +88,19 @@ namespace NGM.Forum.Controllers {
             _forumPathConstraint.AddPath(thread.As<IRoutableAspect>().Path);
 
             _orchardServices.Notifier.Information(T("Your {0} has been created.", thread.TypeDefinition.DisplayName));
+            return Redirect(Url.ViewThread(thread));
+        }
+
+        public ActionResult Close(int threadId) {
+            if (!_orchardServices.Authorizer.Authorize(Permissions.CloseThread, T("Couldn't close thread")))
+                return new HttpUnauthorizedResult();
+
+            var thread = _threadService.Get(threadId, VersionOptions.Latest).As<ThreadPart>();
+            if (thread == null)
+                return HttpNotFound();
+
+            _threadService.CloseThread(thread);
+
             return Redirect(Url.ViewThread(thread));
         }
 

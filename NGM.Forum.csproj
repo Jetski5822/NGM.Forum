@@ -55,6 +55,7 @@
     <Compile Include="Drivers\PostPartDriver.cs" />
     <Compile Include="Drivers\ThreadPartDriver.cs" />
     <Compile Include="Drivers\ForumPartDriver.cs" />
+    <Compile Include="Extensions\Constants.cs" />
     <Compile Include="Handlers\PostPartHandler.cs" />
     <Compile Include="Handlers\ForumPartHandler.cs" />
     <Compile Include="Handlers\ThreadPartHandler.cs" />
