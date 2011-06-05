@@ -8,6 +8,7 @@ namespace NGM.Forum {
             SchemaBuilder.CreateTable("ForumPartRecord",
                 table => table
                     .ContentPartRecord()
+                    .Column<bool>("IsClosed")
                     .Column<int>("ThreadCount")
                     .Column<int>("PostCount")
                 );

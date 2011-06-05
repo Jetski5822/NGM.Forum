@@ -20,6 +20,7 @@ namespace NGM.Forum.Services {
         IEnumerable<ThreadPart> Get(ForumPart forumPart, int skip, int count, VersionOptions versionOptions);
 
         void CloseThread(ThreadPart threadPart);
+        void OpenThread(ThreadPart threadPart);
     }
 
     [UsedImplicitly]
@@ -60,6 +61,10 @@ namespace NGM.Forum.Services {
 
         public void CloseThread(ThreadPart threadPart) {
             threadPart.IsClosed = true;
+        }
+
+        public void OpenThread(ThreadPart threadPart) {
+            threadPart.IsClosed = false;
         }
 
         private IContentQuery<ContentItem, CommonPartRecord> GetForumQuery(ContentPart<ForumPartRecord> forum, VersionOptions versionOptions) {

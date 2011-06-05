@@ -11,5 +11,10 @@ namespace NGM.Forum.Models {
             get { return Record.PostCount; }
             set { Record.PostCount = value; }
         }
+
+        public bool IsClosed {
+            get { return Record.IsClosed; }
+            set { Record.IsClosed = value; }
+        }
     }
 }

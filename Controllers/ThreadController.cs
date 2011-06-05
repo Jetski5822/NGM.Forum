@@ -104,6 +104,19 @@ namespace NGM.Forum.Controllers {
             return Redirect(Url.ViewThread(thread));
         }
 
+        public ActionResult Open(int threadId) {
+            if (!_orchardServices.Authorizer.Authorize(Permissions.OpenThread, T("Couldn't open thread")))
+                return new HttpUnauthorizedResult();
+
+            var thread = _threadService.Get(threadId, VersionOptions.Latest).As<ThreadPart>();
+            if (thread == null)
+                return HttpNotFound();
+
+            _threadService.OpenThread(thread);
+
+            return Redirect(Url.ViewThread(thread));
+        }
+
         public ActionResult Item(string forumPath, string threadSlug, PagerParameters pagerParameters) {
             if (!_orchardServices.Authorizer.Authorize(StandardPermissions.AccessFrontEnd, T("Couldn't view thread")))
                 return new HttpUnauthorizedResult();

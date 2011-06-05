@@ -30,8 +30,20 @@ namespace NGM.Forum.Extensions {
             return ReplyPost(urlHelper, threadPart);
         }
 
+        public static string OpenThread(this UrlHelper urlHelper, ThreadPart threadPart) {
+            return urlHelper.Action("Open", "Thread", new { threadId = threadPart.Id, area = Constants.LocalArea });
+        }
+
         public static string CloseThread(this UrlHelper urlHelper, ThreadPart threadPart) {
             return urlHelper.Action("Close", "Thread", new { threadId = threadPart.Id, area = Constants.LocalArea });
+        }
+
+        public static string OpenForum(this UrlHelper urlHelper, ForumPart forumPart) {
+            return urlHelper.Action("Open", "Forum", new { forumId = forumPart.Id, area = Constants.LocalArea });
+        }
+
+        public static string CloseForum(this UrlHelper urlHelper, ForumPart forumPart) {
+            return urlHelper.Action("Close", "Forum", new { forumId = forumPart.Id, area = Constants.LocalArea });
         }
     }
 }

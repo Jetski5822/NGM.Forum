@@ -2,7 +2,7 @@
   <Match ContentType="Forum">
     <Match DisplayType="Detail">
       <Place Parts_Forums_Thread_List="Content"
-             Parts_Forums_Forum_Manage="Content:before"/>
+             Parts_Forums_Forum_Manage="Meta:3"/>
     </Match>
     <Match DisplayType="Summary">
       <Place Parts_Forums_Forum_ThreadCount="Meta:3"
