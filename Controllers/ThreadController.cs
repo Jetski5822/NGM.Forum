@@ -92,7 +92,7 @@ namespace NGM.Forum.Controllers {
         }
 
         public ActionResult Close(int threadId) {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.CloseThread, T("Couldn't close thread")))
+            if (!_orchardServices.Authorizer.Authorize(Permissions.CloseThread, T("Not allowed to close thread")))
                 return new HttpUnauthorizedResult();
 
             var thread = _threadService.Get(threadId, VersionOptions.Latest).As<ThreadPart>();
@@ -105,7 +105,7 @@ namespace NGM.Forum.Controllers {
         }
 
         public ActionResult Open(int threadId) {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.OpenThread, T("Couldn't open thread")))
+            if (!_orchardServices.Authorizer.Authorize(Permissions.OpenThread, T("Not allowed to open thread")))
                 return new HttpUnauthorizedResult();
 
             var thread = _threadService.Get(threadId, VersionOptions.Latest).As<ThreadPart>();
@@ -118,7 +118,7 @@ namespace NGM.Forum.Controllers {
         }
 
         public ActionResult Item(string forumPath, string threadSlug, PagerParameters pagerParameters) {
-            if (!_orchardServices.Authorizer.Authorize(StandardPermissions.AccessFrontEnd, T("Couldn't view thread")))
+            if (!_orchardServices.Authorizer.Authorize(StandardPermissions.AccessFrontEnd, T("Not allowed to view thread")))
                 return new HttpUnauthorizedResult();
 
             Pager pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
