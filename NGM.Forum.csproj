@@ -56,6 +56,7 @@
     <Compile Include="Drivers\ThreadPartDriver.cs" />
     <Compile Include="Drivers\ForumPartDriver.cs" />
     <Compile Include="Extensions\Constants.cs" />
+    <Compile Include="Extensions\ContentTypeConstants.cs" />
     <Compile Include="Handlers\PostPartHandler.cs" />
     <Compile Include="Handlers\ForumPartHandler.cs" />
     <Compile Include="Handlers\ThreadPartHandler.cs" />
@@ -155,9 +156,7 @@
   <ItemGroup>
     <Content Include="Views\Parts.Posts.Post.Manage.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Items\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Views\Parts.Posts.Post.Title.cshtml" />
   </ItemGroup>

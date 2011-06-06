@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NGM.Forum.Extensions;
 using NGM.Forum.Models;
 using Orchard;
 using Orchard.ContentManagement;
@@ -27,11 +28,11 @@ namespace NGM.Forum.Services {
 
         public IEnumerable<PostPart> Get(ThreadPart threadPart, VersionOptions versionOptions) {
             return _contentManager
-                .Query(versionOptions, "Post")
+                .Query(versionOptions, ContentTypeConstants.Post)
                 .Join<CommonPartRecord>().Where(cpr => cpr.Container == threadPart.ContentItem.Record)
                 .List()
                 .ToList()
-                .Select(ci => ContentExtensions.As<PostPart>(ci));            
+                .Select(ci => ci.As<PostPart>());            
         }
 
         public IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count) {
@@ -40,11 +41,11 @@ namespace NGM.Forum.Services {
 
         public IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count, VersionOptions versionOptions) {
             return _contentManager
-                .Query(versionOptions, "Post")
+                .Query(versionOptions, ContentTypeConstants.Post)
                 .Join<CommonPartRecord>().Where(cpr => cpr.Container == threadPart.ContentItem.Record)
                 .Slice(skip, count)
                 .ToList()
-                .Select(ci => ContentExtensions.As<PostPart>(ci));
+                .Select(ci => ci.As<PostPart>());
         }
 
     }

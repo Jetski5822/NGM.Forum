@@ -56,7 +56,7 @@ namespace NGM.Forum.Controllers {
             if (forum == null)
                 return HttpNotFound();
 
-            var thread = _orchardServices.ContentManager.New<ThreadPart>("Thread");
+            var thread = _orchardServices.ContentManager.New<ThreadPart>(ContentTypeConstants.Thread);
             thread.ForumPart = forum;
 
             dynamic model = _orchardServices.ContentManager.BuildEditor(thread);
@@ -73,7 +73,7 @@ namespace NGM.Forum.Controllers {
             if (forum == null)
                 return HttpNotFound();
 
-            var thread = _orchardServices.ContentManager.New<ThreadPart>("Thread");
+            var thread = _orchardServices.ContentManager.New<ThreadPart>(ContentTypeConstants.Thread);
             thread.ForumPart = forum;
             
             _orchardServices.ContentManager.Create(thread, VersionOptions.Draft);
