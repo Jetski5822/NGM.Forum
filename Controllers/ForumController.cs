@@ -1,8 +1,11 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
+using NGM.Forum.Extensions;
+using NGM.Forum.Models;
 using NGM.Forum.Routing;
 using NGM.Forum.Services;
 using Orchard;
+using Orchard.ContentManagement;
 using Orchard.DisplayManagement;
 using Orchard.Localization;
 using Orchard.Mvc;
@@ -50,6 +53,32 @@ namespace NGM.Forum.Controllers {
 
             // Casting to avoid invalid (under medium trust) reflection over the protected View method and force a static invocation.
             return View((object)viewModel);
+        }
+
+        public ActionResult Close(int forumId) {
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Couldn't close forum")))
+                return new HttpUnauthorizedResult();
+
+            var forum = _forumService.Get(forumId, VersionOptions.Latest).As<ForumPart>();
+            if (forum == null)
+                return HttpNotFound();
+
+            _forumService.CloseForum(forum);
+
+            return Redirect(Url.ViewForums());
+        }
+
+        public ActionResult Open(int forumId) {
+            if (!_orchardServices.Authorizer.Authorize(Permissions.OpenThread, T("Couldn't open forum")))
+                return new HttpUnauthorizedResult();
+
+            var forum = _forumService.Get(forumId, VersionOptions.Latest).As<ForumPart>();
+            if (forum == null)
+                return HttpNotFound();
+
+            _forumService.OpenForum(forum);
+
+            return Redirect(Url.ViewForums());
         }
 
         public ActionResult Item(string forumPath, PagerParameters pagerParameters) {

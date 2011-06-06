@@ -14,6 +14,10 @@ namespace NGM.Forum.Extensions {
             return urlHelper.Action("Create", "ForumAdmin", new { area = Constants.LocalArea });
         }
 
+        public static string ViewForums(this UrlHelper urlHelper) {
+            return urlHelper.Action("List", "Forum", new { area = Constants.LocalArea });
+        }
+
         public static string ViewThread(this UrlHelper urlHelper, ThreadPart threadPart) {
             return urlHelper.Action("Item", "Thread", new { forumPath = threadPart.ForumPart.As<IRoutableAspect>().Path, threadSlug = threadPart.As<IRoutableAspect>().GetEffectiveSlug(), area = "NGM.Forum" });
         }

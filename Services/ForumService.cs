@@ -14,8 +14,8 @@ namespace NGM.Forum.Services {
         IEnumerable<ForumPart> Get(VersionOptions versionOptions);
         ForumPart Get(string path);
 
-        void CloseThread(ForumPart forumPart);
-        void OpenThread(ForumPart forumPart);
+        void CloseForum(ForumPart forumPart);
+        void OpenForum(ForumPart forumPart);
     }
 
     [UsedImplicitly]
@@ -32,11 +32,11 @@ namespace NGM.Forum.Services {
                 .List().FirstOrDefault();
         }
 
-        public void CloseThread(ForumPart forumPart) {
+        public void CloseForum(ForumPart forumPart) {
             forumPart.IsClosed = true;
         }
 
-        public void OpenThread(ForumPart forumPart) {
+        public void OpenForum(ForumPart forumPart) {
             forumPart.IsClosed = false;
         }
 
