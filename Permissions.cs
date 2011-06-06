@@ -11,13 +11,14 @@ namespace NGM.Forum {
         public static readonly Permission DeleteThread = new Permission { Description = "Delete any thread", Name = "DeleteThread", ImpliedBy = new [] { AddThread }};
         public static readonly Permission CloseThread = new Permission { Description = "Can close a thread", Name = "CloseThread", ImpliedBy = new[] { ManageForums } };
         public static readonly Permission OpenThread = new Permission { Description = "Can open a thread", Name = "OpenThread", ImpliedBy = new[] { ManageForums } };
+        public static readonly Permission ManageStickyThread = new Permission { Description = "Can create a thread that is sticky", Name = "CreateStickyThread", ImpliedBy = new[] { ManageForums } };
 
         public static readonly Permission AddPost = new Permission { Description = "Add a post", Name = "AddPost" };
         public static readonly Permission EditPost = new Permission { Description = "Edit a post", Name = "EditPost", ImpliedBy = new[] { AddPost } };
         public static readonly Permission DeletePost = new Permission { Description = "Delete a post", Name = "DeletePost", ImpliedBy = new[] { AddPost } };
 
-        public static readonly Permission MetaListForum = new Permission { ImpliedBy = new[] { AddThread, EditThread, DeleteThread } };
-        public static readonly Permission MetaListThread = new Permission { ImpliedBy = new[] { AddPost, EditPost, DeletePost, CloseThread, OpenThread } };
+        public static readonly Permission MetaListForum = new Permission { ImpliedBy = new[] { AddThread, EditThread, DeleteThread, CloseThread, OpenThread, ManageStickyThread } };
+        public static readonly Permission MetaListThread = new Permission { ImpliedBy = new[] { AddPost, EditPost, DeletePost } };
 
         public virtual Feature Feature { get; set; }
 
@@ -29,6 +30,7 @@ namespace NGM.Forum {
                 DeleteThread,
                 CloseThread,
                 OpenThread,
+                ManageStickyThread,
                 AddPost,
                 EditPost,
                 DeletePost

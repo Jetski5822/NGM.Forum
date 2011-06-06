@@ -49,7 +49,7 @@ namespace NGM.Forum.Controllers {
         public Localizer T { get; set; }
 
         public ActionResult Create(int forumId) {
-            if (IsNotAllowedToCreateThread())
+            if (!_orchardServices.Authorizer.Authorize(Permissions.AddThread, T("Not allowed to create thread")))
                 return new HttpUnauthorizedResult();
 
             var forum = _forumService.Get(forumId, VersionOptions.Latest).As<ForumPart>();
@@ -66,7 +66,7 @@ namespace NGM.Forum.Controllers {
 
         [HttpPost, ActionName("Create")]
         public ActionResult CreatePOST(int forumId) {
-            if (IsNotAllowedToCreateThread())
+            if (!_orchardServices.Authorizer.Authorize(Permissions.AddThread, T("Not allowed to create thread")))
                 return new HttpUnauthorizedResult();
 
             var forum = _forumService.Get(forumId, VersionOptions.Latest).As<ForumPart>();
@@ -151,10 +151,6 @@ namespace NGM.Forum.Controllers {
 
         void IUpdateModel.AddModelError(string key, LocalizedString errorMessage) {
             ModelState.AddModelError(key, errorMessage.ToString());
-        }
-
-        private bool IsNotAllowedToCreateThread() {
-            return !_orchardServices.Authorizer.Authorize(Permissions.AddThread, T("Not allowed to create thread"));
         }
     }
 }
