@@ -69,7 +69,7 @@ namespace NGM.Forum.Controllers {
         }
 
         public ActionResult Open(int forumId) {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.OpenThread, T("Couldn't open forum")))
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Couldn't open forum")))
                 return new HttpUnauthorizedResult();
 
             var forum = _forumService.Get(forumId, VersionOptions.Latest).As<ForumPart>();
