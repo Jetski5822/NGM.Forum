@@ -17,6 +17,8 @@
   <Match ContentType="Thread">
     <Place Parts_Threads_Post_List="Content"/>
 
+    <Place Parts_Common_Owner_Edit="-"/>
+
     <Match DisplayType="Detail">
       <Place Parts_Threads_Thread_Manage="Meta:3"/>
     </Match>
