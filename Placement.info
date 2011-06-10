@@ -1,4 +1,8 @@
 ﻿<Placement>
+  <Match DisplayType="Edit">
+  <Place Content_SaveButton="-"/>
+  </Match>
+
   <Match ContentType="Forum">
     <Match DisplayType="Detail">
       <Place Parts_Forums_Thread_List="Content"
@@ -23,9 +27,8 @@
 
   <Match ContentType="Post">
     <Match DisplayType="Detail">
-      <Place
-        Parts_Posts_Post_Title="Header:5"
-        Parts_Posts_Post_Manage="Meta:3"/>
+      <Place Parts_Posts_Post_Title="Header:5"
+             Parts_Posts_Post_Manage="Meta:3"/>
     </Match>
   </Match>
 </Placement>

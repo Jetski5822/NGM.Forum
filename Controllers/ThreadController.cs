@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using NGM.Forum.Extensions;
 using NGM.Forum.Models;
@@ -8,6 +9,7 @@ using Orchard;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
 using Orchard.DisplayManagement;
+using Orchard.DisplayManagement.Shapes;
 using Orchard.Localization;
 using Orchard.Mvc;
 using Orchard.Security;
@@ -58,10 +60,22 @@ namespace NGM.Forum.Controllers {
 
             var thread = _orchardServices.ContentManager.New<ThreadPart>("Thread");
             thread.ForumPart = forum;
+            var post = _orchardServices.ContentManager.New<PostPart>("Post");
+            post.ThreadPart = thread;
 
-            dynamic model = _orchardServices.ContentManager.BuildEditor(thread);
+            dynamic threadModel = _orchardServices.ContentManager.BuildEditor(thread);
+            threadModel.Metadata.DisplayType = "Edit";
 
-            return View((object)model);
+            dynamic postModel = _orchardServices.ContentManager.BuildEditor(post);
+            postModel.Metadata.DisplayType = "Edit";
+
+            DynamicZoneExtensions.RemoveItemFrom(threadModel.Sidebar, "Content_SaveButton");
+
+            var viewModel = Shape.ViewModel()
+                .Thread(threadModel)
+                .Post(postModel);
+
+            return View((object)viewModel);
         }
 
         [HttpPost, ActionName("Create")]
