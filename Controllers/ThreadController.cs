@@ -64,10 +64,7 @@ namespace NGM.Forum.Controllers {
             post.ThreadPart = thread;
 
             dynamic threadModel = _orchardServices.ContentManager.BuildEditor(thread);
-            threadModel.Metadata.DisplayType = "Edit";
-
             dynamic postModel = _orchardServices.ContentManager.BuildEditor(post);
-            postModel.Metadata.DisplayType = "Edit";
 
             DynamicZoneExtensions.RemoveItemFrom(threadModel.Sidebar, "Content_SaveButton");
 
