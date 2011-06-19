@@ -38,6 +38,9 @@ namespace NGM.Forum.Handlers {
         }
 
         private void UpdatePostCount(PostPart postPart) {
+            if (postPart.ParentPostId == 0)
+                return;
+
             UpdateThreadPartCounters(postPart);
         }
 
