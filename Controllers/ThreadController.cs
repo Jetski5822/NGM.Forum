@@ -86,16 +86,26 @@ namespace NGM.Forum.Controllers {
 
             var thread = _orchardServices.ContentManager.New<ThreadPart>("Thread");
             thread.ForumPart = forum;
-            
+            var post = _orchardServices.ContentManager.New<PostPart>("Post");
+            post.ThreadPart = thread;
+
             _orchardServices.ContentManager.Create(thread, VersionOptions.Draft);
-            var model = _orchardServices.ContentManager.UpdateEditor(thread, this);
+            _orchardServices.ContentManager.Create(post, VersionOptions.Draft);
+            var threadModel = _orchardServices.ContentManager.UpdateEditor(thread, this);
+            var postModel = _orchardServices.ContentManager.UpdateEditor(post, this);
 
             if (!ModelState.IsValid) {
                 _orchardServices.TransactionManager.Cancel();
-                return View((object)model);
+                
+                var viewModel = Shape.ViewModel()
+                .Thread(threadModel)
+                .Post(postModel);
+
+                return View((object)viewModel);
             }
 
             _orchardServices.ContentManager.Publish(thread.ContentItem);
+            _orchardServices.ContentManager.Publish(post.ContentItem);
             _forumPathConstraint.AddPath(thread.As<IRoutableAspect>().Path);
 
             _orchardServices.Notifier.Information(T("Your {0} has been created.", thread.TypeDefinition.DisplayName));
