@@ -82,6 +82,7 @@
   <ItemGroup>
     <Content Include="Module.txt" />
     <Content Include="Notes\Design.txt" />
+    <Content Include="Styles\menu.forum-admin.css" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
