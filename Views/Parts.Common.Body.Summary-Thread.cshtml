@@ -9,4 +9,3 @@
     string bodyHtml = Model.Html.ToString();
     var body = new HtmlString(Html.Excerpt(bodyHtml, 200).ToString().Replace(Environment.NewLine, "</p>" + Environment.NewLine + "<p>")); 
 }
-<p>@body <a href="@Url.ReplyPost(contentItem)" class="reply">@T("Reply")</a></p>

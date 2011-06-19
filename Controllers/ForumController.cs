@@ -57,7 +57,7 @@ namespace NGM.Forum.Controllers {
         }
 
         public ActionResult Close(int forumId) {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Couldn't close forum")))
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Not allowed to close forum")))
                 return new HttpUnauthorizedResult();
 
             var forum = _forumService.Get(forumId, VersionOptions.Latest).As<ForumPart>();
@@ -70,7 +70,7 @@ namespace NGM.Forum.Controllers {
         }
 
         public ActionResult Open(int forumId) {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Couldn't open forum")))
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Not allowed to open forum")))
                 return new HttpUnauthorizedResult();
 
             var forum = _forumService.Get(forumId, VersionOptions.Latest).As<ForumPart>();
