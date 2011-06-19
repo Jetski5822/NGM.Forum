@@ -12,12 +12,16 @@ namespace NGM.Forum.Drivers {
         }
 
         protected override DriverResult Display(PostPart postPart, string displayType, dynamic shapeHelper) {
-            return Combined(
-                ContentShape("Parts_Posts_Post_Title",
-                             () => shapeHelper.Parts_Posts_Post_Title(RoutePart: postPart.ThreadPart.As<RoutePart>())),
-                ContentShape("Parts_Posts_Post_Manage",
-                             () => shapeHelper.Parts_Posts_Post_Manage(ContentPart: postPart))
-                );
+            if (postPart.ParentPostId == 0)
+                return Combined(ContentShape("Parts_Posts_Post_Manage",
+                                             () => shapeHelper.Parts_Posts_Post_Manage(ContentPart: postPart)));
+
+                return Combined(
+                    ContentShape("Parts_Posts_Post_Title",
+                                 () => shapeHelper.Parts_Posts_Post_Title(RoutePart: postPart.ThreadPart.As<RoutePart>())),
+                    ContentShape("Parts_Posts_Post_Manage",
+                                 () => shapeHelper.Parts_Posts_Post_Manage(ContentPart: postPart))
+                    );
         }
     }
 }

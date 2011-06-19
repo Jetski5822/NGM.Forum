@@ -1,5 +1,6 @@
 ﻿using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
+using Orchard.Core.Routable.Models;
 using Orchard.Data.Conventions;
 
 namespace NGM.Forum.Models {
@@ -8,6 +9,11 @@ namespace NGM.Forum.Models {
         public ForumPart ForumPart {
             get { return this.As<ICommonPart>().Container.As<ForumPart>(); }
             set { this.As<ICommonPart>().Container = value; }
+        }
+
+        public string Title {
+            get { return this.As<RoutePart>().Title; }
+            set { this.As<RoutePart>().Title = value; }
         }
 
         public int PostCount {
