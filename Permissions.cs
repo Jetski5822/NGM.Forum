@@ -3,7 +3,7 @@ using Orchard.Environment.Extensions.Models;
 using Orchard.Security.Permissions;
 
 namespace NGM.Forum {
-    public class Permissions {
+    public class Permissions : IPermissionProvider {
         public static readonly Permission ManageForums = new Permission { Description = "Manage forums", Name = "ManageForums" };
 
         public static readonly Permission AddThread = new Permission { Description = "Add a thread", Name = "AddThread" };
