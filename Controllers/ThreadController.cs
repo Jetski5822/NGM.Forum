@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Web.Mvc;
 using NGM.Forum.Extensions;
 using NGM.Forum.Models;
@@ -9,7 +8,6 @@ using Orchard;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
 using Orchard.DisplayManagement;
-using Orchard.DisplayManagement.Shapes;
 using Orchard.Localization;
 using Orchard.Mvc;
 using Orchard.Security;
@@ -60,7 +58,7 @@ namespace NGM.Forum.Controllers {
 
             var thread = _orchardServices.ContentManager.New<ThreadPart>(ContentTypeConstants.Thread);
             thread.ForumPart = forum;
-            var post = _orchardServices.ContentManager.New<PostPart>("Post");
+            var post = _orchardServices.ContentManager.New<PostPart>(ContentTypeConstants.Post);
             post.ThreadPart = thread;
 
             dynamic threadModel = _orchardServices.ContentManager.BuildEditor(thread);
@@ -84,15 +82,17 @@ namespace NGM.Forum.Controllers {
             if (forum == null)
                 return HttpNotFound();
 
-            var thread = _orchardServices.ContentManager.Create<ThreadPart>("Thread", VersionOptions.Draft, (o) => { o.ForumPart = forum; });
+            var thread = _orchardServices.ContentManager.Create<ThreadPart>(ContentTypeConstants.Thread, VersionOptions.Draft, (o) => { o.ForumPart = forum; });
             var threadModel = _orchardServices.ContentManager.UpdateEditor(thread, this);
-            
-            var post  = _orchardServices.ContentManager.Create<PostPart>("Post", VersionOptions.Draft, (o) => { o.ThreadPart = thread; });
+
+            var post = _orchardServices.ContentManager.Create<PostPart>(ContentTypeConstants.Post, VersionOptions.Draft, (o) => { o.ThreadPart = thread; });
             var postModel = _orchardServices.ContentManager.UpdateEditor(post, this);
             post.ThreadPart = thread;
 
             if (!ModelState.IsValid) {
                 _orchardServices.TransactionManager.Cancel();
+
+                DynamicZoneExtensions.RemoveItemFrom(threadModel.Sidebar, "Content_SaveButton");
 
                 var viewModel = Shape.ViewModel()
                 .Thread(threadModel)
