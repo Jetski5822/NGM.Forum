@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace NGM.Forum.Controllers {
+namespace NGM.Forum.Extensions {
     public static class DynamicZoneExtensions {
         public static void RemoveItemFrom(dynamic zone, string itemToDelete) {
             var itemsToDelete = new List<object>();

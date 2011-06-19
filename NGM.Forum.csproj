@@ -48,7 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdminMenu.cs" />
-    <Compile Include="Controllers\DynamicZoneExtensions.cs" />
+    <Compile Include="Extensions\DynamicZoneExtensions.cs" />
     <Compile Include="Controllers\ForumAdminController.cs" />
     <Compile Include="Controllers\ForumController.cs" />
     <Compile Include="Controllers\PostController.cs" />
