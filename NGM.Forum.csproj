@@ -63,6 +63,7 @@
     <Compile Include="Models\ForumPartRecord.cs" />
     <Compile Include="Models\PostPartRecord.cs" />
     <Compile Include="Models\ThreadPartRecord.cs" />
+    <Compile Include="ResourceManifest.cs" />
     <Compile Include="Routes.cs" />
     <Compile Include="Routing\ForumPathConstraint.cs" />
     <Compile Include="Routing\ForumPathConstraintUpdator.cs" />
