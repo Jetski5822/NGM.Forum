@@ -7,6 +7,10 @@ using Orchard.ContentManagement;
 namespace NGM.Forum.Drivers {
     [UsedImplicitly]
     public class PostPartDriver : ContentPartDriver<PostPart> {
+        protected override string Prefix {
+            get { return "PostPart"; }
+        }
+
         protected override DriverResult Display(PostPart postPart, string displayType, dynamic shapeHelper) {
             return Combined(
                 ContentShape("Parts_Posts_Post_Title",

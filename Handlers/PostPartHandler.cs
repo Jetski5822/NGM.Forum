@@ -22,11 +22,19 @@ namespace NGM.Forum.Handlers {
 
             Filters.Add(StorageFilter.For(repository));
 
+            OnGetDisplayShape<PostPart>(SetModelProperties);
+            OnGetEditorShape<PostPart>(SetModelProperties);
+            OnUpdateEditorShape<PostPart>(SetModelProperties);
+
             OnCreated<PostPart>((context, part) => UpdatePostCount(part));
             OnPublished<PostPart>((context, part) => UpdatePostCount(part));
             OnUnpublished<PostPart>((context, part) => UpdatePostCount(part));
             OnVersioned<PostPart>((context, part, newVersionPart) => UpdatePostCount(newVersionPart));
             OnRemoved<PostPart>((context, part) => UpdatePostCount(part));
+        }
+
+        private static void SetModelProperties(BuildShapeContext context, PostPart postPart) {
+            context.Shape.Thread = postPart.ThreadPart;
         }
 
         private void UpdatePostCount(PostPart postPart) {

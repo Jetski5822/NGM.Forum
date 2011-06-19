@@ -6,7 +6,13 @@ using Orchard.ContentManagement.Drivers;
 namespace NGM.Forum.Drivers {
     [UsedImplicitly]
     public class ThreadPartDriver : ContentPartDriver<ThreadPart> {
+        protected override string Prefix {
+            get { return "ThreadPart"; }
+        }
+
         protected override DriverResult Display(ThreadPart threadPart, string displayType, dynamic shapeHelper) {
+
+
             if (threadPart.ForumPart.IsClosed) {
                 return Combined(
                     ContentShape("Parts_Threads_Thread_PostCount",
@@ -22,14 +28,6 @@ namespace NGM.Forum.Drivers {
                 );
         }
 
-        protected override DriverResult Editor(ThreadPart threadPart, dynamic shapeHelper) {
-            return null;
-        }
 
-        protected override DriverResult Editor(ThreadPart threadPart, IUpdateModel updater, dynamic shapeHelper) {
-            updater.TryUpdateModel(threadPart.Record, Prefix, null, null);
-
-            return Editor(threadPart, shapeHelper);
-        }
     }
 }

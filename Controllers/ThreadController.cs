@@ -84,19 +84,16 @@ namespace NGM.Forum.Controllers {
             if (forum == null)
                 return HttpNotFound();
 
-            var thread = _orchardServices.ContentManager.New<ThreadPart>("Thread");
-            thread.ForumPart = forum;
-            var post = _orchardServices.ContentManager.New<PostPart>("Post");
-            post.ThreadPart = thread;
-
-            _orchardServices.ContentManager.Create(thread, VersionOptions.Draft);
-            _orchardServices.ContentManager.Create(post, VersionOptions.Draft);
+            var thread = _orchardServices.ContentManager.Create<ThreadPart>("Thread", VersionOptions.Draft, (o) => { o.ForumPart = forum; });
             var threadModel = _orchardServices.ContentManager.UpdateEditor(thread, this);
+            
+            var post  = _orchardServices.ContentManager.Create<PostPart>("Post", VersionOptions.Draft, (o) => { o.ThreadPart = thread; });
             var postModel = _orchardServices.ContentManager.UpdateEditor(post, this);
+            post.ThreadPart = thread;
 
             if (!ModelState.IsValid) {
                 _orchardServices.TransactionManager.Cancel();
-                
+
                 var viewModel = Shape.ViewModel()
                 .Thread(threadModel)
                 .Post(postModel);
