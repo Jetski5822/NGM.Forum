@@ -68,7 +68,12 @@ namespace NGM.Forum.Handlers {
                                       _forumService.Get(commonPart.Record.Container.Id, VersionOptions.Published).As<ForumPart>();
 
                 forumPart.ContentItem.ContentManager.Flush();
-                forumPart.PostCount = _threadService.Get(forumPart, VersionOptions.Published).Count();
+
+                forumPart.PostCount = _threadService
+                    .Get(forumPart, VersionOptions.Published)
+                    .Sum(publishedThreadPart => _postService
+                        .Get(publishedThreadPart, VersionOptions.Published)
+                        .Count());
             }
         }
     }
