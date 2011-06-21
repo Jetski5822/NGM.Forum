@@ -20,5 +20,9 @@ namespace NGM.Forum.Models {
             get { return Record.ParentPostId; }
             set { Record.ParentPostId = value; }
         }
+
+        public bool IsParentThread() {
+            return ParentPostId == 0;
+        }
     }
 }

@@ -12,7 +12,7 @@ namespace NGM.Forum.Drivers {
         }
 
         protected override DriverResult Display(PostPart postPart, string displayType, dynamic shapeHelper) {
-            if (postPart.ParentPostId == 0)
+            if (postPart.IsParentThread())
                 return Combined(ContentShape("Parts_Posts_Post_Manage",
                                              () => shapeHelper.Parts_Posts_Post_Manage(ContentPart: postPart)));
 
