@@ -1,8 +1,9 @@
 ﻿<Placement>
   <Match ContentType="Forum">
+    
     <Match DisplayType="Detail">
       <Place Parts_Forums_Thread_List="Content"
-             Parts_Forums_Forum_Manage="Content:after.1"/>
+             Parts_Forums_Forum_Manage="Content:before.1"/>
     </Match>
     <Match DisplayType="Summary">
       <Place Parts_Forums_Forum_ThreadCount="Meta:3"
@@ -12,8 +13,8 @@
 
   <Match ContentType="Thread">
     <Place Parts_Common_Owner_Edit="-"/>
-    <Place Parts_Routable_Thread_Edit="Content:before.5"/>
     <Place Parts_Routable_Edit="-"/>
+    <Place Parts_Routable_Thread_Edit="Content:before.5"/>
     
     <Place Parts_Threads_Post_List="Content"/>
 
