@@ -22,7 +22,9 @@
       <Place Parts_Common_Metadata="-"/>
     </Match>
     <Match DisplayType="Summary">
-      <Place Parts_Threads_Thread_PostCount="Meta:3"/>
+      <Place
+        Parts_Threads_Thread_Status="Meta:1"
+        Parts_Threads_Thread_PostCount="Meta:3"/>
     </Match>
   </Match>
 

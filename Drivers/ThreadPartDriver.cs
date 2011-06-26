@@ -21,10 +21,12 @@ namespace NGM.Forum.Drivers {
             }
             
             return Combined(
+                ContentShape("Parts_Threads_Thread_Status",
+                    () => shapeHelper.Parts_Threads_Thread_Status(ContentPart: threadPart)),
                 ContentShape("Parts_Threads_Thread_Manage",
-                         () => shapeHelper.Parts_Threads_Thread_Manage(ContentPart: threadPart)),
+                    () => shapeHelper.Parts_Threads_Thread_Manage(ContentPart: threadPart)),
                 ContentShape("Parts_Threads_Thread_PostCount",
-                             () => shapeHelper.Parts_Threads_Thread_PostCount(ContentPart: threadPart, PostCount: threadPart.PostCount))
+                    () => shapeHelper.Parts_Threads_Thread_PostCount(ContentPart: threadPart, PostCount: threadPart.PostCount))
                 );
         }
 

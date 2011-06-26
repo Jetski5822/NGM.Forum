@@ -139,7 +139,7 @@ namespace NGM.Forum.Controllers {
             if (!_orchardServices.Authorizer.Authorize(StandardPermissions.AccessFrontEnd, T("Not allowed to view thread")))
                 return new HttpUnauthorizedResult();
 
-            Pager pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
+            var pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
             var correctedPath = _forumPathConstraint.FindPath(forumPath);
             if (correctedPath == null)
                 return HttpNotFound();

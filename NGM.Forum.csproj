@@ -82,6 +82,10 @@
     <Compile Include="Shapes.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Images\Jhoos-Sticky-Postit-Notes.icon.gif" />
+    <Content Include="Content\Images\sticky.gif" />
+    <Content Include="Content\Images\topic_hot_locked_sticky.png" />
+    <Content Include="Content\Images\topic_sticky.png" />
     <Content Include="Module.txt" />
     <Content Include="Notes\Design.txt" />
     <Content Include="Styles\menu.forum-admin.css" />
@@ -167,6 +171,19 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Parts.Common.Body.Summary-Forum.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Styles\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Threads.Thread.Status.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
