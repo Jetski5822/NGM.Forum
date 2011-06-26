@@ -27,6 +27,8 @@ namespace NGM.Forum.Drivers {
         protected override DriverResult Display(ThreadPart threadPart, string displayType, dynamic shapeHelper) {
             if (threadPart.ForumPart.IsClosed) {
                 return Combined(
+                    ContentShape("Parts_Threads_Thread_Status",
+                                 () => shapeHelper.Parts_Threads_Thread_Status(ContentPart: threadPart)),
                     ContentShape("Parts_Threads_Thread_PostCount",
                                  () => shapeHelper.Parts_Threads_Thread_PostCount(ContentPart: threadPart, PostCount: threadPart.PostCount))
                     );
