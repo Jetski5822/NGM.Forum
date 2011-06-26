@@ -85,6 +85,7 @@
     <Content Include="Content\Images\Jhoos-Sticky-Postit-Notes.icon.gif" />
     <Content Include="Content\Images\sticky.gif" />
     <Content Include="Content\Images\topic_hot_locked_sticky.png" />
+    <Content Include="Content\Images\topic_locked.png" />
     <Content Include="Content\Images\topic_sticky.png" />
     <Content Include="Module.txt" />
     <Content Include="Notes\Design.txt" />
@@ -187,6 +188,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\EditorTemplates\Parts.Status.ThreadPart.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Forums.Forum.Status.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

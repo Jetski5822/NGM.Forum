@@ -1,0 +1,10 @@
+﻿@using NGM.Forum.Extensions
+@using NGM.Forum.Models
+@{
+    var forumPart = (ForumPart)Model.ContentPart;
+}
+<div class="item-properties status">
+  @if (forumPart.IsClosed) {
+        <img src="/Modules/NGM.Forum/Content/Images/topic_locked.png" alt="Is Closed" title="Is Closed" />
+  }
+</div>
