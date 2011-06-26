@@ -15,6 +15,7 @@
     <Place Parts_Common_Owner_Edit="-"/>
     <Place Parts_Routable_Edit="-"/>
     <Place Parts_Routable_Thread_Edit="Content:before.5"/>
+    <Place Parts_Status_Thread_Edit="Content:after.5"/>
     
     <Place Parts_Threads_Post_List="Content"/>
 
@@ -23,7 +24,7 @@
     </Match>
     <Match DisplayType="Summary">
       <Place
-        Parts_Threads_Thread_Status="Meta:1"
+        Parts_Threads_Thread_Status="Meta:4"
         Parts_Threads_Thread_PostCount="Meta:3"/>
     </Match>
   </Match>
