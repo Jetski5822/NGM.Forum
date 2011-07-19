@@ -1,6 +1,6 @@
 ﻿@model NGM.Forum.Models.ThreadPart
 
 <fieldset>
-        @Html.LabelFor(m => m.IsSticky, T("Is Sticky"))
+        <label for="@Html.FieldIdFor(m => m.IsSticky)" class="forcheckbox">@T("Is Sticky")</label>
         @Html.CheckBoxFor(m => m.IsSticky)
 </fieldset>
