@@ -1,4 +1,4 @@
-﻿Name: Forum
+﻿Name: Forums
 AntiForgery: enabled
 Author: Nicholas Mayne
 Website: https://github.com/Jetski5822/Orchard-Forum
