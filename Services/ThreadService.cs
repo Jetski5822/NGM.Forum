@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using NGM.Forum.Extensions;
 using NGM.Forum.Models;
 using Orchard;
 using Orchard.ContentManagement;
@@ -34,7 +35,7 @@ namespace NGM.Forum.Services {
         public ThreadPart Get(ForumPart forumPart, string slug, VersionOptions versionOptions) {
             var threadPath = forumPart.As<IRoutableAspect>().GetChildPath(slug);
 
-            return _contentManager.Query(versionOptions, "Thread").Join<RoutePartRecord>().Where(rr => rr.Path == threadPath).
+            return _contentManager.Query(versionOptions, ContentPartConstants.Thread).Join<RoutePartRecord>().Where(rr => rr.Path == threadPath).
                     Join<CommonPartRecord>().Where(cr => cr.Container == forumPart.Record.ContentItemRecord).List().
                     SingleOrDefault().As<ThreadPart>();
         }
@@ -69,7 +70,7 @@ namespace NGM.Forum.Services {
 
         private IContentQuery<ContentItem, CommonPartRecord> GetForumQuery(ContentPart<ForumPartRecord> forum, VersionOptions versionOptions) {
             return
-                _contentManager.Query(versionOptions, "Thread").Join<CommonPartRecord>().Where(
+                _contentManager.Query(versionOptions, ContentPartConstants.Thread).Join<CommonPartRecord>().Where(
                     cr => cr.Container == forum.Record.ContentItemRecord).OrderByDescending(cr => cr.CreatedUtc);
         }
     }

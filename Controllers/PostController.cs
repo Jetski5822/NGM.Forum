@@ -34,7 +34,7 @@ namespace NGM.Forum.Controllers {
                 return HttpNotFound();
             }
 
-            var part = _orchardServices.ContentManager.New<PostPart>("Post");
+            var part = _orchardServices.ContentManager.New<PostPart>(ContentPartConstants.Post);
 
             dynamic model = _orchardServices.ContentManager.BuildEditor(part);
             
@@ -51,7 +51,7 @@ namespace NGM.Forum.Controllers {
                 return HttpNotFound();
             }
 
-            var post = _orchardServices.ContentManager.New<PostPart>("Post");
+            var post = _orchardServices.ContentManager.New<PostPart>(ContentPartConstants.Post);
             if (contentItem.As<PostPart>() != null) {
                 post.ThreadPart = contentItem.As<PostPart>().ThreadPart;
                 post.ParentPostId = contentItem.As<PostPart>().Id;

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using NGM.Forum.Extensions;
 using NGM.Forum.Services;
 using Orchard.Localization;
 using Orchard.UI.Navigation;
@@ -26,12 +27,12 @@ namespace NGM.Forum {
 
             if (forumCount > 0) {
                 menu.Add(T("Manage Forums"), "3",
-                         item => item.Action("List", "ForumAdmin", new { area = "NGM.Forum" }).Permission(Permissions.ManageForums));
+                         item => item.Action("List", "ForumAdmin", new { area = Constants.LocalArea }).Permission(Permissions.ManageForums));
             }
 
             menu.Add(T("New Forum"), "1.0",
                      item =>
-                     item.Action("Create", "ForumAdmin", new {area = "NGM.Forum"}).Permission(Permissions.ManageForums));
+                     item.Action("Create", "ForumAdmin", new { area = Constants.LocalArea }).Permission(Permissions.ManageForums));
         }
     }
 }

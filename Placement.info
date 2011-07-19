@@ -1,31 +1,44 @@
 ﻿<Placement>
   <Match ContentType="Forum">
+    
     <Match DisplayType="Detail">
-      <Place Parts_Forums_Thread_List="Content"
-             Parts_Forums_Forum_Manage="Meta:3"/>
+      <Place
+        Parts_Forums_Forum_Status="Meta:4"
+        Parts_Forums_Thread_List="Content"
+             Parts_Forums_Forum_Manage="Content:before.1"/>
     </Match>
     <Match DisplayType="Summary">
-      <Place Parts_Forums_Forum_ThreadCount="Meta:3"
-             Parts_Forums_Forum_PostCount="Meta:3"/>
+      <Place
+            Parts_Forums_Forum_Status="Meta:4"
+            Parts_Forums_Forum_ThreadCount="Meta:3"
+            Parts_Forums_Forum_PostCount="Meta:3"/>
     </Match>
   </Match>
 
   <Match ContentType="Thread">
+    <Place Parts_Common_Owner_Edit="-"/>
+    <Place Parts_Routable_Edit="-"/>
+    <Place Parts_Routable_Thread_Edit="Content:before.5"/>
+    <Place Parts_Status_Thread_Edit="Content:after.5"/>
+    
     <Place Parts_Threads_Post_List="Content"/>
 
     <Match DisplayType="Detail">
-      <Place Parts_Threads_Thread_Manage="Meta:3"/>
+      <Place Parts_Common_Metadata="-"/>
     </Match>
     <Match DisplayType="Summary">
-      <Place Parts_Threads_Thread_PostCount="Meta:3"/>
+      <Place
+        Parts_Threads_Thread_Status="Meta:4"
+        Parts_Threads_Thread_PostCount="Meta:3"/>
     </Match>
   </Match>
 
   <Match ContentType="Post">
+    <Place Parts_Common_Owner_Edit="-"/>
+    
     <Match DisplayType="Detail">
-      <Place
-        Parts_Posts_Post_Title="Header:5"
-        Parts_Posts_Post_Manage="Meta:3"/>
+      <Place Parts_Posts_Post_Title="Header:5"
+             Parts_Posts_Post_Manage="Content:after.1"/>
     </Match>
   </Match>
 </Placement>

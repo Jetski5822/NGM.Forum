@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web.Routing;
+using NGM.Forum.Extensions;
 using NGM.Forum.Routing;
 using Orchard.Mvc.Routes;
 
@@ -23,13 +24,13 @@ namespace NGM.Forum {
                                                      Route = new Route(
                                                          "Admin/Forums/Create",
                                                          new RouteValueDictionary {
-                                                                                      {"area", "NGM.Forum"},
+                                                                                      {"area", Constants.LocalArea},
                                                                                       {"controller", "ForumAdmin"},
                                                                                       {"action", "Create"}
                                                                                   },
                                                          new RouteValueDictionary(),
                                                          new RouteValueDictionary {
-                                                                                      {"area", "NGM.Forum"}
+                                                                                      {"area", Constants.LocalArea}
                                                                                   },
                                                          new MvcRouteHandler())
                                                  },
@@ -37,13 +38,13 @@ namespace NGM.Forum {
                                                      Route = new Route(
                                                          "Admin/Forums",
                                                          new RouteValueDictionary {
-                                                                                      {"area", "NGM.Forum"},
+                                                                                      {"area", Constants.LocalArea},
                                                                                       {"controller", "ForumAdmin"},
                                                                                       {"action", "List"}
                                                                                   },
                                                          new RouteValueDictionary(),
                                                          new RouteValueDictionary {
-                                                                                      {"area", "NGM.Forum"}
+                                                                                      {"area", Constants.LocalArea}
                                                                                   },
                                                          new MvcRouteHandler())
                                                  },
@@ -51,13 +52,13 @@ namespace NGM.Forum {
                                                      Route = new Route(
                                                          "Forums",
                                                          new RouteValueDictionary {
-                                                                                      {"area", "NGM.Forum"},
+                                                                                      {"area", Constants.LocalArea},
                                                                                       {"controller", "Forum"},
                                                                                       {"action", "List"}
                                                                                   },
                                                          new RouteValueDictionary(),
                                                          new RouteValueDictionary {
-                                                                                      {"area", "NGM.Forum"}
+                                                                                      {"area", Constants.LocalArea}
                                                                                   },
                                                          new MvcRouteHandler())
                                                  },
@@ -65,13 +66,13 @@ namespace NGM.Forum {
                                                      Route = new Route(
                                                          "Forum/Post/Create",
                                                          new RouteValueDictionary {
-                                                                                      {"area", "NGM.Forum"},
+                                                                                      {"area", Constants.LocalArea},
                                                                                       {"controller", "Post"},
                                                                                       {"action", "Create"}
                                                                                   },
                                                          new RouteValueDictionary(),
                                                          new RouteValueDictionary {
-                                                                                      {"area", "NGM.Forum"}
+                                                                                      {"area", Constants.LocalArea}
                                                                                   },
                                                          new MvcRouteHandler())
                                                  },
@@ -80,7 +81,7 @@ namespace NGM.Forum {
                                                      Route = new Route(
                                                          "{forumPath}/{threadSlug}",
                                                          new RouteValueDictionary {
-                                                                                      {"area", "NGM.Forum"},
+                                                                                      {"area", Constants.LocalArea},
                                                                                       {"controller", "Thread"},
                                                                                       {"action", "Item"}
                                                                                   },
@@ -88,7 +89,7 @@ namespace NGM.Forum {
                                                                                       {"forumPath", _forumPathConstraint}
                                                                                   },
                                                          new RouteValueDictionary {
-                                                                                      {"area", "NGM.Forum"}
+                                                                                      {"area", Constants.LocalArea}
                                                                                   },
                                                          new MvcRouteHandler())
                                                  },
@@ -97,7 +98,7 @@ namespace NGM.Forum {
                                                     Route = new Route(
                                                          "{forumPath}",
                                                          new RouteValueDictionary {
-                                                                                      {"area", "NGM.Forum"},
+                                                                                      {"area", Constants.LocalArea},
                                                                                       {"controller", "Forum"},
                                                                                       {"action", "Item"},
                                                                                       {"forumPath", ""}
@@ -106,7 +107,7 @@ namespace NGM.Forum {
                                                                                       {"forumPath", _forumPathConstraint}
                                                                                   },
                                                          new RouteValueDictionary {
-                                                                                      {"area", "NGM.Forum"}
+                                                                                      {"area", Constants.LocalArea}
                                                                                   },
                                                          new MvcRouteHandler())
                                                  }

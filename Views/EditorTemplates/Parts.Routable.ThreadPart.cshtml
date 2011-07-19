@@ -1,0 +1,6 @@
+﻿@model NGM.Forum.Models.ThreadPart
+
+<fieldset>
+    @Html.LabelFor(m => m.Title, T("Title"))
+    @Html.TextBoxFor(m => m.Title, new { @class = "large text" })
+</fieldset>

@@ -16,6 +16,7 @@ namespace NGM.Forum {
             SchemaBuilder.CreateTable("ThreadPartRecord",
                 table => table
                     .ContentPartRecord()
+                    .Column<bool>("IsSticky")
                     .Column<bool>("IsClosed")
                     .Column<int>("PostCount")
                 );
@@ -40,7 +41,6 @@ namespace NGM.Forum {
                     .WithPart("ThreadPart")
                     .WithPart("CommonPart")
                     .WithPart("RoutePart")
-                    .WithPart("BodyPart")
                 );
 
             ContentDefinitionManager.AlterTypeDefinition("Post",

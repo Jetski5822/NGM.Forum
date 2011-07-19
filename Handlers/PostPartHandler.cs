@@ -22,6 +22,10 @@ namespace NGM.Forum.Handlers {
 
             Filters.Add(StorageFilter.For(repository));
 
+            OnGetDisplayShape<PostPart>(SetModelProperties);
+            OnGetEditorShape<PostPart>(SetModelProperties);
+            OnUpdateEditorShape<PostPart>(SetModelProperties);
+
             OnCreated<PostPart>((context, part) => UpdatePostCount(part));
             OnPublished<PostPart>((context, part) => UpdatePostCount(part));
             OnUnpublished<PostPart>((context, part) => UpdatePostCount(part));
@@ -29,7 +33,14 @@ namespace NGM.Forum.Handlers {
             OnRemoved<PostPart>((context, part) => UpdatePostCount(part));
         }
 
+        private static void SetModelProperties(BuildShapeContext context, PostPart postPart) {
+            context.Shape.Thread = postPart.ThreadPart;
+        }
+
         private void UpdatePostCount(PostPart postPart) {
+            if (postPart.IsParentThread())
+                return;
+
             UpdateThreadPartCounters(postPart);
         }
 
@@ -57,7 +68,12 @@ namespace NGM.Forum.Handlers {
                                       _forumService.Get(commonPart.Record.Container.Id, VersionOptions.Published).As<ForumPart>();
 
                 forumPart.ContentItem.ContentManager.Flush();
-                forumPart.PostCount = _threadService.Get(forumPart, VersionOptions.Published).Count();
+
+                forumPart.PostCount = _threadService
+                    .Get(forumPart, VersionOptions.Published)
+                    .Sum(publishedThreadPart => _postService
+                        .Get(publishedThreadPart, VersionOptions.Published)
+                        .Count());
             }
         }
     }

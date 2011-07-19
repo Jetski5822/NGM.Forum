@@ -1,8 +1,13 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
+using NGM.Forum.Extensions;
+using NGM.Forum.Models;
 using NGM.Forum.Routing;
 using NGM.Forum.Services;
 using Orchard;
+using Orchard.ContentManagement;
 using Orchard.DisplayManagement;
 using Orchard.Localization;
 using Orchard.Mvc;
@@ -52,6 +57,32 @@ namespace NGM.Forum.Controllers {
             return View((object)viewModel);
         }
 
+        public ActionResult Close(int forumId) {
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Not allowed to close forum")))
+                return new HttpUnauthorizedResult();
+
+            var forum = _forumService.Get(forumId, VersionOptions.Latest).As<ForumPart>();
+            if (forum == null)
+                return HttpNotFound();
+
+            _forumService.CloseForum(forum);
+
+            return Redirect(Url.ViewForums());
+        }
+
+        public ActionResult Open(int forumId) {
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Not allowed to open forum")))
+                return new HttpUnauthorizedResult();
+
+            var forum = _forumService.Get(forumId, VersionOptions.Latest).As<ForumPart>();
+            if (forum == null)
+                return HttpNotFound();
+
+            _forumService.OpenForum(forum);
+
+            return Redirect(Url.ViewForums());
+        }
+
         public ActionResult Item(string forumPath, PagerParameters pagerParameters) {
             Pager pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
             var correctedPath = _forumPathConstraint.FindPath(forumPath);
@@ -62,8 +93,11 @@ namespace NGM.Forum.Controllers {
             if (forumPart == null)
                 return HttpNotFound();
 
-            var threads = _threadService.Get(forumPart, pager.GetStartIndex(), pager.PageSize)
-                .Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Summary"));
+            var threadParts = _threadService.Get(forumPart, pager.GetStartIndex(), pager.PageSize);
+            var stickyThreads = threadParts.Where(o => o.IsSticky).Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Summary"));
+            var nonStickyThreads = threadParts.Where(o => !o.IsSticky).Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Summary"));
+            var threads = stickyThreads.Union(nonStickyThreads);
+                
             dynamic forum = _orchardServices.ContentManager.BuildDisplay(forumPart);
 
             var list = Shape.List();
