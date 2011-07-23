@@ -1,6 +1,6 @@
 ﻿<Placement>
   <Match ContentType="Forum">
-    <Place Parts_OpenClosed_Forum_Edit="Content:after.5"/>
+    <Place Parts_Status_Forum_Edit="Content:2"/>
     
     <Match DisplayType="Detail">
       <Place
