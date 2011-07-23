@@ -32,8 +32,8 @@ namespace NGM.Forum.Models {
         }
 
         public ThreadType Type {
-            get { return Record.Type; }
-            set { Record.Type = value; }
+            get { return (ThreadType)Record.Type; }
+            set { Record.Type = (int)value; }
         }
     }
 }

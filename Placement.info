@@ -21,6 +21,7 @@
     <Place Parts_Routable_Edit="-"/>
     <Place Parts_Routable_Thread_Edit="Content:before.5"/>
     <Place Parts_Status_Thread_Edit="Content:after.5"/>
+    <Place Parts_Type_Thread_Edit="Content:after.5"/>
     
     <Place Parts_Threads_Post_List="Content"/>
 

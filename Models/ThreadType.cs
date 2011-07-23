@@ -1,9 +1,7 @@
 ﻿namespace NGM.Forum.Models {
-    public enum ThreadType {
-        Unknown = 0,
-        
-        Question = 1,
+    public enum ThreadType : int {
+        Question = 0,
 
-        Discussion = 2
+        Discussion = 1
     }
 }

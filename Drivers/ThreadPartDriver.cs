@@ -9,6 +9,7 @@ namespace NGM.Forum.Drivers {
     public class ThreadPartDriver : ContentPartDriver<ThreadPart> {
         private const string RoutableTemplateName = "Parts.Routable.ThreadPart";
         private const string StatusTemplateName = "Parts.Status.ThreadPart";
+        private const string TypeTemplateName = "Parts.Type.ThreadPart";
 
         private readonly IAuthenticationService _authenticationService;
         private readonly IAuthorizationService _authorizationService;
@@ -55,6 +56,8 @@ namespace NGM.Forum.Drivers {
                 Combined(
                     ContentShape("Parts_Status_Thread_Edit",
                                  () => shapeHelper.EditorTemplate(TemplateName: StatusTemplateName, Model: threadPart, Prefix: Prefix)),
+                    ContentShape("Parts_Type_Thread_Edit",
+                                 () => shapeHelper.EditorTemplate(TemplateName: TypeTemplateName, Model: threadPart, Prefix: Prefix)),
                     ContentShape("Parts_Routable_Thread_Edit",
                                  () => shapeHelper.EditorTemplate(TemplateName: RoutableTemplateName, Model: threadPart, Prefix: Prefix)));
         }

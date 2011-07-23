@@ -1,0 +1,15 @@
+﻿@using Orchard.ContentManagement;
+
+@{
+    Orchard.ContentManagement.ContentItem contentItem = Model.ContentPart.ContentItem;
+    NGM.Forum.Models.ThreadPart thread = contentItem.As<NGM.Forum.Models.ThreadPart>();
+    string title = Model.Title.ToString();
+}
+
+<h1>
+@if (thread.Type == NGM.Forum.Models.ThreadType.Question) {
+    <img src="Modules/NGM.Forum/Content/Images/question.png" alt="Is Question" title="Is Question" />
+} else if (thread.Type == NGM.Forum.Models.ThreadType.Discussion) {
+    <img src="Modules/NGM.Forum/Content/Images/discussion-ext-icon.png" alt="Is Discussion" title="Is Discussion" />
+}
+@Html.ItemDisplayLink(title, contentItem)</h1>
