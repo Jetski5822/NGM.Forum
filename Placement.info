@@ -1,10 +1,11 @@
 ﻿<Placement>
   <Match ContentType="Forum">
+    <Place Parts_OpenClosed_Forum_Edit="Content:after.5"/>
     
     <Match DisplayType="Detail">
       <Place
-        Parts_Forums_Forum_Status="Meta:4"
-        Parts_Forums_Thread_List="Content"
+             Parts_Forums_Forum_Status="Meta:4"
+             Parts_Forums_Thread_List="Content"
              Parts_Forums_Forum_Manage="Content:before.1"/>
     </Match>
     <Match DisplayType="Summary">

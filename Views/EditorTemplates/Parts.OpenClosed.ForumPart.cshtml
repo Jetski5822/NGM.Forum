@@ -1,0 +1,6 @@
+﻿@model NGM.Forum.Models.ForumPart
+
+<fieldset>
+        <label for="@Html.FieldIdFor(m => m.IsClosed)" class="forcheckbox">@T("Is Closed")</label>
+        @Html.CheckBoxFor(m => m.IsClosed)
+</fieldset>
