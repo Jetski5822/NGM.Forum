@@ -52,5 +52,12 @@ namespace NGM.Forum {
 
             return 1;
         }
+
+        public int UpdateFrom1() {
+            // used for type of thread.. i.e. discussion, question
+            SchemaBuilder.AlterTable("ThreadPartRecord", cmd => cmd.AddColumn<int>("Type"));
+            
+            return 2;
+        }
     }
 }

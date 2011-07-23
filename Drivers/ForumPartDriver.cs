@@ -6,7 +6,11 @@ using Orchard.ContentManagement.Drivers;
 namespace NGM.Forum.Drivers {
     [UsedImplicitly]
     public class ForumPartDriver : ContentPartDriver<ForumPart> {
-        private const string OpenClosedTemplateName = "Parts.OpenClosed.ForumPart";
+        private const string StatusTemplateName = "Parts.Status.ForumPart";
+
+        protected override string Prefix {
+            get { return "ForumPart"; }
+        }
 
         protected override DriverResult Display(ForumPart forumPart, string displayType, dynamic shapeHelper) {
             var postCount = forumPart.PostCount >= 1 ? forumPart.PostCount - 1 : forumPart.PostCount;
@@ -26,8 +30,8 @@ namespace NGM.Forum.Drivers {
         protected override DriverResult Editor(ForumPart part, dynamic shapeHelper) {
             return
                 Combined(
-                    ContentShape("Parts_OpenClosed_Forum_Edit",
-                                 () => shapeHelper.EditorTemplate(TemplateName: OpenClosedTemplateName, Model: part, Prefix: Prefix)));
+                    ContentShape("Parts_Status_Forum_Edit",
+                                 () => shapeHelper.EditorTemplate(TemplateName: StatusTemplateName, Model: part, Prefix: Prefix)));
         }
 
         protected override DriverResult Editor(ForumPart part, IUpdateModel updater, dynamic shapeHelper) {

@@ -8,12 +8,6 @@
   <p>
     @if (!threadPart.IsClosed) {
         <a href="@Url.ReplyThread(threadPart)" class="create">@T("Reply")</a>
-        if (AuthorizedFor(NGM.Forum.Permissions.CloseThread)) {
-            <text> | </text><a href="@Url.CloseThread(threadPart)" class="close">@T("Close")</a>
-        }
-    }
-    else if (AuthorizedFor(NGM.Forum.Permissions.OpenThread)) {
-        <a href="@Url.OpenThread(threadPart)" class="open">@T("Open")</a>
     }
   </p>
 </div>
