@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using NGM.Forum.Extensions;
 using NGM.Forum.Models;
@@ -14,6 +13,7 @@ namespace NGM.Forum.Services {
         IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count);
         IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count, VersionOptions versionOptions);
         PostPart GetLatestPost(ForumPart forumPart, VersionOptions versionOptions);
+        PostPart GetLatestPost(ThreadPart threadPart, VersionOptions versionOptions);
     }
 
     public class PostService : IPostService {
@@ -32,6 +32,15 @@ namespace NGM.Forum.Services {
                 .Query<PostPart, PostPartRecord>(versionOptions)
                 .Join<ThreadPartRecord>()
                 .Join<ForumPartRecord>().Where(f => f.Id == forumPart.Id)
+                .List()
+                .LastOrDefault();
+        }
+
+        public PostPart GetLatestPost(ThreadPart threadPart, VersionOptions versionOptions) {
+            return _contentManager
+                .Query<PostPart, PostPartRecord>(versionOptions)
+                .Join<ThreadPartRecord>()
+                .Join<ForumPartRecord>().Where(f => f.Id == threadPart.Id)
                 .List()
                 .LastOrDefault();
         }

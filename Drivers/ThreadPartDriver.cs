@@ -1,5 +1,6 @@
 ﻿using JetBrains.Annotations;
 using NGM.Forum.Models;
+using NGM.Forum.Services;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Drivers;
 using Orchard.Security;
@@ -13,12 +14,15 @@ namespace NGM.Forum.Drivers {
 
         private readonly IAuthenticationService _authenticationService;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IPostService _postService;
 
         public ThreadPartDriver(
             IAuthenticationService authenticationService,
-            IAuthorizationService authorizationService) {
+            IAuthorizationService authorizationService,
+            IPostService postService) {
             _authenticationService = authenticationService;
             _authorizationService = authorizationService;
+            _postService = postService;
         }
 
         protected override string Prefix {
@@ -28,10 +32,14 @@ namespace NGM.Forum.Drivers {
         protected override DriverResult Display(ThreadPart threadPart, string displayType, dynamic shapeHelper) {
             var postCount = threadPart.PostCount >= 1 ? threadPart.PostCount - 1 : threadPart.PostCount;
 
+            var latestPostPart = _postService.GetLatestPost(threadPart, VersionOptions.Published);
+
             if (threadPart.ForumPart.IsClosed) {
                 return Combined(
                     ContentShape("Parts_Threads_Thread_Status",
                                  () => shapeHelper.Parts_Threads_Thread_Status(ContentPart: threadPart)),
+                    ContentShape("Parts_Threads_Thread_LatestPost",
+                                 () => shapeHelper.Parts_Threads_Thread_LatestPost(ContentPart: latestPostPart)),
                     ContentShape("Parts_Threads_Thread_PostCount",
                                  () => shapeHelper.Parts_Threads_Thread_PostCount(ContentPart: threadPart, PostCount: postCount))
                     );
@@ -39,11 +47,13 @@ namespace NGM.Forum.Drivers {
             
             return Combined(
                 ContentShape("Parts_Threads_Thread_Status",
-                    () => shapeHelper.Parts_Threads_Thread_Status(ContentPart: threadPart)),
+                            () => shapeHelper.Parts_Threads_Thread_Status(ContentPart: threadPart)),
+                ContentShape("Parts_Threads_Thread_LatestPost",
+                            () => shapeHelper.Parts_Threads_Thread_LatestPost(ContentPart: latestPostPart)),
                 ContentShape("Parts_Threads_Thread_Manage",
-                    () => shapeHelper.Parts_Threads_Thread_Manage(ContentPart: threadPart)),
+                            () => shapeHelper.Parts_Threads_Thread_Manage(ContentPart: threadPart)),
                 ContentShape("Parts_Threads_Thread_PostCount",
-                    () => shapeHelper.Parts_Threads_Thread_PostCount(ContentPart: threadPart, PostCount: postCount))
+                            () => shapeHelper.Parts_Threads_Thread_PostCount(ContentPart: threadPart, PostCount: postCount))
                 );
         }
 
