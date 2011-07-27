@@ -4,15 +4,16 @@
     
     <Match DisplayType="Detail">
       <Place
-            Parts_Forums_Forum_Status="Meta:4"
+            Parts_Forums_Forum_Status="Meta:1"
             Parts_Forums_Thread_List="Content"
-            Parts_Forums_Forum_Manage="Content:before.1"/>
+            Parts_Common_Body="-"
+            Parts_Forums_Forum_Manage="Meta:2"/>
     </Match>
     <Match DisplayType="Summary">
       <Place
-            Parts_Forums_Forum_Status="Meta:4"
-            Parts_Forums_Forum_ThreadCount="Meta:3"
-            Parts_Forums_Forum_PostCount="Meta:3"
+            Parts_Forums_Forum_Status="Meta:1"
+            Parts_Forums_Forum_ThreadCount="Content:before.2"
+            Parts_Forums_Forum_PostCount="Content:before.2"
             Parts_Forums_Forum_LatestPost="Content:before.1"/>
     </Match>
   </Match>
@@ -31,8 +32,10 @@
     </Match>
     <Match DisplayType="Summary">
       <Place
-            Parts_Threads_Thread_Status="Meta:4"
-            Parts_Threads_Thread_PostCount="Meta:3"/>
+            Parts_Common_Metadata_Summary="-"
+            Parts_Threads_Thread_PostCount="Content:before.1"
+            Parts_Threads_Thread_Status="Meta:2"
+            Parts_Threads_Thread_LatestPost="Meta:5"/>
     </Match>
   </Match>
 
@@ -42,7 +45,7 @@
     <Match DisplayType="Detail">
       <Place 
             Parts_Posts_Post_Title="Header:5"
-            Parts_Posts_Post_Manage="Content:after.1"/>
+            Parts_Posts_Post_Manage="Actions"/>
     </Match>
   </Match>
 </Placement>

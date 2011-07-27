@@ -9,12 +9,5 @@
     @if (!forumPart.IsClosed) {
         <a href="@Url.CreateThread(forumPart)" class="create">@T("Create Post")</a>
     }
-@*        if (AuthorizedFor(NGM.Forum.Permissions.ManageForums)) {
-            <text> | </text><a href="@Url.CloseForum(forumPart)" class="close">@T("Close")</a>
-        }*@
-@*    }
-    else if (AuthorizedFor(NGM.Forum.Permissions.ManageForums)) {
-        <a href="@Url.OpenForum(forumPart)" class="open">@T("Open")</a>
-    }*@
   </p>
 </div>

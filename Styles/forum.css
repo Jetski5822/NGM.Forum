@@ -1,7 +1,44 @@
-﻿div.metadata  
+﻿.forums li
 {
+	height: 95px;
 }
 
-.forum h1
-{	
+.threads li
+{
+	height: 85px;
+}
+
+.forums header, .forums .latestpost
+{
+	height: 75px;	
+	width: 33%;
+	float: left;
+}
+
+.forum div
+{
+	margin: 10px 0px 0px 0px;
+}
+
+.thread-count, .post-count
+{
+    float: left;
+    width: 200px;
+}
+
+#thread-list
+{
+	clear:left;	
+	margin: 0;
+}
+
+.forum-threads article
+{
+	height: 85px;
+}
+
+.forum-threads header
+{
+	width:75%;
+	float:left;
 }

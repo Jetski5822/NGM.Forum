@@ -1,8 +1,0 @@
-#@{
-    Model.ContentItems.Classes.Add("content-items");
-    Model.ContentItems.Classes.Add("threads");
-}
-@Display(Model.ContentItems)
-@if (Model.ContentItems.Items.Count < 1) {
-<p>@T("No threads found.")</p>
-}
