@@ -75,6 +75,21 @@ namespace NGM.Forum.Controllers {
             return Redirect(Url.ForumForAdmin(forum));
         }
 
+        public ActionResult List() {
+            var list = _orchardServices.New.List();
+            list.AddRange(_forumService.Get(VersionOptions.Latest)
+                              .Select(b => {
+                                  var forum = _orchardServices.ContentManager.BuildDisplay(b, "SummaryAdmin");
+                                  forum.TotalPostCount = _threadService.Get(b, VersionOptions.Latest).Count();
+                                  return forum;
+                              }));
+
+            dynamic viewModel = _orchardServices.New.ViewModel()
+                .ContentItems(list);
+            // Casting to avoid invalid (under medium trust) reflection over the protected View method and force a static invocation.
+            return View((object)viewModel);
+        }
+
         public ActionResult Item(int forumId, PagerParameters pagerParameters) {
             Pager pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
             ForumPart forumPart = _forumService.Get(forumId, VersionOptions.Latest).As<ForumPart>();
@@ -93,21 +108,6 @@ namespace NGM.Forum.Controllers {
 
             // Casting to avoid invalid (under medium trust) reflection over the protected View method and force a static invocation.
             return View((object)forum);
-        }
-
-        public ActionResult List() {
-            var list = _orchardServices.New.List();
-            list.AddRange(_forumService.Get(VersionOptions.Latest)
-                              .Select(b => {
-                                  var forum = _orchardServices.ContentManager.BuildDisplay(b, "SummaryAdmin");
-                                  forum.TotalPostCount = _threadService.Get(b, VersionOptions.Latest).Count();
-                                  return forum;
-                              }));
-
-            dynamic viewModel = _orchardServices.New.ViewModel()
-                .ContentItems(list);
-            // Casting to avoid invalid (under medium trust) reflection over the protected View method and force a static invocation.
-            return View((object)viewModel);
         }
 
         bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties) {

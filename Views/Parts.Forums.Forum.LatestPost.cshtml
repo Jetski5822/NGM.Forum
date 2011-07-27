@@ -1,0 +1,12 @@
+﻿@using NGM.Forum.Extensions
+@using NGM.Forum.Models
+@{
+    var postPart = (PostPart)Model.ContentPart;
+    
+    string bodyHtml = "Latest post to go here...";
+    if (postPart != null) {
+        bodyHtml = postPart.Text.ToString();
+    }
+    var body = new HtmlString(Html.Excerpt(bodyHtml, 200).ToString().Replace(Environment.NewLine, "</p>" + Environment.NewLine + "<p>")); 
+}
+<div>@bodyHtml</div>

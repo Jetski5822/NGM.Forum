@@ -50,6 +50,20 @@ namespace NGM.Forum {
                                                  },
                              new RouteDescriptor {
                                                      Route = new Route(
+                                                         "Admin/Forums/{forumId}",
+                                                         new RouteValueDictionary {
+                                                                                      {"area", Constants.LocalArea},
+                                                                                      {"controller", "ForumAdmin"},
+                                                                                      {"action", "Item"}
+                                                                                  },
+                                                         new RouteValueDictionary (),
+                                                         new RouteValueDictionary {
+                                                                                      {"area", Constants.LocalArea}
+                                                                                  },
+                                                         new MvcRouteHandler())
+                                                 },
+                             new RouteDescriptor {
+                                                     Route = new Route(
                                                          "Forums",
                                                          new RouteValueDictionary {
                                                                                       {"area", Constants.LocalArea},
