@@ -15,6 +15,11 @@
 	float: left;
 }
 
+.thread .latestpost 
+{
+	width: 75%;
+}
+
 .forum div
 {
 	margin: 10px 0px 0px 0px;
@@ -30,11 +35,6 @@
 {
 	clear:left;	
 	margin: 0;
-}
-
-.forum-threads article
-{
-	height: 85px;
 }
 
 .forum-threads header
