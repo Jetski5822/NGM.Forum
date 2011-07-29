@@ -1,8 +1,13 @@
 ﻿@using NGM.Forum.Extensions
 @using NGM.Forum.Models
+@{
+    var postPart = (PostPart)Model.ContentPart;
+}
 
 <div class="item-properties actions">
   <p>
-    <a href="@Url.ReplyPost((Orchard.ContentManagement.IContent)Model.ContentPart.ContentItem)" class="create">@T("Reply")</a>
+    @if (!Model.IsClosed) {
+        <a href="@Url.ReplyPost(postPart)" class="create">@T("Reply")</a>
+    }
   </p>
 </div>

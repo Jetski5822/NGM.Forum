@@ -90,6 +90,7 @@
     <Content Include="Content\Images\question2.gif" />
     <Content Include="Content\Images\question_mark.png" />
     <Content Include="Content\Images\sticky.gif" />
+    <Content Include="Content\Images\support-forums-closed.png" />
     <Content Include="Content\Images\topic_hot_locked_sticky.png" />
     <Content Include="Content\Images\topic_locked.png" />
     <Content Include="Content\Images\topic_sticky.png" />
