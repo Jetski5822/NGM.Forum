@@ -45,7 +45,7 @@
     <Match DisplayType="Detail">
       <Place 
             Parts_Posts_Post_Title="Header:5"
-            Parts_Posts_Post_Manage="Actions"/>
+            Parts_Posts_Post_Manage="Content:after.1"/>
     </Match>
   </Match>
 </Placement>

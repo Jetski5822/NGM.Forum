@@ -3,7 +3,10 @@
     Model.ContentItems.Classes.Add("content-items");
     Model.ContentItems.Classes.Add("forums");
 }
-@Display(Model.ContentItems)
-@if (Model.ContentItems.Items.Count < 1) {
-<p>@T("No forums found.")</p>
-}
+<h1>@T("Forums")</h1>
+<div id="forum-list">
+    @Display(Model.ContentItems)
+    @if (Model.ContentItems.Items.Count < 1) {
+    <p>@T("No forums found.")</p>
+    }
+</div>
