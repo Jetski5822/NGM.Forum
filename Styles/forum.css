@@ -10,9 +10,9 @@
 
 .forums header, .forums .latestpost
 {
-	height: 75px;	
 	width: 33%;
 	float: left;
+	height: 75px;
 }
 
 .thread .latestpost 
