@@ -11,6 +11,7 @@ using Orchard.ContentManagement;
 using Orchard.DisplayManagement;
 using Orchard.Localization;
 using Orchard.Mvc;
+using Orchard.Security;
 using Orchard.Settings;
 using Orchard.Themes;
 using Orchard.UI.Navigation;
@@ -84,6 +85,9 @@ namespace NGM.Forum.Controllers {
         }
 
         public ActionResult Item(string forumPath, PagerParameters pagerParameters) {
+            if (!_orchardServices.Authorizer.Authorize(StandardPermissions.AccessFrontEnd, T("Not allowed to view forum")))
+                return new HttpUnauthorizedResult();
+
             Pager pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
             var correctedPath = _forumPathConstraint.FindPath(forumPath);
             if (correctedPath == null)
