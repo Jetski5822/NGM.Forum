@@ -5,12 +5,20 @@
 
 @{
     var postPart = (PostPart)Model.ContentPart;
-    var user = postPart.As<ICommonPart>().Owner;
+
+    string userName = "Anon";
+    if (postPart != null){
+        userName = postPart.As<ICommonPart>().Owner.UserName;
+    }
     
-    string bodyHtml = "Latest post to go here...";
+    string bodyHtml = "No posts yet...";
     if (postPart != null) {
         bodyHtml = postPart.Text.ToString();
     }
     var body = new HtmlString(Html.Excerpt(bodyHtml, 200).ToString().Replace(Environment.NewLine, "</p>" + Environment.NewLine + "<p>")); 
 }
-<div class="latestpost">@body <strong>by</strong> @user.UserName </div>
+@if (postPart != null) {
+    <div class="latstpost">@body <strong>by</strong> @userName </div>
+} else { 
+    <div class="latstpost">@body</div>
+}

@@ -4,6 +4,7 @@ using NGM.Forum.Extensions;
 using NGM.Forum.Models;
 using Orchard;
 using Orchard.ContentManagement;
+using Orchard.ContentManagement.Aspects;
 using Orchard.Core.Common.Models;
 
 namespace NGM.Forum.Services {
@@ -28,10 +29,14 @@ namespace NGM.Forum.Services {
         }
 
         public PostPart GetLatestPost(ForumPart forumPart, VersionOptions versionOptions) {
-            return _contentManager
-                .Query<PostPart, PostPartRecord>(versionOptions)
-                .Join<CommonPartRecord>()
-                .List()
+            var threadParts = _contentManager
+                .Query<ThreadPart, ThreadPartRecord>(versionOptions)
+                .Join<CommonPartRecord>().Where(cpr => cpr.Container == forumPart.ContentItem.Record)
+                .List();
+
+            return threadParts
+                .Select(o => GetLatestPost(o, versionOptions))
+                .OrderBy(o => o.As<ICommonPart>().PublishedUtc)
                 .LastOrDefault();
         }
 
