@@ -26,12 +26,17 @@ namespace NGM.Forum.Controllers {
         public Localizer T { get; set; }
 
         public ActionResult Create(int contentId) {
-            if (IsNotAllowedToCreatePost())
-                return new HttpUnauthorizedResult();
-
             var contentItem = _orchardServices.ContentManager.Get(contentId, VersionOptions.Latest);
-            if (contentItem.As<PostPart>() == null && contentItem.As<ThreadPart>() == null) {
-                return HttpNotFound();
+            if (contentItem.As<PostPart>() == null)
+            {
+                if (IsNotAllowedToCreatePost())
+                    return new HttpUnauthorizedResult();
+
+                if (contentItem.As<ThreadPart>() == null)
+                    return HttpNotFound();
+
+                if (IsNotAllowedToReplyToPost())
+                    return new HttpUnauthorizedResult();
             }
 
             var part = _orchardServices.ContentManager.New<PostPart>(ContentPartConstants.Post);
@@ -44,22 +49,23 @@ namespace NGM.Forum.Controllers {
         [HttpPost, ActionName("Create")]
         public ActionResult CreatePOST(int contentId) {
             var contentItem = _orchardServices.ContentManager.Get(contentId, VersionOptions.Latest);
-            if (contentItem.As<PostPart>() == null && contentItem.As<ThreadPart>() == null) {
-                return HttpNotFound();
+            if (contentItem.As<PostPart>() == null) {
+                if (IsNotAllowedToCreatePost())
+                    return new HttpUnauthorizedResult();
+
+                if (contentItem.As<ThreadPart>() == null)
+                    return HttpNotFound();
+
+                if (IsNotAllowedToReplyToPost())
+                    return new HttpUnauthorizedResult();
             }
 
             var post = _orchardServices.ContentManager.New<PostPart>(ContentPartConstants.Post);
             
             if (contentItem.As<PostPart>() == null) {
-                if (IsNotAllowedToCreatePost())
-                    return new HttpUnauthorizedResult();
-
                 post.ThreadPart = contentItem.As<ThreadPart>();
             }
             else {
-                if (IsNotAllowedToReplyToPost())
-                    return new HttpUnauthorizedResult();
-
                 post.ThreadPart = contentItem.As<PostPart>().ThreadPart;
                 post.ParentPostId = contentItem.As<PostPart>().Id;
             }
