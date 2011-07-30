@@ -1,3 +1,8 @@
 ﻿@using Orchard.ContentManagement;
 
-<h1>Re: @Model.RoutePart.Title</h1>
+<h1>By @Model.CommonPart.Owner.UserName - 
+@if (!Model.ContentPart.IsParentThread())
+{
+    <span>Re:</span> 
+}
+@Model.RoutePart.Title</h1>
