@@ -49,7 +49,7 @@ namespace NGM.Forum.Controllers {
         public Localizer T { get; set; }
 
         public ActionResult Create(int forumId) {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.AddThread, T("Not allowed to create thread")))
+            if (!_orchardServices.Authorizer.Authorize(Permissions.CreatePost, T("Not allowed to create thread")))
                 return new HttpUnauthorizedResult();
 
             var forum = _forumService.Get(forumId, VersionOptions.Latest).As<ForumPart>();
@@ -75,7 +75,7 @@ namespace NGM.Forum.Controllers {
 
         [HttpPost, ActionName("Create")]
         public ActionResult CreatePOST(int forumId) {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.AddThread, T("Not allowed to create thread")))
+            if (!_orchardServices.Authorizer.Authorize(Permissions.CreatePost, T("Not allowed to create thread")))
                 return new HttpUnauthorizedResult();
 
             var forum = _forumService.Get(forumId, VersionOptions.Latest).As<ForumPart>();
@@ -110,7 +110,7 @@ namespace NGM.Forum.Controllers {
         }
 
         public ActionResult Close(int threadId) {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.CloseThread, T("Not allowed to close thread")))
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageOpenCloseThread, T("Not allowed to close thread")))
                 return new HttpUnauthorizedResult();
 
             var thread = _threadService.Get(threadId, VersionOptions.Latest).As<ThreadPart>();
@@ -123,7 +123,7 @@ namespace NGM.Forum.Controllers {
         }
 
         public ActionResult Open(int threadId) {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.OpenThread, T("Not allowed to open thread")))
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageOpenCloseThread, T("Not allowed to open thread")))
                 return new HttpUnauthorizedResult();
 
             var thread = _threadService.Get(threadId, VersionOptions.Latest).As<ThreadPart>();

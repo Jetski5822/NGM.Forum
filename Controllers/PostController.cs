@@ -43,21 +43,25 @@ namespace NGM.Forum.Controllers {
 
         [HttpPost, ActionName("Create")]
         public ActionResult CreatePOST(int contentId) {
-            if (IsNotAllowedToCreatePost())
-                return new HttpUnauthorizedResult();
-
             var contentItem = _orchardServices.ContentManager.Get(contentId, VersionOptions.Latest);
             if (contentItem.As<PostPart>() == null && contentItem.As<ThreadPart>() == null) {
                 return HttpNotFound();
             }
 
             var post = _orchardServices.ContentManager.New<PostPart>(ContentPartConstants.Post);
-            if (contentItem.As<PostPart>() != null) {
-                post.ThreadPart = contentItem.As<PostPart>().ThreadPart;
-                post.ParentPostId = contentItem.As<PostPart>().Id;
+            
+            if (contentItem.As<PostPart>() == null) {
+                if (IsNotAllowedToCreatePost())
+                    return new HttpUnauthorizedResult();
+
+                post.ThreadPart = contentItem.As<ThreadPart>();
             }
             else {
-                post.ThreadPart = contentItem.As<ThreadPart>();
+                if (IsNotAllowedToReplyToPost())
+                    return new HttpUnauthorizedResult();
+
+                post.ThreadPart = contentItem.As<PostPart>().ThreadPart;
+                post.ParentPostId = contentItem.As<PostPart>().Id;
             }
 
             _orchardServices.ContentManager.Create(post, VersionOptions.Draft);
@@ -83,7 +87,11 @@ namespace NGM.Forum.Controllers {
         }
 
         private bool IsNotAllowedToCreatePost() {
-            return !_orchardServices.Authorizer.Authorize(Permissions.AddPost, T("Not allowed to create post"));
+            return !_orchardServices.Authorizer.Authorize(Permissions.CreatePost, T("Not allowed to create post"));
+        }
+
+        private bool IsNotAllowedToReplyToPost() {
+            return !_orchardServices.Authorizer.Authorize(Permissions.ReplyPost, T("Not allowed to reply to a post"));
         }
     }
 }
