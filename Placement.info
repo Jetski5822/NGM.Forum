@@ -15,10 +15,11 @@
     </Match>
     <Match DisplayType="Summary">
       <Place
-            Parts_Forums_Forum_Status="Meta:1"
-            Parts_Forums_Forum_ThreadCount="Content:before.2"
+            Parts_Common_Metadata_Summary="-"
+            Parts_Forums_Forum_Status="Meta:2"
+            Parts_Forums_Forum_ThreadCount="Content:before.1"
             Parts_Forums_Forum_PostCount="Content:before.2"
-            Parts_Forums_Forum_LatestPost="Content:before.1"/>
+            Parts_Forums_Forum_LatestPost="Content:after.1"/>
     </Match>
   </Match>
 

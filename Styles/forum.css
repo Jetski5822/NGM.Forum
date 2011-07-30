@@ -8,16 +8,21 @@
 	height: 85px;
 }
 
-.forums header, .forums .latestpost
-{
-	width: 33%;
-	float: left;
-	height: 75px;
-}
-
-.thread .latestpost 
+.forum header, .thread header
 {
 	width: 75%;
+	float: left;
+}
+
+.post header
+{
+	width: 100%;
+	float: none;	
+}
+
+.latestpost
+{
+	clear: left;
 }
 
 .forum div
@@ -25,20 +30,12 @@
 	margin: 10px 0px 0px 0px;
 }
 
-.thread-count, .post-count
-{
-    float: left;
-    width: 200px;
-}
-
 #thread-list
 {
-	clear:left;	
-	margin: 0;
+	clear:left;
 }
 
-.forum-threads header
+.thread-posts
 {
-	width:75%;
-	float:left;
+	clear: left;
 }
