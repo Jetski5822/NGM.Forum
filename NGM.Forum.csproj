@@ -83,12 +83,16 @@
     <Compile Include="Shapes.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Images\attachment.gif" />
     <Content Include="Content\Images\discussion-ext-icon.png" />
     <Content Include="Content\Images\Discussion-small.png" />
+    <Content Include="Content\Images\folder_answered.png" />
     <Content Include="Content\Images\Jhoos-Sticky-Postit-Notes.icon.gif" />
     <Content Include="Content\Images\question.png" />
     <Content Include="Content\Images\question2.gif" />
     <Content Include="Content\Images\question_mark.png" />
+    <Content Include="Content\Images\status_Answered.gif" />
+    <Content Include="Content\Images\status_NotAnswered.gif" />
     <Content Include="Content\Images\sticky.gif" />
     <Content Include="Content\Images\support-forums-closed.png" />
     <Content Include="Content\Images\topic_hot_locked_sticky.png" />

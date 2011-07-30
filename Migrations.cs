@@ -18,6 +18,7 @@ namespace NGM.Forum {
                     .ContentPartRecord()
                     .Column<bool>("IsSticky")
                     .Column<bool>("IsClosed")
+                    .Column<bool>("IsAnswered")
                     .Column<int>("PostCount")
                     .Column<int>("Type")
                 );

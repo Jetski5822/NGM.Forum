@@ -31,6 +31,11 @@ namespace NGM.Forum.Models {
             set { Record.IsClosed = value; }
         }
 
+        public bool IsAnswered {
+            get { return Record.IsAnswered; }
+            set { Record.IsAnswered = value; }
+        }
+
         public ThreadType Type {
             get { return (ThreadType)Record.Type; }
             set { Record.Type = (int)value; }
