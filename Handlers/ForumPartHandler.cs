@@ -19,12 +19,6 @@ namespace NGM.Forum.Handlers {
             if (blog == null)
                 return;
 
-            //context.Metadata.EditorRouteValues = new RouteValueDictionary {
-            //    {"Area", Constants.LocalArea},
-            //    {"Controller", "ForumAdmin"},
-            //    {"Action", "Edit"},
-            //    {"forumId", context.ContentItem.Id}
-            //};
             context.Metadata.AdminRouteValues = new RouteValueDictionary {
                 {"Area", Constants.LocalArea},
                 {"Controller", "ForumAdmin"},
