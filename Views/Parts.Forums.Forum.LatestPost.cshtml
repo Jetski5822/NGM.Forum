@@ -1,7 +1,11 @@
 ﻿@using NGM.Forum.Extensions
 @using NGM.Forum.Models
+@using Orchard.ContentManagement
+@using Orchard.ContentManagement.Aspects
+
 @{
     var postPart = (PostPart)Model.ContentPart;
+    var user = postPart.As<ICommonPart>().Owner;
     
     string bodyHtml = "Latest post to go here...";
     if (postPart != null) {
@@ -9,4 +13,4 @@
     }
     var body = new HtmlString(Html.Excerpt(bodyHtml, 200).ToString().Replace(Environment.NewLine, "</p>" + Environment.NewLine + "<p>")); 
 }
-<div class="latestpost">@bodyHtml</div>
+<div class="latestpost">@body <strong>by</strong> @user.UserName </div>

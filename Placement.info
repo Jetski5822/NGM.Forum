@@ -1,4 +1,8 @@
 ﻿<Placement>
+  <Match DisplayType="Summary">
+    <Place Parts_Common_Body_Summary="-"/>
+  </Match>
+  
   <Match ContentType="Forum">
     <Place Parts_Status_Forum_Edit="Content:2"/>
     

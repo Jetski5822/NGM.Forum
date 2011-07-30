@@ -30,8 +30,7 @@ namespace NGM.Forum.Services {
         public PostPart GetLatestPost(ForumPart forumPart, VersionOptions versionOptions) {
             return _contentManager
                 .Query<PostPart, PostPartRecord>(versionOptions)
-                .Join<ThreadPartRecord>()
-                .Join<ForumPartRecord>().Where(f => f.Id == forumPart.Id)
+                .Join<CommonPartRecord>()
                 .List()
                 .LastOrDefault();
         }
@@ -39,8 +38,7 @@ namespace NGM.Forum.Services {
         public PostPart GetLatestPost(ThreadPart threadPart, VersionOptions versionOptions) {
             return _contentManager
                 .Query<PostPart, PostPartRecord>(versionOptions)
-                .Join<ThreadPartRecord>()
-                .Join<ForumPartRecord>().Where(f => f.Id == threadPart.Id)
+                .Join<CommonPartRecord>().Where(cpr => cpr.Container == threadPart.ContentItem.Record)
                 .List()
                 .LastOrDefault();
         }
