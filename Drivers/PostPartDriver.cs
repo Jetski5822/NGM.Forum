@@ -19,7 +19,7 @@ namespace NGM.Forum.Drivers {
 
                 return Combined(
                     ContentShape("Parts_Posts_Post_Title",
-                    () => shapeHelper.Parts_Posts_Post_Title(ContentPart: postPart, CommonPart: postPart.ThreadPart.As<ICommonPart>(), RoutePart: postPart.ThreadPart.As<RoutePart>())),
+                    () => shapeHelper.Parts_Posts_Post_Title(ContentPart: postPart, CommonPart: postPart.As<ICommonPart>(), RoutePart: postPart.ThreadPart.As<RoutePart>())),
                     ContentShape("Parts_Posts_Post_Manage",
                                  () => shapeHelper.Parts_Posts_Post_Manage(ContentPart: postPart, IsClosed: postPart.ThreadPart.IsClosed))
                     );
