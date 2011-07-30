@@ -5,9 +5,11 @@ using Orchard.Security.Permissions;
 namespace NGM.Forum {
     public class Permissions : IPermissionProvider {
         public static readonly Permission ManageForums = new Permission { Description = "Manage forums", Name = "ManageForums" };
+        public static readonly Permission ViewForum = new Permission { Description = "View forum", Name = "ViewForum" };
 
         public static readonly Permission CreatePost = new Permission { Description = "Create a post", Name = "CreatePost" };
         public static readonly Permission ReplyPost = new Permission { Description = "Reply to a post", Name = "ReplyPost" };
+        public static readonly Permission ViewPost = new Permission { Description = "View post", Name = "ViewPost" };
 
         public static readonly Permission DeleteOwnPost = new Permission { Description = "Delete your own post", Name = "DeleteOwnPost" };
         public static readonly Permission DeleteAnyPost = new Permission { Description = "Delete any post", Name = "DeleteAnyPost" };

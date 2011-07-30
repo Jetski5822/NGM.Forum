@@ -136,7 +136,7 @@ namespace NGM.Forum.Controllers {
         }
 
         public ActionResult Item(string forumPath, string threadSlug, PagerParameters pagerParameters) {
-            if (!_orchardServices.Authorizer.Authorize(StandardPermissions.AccessFrontEnd, T("Not allowed to view thread")))
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ViewPost, T("Not allowed to view thread")))
                 return new HttpUnauthorizedResult();
 
             var pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
