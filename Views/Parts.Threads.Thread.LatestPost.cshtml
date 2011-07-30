@@ -11,6 +11,6 @@
     if (postPart != null) {
         bodyHtml = postPart.Text.ToString();
     }
-    var body = new HtmlString(Html.Excerpt(bodyHtml, 200).ToString().Replace(Environment.NewLine, "</p>" + Environment.NewLine + "<p>")); 
+    var body = new HtmlString(Html.Excerpt(bodyHtml, 50).ToString().Replace(Environment.NewLine, "</p>" + Environment.NewLine + "<p>")); 
 }
 <div class="latestpost">@body <strong>by</strong> @commonPart.Owner.UserName (@commonPart.PublishedUtc.Value.ToString("MM/dd/yyyy hh:mm tt"))</div>
