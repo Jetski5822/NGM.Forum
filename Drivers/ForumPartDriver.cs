@@ -3,15 +3,23 @@ using NGM.Forum.Models;
 using NGM.Forum.Services;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Drivers;
+using Orchard.Security;
 
 namespace NGM.Forum.Drivers {
     [UsedImplicitly]
     public class ForumPartDriver : ContentPartDriver<ForumPart> {
+        private const string StatusCloseTemplateName = "Parts.Status.Close.ForumPart";
+
+        private readonly IAuthenticationService _authenticationService;
+        private readonly IAuthorizationService _authorizationService;
         private readonly IPostService _postService;
 
-        private const string StatusTemplateName = "Parts.Status.ForumPart";
-
-        public ForumPartDriver(IPostService postService) {
+        public ForumPartDriver(
+            IAuthenticationService authenticationService,
+            IAuthorizationService authorizationService,
+            IPostService postService) {
+            _authenticationService = authenticationService;
+            _authorizationService = authorizationService;
             _postService = postService;
         }
 
@@ -39,10 +47,12 @@ namespace NGM.Forum.Drivers {
         }
 
         protected override DriverResult Editor(ForumPart part, dynamic shapeHelper) {
+            if (!_authorizationService.TryCheckAccess(Permissions.ManageForums, _authenticationService.GetAuthenticatedUser(), part))
+                return null;
+
             return
-                Combined(
-                    ContentShape("Parts_Status_Forum_Edit",
-                                 () => shapeHelper.EditorTemplate(TemplateName: StatusTemplateName, Model: part, Prefix: Prefix)));
+                Combined(ContentShape("Parts_Status_Close_Forum_Edit",
+                                 () => shapeHelper.EditorTemplate(TemplateName: StatusCloseTemplateName, Model: part, Prefix: Prefix)));
         }
 
         protected override DriverResult Editor(ForumPart part, IUpdateModel updater, dynamic shapeHelper) {

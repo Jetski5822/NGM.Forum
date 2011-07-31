@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
 using Orchard.ContentManagement;
@@ -9,7 +10,8 @@ namespace NGM.Forum.Drivers {
     [UsedImplicitly]
     public class ThreadPartDriver : ContentPartDriver<ThreadPart> {
         private const string RoutableTemplateName = "Parts.Routable.ThreadPart";
-        private const string StatusTemplateName = "Parts.Status.ThreadPart";
+        private const string StatusCloseTemplateName = "Parts.Status.Close.ThreadPart";
+        private const string StatusStickyTemplateName = "Parts.Status.Sticky.ThreadPart";
         private const string TypeTemplateName = "Parts.Type.ThreadPart";
 
         private readonly IAuthenticationService _authenticationService;
@@ -34,42 +36,37 @@ namespace NGM.Forum.Drivers {
 
             var latestPostPart = _postService.GetLatestPost(threadPart, VersionOptions.Published);
 
-            if (threadPart.ForumPart.IsClosed) {
-                return Combined(
-                    ContentShape("Parts_Threads_Thread_Status",
-                                 () => shapeHelper.Parts_Threads_Thread_Status(ContentPart: threadPart)),
-                    ContentShape("Parts_Threads_Thread_LatestPost",
-                                 () => shapeHelper.Parts_Threads_Thread_LatestPost(ContentPart: latestPostPart)),
-                    ContentShape("Parts_Threads_Thread_PostCount",
-                                 () => shapeHelper.Parts_Threads_Thread_PostCount(ContentPart: threadPart, PostCount: postCount))
-                    );
-            }
-            
-            return Combined(
+            List<ContentShapeResult> contentShapeResults = new List<ContentShapeResult>(new[] {
                 ContentShape("Parts_Threads_Thread_Status",
-                            () => shapeHelper.Parts_Threads_Thread_Status(ContentPart: threadPart)),
+                             () => shapeHelper.Parts_Threads_Thread_Status(ContentPart: threadPart)),
                 ContentShape("Parts_Threads_Thread_LatestPost",
-                            () => shapeHelper.Parts_Threads_Thread_LatestPost(ContentPart: latestPostPart)),
-                ContentShape("Parts_Threads_Thread_Manage",
-                            () => shapeHelper.Parts_Threads_Thread_Manage(ContentPart: threadPart)),
+                             () => shapeHelper.Parts_Threads_Thread_LatestPost(ContentPart: latestPostPart)),
                 ContentShape("Parts_Threads_Thread_PostCount",
-                            () => shapeHelper.Parts_Threads_Thread_PostCount(ContentPart: threadPart, PostCount: postCount))
-                );
+                             () => shapeHelper.Parts_Threads_Thread_PostCount(ContentPart: threadPart, PostCount: postCount))
+            });
+
+            return Combined(contentShapeResults.ToArray());
         }
 
         protected override DriverResult Editor(ThreadPart threadPart, dynamic shapeHelper) {
-            if (!_authorizationService.TryCheckAccess(Permissions.ManageStickyThread, _authenticationService.GetAuthenticatedUser(), threadPart))
-                return ContentShape("Parts_Routable_Thread_Edit",
-                    () => shapeHelper.EditorTemplate(TemplateName: RoutableTemplateName, Model: threadPart, Prefix: Prefix));
+            List<ContentShapeResult> contentShapeResults = new List<ContentShapeResult>(new[] {
+                ContentShape("Parts_Type_Thread_Edit",
+                             () => shapeHelper.EditorTemplate(TemplateName: TypeTemplateName, Model: threadPart, Prefix: Prefix)),
+                ContentShape("Parts_Routable_Thread_Edit",
+                             () => shapeHelper.EditorTemplate(TemplateName: RoutableTemplateName, Model: threadPart, Prefix: Prefix))
+            });
 
-            return
-                Combined(
-                    ContentShape("Parts_Status_Thread_Edit",
-                                 () => shapeHelper.EditorTemplate(TemplateName: StatusTemplateName, Model: threadPart, Prefix: Prefix)),
-                    ContentShape("Parts_Type_Thread_Edit",
-                                 () => shapeHelper.EditorTemplate(TemplateName: TypeTemplateName, Model: threadPart, Prefix: Prefix)),
-                    ContentShape("Parts_Routable_Thread_Edit",
-                                 () => shapeHelper.EditorTemplate(TemplateName: RoutableTemplateName, Model: threadPart, Prefix: Prefix)));
+            if (_authorizationService.TryCheckAccess(Permissions.ManageOpenCloseThread, _authenticationService.GetAuthenticatedUser(), threadPart)) {
+                contentShapeResults.Add(ContentShape("Parts_Status_Close_Thread_Edit",
+                                                     () => shapeHelper.EditorTemplate(TemplateName: StatusCloseTemplateName, Model: threadPart, Prefix: Prefix)));
+            }
+
+            if (_authorizationService.TryCheckAccess(Permissions.ManageStickyThread, _authenticationService.GetAuthenticatedUser(), threadPart)) {
+                contentShapeResults.Add(ContentShape("Parts_Status_Sticky_Thread_Edit",
+                                                     () => shapeHelper.EditorTemplate(TemplateName: StatusStickyTemplateName, Model: threadPart, Prefix: Prefix)));                
+            }
+
+            return Combined(contentShapeResults.ToArray());
         }
 
         protected override DriverResult Editor(ThreadPart part, IUpdateModel updater, dynamic shapeHelper) {
