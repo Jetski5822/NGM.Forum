@@ -50,10 +50,24 @@ namespace NGM.Forum {
                                                  },
                              new RouteDescriptor {
                                                      Route = new Route(
-                                                         "Admin/Forums/{forumId}",
+                                                         "Admin/Forums/{forumId}/Threads",
                                                          new RouteValueDictionary {
                                                                                       {"area", Constants.LocalArea},
                                                                                       {"controller", "ForumAdmin"},
+                                                                                      {"action", "Item"}
+                                                                                  },
+                                                         new RouteValueDictionary (),
+                                                         new RouteValueDictionary {
+                                                                                      {"area", Constants.LocalArea}
+                                                                                  },
+                                                         new MvcRouteHandler())
+                                                 },
+                             new RouteDescriptor {
+                                                     Route = new Route(
+                                                         "Admin/Forums/{forumId}/Threads/{threadId}/Posts",
+                                                         new RouteValueDictionary {
+                                                                                      {"area", Constants.LocalArea},
+                                                                                      {"controller", "ThreadAdmin"},
                                                                                       {"action", "Item"}
                                                                                   },
                                                          new RouteValueDictionary (),

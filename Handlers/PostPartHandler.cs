@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Web.Routing;
 using JetBrains.Annotations;
+using NGM.Forum.Extensions;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
 using Orchard.ContentManagement;
@@ -36,7 +37,7 @@ namespace NGM.Forum.Handlers {
         private static void SetModelProperties(BuildShapeContext context, PostPart postPart) {
             context.Shape.Thread = postPart.ThreadPart;
         }
-
+        
         private void UpdatePostCount(PostPart postPart) {
             if (postPart.IsParentThread())
                 return;

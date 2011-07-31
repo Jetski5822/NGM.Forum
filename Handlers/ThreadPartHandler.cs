@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Web.Routing;
 using JetBrains.Annotations;
+using NGM.Forum.Extensions;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
 using Orchard.ContentManagement;
@@ -51,6 +52,20 @@ namespace NGM.Forum.Handlers {
                 forumPart.ContentItem.ContentManager.Flush();
                 forumPart.ThreadCount = _threadService.Get(forumPart, VersionOptions.Published).Count();
             }
+        }
+
+        protected override void GetItemMetadata(GetContentItemMetadataContext context) {
+            var blog = context.ContentItem.As<ThreadPart>();
+
+            if (blog == null)
+                return;
+
+            context.Metadata.AdminRouteValues = new RouteValueDictionary {
+                {"Area", Constants.LocalArea},
+                {"Controller", "ThreadAdmin"},
+                {"Action", "Item"},
+                {"threadId", context.ContentItem.Id}
+            };
         }
     }
 }

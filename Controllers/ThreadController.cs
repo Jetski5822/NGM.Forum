@@ -109,32 +109,6 @@ namespace NGM.Forum.Controllers {
             return Redirect(Url.ViewThread(thread));
         }
 
-        public ActionResult Close(int threadId) {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageOpenCloseThread, T("Not allowed to close thread")))
-                return new HttpUnauthorizedResult();
-
-            var thread = _threadService.Get(threadId, VersionOptions.Latest).As<ThreadPart>();
-            if (thread == null)
-                return HttpNotFound();
-
-            _threadService.CloseThread(thread);
-
-            return Redirect(Url.ViewThread(thread));
-        }
-
-        public ActionResult Open(int threadId) {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageOpenCloseThread, T("Not allowed to open thread")))
-                return new HttpUnauthorizedResult();
-
-            var thread = _threadService.Get(threadId, VersionOptions.Latest).As<ThreadPart>();
-            if (thread == null)
-                return HttpNotFound();
-
-            _threadService.OpenThread(thread);
-
-            return Redirect(Url.ViewThread(thread));
-        }
-
         public ActionResult Item(string forumPath, string threadSlug, PagerParameters pagerParameters) {
             if (!_orchardServices.Authorizer.Authorize(Permissions.ViewPost, T("Not allowed to view thread")))
                 return new HttpUnauthorizedResult();

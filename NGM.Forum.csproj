@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdminMenu.cs" />
+    <Compile Include="Controllers\ThreadAdminController.cs" />
     <Compile Include="Extensions\DynamicZoneExtensions.cs" />
     <Compile Include="Controllers\ForumAdminController.cs" />
     <Compile Include="Controllers\ForumController.cs" />
@@ -204,6 +205,12 @@
     <Content Include="Views\EditorTemplates\Parts.Status.Close.ForumPart.cshtml" />
     <Content Include="Views\EditorTemplates\Parts.Status.Close.ThreadPart.cshtml" />
     <Content Include="Views\EditorTemplates\Parts.Status.Sticky.ThreadPart.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Threads.Post.ListAdmin.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ThreadAdmin\Item.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
