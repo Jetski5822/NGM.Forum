@@ -19,7 +19,7 @@ namespace NGM.Forum {
 
         public static readonly Permission MoveThread = new Permission { Description = "Move thread to another forum", Name = "MoveThread" };
 
-        public static readonly Permission MoveAnyPost = new Permission { Description = "Move any post", Name = "MoveAnyPost" };
+        //public static readonly Permission MoveAnyPost = new Permission { Description = "Move any post", Name = "MoveAnyPost" };
 
         public static readonly Permission ManageOpenCloseThread = new Permission { Description = "Can open/close a thread", Name = "ManageOpenCloseThread" };
         public static readonly Permission ManageStickyThread = new Permission { Description = "Can create a thread that is sticky", Name = "ManageStickyThread" };
@@ -39,7 +39,7 @@ namespace NGM.Forum {
                 EditOwnPost,
                 EditAnyPost,
                 MoveThread,
-                MoveAnyPost,
+                //MoveAnyPost,
                 ManageOpenCloseThread,
                 ManageStickyThread,
                 MarkPostInOwnThreadAsAnswer,
