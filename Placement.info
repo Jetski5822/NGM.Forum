@@ -49,7 +49,8 @@
     <Place Parts_Common_Owner_Edit="-"/>
     
     <Match DisplayType="Detail">
-      <Place 
+      <Place
+            Parts_Posts_Post_Metadata="Meta:1"
             Parts_Posts_Post_Title="Header:5"
             Parts_Posts_Post_Manage="Content:after.1"/>
     </Match>

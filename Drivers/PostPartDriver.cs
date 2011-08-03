@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 using NGM.Forum.Models;
 using Orchard.ContentManagement.Aspects;
 using Orchard.ContentManagement.Drivers;
@@ -13,16 +14,21 @@ namespace NGM.Forum.Drivers {
         }
 
         protected override DriverResult Display(PostPart postPart, string displayType, dynamic shapeHelper) {
-            if (postPart.IsParentThread())
-                return Combined(ContentShape("Parts_Posts_Post_Manage",
-                                             () => shapeHelper.Parts_Posts_Post_Manage(ContentPart: postPart, IsClosed: postPart.ThreadPart.IsClosed)));
-
-            return Combined(
-                ContentShape("Parts_Posts_Post_Title",
-                             () => shapeHelper.Parts_Posts_Post_Title(ContentPart: postPart, CommonPart: postPart.As<ICommonPart>(), RoutePart: postPart.ThreadPart.As<RoutePart>())),
+            var contentShapeResults = new List<ContentShapeResult>(new[] {
                 ContentShape("Parts_Posts_Post_Manage",
-                             () => shapeHelper.Parts_Posts_Post_Manage(ContentPart: postPart, IsClosed: postPart.ThreadPart.IsClosed))
-                );
+                    () => shapeHelper.Parts_Posts_Post_Manage(ContentPart: postPart, IsClosed: postPart.ThreadPart.IsClosed)),
+                ContentShape("Parts_Posts_Post_Metadata",
+                    () => shapeHelper.Parts_Posts_Post_Metadata(ContentPart: postPart, CommonPart: postPart.As<ICommonPart>()))
+            });
+
+
+            if (postPart.IsParentThread())
+                return Combined(contentShapeResults.ToArray());
+
+            contentShapeResults.Add(ContentShape("Parts_Posts_Post_Title",
+                             () => shapeHelper.Parts_Posts_Post_Title(ContentPart: postPart, CommonPart: postPart.As<ICommonPart>(), RoutePart: postPart.ThreadPart.As<RoutePart>())));
+
+            return Combined(contentShapeResults.ToArray());
         }
     }
 }

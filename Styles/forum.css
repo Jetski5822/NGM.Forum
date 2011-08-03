@@ -34,3 +34,10 @@
 {
 	clear: left;
 }
+
+.owner-metadata
+{
+	float: left;
+    padding-right: 5px;
+    font-weight: bold;
+}
