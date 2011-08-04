@@ -1,10 +1,10 @@
 ﻿Name: Forums
 AntiForgery: enabled
 Author: Nicholas Mayne
-Website: https://github.com/Jetski5822/Orchard-Forum
+Website: http://orchardforums.codeplex.com/
 Version: 0.0.1
-OrchardVersion: 1.1.30
+OrchardVersion: 1.2.41
 Description: Introduces a forum module
 FeatureDescription: A basic forum module
-Dependencies: Contents
+Dependencies: Common, Routable, Orchard.jQuery
 Category: Content
