@@ -71,6 +71,7 @@
     <Compile Include="Routing\ForumPathConstraint.cs" />
     <Compile Include="Routing\ForumPathConstraintUpdator.cs" />
     <Compile Include="Routing\IForumPathConstraint.cs" />
+    <Compile Include="Security\ForumAuthorizationEventHandler.cs" />
     <Compile Include="Services\ForumService.cs" />
     <Compile Include="Extensions\UrlHelperExtensions.cs" />
     <Compile Include="Migrations.cs" />
@@ -83,21 +84,34 @@
     <Compile Include="Services\ThreadService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Images\answer-correct-16x16.gif" />
+    <Content Include="Content\Images\answer-correct-2-16x16.gif" />
+    <Content Include="Content\Images\answer-helpful-16x16.gif" />
     <Content Include="Content\Images\attachment.gif" />
+    <Content Include="Content\Images\confused.png" />
     <Content Include="Content\Images\discussion-ext-icon.png" />
     <Content Include="Content\Images\Discussion-small.png" />
+    <Content Include="Content\Images\enthusiast_icon.gif" />
+    <Content Include="Content\Images\expert_icon.gif" />
     <Content Include="Content\Images\folder_answered.png" />
+    <Content Include="Content\Images\menu.forum.png" />
+    <Content Include="Content\Images\guru_icon.gif" />
     <Content Include="Content\Images\Jhoos-Sticky-Postit-Notes.icon.gif" />
+    <Content Include="Content\Images\novice_icon.gif" />
+    <Content Include="Content\Images\Paperclip.jpg" />
     <Content Include="Content\Images\question.png" />
     <Content Include="Content\Images\question2.gif" />
     <Content Include="Content\Images\question_mark.png" />
     <Content Include="Content\Images\status_Answered.gif" />
     <Content Include="Content\Images\status_NotAnswered.gif" />
+    <Content Include="Content\Images\status_SuggestedAnswer.gif" />
     <Content Include="Content\Images\sticky.gif" />
     <Content Include="Content\Images\support-forums-closed.png" />
     <Content Include="Content\Images\topic_hot_locked_sticky.png" />
     <Content Include="Content\Images\topic_locked.png" />
     <Content Include="Content\Images\topic_sticky.png" />
+    <Content Include="Content\Images\VoteDown.jpg" />
+    <Content Include="Content\Images\wrench-16x16.gif" />
     <Content Include="Module.txt" />
     <Content Include="Notes\Design.txt" />
     <Content Include="Styles\forum.css" />
