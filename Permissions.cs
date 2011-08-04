@@ -32,16 +32,24 @@ namespace NGM.Forum {
         public IEnumerable<Permission> GetPermissions() {
             return new[] {
                 ManageForums,
+                ViewForum,
+                
                 CreatePost,
                 ReplyPost, 
+                ViewPost,
+
                 DeleteOwnPost,
                 DeleteAnyPost,
+                
                 EditOwnPost,
                 EditAnyPost,
+                
                 MoveThread,
                 //MoveAnyPost,
+                
                 ManageOpenCloseThread,
                 ManageStickyThread,
+        
                 MarkPostInOwnThreadAsAnswer,
                 MarkAnyPostAsAnswer
             };
@@ -56,27 +64,27 @@ namespace NGM.Forum {
                 },
                 new PermissionStereotype {
                     Name = "Anonymous",
-                    Permissions = new Permission[] {},
+                    Permissions = new[] {ViewForum, ViewPost},
                 },
                 new PermissionStereotype {
                     Name = "Authenticated",
-                    Permissions = new Permission[] {},
+                    Permissions = new[] {ViewForum, ViewPost},
                 },
                 new PermissionStereotype {
                     Name = "Editor",
-                    Permissions = new Permission[] {},
+                    Permissions = new[] {ViewForum, ViewPost},
                 },
                 new PermissionStereotype {
                     Name = "Moderator",
-                    Permissions = new Permission[] {},
+                    Permissions = new[] {ViewForum, ViewPost},
                 },
                 new PermissionStereotype {
                     Name = "Author",
-                    Permissions = new Permission[] {},
+                    Permissions = new[] {ViewForum, ViewPost},
                 },
                 new PermissionStereotype {
                     Name = "Contributor",
-                    Permissions = new Permission[] {},
+                    Permissions = new[] {ViewForum, ViewPost},
                 },
             };
         }
