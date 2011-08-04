@@ -55,9 +55,9 @@ namespace NGM.Forum.Handlers {
         }
 
         protected override void GetItemMetadata(GetContentItemMetadataContext context) {
-            var blog = context.ContentItem.As<ThreadPart>();
+            var thread = context.ContentItem.As<ThreadPart>();
 
-            if (blog == null)
+            if (thread == null)
                 return;
 
             context.Metadata.AdminRouteValues = new RouteValueDictionary {
