@@ -1,1 +1,6 @@
-﻿
+﻿.navicon-forum {
+background-image:url(../Content/images/menu.forum.png) !important;
+}
+.navicon-forum:hover {
+background-position:0 !important;
+}
