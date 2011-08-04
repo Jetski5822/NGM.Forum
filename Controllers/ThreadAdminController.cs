@@ -45,6 +45,22 @@ namespace NGM.Forum.Controllers {
         dynamic Shape { get; set; }
         public Localizer T { get; set; }
 
+        public ActionResult List(int forumId) {
+            var list = _orchardServices.New.List();
+
+            var forum = _forumService.Get(forumId, VersionOptions.Latest).As<ForumPart>();
+
+            list.AddRange(_threadService.Get(forum)
+                              .Select(b => {
+                                  return _orchardServices.ContentManager.BuildDisplay(b, "SummaryAdmin");
+                              }));
+
+            dynamic viewModel = _orchardServices.New.ViewModel()
+                .ContentItems(list);
+            // Casting to avoid invalid (under medium trust) reflection over the protected View method and force a static invocation.
+            return View((object)viewModel);
+        }
+
         public ActionResult Item(int threadId, PagerParameters pagerParameters) {
             Pager pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
             ThreadPart threadPart = _threadService.Get(threadId, VersionOptions.Latest).As<ThreadPart>();

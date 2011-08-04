@@ -14,15 +14,15 @@ namespace NGM.Forum.Handlers {
         }
 
         protected override void GetItemMetadata(GetContentItemMetadataContext context) {
-            var blog = context.ContentItem.As<ForumPart>();
+            var forum = context.ContentItem.As<ForumPart>();
 
-            if (blog == null)
+            if (forum == null)
                 return;
 
             context.Metadata.AdminRouteValues = new RouteValueDictionary {
                 {"Area", Constants.LocalArea},
-                {"Controller", "ForumAdmin"},
-                {"Action", "Item"},
+                {"Controller", "ThreadAdmin"},
+                {"Action", "List"},
                 {"forumId", context.ContentItem.Id}
             };
         }

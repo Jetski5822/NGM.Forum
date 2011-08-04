@@ -50,11 +50,11 @@ namespace NGM.Forum {
                                                  },
                              new RouteDescriptor {
                                                      Route = new Route(
-                                                         "Admin/Forums/{forumId}/Threads",
+                                                         "Admin/Forums/{forumId}",
                                                          new RouteValueDictionary {
                                                                                       {"area", Constants.LocalArea},
-                                                                                      {"controller", "ForumAdmin"},
-                                                                                      {"action", "Item"}
+                                                                                      {"controller", "ThreadAdmin"},
+                                                                                      {"action", "List"}
                                                                                   },
                                                          new RouteValueDictionary (),
                                                          new RouteValueDictionary {
@@ -64,7 +64,7 @@ namespace NGM.Forum {
                                                  },
                              new RouteDescriptor {
                                                      Route = new Route(
-                                                         "Admin/Forums/{forumId}/Threads/{threadId}/Posts",
+                                                         "Admin/Forums/{forumId}/Threads/{threadId}",
                                                          new RouteValueDictionary {
                                                                                       {"area", Constants.LocalArea},
                                                                                       {"controller", "ThreadAdmin"},
