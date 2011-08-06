@@ -4,12 +4,22 @@
     Orchard.ContentManagement.ContentItem contentItem = Model.ContentPart.ContentItem;
     NGM.Forum.Models.ThreadPart thread = contentItem.As<NGM.Forum.Models.ThreadPart>();
     string title = Model.Title.ToString();
+
+    string titleClass;
+    string titleOver;
+    
+    switch(thread.Type)
+    {
+        case  NGM.Forum.Models.ThreadType.Question:
+            titleClass = "question";
+            titleOver = T("Is Question").Text;
+            break;
+            
+        default:
+            titleClass = "discussion";
+            titleOver = T("Is Discussion").Text;
+            break;
+    }
 }
 
-<h1>
-@if (thread.Type == NGM.Forum.Models.ThreadType.Question) {
-    <img src="Modules/NGM.Forum/Content/Images/status_NotAnswered.gif" alt="Is Question" title="Is Question" />
-} else if (thread.Type == NGM.Forum.Models.ThreadType.Discussion) {
-    <img src="Modules/NGM.Forum/Content/Images/Discussion-small.png" alt="Is Discussion" title="Is Discussion" />
-}
-@Html.ItemDisplayLink(title, contentItem)</h1>
+<h2 class="@titleClass" title="@titleOver">@Html.ItemDisplayLink(title, contentItem)</h2>
