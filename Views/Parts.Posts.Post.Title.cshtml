@@ -1,8 +1,10 @@
 ﻿@using Orchard.ContentManagement;
 
-<h1>
 @if (!Model.ContentPart.IsParentThread())
 {
-    <span>Re:</span> 
+    <h2><span>@T("Re:")</span>@Model.RoutePart.Title</h2>
 }
-@Model.RoutePart.Title</h1>
+else
+{ 
+    <h1>@Model.RoutePart.Title</h1>
+}
