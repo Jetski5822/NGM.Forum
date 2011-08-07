@@ -44,9 +44,15 @@
 {
 	padding-right: 5px;
 	float: left;
+	width: 120px;
 }
 
 .post .actions
 {
 	clear: left;
+}
+
+.item-text
+{
+	margin-left: 120px;
 }
