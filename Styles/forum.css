@@ -42,9 +42,8 @@
 
 .post .metadata
 {
-	padding-right: 5px;
+	padding-right: 20px;
 	float: left;
-	width: 120px;
 }
 
 .post .actions
@@ -54,5 +53,5 @@
 
 .item-text
 {
-	margin-left: 120px;
+	float: left;
 }
