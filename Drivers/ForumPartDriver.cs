@@ -28,8 +28,8 @@ namespace NGM.Forum.Drivers {
         }
 
         protected override DriverResult Display(ForumPart forumPart, string displayType, dynamic shapeHelper) {
-            var postCount = forumPart.PostCount >= 1 ? forumPart.PostCount - 1 : forumPart.PostCount;
-
+            var postCount = forumPart.PostCount >= 1 ? forumPart.PostCount - forumPart.ThreadCount : 0;
+            
             var latestPostPart = _postService.GetLatestPost(forumPart, VersionOptions.Published);
             
             return Combined(

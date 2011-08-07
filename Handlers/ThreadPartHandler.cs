@@ -12,10 +12,12 @@ using Orchard.Data;
 namespace NGM.Forum.Handlers {
     [UsedImplicitly]
     public class ThreadPartHandler : ContentHandler {
+        private readonly IPostService _postService;
         private readonly IThreadService _threadService;
         private readonly IForumService _forumService;
 
-        public ThreadPartHandler(IRepository<ThreadPartRecord> repository, IThreadService threadService, IForumService forumService, RequestContext requestContext) {
+        public ThreadPartHandler(IRepository<ThreadPartRecord> repository, IPostService postService, IThreadService threadService, IForumService forumService, RequestContext requestContext) {
+            _postService = postService;
             _threadService = threadService;
             _forumService = forumService;
 
@@ -50,7 +52,13 @@ namespace NGM.Forum.Handlers {
                                       _forumService.Get(commonPart.Record.Container.Id, VersionOptions.Published).As<ForumPart>();
 
                 forumPart.ContentItem.ContentManager.Flush();
+
                 forumPart.ThreadCount = _threadService.Get(forumPart, VersionOptions.Published).Count();
+                forumPart.PostCount = _threadService
+                    .Get(forumPart, VersionOptions.Published)
+                    .Sum(publishedThreadPart => _postService
+                        .Get(publishedThreadPart, VersionOptions.Published)
+                        .Count());
             }
         }
 
