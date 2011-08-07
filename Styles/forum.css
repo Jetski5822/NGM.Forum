@@ -1,57 +1,55 @@
-﻿.threads li
-{
+﻿.threads li {
 	height: 85px;
 }
 
-.forum header, .thread header
-{
+.forum header, .thread header {
 	width: 75%;
 	float: left;
 }
 
-.post header
-{
+.post header {
 	/*width: 100%;*/
 	float: none;	
 }
 
-.latestpost
-{
+.latestpost {
 	clear: left;
 }
 
-.forum div
-{
+.forum div {
 	margin: 10px 0px 0px 0px;
 }
 
-.forum .thread-list
-{
+.forum .thread-list {
 	clear:left;
 }
 
-.thread-posts
-{
+.thread-posts {
 	clear: left;
 }
 
-.owner-metadata
-{
+.owner-metadata {
     font-weight: bold;
 }
 
-.post .metadata
-{
+.post .metadata {
 	padding-right: 20px;
 	float: left;
 }
 
-.post .actions
-{
+.post .actions {
 	clear: left;
 }
 
-.item-text
-{
+.item-text {
 	float: left;
 }
+
+.item-text blockquote {
+	font-weight: bold;
+	font-style: italic;
+	margin: 1em 3em; }
+.item-text blockquote p:before {
+	content: '"'; }
+.item-text blockquote p:after {
+	content: '"'; }
