@@ -11,6 +11,7 @@
             Parts_Forums_Forum_Status="Meta:1"
             Parts_Forums_Thread_List="Content"
             Parts_Common_Body="-"
+            Parts_Common_Metadata="-"
             Parts_Forums_Forum_Manage="Meta:2"/>
     </Match>
     <Match DisplayType="Summary">
