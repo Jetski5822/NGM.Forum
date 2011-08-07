@@ -1,44 +1,44 @@
 ﻿.forum header, .thread header {
-	width: 75%;
-	float: left;
+  width: 75%;
+  float: left;
 }
 
 .forum div {
-	margin: 10px 0px 0px 0px;
+  margin: 10px 0px 0px 0px;
 }
 
 .forum .thread-list {
-	clear:left;
+  clear:left;
 }
 
 .latestpost {
-	clear: left;
+  clear: left;
 }
 
 .thread-posts {
-	clear: left;
+  clear: left;
 }
 
 .threads li {
-	height: 85px;
+  height: 85px;
 }
 
 .post header {
-	float: none;	
+  float: none;  
 }
 
 .post .metadata {
-	padding-right: 20px;
-	float: left;
+  padding-right: 20px;
+  float: left;
 }
 
 .post .actions {
-	clear: left;
+  clear: left;
 }
 
 .item-text {
-	float: left;
-	width: 85%;
+  float: left;
+  width: 85%;
 }
 .item-text p {
   /* The following styles prevent unbroken strings from breaking the layout */
@@ -54,16 +54,15 @@
 }
 
 .item-text blockquote {
-	font-weight: bold;
-	font-style: italic;
-	margin: 1em 3em; }
+  font-weight: bold;
+  font-style: italic;
+  margin: 1em 3em; }
 .item-text blockquote p:before {
-	content: '"'; }
+  content: '"'; }
 .item-text blockquote p:after {
-	content: '"'; }
+  content: '"'; }
 
-/* Common */	
-.owner-metadata 
-{
-    font-weight: bold;
+/* Common */  
+.owner-metadata {
+  font-weight: bold;
 }
