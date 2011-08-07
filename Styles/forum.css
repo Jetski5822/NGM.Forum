@@ -1,19 +1,6 @@
-﻿.threads li {
-	height: 85px;
-}
-
-.forum header, .thread header {
+﻿.forum header, .thread header {
 	width: 75%;
 	float: left;
-}
-
-.post header {
-	/*width: 100%;*/
-	float: none;	
-}
-
-.latestpost {
-	clear: left;
 }
 
 .forum div {
@@ -24,12 +11,20 @@
 	clear:left;
 }
 
+.latestpost {
+	clear: left;
+}
+
 .thread-posts {
 	clear: left;
 }
 
-.owner-metadata {
-    font-weight: bold;
+.threads li {
+	height: 85px;
+}
+
+.post header {
+	float: none;	
 }
 
 .post .metadata {
@@ -43,6 +38,19 @@
 
 .item-text {
 	float: left;
+	width: 85%;
+}
+.item-text p {
+  /* The following styles prevent unbroken strings from breaking the layout */
+  overflow: auto;
+  white-space: -moz-pre-wrap; /* Mozilla */
+  white-space: -hp-pre-wrap; /* HP printers */
+  white-space: -o-pre-wrap; /* Opera 7 */
+  white-space: -pre-wrap; /* Opera 4-6 */
+  white-space: pre-wrap; /* CSS 2.1 */
+  white-space: pre-line; /* CSS 3 (and 2.1 as well, actually) */
+  word-wrap: break-word; /* IE */
+  -moz-binding: url('xbl.xml#wordwrap'); /* Firefox (using XBL) */
 }
 
 .item-text blockquote {
@@ -53,3 +61,9 @@
 	content: '"'; }
 .item-text blockquote p:after {
 	content: '"'; }
+
+/* Common */	
+.owner-metadata 
+{
+    font-weight: bold;
+}
