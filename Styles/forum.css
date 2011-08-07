@@ -37,7 +37,16 @@
 
 .owner-metadata
 {
-	float: left;
-    padding-right: 5px;
     font-weight: bold;
+}
+
+.post .metadata
+{
+	padding-right: 5px;
+	float: left;
+}
+
+.post .actions
+{
+	clear: left;
 }
