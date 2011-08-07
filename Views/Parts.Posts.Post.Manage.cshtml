@@ -5,9 +5,8 @@
 }
 
 <div class="item-properties actions">
-  <p>
     @if (!Model.IsClosed) {
         <a href="@Url.ReplyPost(postPart)" class="create">@T("Reply")</a>
+        <a href="@Url.ReplyPostWithQuote(postPart)" class="create">@T("Reply with quote")</a>
     }
-  </p>
 </div>

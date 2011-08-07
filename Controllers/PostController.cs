@@ -46,6 +46,28 @@ namespace NGM.Forum.Controllers {
             return View((object)model);
         }
 
+        public ActionResult CreateWithQuote(int contentId) {
+            var contentItem = _orchardServices.ContentManager.Get(contentId, VersionOptions.Latest);
+            if (contentItem.As<PostPart>() == null) {
+                if (IsNotAllowedToCreatePost())
+                    return new HttpUnauthorizedResult();
+
+                if (contentItem.As<ThreadPart>() == null)
+                    return HttpNotFound();
+
+                if (IsNotAllowedToReplyToPost())
+                    return new HttpUnauthorizedResult();
+            }
+
+            var part = _orchardServices.ContentManager.New<PostPart>(ContentPartConstants.Post);
+
+            part.Text = string.Format("<blockquote>{0}</blockquote><br />", contentItem.As<PostPart>().Text);
+
+            dynamic model = _orchardServices.ContentManager.BuildEditor(part);
+
+            return View("Create", (object)model);
+        }
+
         [HttpPost, ActionName("Create")]
         public ActionResult CreatePOST(int contentId) {
             var contentItem = _orchardServices.ContentManager.Get(contentId, VersionOptions.Latest);
