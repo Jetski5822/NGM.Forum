@@ -3,7 +3,6 @@ using NGM.Forum.Extensions;
 using NGM.Forum.Models;
 using Orchard;
 using Orchard.ContentManagement;
-using Orchard.DisplayManagement;
 using Orchard.Localization;
 using Orchard.Themes;
 using Orchard.UI.Notify;
@@ -14,15 +13,12 @@ namespace NGM.Forum.Controllers {
     public class PostController : Controller, IUpdateModel {
         private readonly IOrchardServices _orchardServices;
 
-        public PostController(IOrchardServices orchardServices, 
-            IShapeFactory shapeFactory) {
+        public PostController(IOrchardServices orchardServices) {
             _orchardServices = orchardServices;
 
             T = NullLocalizer.Instance;
-            Shape = shapeFactory;
         }
 
-        dynamic Shape { get; set; }
         public Localizer T { get; set; }
 
         public ActionResult Create(int contentId) {
