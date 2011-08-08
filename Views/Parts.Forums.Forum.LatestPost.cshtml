@@ -14,7 +14,7 @@
 }
 @if (postPart != null) {
     <div class="latestpost">
-        <a href="@Url.ViewThread(postPart.ThreadPart)">@T("Last Post")</a> <strong>by</strong> @commonPart.Owner.UserName <span class="meta">, @commonPart.PublishedUtc.Value.ToString("M/d/yyyy h:mm tt")</span>
+        <a href="@Url.ViewThread(postPart.ThreadPart)">@T("Last Post")</a> <strong>@T("by")</strong> @commonPart.Owner.UserName <span class="meta">, @commonPart.PublishedUtc.Value.ToString("M/d/yyyy h:mm tt")</span>
     </div>
 } else { 
     <div class="latestpost">@T("No posts yet...")</div>
