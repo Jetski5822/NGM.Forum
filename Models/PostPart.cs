@@ -21,6 +21,11 @@ namespace NGM.Forum.Models {
             set { Record.ParentPostId = value; }
         }
 
+        public MarkedAs MarkedAs{
+            get { return (MarkedAs)Record.MarkedAs; }
+            set { Record.MarkedAs = (int)value; }
+        }
+
         public bool IsParentThread() {
             return ParentPostId == 0;
         }

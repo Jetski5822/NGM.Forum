@@ -1,4 +1,5 @@
-﻿@using NGM.Forum.Extensions
+﻿@using NGM.Forum
+@using NGM.Forum.Extensions
 @using NGM.Forum.Models
 @{
     var postPart = (PostPart)Model.ContentPart;
@@ -8,5 +9,9 @@
     @if (!Model.IsClosed) {
         <a href="@Url.ReplyPost(postPart)" class="create">@T("Reply")</a>
         <a href="@Url.ReplyPostWithQuote(postPart)" class="create">@T("Reply with quote")</a>
+      
+        if (postPart.ThreadPart.Type == ThreadType.Question && Model.CanMarkAsAnswer) {
+          <a href="@Url.MarkPostAsAnswer(postPart)">@T("Mark as answer")</a>
+        }
     }
 </div>

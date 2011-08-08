@@ -59,10 +59,12 @@
     <Compile Include="Drivers\ForumPartDriver.cs" />
     <Compile Include="Extensions\Constants.cs" />
     <Compile Include="Extensions\ContentPartConstants.cs" />
+    <Compile Include="Extensions\PostPartExtensions.cs" />
     <Compile Include="Handlers\PostPartHandler.cs" />
     <Compile Include="Handlers\ForumPartHandler.cs" />
     <Compile Include="Handlers\ThreadPartHandler.cs" />
     <Compile Include="Models\ForumPartRecord.cs" />
+    <Compile Include="Models\MarkedAs.cs" />
     <Compile Include="Models\PostPartRecord.cs" />
     <Compile Include="Models\ThreadPartRecord.cs" />
     <Compile Include="Models\ThreadType.cs" />

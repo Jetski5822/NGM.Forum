@@ -54,5 +54,13 @@ namespace NGM.Forum {
 
             return 1;
         }
+
+        public int UpdateFrom1() {
+            SchemaBuilder.AlterTable("ThreadPartRecord", t => t.DropColumn("IsAnswered"));
+            
+            SchemaBuilder.AlterTable("PostPartRecord", t => t.AddColumn<int>("MarkedAs"));
+
+            return 2;
+        }
     }
 }

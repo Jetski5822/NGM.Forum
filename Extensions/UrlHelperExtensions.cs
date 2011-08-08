@@ -57,5 +57,10 @@ namespace NGM.Forum.Extensions {
         public static string CloseForum(this UrlHelper urlHelper, ForumPart forumPart) {
             return urlHelper.Action("Close", "Forum", new { forumId = forumPart.Id, area = Constants.LocalArea });
         }
+
+        public static string MarkPostAsAnswer(this UrlHelper urlHelper, PostPart postPart) {
+            return urlHelper.Action("MarkPostAsAnswer", "Post", new { contentId = postPart.Id, area = Constants.LocalArea });
+        }
+        
     }
 }
