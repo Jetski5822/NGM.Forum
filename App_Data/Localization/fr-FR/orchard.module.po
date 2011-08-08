@@ -1,0 +1,227 @@
+﻿# NGM Forum resource strings - fr-FR
+# This file is distributed under the BSD license
+
+#: NGM.Forum.AdminMenu
+#| msgid "Forum"
+msgid "Forum"
+msgstr "Forum"
+
+#: NGM.Forum.AdminMenu
+#| msgid "Manage Forums"
+msgid "Manage Forums"
+msgstr "Gérer les forums"
+
+#: NGM.Forum.AdminMenu
+#| msgid "New Forum"
+msgid "New Forum"
+msgstr "Nouveau forum"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Forums.Forum.LatestPost.cshtml
+#| msgid "by"
+msgid "by"
+msgstr "par"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Forums.Forum.Manage.cshtml
+#| msgid "Create Post"
+msgid "Create Post"
+msgstr "Nouveau Message"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Forums.Forum.PostCount.cshtml
+#| msgid "1 reply"
+msgid "1 reply"
+msgstr "1 réponse"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Forums.Forum.PostCount.cshtml
+#| msgid "{0} replies"
+msgid "{0} replies"
+msgstr "{0} réponses"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Forums.Forum.Status.cshtml
+#| msgid "Is Closed"
+msgid "Is Closed"
+msgstr "Est Fermé"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Forums.Forum.ThreadCount.cshtml
+#| msgid "1 thread"
+msgid "1 thread"
+msgstr "1 sujet"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Forums.Forum.ThreadCount.cshtml
+#| msgid "{0} threads"
+msgid "{0} threads"
+msgstr "{0} sujets"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Forums.Thread.List.cshtml
+#| msgid "Threads"
+msgid "Threads"
+msgstr "Sujets"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Forums.Thread.List.cshtml
+#| msgid "There are no threads for this forum."
+msgid "There are no threads for this forum."
+msgstr "Il n'y pas encore de sujets dans ce forum."
+
+#: ~/Modules/NGM.Forum/Views/Parts.Forums.Thread.ListAdmin.cshtml
+#| msgid "There are no threads for this forum."
+msgid "There are no threads for this forum."
+msgstr "Il n'y pas encore de sujets dans ce forum."
+
+#: ~/Modules/NGM.Forum/Views/Parts.Forums.Thread.Manage.cshtml
+#| msgid "Reply"
+msgid "Reply"
+msgstr "Réponse"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Posts.Post.Title.cshtml
+#| msgid "Re:"
+msgid "Re:"
+msgstr "Re :"
+
+#: ~/Modules/NGM.Forum/Views/Parts.RoutableTitle.Summary-Thread.cshtml
+#| msgid "Is Question"
+msgid "Is Question"
+msgstr "Est une question"
+
+#: ~/Modules/NGM.Forum/Views/Parts.RoutableTitle.Summary-Thread.cshtml
+#| msgid "Is Discussion"
+msgid "Is Discussion"
+msgstr "Est une discussion"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Threads.Post.ListAdmin.cshtml
+#| msgid "There are no posts for this thread."
+msgid "There are no posts for this thread."
+msgstr "Il n'y a pas de messages pour ce sujet."
+
+#: ~/Modules/NGM.Forum/Views/Parts.Threads.Thread.LatestPost.cshtml
+#| msgid "Latest post to go here..."
+msgid "Latest post to go here..."
+msgstr "Les derniers messages apparaîtront ici..."
+
+#: ~/Modules/NGM.Forum/Views/Parts.Threads.Thread.LatestPost.cshtml
+#| msgid "Latest post to go here..."
+msgid "Latest post to go here..."
+msgstr "Les derniers messages apparaîtront ici..."
+
+#: ~/Modules/NGM.Forum/Views/Parts.Threads.Thread.LatestPost.cshtml
+#| msgid "by"
+msgid "by"
+msgstr "par"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Threads.Thread.LatestPost.cshtml
+#| msgid "MM/dd/yyyy hh:mm tt"
+msgid "MM/dd/yyyy hh:mm tt"
+msgstr "dd/MM/yyyy HH:mm"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Threads.Thread.PostCount.cshtml
+#| msgid "1 reply"
+msgid "1 reply"
+msgstr "1 réponse"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Threads.Thread.PostCount.cshtml
+#| msgid "{0} replies"
+msgid "{0} replies"
+msgstr "{0} réponses"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Threads.Thread.Status.cshtml
+#| msgid "Is Sticky"
+msgid "Is Sticky"
+msgstr "Est épinglé"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Threads.Thread.Status.cshtml
+#| msgid "Is Closed"
+msgid "Is Closed"
+msgstr "Est fermé"
+
+#: ~/Modules/NGM.Forum/Views/EditorTemplates/Parts.Routable.ThreadPart.cshtml
+#| msgid "Title"
+msgid "Title"
+msgstr "Titre"
+
+#: ~/Modules/NGM.Forum/Views/EditorTemplates/Parts.Status.Close.ForumPart.cshtml
+#| msgid "Is Closed"
+msgid "Is Closed"
+msgstr "Est fermé"
+
+#: ~/Modules/NGM.Forum/Views/EditorTemplates/Parts.Status.Close.ThreadPart.cshtml
+#| msgid "Is Closed"
+msgid "Is Closed"
+msgstr "Est fermé"
+
+#: ~/Modules/NGM.Forum/Views/EditorTemplates/Parts.Status.Sticky.ThreadPart.cshtml
+#| msgid "Is Sticky"
+msgid "Is Sticky"
+msgstr "Est épinglé"
+
+#: ~/Modules/NGM.Forum/Views/EditorTemplates/Parts.Type.ThreadPart.cshtml
+#| msgid "Type"
+msgid "Type"
+msgstr "Type"
+
+#: ~/Modules/NGM.Forum/Views/Forum/List.cshtml
+#| msgid "Forums"
+msgid "Forums"
+msgstr "Forums"
+
+#: ~/Modules/NGM.Forum/Views/Forum/List.cshtml
+#| msgid "Not forums found."
+msgid "No forums found."
+msgstr "Aucun forum trouvé."
+
+#: ~/Modules/NGM.Forum/Views/ForumAdmin/Create.cshtml
+#| msgid "New Forum"
+msgid "New Forum"
+msgstr "Nouveau forum"
+
+#: ~/Modules/NGM.Forum/Views/ForumAdmin/Edit.cshtml
+#| msgid "Forum properties"
+msgid "Forum properties"
+msgstr "Propriétés du forum"
+
+#: ~/Modules/NGM.Forum/Views/ForumAdmin/List.cshtml
+#| msgid "Manage Forums"
+msgid "Manage Forums"
+msgstr "Gestion des forums"
+
+#: ~/Modules/NGM.Forum/Views/Post/Create.cshtml
+#| msgid "New Post"
+msgid "New Post"
+msgstr "Nouveau message"
+
+#: ~/Modules/NGM.Forum/Views/Thread/Create.cshtml
+#| msgid "New Thread"
+msgid "New Thread"
+msgstr "Nouveau sujet"
+
+#: ~/Modules/NGM.Forum/Views/ThreadAdmin/Item.cshtml
+#| msgid "Manage Thread"
+msgid "Manage Thread"
+msgstr "Gérer ce sujet"
+
+#: ~/Modules/NGM.Forum/Views/ThreadAdmin/List.cshtml
+#| msgid "Manage Threads"
+msgid "Manage Threads"
+msgstr "Gestion des sujets"
+
+#: ~/Modules/NGM.Forum/Views/ThreadAdmin/List.cshtml
+#| msgid "Actions:"
+msgid "Actions:"
+msgstr "Actions :"
+
+#: ~/Modules/NGM.Forum/Views/ThreadAdmin/List.cshtml
+#| msgid "Choose action..."
+msgid "Choose action..."
+msgstr "Choix d'une action..."
+
+#: ~/Modules/NGM.Forum/Views/ThreadAdmin/List.cshtml
+#| msgid "Delete"
+msgid "Delete"
+msgstr "Supprimer"
+
+#: ~/Modules/NGM.Forum/Views/ThreadAdmin/List.cshtml
+#| msgid "Apply"
+msgid "Apply"
+msgstr "Appliquer"
+
+#: ~/Modules/NGM.Forum/Views/ThreadAdmin/List.cshtml
+#| msgid "There are no forums for you to see. Want to <a href="{0}">add one</a>?"
+msgid "There are no forums for you to see. Want to <a href="{0}">add one</a>?"
+msgstr "Il n'existe aucun forum à afficher. Souhaitez-vous <a href="{0}">en créer un</a> ?
