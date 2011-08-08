@@ -3,7 +3,6 @@ using NGM.Forum.Extensions;
 using NGM.Forum.Models;
 using Orchard;
 using Orchard.ContentManagement;
-using Orchard.DisplayManagement;
 using Orchard.Localization;
 using Orchard.Themes;
 using Orchard.UI.Notify;
@@ -14,15 +13,12 @@ namespace NGM.Forum.Controllers {
     public class PostController : Controller, IUpdateModel {
         private readonly IOrchardServices _orchardServices;
 
-        public PostController(IOrchardServices orchardServices, 
-            IShapeFactory shapeFactory) {
+        public PostController(IOrchardServices orchardServices) {
             _orchardServices = orchardServices;
 
             T = NullLocalizer.Instance;
-            Shape = shapeFactory;
         }
 
-        dynamic Shape { get; set; }
         public Localizer T { get; set; }
 
         public ActionResult Create(int contentId) {
@@ -44,6 +40,28 @@ namespace NGM.Forum.Controllers {
             dynamic model = _orchardServices.ContentManager.BuildEditor(part);
             
             return View((object)model);
+        }
+
+        public ActionResult CreateWithQuote(int contentId) {
+            var contentItem = _orchardServices.ContentManager.Get(contentId, VersionOptions.Latest);
+            if (contentItem.As<PostPart>() == null) {
+                if (IsNotAllowedToCreatePost())
+                    return new HttpUnauthorizedResult();
+
+                if (contentItem.As<ThreadPart>() == null)
+                    return HttpNotFound();
+
+                if (IsNotAllowedToReplyToPost())
+                    return new HttpUnauthorizedResult();
+            }
+
+            var part = _orchardServices.ContentManager.New<PostPart>(ContentPartConstants.Post);
+
+            part.Text = string.Format("<blockquote>{0}</blockquote><br />", contentItem.As<PostPart>().Text);
+
+            dynamic model = _orchardServices.ContentManager.BuildEditor(part);
+
+            return View("Create", (object)model);
         }
 
         [HttpPost, ActionName("Create")]

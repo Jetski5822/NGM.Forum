@@ -1,43 +1,71 @@
-﻿.threads li
-{
-	height: 85px;
+﻿.forum header, .thread header {
+  width: 75%;
+  float: left;
 }
 
-.forum header, .thread header
-{
-	width: 75%;
-	float: left;
+.forum div {
+  margin: 10px 0px 0px 0px;
 }
 
-.post header
-{
-	width: 100%;
-	float: none;	
+.forum .thread-list {
+  clear:left;
+.thread header h2 { background: transparent none no-repeat left center; padding-left: 18px; }
+.thread header h2.question { background-image: url('../Content/Images/status_NotAnswered.gif'); }
+.thread header h2.discussion { background-image: url('../Content/Images/Discussion-small.gif'); }
 }
 
-.latestpost
-{
-	clear: left;
+.latestpost {
+  clear: left;
 }
 
-.forum div
-{
-	margin: 10px 0px 0px 0px;
+.thread-posts {
+  clear: left;
 }
 
-.forum .thread-list
-{
-	clear:left;
+.threads li {
+  height: 85px;
 }
 
-.thread-posts
-{
-	clear: left;
+.post header {
+  float: none;  
 }
 
-.owner-metadata
-{
-	float: left;
-    padding-right: 5px;
-    font-weight: bold;
+.post .metadata {
+  padding-right: 20px;
+  float: left;
+}
+
+.post .actions {
+  clear: left;
+}
+
+.item-text {
+  float: left;
+  width: 85%;
+}
+.item-text p {
+  /* The following styles prevent unbroken strings from breaking the layout */
+  overflow: auto;
+  white-space: -moz-pre-wrap; /* Mozilla */
+  white-space: -hp-pre-wrap; /* HP printers */
+  white-space: -o-pre-wrap; /* Opera 7 */
+  white-space: -pre-wrap; /* Opera 4-6 */
+  white-space: pre-wrap; /* CSS 2.1 */
+  white-space: pre-line; /* CSS 3 (and 2.1 as well, actually) */
+  word-wrap: break-word; /* IE */
+  -moz-binding: url('xbl.xml#wordwrap'); /* Firefox (using XBL) */
+}
+
+.item-text blockquote {
+  font-weight: bold;
+  font-style: italic;
+  margin: 1em 3em; }
+.item-text blockquote p:before {
+  content: '"'; }
+.item-text blockquote p:after {
+  content: '"'; }
+
+/* Common */  
+.owner-metadata {
+  font-weight: bold;
 }
