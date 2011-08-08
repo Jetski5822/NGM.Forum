@@ -105,6 +105,20 @@ namespace NGM.Forum {
                                                          new MvcRouteHandler())
                                                  },
                              new RouteDescriptor {
+                                                     Route = new Route(
+                                                         "Forum/Post/CreateWithQuote",
+                                                         new RouteValueDictionary {
+                                                                                      {"area", Constants.LocalArea},
+                                                                                      {"controller", "Post"},
+                                                                                      {"action", "CreateWithQuote"}
+                                                                                  },
+                                                         new RouteValueDictionary(),
+                                                         new RouteValueDictionary {
+                                                                                      {"area", Constants.LocalArea}
+                                                                                  },
+                                                         new MvcRouteHandler())
+                                                 },
+                             new RouteDescriptor {
                                                      Priority = 11,
                                                      Route = new Route(
                                                          "{forumPath}/{threadSlug}",

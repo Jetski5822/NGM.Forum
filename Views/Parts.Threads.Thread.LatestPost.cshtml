@@ -6,11 +6,7 @@
 @{
     var postPart = (PostPart)Model.ContentPart;
     var commonPart = postPart.As<ICommonPart>();
-    
-    string bodyHtml = "Latest post to go here...";
-    if (postPart != null) {
-        bodyHtml = postPart.Text.ToString();
-    }
-    var body = new HtmlString(Html.Excerpt(bodyHtml, 50).ToString().Replace(Environment.NewLine, "</p>" + Environment.NewLine + "<p>")); 
 }
-<div class="latestpost">@body <strong>by</strong> @commonPart.Owner.UserName (@commonPart.PublishedUtc.Value.ToString("MM/dd/yyyy hh:mm tt"))</div>
+<div class="latestpost">
+    <a href="@Url.ViewThread(postPart.ThreadPart)">@T("Last Post")</a> <strong>by</strong> @commonPart.Owner.UserName <span class="meta">, @commonPart.PublishedUtc.Value.ToString("M/d/yyyy h:mm tt")</span>
+</div>

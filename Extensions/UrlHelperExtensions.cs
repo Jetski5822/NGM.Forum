@@ -26,6 +26,10 @@ namespace NGM.Forum.Extensions {
             return urlHelper.Action("Create", "Thread", new { forumId = forumPart.Id, area = Constants.LocalArea });
         }
 
+        public static string ReplyPostWithQuote(this UrlHelper urlHelper, IContent content) {
+            return urlHelper.Action("CreateWithQuote", "Post", new { contentId = content.Id, area = Constants.LocalArea });
+        }
+
         public static string ReplyPost(this UrlHelper urlHelper, PostPart postPart) {
             return ReplyContent(urlHelper, postPart);
         }
