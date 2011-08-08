@@ -40,5 +40,9 @@ namespace NGM.Forum.Models {
             get { return (ThreadType)Record.Type; }
             set { Record.Type = (int)value; }
         }
+
+        public int ReplyCount {
+            get { return PostCount >= 1 ? PostCount - 1 : 0; }
+        }
     }
 }
