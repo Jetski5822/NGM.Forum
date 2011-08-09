@@ -6,8 +6,8 @@ using Orchard.Core.Routable.Services;
 
 namespace NGM.Forum.Extensions {
     public static class UrlHelperExtensions {
-        public static string ForumForAdmin(this UrlHelper urlHelper, ForumPart forumPart) {
-            return urlHelper.Action("Item", "ForumAdmin", new { forumId = forumPart.Id, area = Constants.LocalArea });
+        public static string AdminThreadsForForum(this UrlHelper urlHelper, ForumPart forumPart) {
+            return urlHelper.Action("List", "ThreadAdmin", new { forumId = forumPart.Id, area = Constants.LocalArea });
         }
 
         public static string ForumCreate(this UrlHelper urlHelper) {
