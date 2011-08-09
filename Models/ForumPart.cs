@@ -16,5 +16,9 @@ namespace NGM.Forum.Models {
             get { return Record.IsClosed; }
             set { Record.IsClosed = value; }
         }
+
+        public int ReplyCount {
+            get { return PostCount >= 1 ? PostCount - ThreadCount : 0; }
+        }
     }
 }

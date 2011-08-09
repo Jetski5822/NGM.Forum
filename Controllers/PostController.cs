@@ -1,11 +1,14 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using NGM.Forum.Extensions;
 using NGM.Forum.Models;
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.Localization;
+using Orchard.Logging;
 using Orchard.Themes;
 using Orchard.UI.Notify;
+using Orchard.Utility.Extensions;
 
 namespace NGM.Forum.Controllers {
     [Themed]
@@ -16,9 +19,11 @@ namespace NGM.Forum.Controllers {
         public PostController(IOrchardServices orchardServices) {
             _orchardServices = orchardServices;
 
+            Logger = NullLogger.Instance;
             T = NullLocalizer.Instance;
         }
 
+        public ILogger Logger { get; set; }
         public Localizer T { get; set; }
 
         public ActionResult Create(int contentId) {
@@ -99,6 +104,20 @@ namespace NGM.Forum.Controllers {
             _orchardServices.ContentManager.Publish(post.ContentItem);
 
             _orchardServices.Notifier.Information(T("Your {0} has been created.", post.TypeDefinition.DisplayName));
+            return Redirect(Url.ViewThread(post.ThreadPart));
+        }
+
+        [HttpPost]
+        public ActionResult MarkPostAsAnswer(int contentId) {
+            if (!_orchardServices.Authorizer.Authorize(Permissions.MarkPostAsAnswer, T("Not allowed to mark post as answer")))
+                return new HttpUnauthorizedResult();
+
+            var contentItem = _orchardServices.ContentManager.Get(contentId, VersionOptions.Latest);
+
+            var post = contentItem.As<PostPart>();
+
+            post.MarkedAs = MarkedAs.Answer;
+
             return Redirect(Url.ViewThread(post.ThreadPart));
         }
 

@@ -32,8 +32,6 @@ namespace NGM.Forum.Drivers {
         }
 
         protected override DriverResult Display(ThreadPart threadPart, string displayType, dynamic shapeHelper) {
-            var postCount = threadPart.PostCount >= 1 ? threadPart.PostCount - 1 : threadPart.PostCount;
-
             var latestPostPart = _postService.GetLatestPost(threadPart, VersionOptions.Published);
 
             List<ContentShapeResult> contentShapeResults = new List<ContentShapeResult>(new[] {
@@ -42,7 +40,7 @@ namespace NGM.Forum.Drivers {
                 ContentShape("Parts_Threads_Thread_LatestPost",
                              () => shapeHelper.Parts_Threads_Thread_LatestPost(ContentPart: latestPostPart)),
                 ContentShape("Parts_Threads_Thread_PostCount",
-                             () => shapeHelper.Parts_Threads_Thread_PostCount(ContentPart: threadPart, PostCount: postCount))
+                             () => shapeHelper.Parts_Threads_Thread_PostCount(ContentPart: threadPart, PostCount: threadPart.ReplyCount))
             });
 
             return Combined(contentShapeResults.ToArray());
