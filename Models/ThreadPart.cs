@@ -36,6 +36,11 @@ namespace NGM.Forum.Models {
             set { Record.Type = (int)value; }
         }
 
+        public bool IsAnswered {
+            get { return Record.IsAnswered; }
+            set { Record.IsAnswered = value; }            
+        }
+
         public int ReplyCount {
             get { return PostCount >= 1 ? PostCount - 1 : 0; }
         }

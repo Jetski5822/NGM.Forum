@@ -24,15 +24,9 @@ namespace NGM.Forum.Drivers {
         }
 
         protected override DriverResult Display(PostPart postPart, string displayType, dynamic shapeHelper) {
-            bool canMarkAsAnswer = false;
-            if (postPart.ThreadPart.Type == ThreadType.Question) {
-                if (_authorizationService.TryCheckAccess(Permissions.MarkPostAsAnswer, _authenticationService.GetAuthenticatedUser(), postPart))
-                    canMarkAsAnswer = true;
-            }
-            
             var contentShapeResults = new List<ContentShapeResult>(new[] {
                 ContentShape("Parts_Posts_Post_Manage",
-                    () => shapeHelper.Parts_Posts_Post_Manage(ContentPart: postPart, IsClosed: postPart.ThreadPart.IsClosed, CanMarkAsAnswer: canMarkAsAnswer)),
+                    () => shapeHelper.Parts_Posts_Post_Manage(ContentPart: postPart, IsClosed: postPart.ThreadPart.IsClosed, CanMarkAsAnswer: CanMarkAsAnswer(postPart))),
                 ContentShape("Parts_Posts_Post_Metadata",
                     () => shapeHelper.Parts_Posts_Post_Metadata(ContentPart: postPart, CommonPart: postPart.As<ICommonPart>()))
             });
@@ -45,6 +39,13 @@ namespace NGM.Forum.Drivers {
                              () => shapeHelper.Parts_Posts_Post_Title(ContentPart: postPart, CommonPart: postPart.As<ICommonPart>(), RoutePart: postPart.ThreadPart.As<RoutePart>())));
 
             return Combined(contentShapeResults.ToArray());
+        }
+
+        private bool CanMarkAsAnswer(PostPart postPart) {
+            if (postPart.ThreadPart.Type == ThreadType.Question) {
+                return _authorizationService.TryCheckAccess(Permissions.MarkPostAsAnswer, _authenticationService.GetAuthenticatedUser(), postPart);
+            }
+            return false;
         }
     }
 }

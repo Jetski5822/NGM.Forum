@@ -119,6 +119,34 @@ namespace NGM.Forum {
                                                          new MvcRouteHandler())
                                                  },
                              new RouteDescriptor {
+                                                     Route = new Route(
+                                                         "Forum/Post/MarkPostAsAnswer",
+                                                         new RouteValueDictionary {
+                                                                                      {"area", Constants.LocalArea},
+                                                                                      {"controller", "Post"},
+                                                                                      {"action", "MarkPostAsAnswer"}
+                                                                                  },
+                                                         new RouteValueDictionary(),
+                                                         new RouteValueDictionary {
+                                                                                      {"area", Constants.LocalArea}
+                                                                                  },
+                                                         new MvcRouteHandler())
+                                                 },
+                             new RouteDescriptor {
+                                                     Route = new Route(
+                                                         "Forum/Post/UnMarkPostAsAnswer",
+                                                         new RouteValueDictionary {
+                                                                                      {"area", Constants.LocalArea},
+                                                                                      {"controller", "Post"},
+                                                                                      {"action", "UnMarkPostAsAnswer"}
+                                                                                  },
+                                                         new RouteValueDictionary(),
+                                                         new RouteValueDictionary {
+                                                                                      {"area", Constants.LocalArea}
+                                                                                  },
+                                                         new MvcRouteHandler())
+                                                 },
+                             new RouteDescriptor {
                                                      Priority = 11,
                                                      Route = new Route(
                                                          "{forumPath}/{threadSlug}",

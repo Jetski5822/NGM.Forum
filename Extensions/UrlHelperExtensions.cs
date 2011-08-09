@@ -61,6 +61,10 @@ namespace NGM.Forum.Extensions {
         public static string MarkPostAsAnswer(this UrlHelper urlHelper, PostPart postPart) {
             return urlHelper.Action("MarkPostAsAnswer", "Post", new { contentId = postPart.Id, area = Constants.LocalArea });
         }
-        
+
+        public static string UnMarkPostAsAnswer(this UrlHelper urlHelper, PostPart postPart) {
+            return urlHelper.Action("UnMarkPostAsAnswer", "Post", new { contentId = postPart.Id, area = Constants.LocalArea });
+        }
+ 
     }
 }

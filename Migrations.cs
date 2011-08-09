@@ -56,9 +56,7 @@ namespace NGM.Forum {
         }
 
         public int UpdateFrom1() {
-            SchemaBuilder.AlterTable("ThreadPartRecord", t => t.DropColumn("IsAnswered"));
-            
-            SchemaBuilder.AlterTable("PostPartRecord", t => t.AddColumn<int>("MarkedAs"));
+            SchemaBuilder.AlterTable("PostPartRecord", t => t.AddColumn<int>("IsAnswer"));
 
             return 2;
         }

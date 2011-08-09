@@ -90,6 +90,26 @@ namespace NGM.Forum.Controllers {
             return View((object)viewModel);
         }
 
+         public ActionResult Item(int forumId, PagerParameters pagerParameters) {
+            Pager pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
+            ForumPart forumPart = _forumService.Get(forumId, VersionOptions.Latest).As<ForumPart>();
+
+            if (forumPart == null)
+                return HttpNotFound();
+
+            var threads = _threadService.Get(forumPart, pager.GetStartIndex(), pager.PageSize, VersionOptions.Latest)
+                .Select(bp => _orchardServices.ContentManager.BuildDisplay(bp, "SummaryAdmin"));
+
+            dynamic forum = _orchardServices.ContentManager.BuildDisplay(forumPart, "DetailAdmin");
+
+            var list = Shape.List();
+            list.AddRange(threads);
+            forum.Content.Add(Shape.Parts_Forums_Thread_ListAdmin(ContentItems: list), "5");
+
+            // Casting to avoid invalid (under medium trust) reflection over the protected View method and force a static invocation.
+            return View((object)forum);
+        }
+
         bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties) {
             return TryUpdateModel(model, prefix, includeProperties, excludeProperties);
         }

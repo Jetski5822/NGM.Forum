@@ -59,12 +59,10 @@
     <Compile Include="Drivers\ForumPartDriver.cs" />
     <Compile Include="Extensions\Constants.cs" />
     <Compile Include="Extensions\ContentPartConstants.cs" />
-    <Compile Include="Extensions\PostPartExtensions.cs" />
     <Compile Include="Handlers\PostPartHandler.cs" />
     <Compile Include="Handlers\ForumPartHandler.cs" />
     <Compile Include="Handlers\ThreadPartHandler.cs" />
     <Compile Include="Models\ForumPartRecord.cs" />
-    <Compile Include="Models\MarkedAs.cs" />
     <Compile Include="Models\PostPartRecord.cs" />
     <Compile Include="Models\ThreadPartRecord.cs" />
     <Compile Include="Models\ThreadType.cs" />
@@ -234,6 +232,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Parts.Common.Body-Post.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ForumAdmin\Item.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
