@@ -10,7 +10,7 @@ namespace NGM.Forum.Extensions {
             return urlHelper.Action("List", "ThreadAdmin", new { forumId = forumPart.Id, area = Constants.LocalArea });
         }
 
-        public static string ForumCreate(this UrlHelper urlHelper) {
+        public static string AdminForumCreate(this UrlHelper urlHelper) {
             return urlHelper.Action("Create", "ForumAdmin", new { area = Constants.LocalArea });
         }
 
