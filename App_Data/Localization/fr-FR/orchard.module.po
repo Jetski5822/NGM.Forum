@@ -84,7 +84,7 @@ msgstr "Réponse"
 #: ~/Modules/NGM.Forum/Views/Parts.Posts.Post.Title.cshtml
 #| msgid "Re:"
 msgid "Re:"
-msgstr "Re :"
+msgstr "Re : "
 
 #: ~/Modules/NGM.Forum/Views/Parts.RoutableTitle.Summary-Thread.cshtml
 #| msgid "Is Question"
