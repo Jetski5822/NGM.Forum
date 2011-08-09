@@ -8,7 +8,11 @@
 
 <h1>
 @if (thread.Type == NGM.Forum.Models.ThreadType.Question) {
+  if (thread.IsAnswered) { 
+    <img src="Modules/NGM.Forum/Content/Images/status_Answered.gif" alt="Is Answered" title="Is Answered" />  
+  } else {
     <img src="Modules/NGM.Forum/Content/Images/status_NotAnswered.gif" alt="Is Question" title="Is Question" />
+  }
 } else if (thread.Type == NGM.Forum.Models.ThreadType.Discussion) {
     <img src="Modules/NGM.Forum/Content/Images/Discussion-small.png" alt="Is Discussion" title="Is Discussion" />
 }
