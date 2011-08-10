@@ -84,7 +84,7 @@ namespace NGM.Forum {
                 },
                 new PermissionStereotype {
                     Name = "Contributor",
-                    Permissions = new[] {ViewForum, ViewPost},
+                    Permissions = new[] {ViewForum, ViewPost, CreatePost, ReplyPost},
                 },
             };
         }
