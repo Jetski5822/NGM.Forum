@@ -38,10 +38,11 @@ namespace NGM.Forum.Handlers {
             OnVersioned<ThreadPart>((context, part, newVersionPart) => UpdateForumPartCounters(newVersionPart));
             OnRemoved<ThreadPart>((context, part) => UpdateForumPartCounters(part));
 
-            OnRemoved<ForumPart>(
-                (context, b) =>
-                _threadService.Get(context.ContentItem.As<ForumPart>()).ToList().ForEach(
-                    thread => context.ContentManager.Remove(thread.ContentItem)));
+            OnRemoved<ForumPart>((context, b) => 
+                _threadService
+                    .Get(context.ContentItem.As<ForumPart>())
+                    .ToList()
+                    .ForEach(thread => context.ContentManager.Remove(thread.ContentItem)));
         }
 
         private static void UpdateViewCount(BuildDisplayContext context, ThreadPart threadPart) {

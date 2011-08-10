@@ -1,4 +1,5 @@
-﻿using Orchard.ContentManagement;
+﻿using System;
+using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
 using Orchard.Core.Routable.Models;
 using Orchard.Data.Conventions;
@@ -48,6 +49,24 @@ namespace NGM.Forum.Models {
 
         public int ReplyCount {
             get { return PostCount >= 1 ? PostCount - 1 : 0; }
+        }
+
+        /// <summary>
+        /// (log(Qviews)*4) + ((Qanswers * Qscore)/5) + sum(Ascores) 
+        /// --------------------------------------------------------------------------
+        /// ((Qage+1) - ((Qage - Qupdated)/2)) ^ 1.5
+        /// </summary>
+        public double Popularity {
+            get {
+                var threadAge = this.As<ICommonPart>().CreatedUtc;
+                var threadModifiedAge = this.As<ICommonPart>().ModifiedUtc;
+                //var top = (((Math.Log(NumberOfViews)*4) + (()/5) + Math.Sum()) /
+                var bottom = 
+                   Math.Pow(Convert.ToDouble((threadAge.Value.Hour + 1) - ((threadAge.Value.Subtract(threadModifiedAge.Value)).Hours/2)), 1.5);
+                // top / bottom
+
+                return 0.0;
+            }
         }
     }
 }
