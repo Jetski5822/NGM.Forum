@@ -7,5 +7,6 @@ namespace NGM.Forum.Models {
         public virtual bool IsAnswered { get; set; }
         public virtual int PostCount { get; set; }
         public virtual int Type { get; set; }
+        public virtual int NumberOfViews { get; set; }
     }
 }

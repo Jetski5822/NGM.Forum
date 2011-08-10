@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Web.Routing;
 using JetBrains.Annotations;
@@ -23,7 +24,11 @@ namespace NGM.Forum.Handlers {
 
             Filters.Add(StorageFilter.For(repository));
 
-            OnGetDisplayShape<ThreadPart>(SetModelProperties);
+            OnGetDisplayShape<ThreadPart>((context, t) => {
+                SetModelProperties(context, t);
+                UpdateViewCount(context, t);
+                                          });
+
             OnGetEditorShape<ThreadPart>(SetModelProperties);
             OnUpdateEditorShape<ThreadPart>(SetModelProperties);
 
@@ -37,6 +42,11 @@ namespace NGM.Forum.Handlers {
                 (context, b) =>
                 _threadService.Get(context.ContentItem.As<ForumPart>()).ToList().ForEach(
                     thread => context.ContentManager.Remove(thread.ContentItem)));
+        }
+
+        private static void UpdateViewCount(BuildDisplayContext context, ThreadPart threadPart) {
+            if (context.DisplayType == "Detail")
+                threadPart.NumberOfViews++;
         }
 
         private static void SetModelProperties(BuildShapeContext context, ThreadPart threadPost) {

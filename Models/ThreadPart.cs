@@ -41,6 +41,11 @@ namespace NGM.Forum.Models {
             set { Record.IsAnswered = value; }            
         }
 
+        public int NumberOfViews {
+            get { return Record.NumberOfViews; }
+            set { Record.NumberOfViews = value; }
+        }
+
         public int ReplyCount {
             get { return PostCount >= 1 ? PostCount - 1 : 0; }
         }
