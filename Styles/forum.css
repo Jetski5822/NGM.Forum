@@ -14,7 +14,7 @@
 .thread header h2 { background: transparent none no-repeat left center; padding-left: 18px; }
 .thread header h2.question { background-image: url('../Content/Images/status_NotAnswered.gif'); }
 .thread header h2.answer { background-image: url('../Content/Images/status_Answered.gif'); }
-.thread header h2.discussion { background-image: url('../Content/Images/Discussion-small.gif'); }
+.thread header h2.discussion { background-image: url('../Content/Images/Discussion-small.png'); }
 
 .latestpost {
   clear: left;
