@@ -67,8 +67,8 @@ namespace NGM.Forum.Models {
                 double Qscore = 0D;
 
                 var top = ((Math.Log(NumberOfViews)*4) + ((PostCount*Qscore) / 5) + Ascores.Sum());
-                var bottom = 
-                   Math.Pow(Convert.ToDouble((threadAge.Value.AddHours(1).Hour) - ((threadAge.Value.Subtract(threadModifiedAge.Value)).Hours / 2)), 1.5);
+                var bottom =
+                   Math.Pow(Convert.ToDouble((threadAge.GetValueOrDefault(DateTime.Now).AddHours(1).Hour) - ((threadAge.GetValueOrDefault(DateTime.Now).Subtract(threadModifiedAge.GetValueOrDefault(DateTime.Now))).Hours / 2)), 1.5);
 
                 return top/bottom;
             }
