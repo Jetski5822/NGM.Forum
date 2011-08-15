@@ -99,7 +99,7 @@ namespace NGM.Forum.Controllers {
 
             var threadParts = _threadService.Get(forumPart, pager.GetStartIndex(), pager.PageSize);
             var stickyThreads = threadParts.Where(o => o.IsSticky).Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Summary"));
-            var nonStickyThreads = threadParts.Where(o => !o.IsSticky).Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Summary"));
+            var nonStickyThreads = threadParts.Where(o => !o.IsSticky).OrderByDescending(p => p.Popularity).Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Summary"));
             var threads = stickyThreads.Union(nonStickyThreads);
                 
             dynamic forum = _orchardServices.ContentManager.BuildDisplay(forumPart);

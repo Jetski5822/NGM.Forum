@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
 using Orchard.Core.Routable.Models;
@@ -60,12 +62,15 @@ namespace NGM.Forum.Models {
             get {
                 var threadAge = this.As<ICommonPart>().CreatedUtc;
                 var threadModifiedAge = this.As<ICommonPart>().ModifiedUtc;
-                //var top = (((Math.Log(NumberOfViews)*4) + (()/5) + Math.Sum()) /
-                var bottom = 
-                   Math.Pow(Convert.ToDouble((threadAge.Value.Hour + 1) - ((threadAge.Value.Subtract(threadModifiedAge.Value)).Hours/2)), 1.5);
-                // top / bottom
 
-                return 0.0;
+                List<int> Ascores = new List<int>();
+                double Qscore = 0D;
+
+                var top = ((Math.Log(NumberOfViews)*4) + ((PostCount*Qscore) / 5) + Ascores.Sum());
+                var bottom = 
+                   Math.Pow(Convert.ToDouble((threadAge.Value.AddHours(1).Hour) - ((threadAge.Value.Subtract(threadModifiedAge.Value)).Hours / 2)), 1.5);
+
+                return top/bottom;
             }
         }
     }
