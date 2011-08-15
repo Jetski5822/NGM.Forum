@@ -5,5 +5,7 @@ namespace NGM.Forum.Models {
         public virtual bool IsClosed { get; set; }
         public virtual int ThreadCount { get; set; }
         public virtual int PostCount { get; set; }
+
+        public virtual bool UsePopularityAlgorithm { get; set; }
     }
 }

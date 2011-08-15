@@ -17,6 +17,11 @@ namespace NGM.Forum.Models {
             set { Record.IsClosed = value; }
         }
 
+        public bool UsePopularityAlgorithm {
+            get { return Record.UsePopularityAlgorithm; }
+            set { Record.UsePopularityAlgorithm = value; }
+        }
+
         public int ReplyCount {
             get { return PostCount >= 1 ? PostCount - ThreadCount : 0; }
         }

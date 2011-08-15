@@ -64,7 +64,13 @@ namespace NGM.Forum {
         public int UpdateFrom2() {
             SchemaBuilder.AlterTable("ThreadPartRecord", t => t.AddColumn<int>("NumberOfViews"));
 
-            return 3;            
+            return 3;
+        }
+
+        public int UpdateFrom3() {
+            SchemaBuilder.AlterTable("ForumPartRecord", t => t.AddColumn<bool>("UsePopularityAlgorithm"));
+
+            return 3;
         }
     }
 }

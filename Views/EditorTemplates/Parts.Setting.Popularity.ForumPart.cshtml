@@ -1,0 +1,6 @@
+﻿@model NGM.Forum.Models.ForumPart
+
+<fieldset>
+        @Html.CheckBoxFor(m => m.UsePopularityAlgorithm, new { @class="check-box"})
+        <label for="@Html.FieldIdFor(m => m.UsePopularityAlgorithm)" class="forcheckbox">@T("Use Popularity Algorithm")</label>
+</fieldset>
