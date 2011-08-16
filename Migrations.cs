@@ -70,7 +70,7 @@ namespace NGM.Forum {
         public int UpdateFrom3() {
             SchemaBuilder.AlterTable("ForumPartRecord", t => t.AddColumn<bool>("UsePopularityAlgorithm"));
 
-            return 3;
+            return 4;
         }
     }
 }
