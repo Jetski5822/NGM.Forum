@@ -10,6 +10,7 @@ using Orchard.Core.Common.Models;
 namespace NGM.Forum.Services {
     public interface IPostService : IDependency {
         ContentItem Get(int id, VersionOptions versionOptions);
+        IEnumerable<PostPart> Get(ThreadPart threadPart);
         IEnumerable<PostPart> Get(ThreadPart threadPart, VersionOptions versionOptions);
         IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count);
         IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count, VersionOptions versionOptions);
@@ -22,6 +23,10 @@ namespace NGM.Forum.Services {
 
         public PostService(IContentManager contentManager) {
             _contentManager = contentManager;
+        }
+
+        public IEnumerable<PostPart> Get(ThreadPart threadPart) {
+            return Get(threadPart, VersionOptions.Published);
         }
 
         public ContentItem Get(int id, VersionOptions versionOptions) {

@@ -44,7 +44,7 @@ namespace NGM.Forum.Handlers {
                     .ToList()
                     .ForEach(thread => context.ContentManager.Remove(thread.ContentItem)));
         }
-
+    
         private static void UpdateViewCount(BuildDisplayContext context, ThreadPart threadPart) {
             if (context.DisplayType == "Detail")
                 threadPart.NumberOfViews++;

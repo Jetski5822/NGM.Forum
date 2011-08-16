@@ -32,6 +32,12 @@ namespace NGM.Forum.Handlers {
             OnUnpublished<PostPart>((context, part) => UpdatePostCount(part));
             OnVersioned<PostPart>((context, part, newVersionPart) => UpdatePostCount(newVersionPart));
             OnRemoved<PostPart>((context, part) => UpdatePostCount(part));
+
+            OnRemoved<ThreadPart>((context, b) =>
+                _postService
+                    .Get(context.ContentItem.As<ThreadPart>())
+                    .ToList()
+                    .ForEach(post => context.ContentManager.Remove(post.ContentItem)));
         }
 
         private static void SetModelProperties(BuildShapeContext context, PostPart postPart) {
