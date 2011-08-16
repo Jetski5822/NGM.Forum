@@ -27,6 +27,9 @@ namespace NGM.Forum.Controllers {
         public Localizer T { get; set; }
 
         public ActionResult Create(int contentId) {
+            if (!_orchardServices.Authorizer.Authorize(Permissions.CreatePost, T("Not allowed to create post")))
+                return new HttpUnauthorizedResult();
+
             var contentItem = _orchardServices.ContentManager.Get(contentId, VersionOptions.Latest);
             if (contentItem.As<PostPart>() == null)
             {
@@ -48,6 +51,9 @@ namespace NGM.Forum.Controllers {
         }
 
         public ActionResult CreateWithQuote(int contentId) {
+            if (!_orchardServices.Authorizer.Authorize(Permissions.CreatePost, T("Not allowed to create post")))
+                return new HttpUnauthorizedResult();
+
             var contentItem = _orchardServices.ContentManager.Get(contentId, VersionOptions.Latest);
             if (contentItem.As<PostPart>() == null) {
                 if (IsNotAllowedToCreatePost())
@@ -71,6 +77,9 @@ namespace NGM.Forum.Controllers {
 
         [HttpPost, ActionName("Create")]
         public ActionResult CreatePOST(int contentId) {
+            if (!_orchardServices.Authorizer.Authorize(Permissions.CreatePost, T("Not allowed to create post")))
+                return new HttpUnauthorizedResult();
+
             var contentItem = _orchardServices.ContentManager.Get(contentId, VersionOptions.Latest);
             if (contentItem.As<PostPart>() == null) {
                 if (IsNotAllowedToCreatePost())
