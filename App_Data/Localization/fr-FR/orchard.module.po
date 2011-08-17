@@ -17,9 +17,19 @@ msgid "New Forum"
 msgstr "Nouveau forum"
 
 #: ~/Modules/NGM.Forum/Views/Parts.Forums.Forum.LatestPost.cshtml
+#| msgid "Last Post"
+msgid "Last Post"
+msgstr "Dernier message"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Forums.Forum.LatestPost.cshtml
 #| msgid "by"
 msgid "by"
 msgstr "par"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Forums.Forum.LatestPost.cshtml
+#| msgid "M/d/yyyy h:mm tt"
+msgid "M/d/yyyy h:mm tt"
+msgstr "dd/MM/yyyy HH:mm"
 
 #: ~/Modules/NGM.Forum/Views/Parts.Forums.Forum.Manage.cshtml
 #| msgid "Create Post"
@@ -74,7 +84,7 @@ msgstr "Réponse"
 #: ~/Modules/NGM.Forum/Views/Parts.Posts.Post.Title.cshtml
 #| msgid "Re:"
 msgid "Re:"
-msgstr "Re :"
+msgstr "Re : "
 
 #: ~/Modules/NGM.Forum/Views/Parts.RoutableTitle.Summary-Thread.cshtml
 #| msgid "Is Question"
@@ -92,14 +102,9 @@ msgid "There are no posts for this thread."
 msgstr "Il n'y a pas de messages pour ce sujet."
 
 #: ~/Modules/NGM.Forum/Views/Parts.Threads.Thread.LatestPost.cshtml
-#| msgid "Latest post to go here..."
-msgid "Latest post to go here..."
-msgstr "Les derniers messages apparaîtront ici..."
-
-#: ~/Modules/NGM.Forum/Views/Parts.Threads.Thread.LatestPost.cshtml
-#| msgid "Latest post to go here..."
-msgid "Latest post to go here..."
-msgstr "Les derniers messages apparaîtront ici..."
+#| msgid "Last Post"
+msgid "Last Post"
+msgstr "Dernier message"
 
 #: ~/Modules/NGM.Forum/Views/Parts.Threads.Thread.LatestPost.cshtml
 #| msgid "by"
@@ -108,7 +113,7 @@ msgstr "par"
 
 #: ~/Modules/NGM.Forum/Views/Parts.Threads.Thread.LatestPost.cshtml
 #| msgid "MM/dd/yyyy hh:mm tt"
-msgid "MM/dd/yyyy hh:mm tt"
+msgid "M/d/yyyy h:mm tt"
 msgstr "dd/MM/yyyy HH:mm"
 
 #: ~/Modules/NGM.Forum/Views/Parts.Threads.Thread.PostCount.cshtml
