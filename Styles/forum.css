@@ -25,6 +25,10 @@
   clear: left;
 }
 
+.thread-posts .first article {
+  border: 0;
+}
+
 .threads li {
   height: 85px;
 }
