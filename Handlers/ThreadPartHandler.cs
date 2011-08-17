@@ -26,7 +26,7 @@ namespace NGM.Forum.Handlers {
 
             OnGetDisplayShape<ThreadPart>((context, t) => {
                 SetModelProperties(context, t);
-                UpdateViewCount(context, t);
+                //UpdateViewCount(context, t);
                                           });
 
             OnGetEditorShape<ThreadPart>(SetModelProperties);
