@@ -2,7 +2,7 @@
 AntiForgery: enabled
 Author: Nicholas Mayne
 Website: http://orchardforums.codeplex.com/
-Version: 1.0.0
+Version: 0.1.0
 OrchardVersion: 1.2.41
 Description: Introduces a forum module allowing users to create forums, threads and posts.
 FeatureDescription: A basic forum module
