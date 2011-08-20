@@ -105,7 +105,7 @@ namespace NGM.Forum.Controllers {
             var list = Shape.List();
 
             if (forumPart.UsePopularityAlgorithm)
-                list.AddRange(stickyThreads.Union(threadParts.Where(o => !o.IsSticky).OrderByDescending(p => p.Popularity).Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Summary"))));
+                list.AddRange(stickyThreads.Union(threadParts.Where(o => !o.IsSticky).OrderByDescending(p => _threadService.CalculatePopularity(p)).Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Summary"))));
             else {
                 list.AddRange(stickyThreads.Union(threadParts.Where(o => !o.IsSticky).Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Summary"))));
             }

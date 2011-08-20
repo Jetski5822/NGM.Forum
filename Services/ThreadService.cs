@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
+using Contrib.Voting.Services;
 using NGM.Forum.Extensions;
 using NGM.Forum.Models;
 using Orchard;
@@ -22,14 +22,21 @@ namespace NGM.Forum.Services {
 
         void CloseThread(ThreadPart threadPart);
         void OpenThread(ThreadPart threadPart);
+
+        double CalculatePopularity(ThreadPart threadPart);
     }
 
-    [UsedImplicitly]
     public class ThreadService : IThreadService {
         private readonly IContentManager _contentManager;
+        private readonly IPostService _postService;
+        private readonly IVotingService _votingService;
 
-        public ThreadService(IContentManager contentManager) {
+        public ThreadService(IContentManager contentManager, 
+            IPostService postService,
+            IVotingService votingService) {
             _contentManager = contentManager;
+            _postService = postService;
+            _votingService = votingService;
         }
 
         public ThreadPart Get(ForumPart forumPart, string slug, VersionOptions versionOptions) {
@@ -66,6 +73,33 @@ namespace NGM.Forum.Services {
 
         public void OpenThread(ThreadPart threadPart) {
             threadPart.IsClosed = false;
+        }
+
+        public double CalculatePopularity(ThreadPart threadPart) {
+            double questionScore = 0D;
+            IList<double> answerScores = new List<double>();
+
+            var posts = _postService.Get(threadPart).ToArray();
+
+            var question = posts.Where(o => o.IsParentThread()).First();
+            var questionScoreRecord = _votingService.Get(vote => vote.ContentItemRecord == question.Record.ContentItemRecord).FirstOrDefault();
+            if (questionScoreRecord != null) {
+                questionScore = questionScoreRecord.Value;
+
+                foreach (var answer in posts.Where(o => !o.IsParentThread())) {
+                    var answerScoreRecord = _votingService.Get(vote => vote.ContentItemRecord == answer.Record.ContentItemRecord).FirstOrDefault();
+                    if (answerScoreRecord != null)
+                        answerScores.Add(answerScoreRecord.Value);
+                }
+            }
+
+            var threadAge = threadPart.As<ICommonPart>().CreatedUtc;
+            var threadModifiedAge = threadPart.As<ICommonPart>().ModifiedUtc;
+
+            var top = ((Math.Log(threadPart.NumberOfViews) * 4) + ((threadPart.PostCount * questionScore) / 5) + answerScores.Sum());
+            var bottom = Math.Pow(Convert.ToDouble((threadAge.GetValueOrDefault(DateTime.Now).AddHours(1).Hour) - ((threadAge.GetValueOrDefault(DateTime.Now).Subtract(threadModifiedAge.GetValueOrDefault(DateTime.Now))).Hours / 2)), 1.5);
+
+            return top / bottom;
         }
 
         private IContentQuery<ContentItem, CommonPartRecord> GetForumQuery(ContentPart<ForumPartRecord> forum, VersionOptions versionOptions) {

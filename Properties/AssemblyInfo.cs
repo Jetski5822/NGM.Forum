@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Security;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -8,8 +8,8 @@ using System.Security;
 [assembly: AssemblyTitle("NGM.Forum")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyProduct("Forum")]
-[assembly: AssemblyCopyright("Copyright ©  Nicholas Mayne 2010")]
+[assembly: AssemblyProduct("NGM.Forum")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -19,7 +19,7 @@ using System.Security;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("6db4dac4-c637-4786-8e9b-ce26396e4567")]
+[assembly: Guid("6120978e-1772-49fe-b9bd-399403e83b93")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -30,6 +30,5 @@ using System.Security;
 //
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("0.0.1.0")]
-[assembly: AssemblyFileVersion("0.0.1.0")]
-[assembly: SecurityTransparent]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]

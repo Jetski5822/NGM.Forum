@@ -1,7 +1,5 @@
-using System;
 using System.Linq;
 using System.Web.Routing;
-using JetBrains.Annotations;
 using NGM.Forum.Extensions;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
@@ -11,13 +9,15 @@ using Orchard.Core.Common.Models;
 using Orchard.Data;
 
 namespace NGM.Forum.Handlers {
-    [UsedImplicitly]
     public class ThreadPartHandler : ContentHandler {
         private readonly IPostService _postService;
         private readonly IThreadService _threadService;
         private readonly IForumService _forumService;
 
-        public ThreadPartHandler(IRepository<ThreadPartRecord> repository, IPostService postService, IThreadService threadService, IForumService forumService, RequestContext requestContext) {
+        public ThreadPartHandler(IRepository<ThreadPartRecord> repository, 
+            IPostService postService,
+            IThreadService threadService, 
+            IForumService forumService) {
             _postService = postService;
             _threadService = threadService;
             _forumService = forumService;
@@ -26,7 +26,7 @@ namespace NGM.Forum.Handlers {
 
             OnGetDisplayShape<ThreadPart>((context, t) => {
                 SetModelProperties(context, t);
-                //UpdateViewCount(context, t);
+                UpdateViewCount(context, t);
                                           });
 
             OnGetEditorShape<ThreadPart>(SetModelProperties);
@@ -50,8 +50,8 @@ namespace NGM.Forum.Handlers {
                 threadPart.NumberOfViews++;
         }
 
-        private static void SetModelProperties(BuildShapeContext context, ThreadPart threadPost) {
-            context.Shape.Forum = threadPost.ForumPart;
+        private void SetModelProperties(BuildShapeContext context, ThreadPart threadPart) {
+            context.Shape.Forum = threadPart.ForumPart;
         }
 
         private void UpdateForumPartCounters(ThreadPart threadPart) {

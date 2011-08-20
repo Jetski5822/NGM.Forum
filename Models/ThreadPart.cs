@@ -52,26 +52,5 @@ namespace NGM.Forum.Models {
         public int ReplyCount {
             get { return PostCount >= 1 ? PostCount - 1 : 0; }
         }
-
-        /// <summary>
-        /// (log(Qviews)*4) + ((Qanswers * Qscore)/5) + sum(Ascores) 
-        /// --------------------------------------------------------------------------
-        /// ((Qage+1) - ((Qage - Qupdated)/2)) ^ 1.5
-        /// </summary>
-        public double Popularity {
-            get {
-                var threadAge = this.As<ICommonPart>().CreatedUtc;
-                var threadModifiedAge = this.As<ICommonPart>().ModifiedUtc;
-
-                List<int> Ascores = new List<int>();
-                double Qscore = 0D;
-
-                var top = ((Math.Log(NumberOfViews)*4) + ((PostCount*Qscore) / 5) + Ascores.Sum());
-                var bottom =
-                   Math.Pow(Convert.ToDouble((threadAge.GetValueOrDefault(DateTime.Now).AddHours(1).Hour) - ((threadAge.GetValueOrDefault(DateTime.Now).Subtract(threadModifiedAge.GetValueOrDefault(DateTime.Now))).Hours / 2)), 1.5);
-
-                return top/bottom;
-            }
-        }
     }
 }

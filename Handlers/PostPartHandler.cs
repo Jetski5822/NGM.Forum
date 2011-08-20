@@ -10,13 +10,15 @@ using Orchard.Core.Common.Models;
 using Orchard.Data;
 
 namespace NGM.Forum.Handlers {
-    [UsedImplicitly]
     public class PostPartHandler : ContentHandler {
         private readonly IPostService _postService;
         private readonly IThreadService _threadService;
         private readonly IForumService _forumService;
 
-        public PostPartHandler(IRepository<PostPartRecord> repository, IPostService postService, IThreadService threadService, IForumService forumService, RequestContext requestContext) {
+        public PostPartHandler(IRepository<PostPartRecord> repository, 
+            IPostService postService, 
+            IThreadService threadService, 
+            IForumService forumService) {
             _postService = postService;
             _threadService = threadService;
             _forumService = forumService;
@@ -40,7 +42,7 @@ namespace NGM.Forum.Handlers {
                     .ForEach(post => context.ContentManager.Remove(post.ContentItem)));
         }
 
-        private static void SetModelProperties(BuildShapeContext context, PostPart postPart) {
+        private void SetModelProperties(BuildShapeContext context, PostPart postPart) {
             context.Shape.Thread = postPart.ThreadPart;
         }
         
