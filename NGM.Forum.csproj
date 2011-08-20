@@ -120,7 +120,6 @@
     <Content Include="Styles\forum.css" />
     <Content Include="Styles\menu.forum-admin.css" />
     <Content Include="Styles\ngm-forum-admin.css" />
-    <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />
@@ -177,6 +176,10 @@
     <ProjectReference Include="..\..\Core\Orchard.Core.csproj">
       <Project>{9916839C-39FC-4CEB-A5AF-89CA7E87119F}</Project>
       <Name>Orchard.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Contrib.Voting\Contrib.Voting.csproj">
+      <Project>{4DA5F35F-E62C-4B49-B5A8-379503257B3A}</Project>
+      <Name>Contrib.Voting</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
