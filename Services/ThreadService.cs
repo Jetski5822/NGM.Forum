@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Contrib.Voting.Services;
+using NGM.ContentViewCounter.Services;
 using NGM.Forum.Extensions;
 using NGM.Forum.Models;
 using Orchard;
@@ -30,13 +31,16 @@ namespace NGM.Forum.Services {
         private readonly IContentManager _contentManager;
         private readonly IPostService _postService;
         private readonly IVotingService _votingService;
+        private readonly IViewCounterService _viewCounterService;
 
         public ThreadService(IContentManager contentManager, 
             IPostService postService,
-            IVotingService votingService) {
+            IVotingService votingService,
+            IViewCounterService viewCounterService) {
             _contentManager = contentManager;
             _postService = postService;
             _votingService = votingService;
+            _viewCounterService = viewCounterService;
         }
 
         public ThreadPart Get(ForumPart forumPart, string slug, VersionOptions versionOptions) {
@@ -93,11 +97,13 @@ namespace NGM.Forum.Services {
                 }
             }
 
-            var threadAge = threadPart.As<ICommonPart>().CreatedUtc;
-            var threadModifiedAge = threadPart.As<ICommonPart>().ModifiedUtc;
+            var totalViews = _viewCounterService.TotalViewsFor(threadPart.ContentItem);
 
-            var top = ((Math.Log(threadPart.NumberOfViews) * 4) + ((threadPart.PostCount * questionScore) / 5) + answerScores.Sum());
-            var bottom = Math.Pow(Convert.ToDouble((threadAge.GetValueOrDefault(DateTime.Now).AddHours(1).Hour) - ((threadAge.GetValueOrDefault(DateTime.Now).Subtract(threadModifiedAge.GetValueOrDefault(DateTime.Now))).Hours / 2)), 1.5);
+            var threadCreatedDate = threadPart.As<ICommonPart>().CreatedUtc;
+            var threadModifiedDate = threadPart.As<ICommonPart>().ModifiedUtc;
+
+            var top = ((Math.Log(totalViews) * 4) + ((threadPart.PostCount * questionScore) / 5) + answerScores.Sum());
+            var bottom = Math.Pow(Convert.ToDouble((threadCreatedDate.GetValueOrDefault(DateTime.Now).AddHours(1).Hour) - ((threadCreatedDate.GetValueOrDefault(DateTime.Now).Subtract(threadModifiedDate.GetValueOrDefault(DateTime.Now))).Hours / 2)), 1.5);
 
             return top / bottom;
         }

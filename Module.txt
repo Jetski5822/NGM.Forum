@@ -4,10 +4,10 @@ Author: Nicholas Mayne
 Website: http://orchardforums.codeplex.com/
 Version: 0.1.0
 OrchardVersion: 1.2.41
-Description: Introduces a forum module allowing users to create forums, threads and posts. Requires the Voting module to be installed.
+Description: Introduces a forum module allowing users to create forums, threads and posts. Requires the Voting and Content View Counter modules to be installed.
 Features:
     NGM.Forum:
         Name: Forums
         Category: Content
         Description: Introduces a forum module allowing users to create forums, threads and posts.
-        Dependencies: Contrib.Voting, Orchard.jQuery
+        Dependencies: Contrib.Voting, Orchard.jQuery, NGM.ContentViewCounter

@@ -24,10 +24,7 @@ namespace NGM.Forum.Handlers {
 
             Filters.Add(StorageFilter.For(repository));
 
-            OnGetDisplayShape<ThreadPart>((context, t) => {
-                SetModelProperties(context, t);
-                UpdateViewCount(context, t);
-                                          });
+            OnGetDisplayShape<ThreadPart>(SetModelProperties);
 
             OnGetEditorShape<ThreadPart>(SetModelProperties);
             OnUpdateEditorShape<ThreadPart>(SetModelProperties);
@@ -43,11 +40,6 @@ namespace NGM.Forum.Handlers {
                     .Get(context.ContentItem.As<ForumPart>())
                     .ToList()
                     .ForEach(thread => context.ContentManager.Remove(thread.ContentItem)));
-        }
-    
-        private static void UpdateViewCount(BuildDisplayContext context, ThreadPart threadPart) {
-            if (context.DisplayType == "Detail")
-                threadPart.NumberOfViews++;
         }
 
         private void SetModelProperties(BuildShapeContext context, ThreadPart threadPart) {

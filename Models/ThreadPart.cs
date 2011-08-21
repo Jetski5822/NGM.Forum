@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Orchard.ContentManagement;
+﻿using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
 using Orchard.Core.Routable.Models;
 using Orchard.Data.Conventions;
@@ -42,11 +39,6 @@ namespace NGM.Forum.Models {
         public bool IsAnswered {
             get { return Record.IsAnswered; }
             set { Record.IsAnswered = value; }            
-        }
-
-        public int NumberOfViews {
-            get { return Record.NumberOfViews; }
-            set { Record.NumberOfViews = value; }
         }
 
         public int ReplyCount {

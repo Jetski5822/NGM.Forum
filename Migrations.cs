@@ -72,5 +72,17 @@ namespace NGM.Forum {
 
             return 4;
         }
+
+        public int UpdateFrom4() {
+            SchemaBuilder.AlterTable("ThreadPartRecord", t => t.DropColumn("NumberOfViews"));
+
+            return 5;            
+        }
+
+        public int UpdateFrom5() {
+            ContentDefinitionManager.AlterTypeDefinition("Thread", cfg => cfg.WithPart("UserViewPart", p => p.WithSetting("UserViewTypePartSettings.DisplayType", "Detail")));
+
+            return 6;
+        }
     }
 }

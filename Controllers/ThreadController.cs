@@ -10,7 +10,6 @@ using Orchard.ContentManagement.Aspects;
 using Orchard.DisplayManagement;
 using Orchard.Localization;
 using Orchard.Mvc;
-using Orchard.Security;
 using Orchard.Settings;
 using Orchard.Themes;
 using Orchard.UI.Navigation;
