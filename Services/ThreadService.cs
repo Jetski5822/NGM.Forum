@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Contrib.Voting.Services;
-using NGM.ContentViewCounter.Services;
 using NGM.Forum.Extensions;
 using NGM.Forum.Models;
 using Orchard;
@@ -31,16 +30,13 @@ namespace NGM.Forum.Services {
         private readonly IContentManager _contentManager;
         private readonly IPostService _postService;
         private readonly IVotingService _votingService;
-        private readonly IViewCounterService _viewCounterService;
 
         public ThreadService(IContentManager contentManager, 
             IPostService postService,
-            IVotingService votingService,
-            IViewCounterService viewCounterService) {
+            IVotingService votingService) {
             _contentManager = contentManager;
             _postService = postService;
             _votingService = votingService;
-            _viewCounterService = viewCounterService;
         }
 
         public ThreadPart Get(ForumPart forumPart, string slug, VersionOptions versionOptions) {
@@ -97,7 +93,8 @@ namespace NGM.Forum.Services {
                 }
             }
 
-            var totalViews = _viewCounterService.TotalViewsFor(threadPart.ContentItem);
+            var resultRecord = _votingService.GetResult(threadPart.ContentItem.Id, "count", "ContentViews");
+            var totalViews = resultRecord == null ? 0 : (int)resultRecord.Value;
 
             var threadCreatedDate = threadPart.As<ICommonPart>().CreatedUtc;
             var threadModifiedDate = threadPart.As<ICommonPart>().ModifiedUtc;
