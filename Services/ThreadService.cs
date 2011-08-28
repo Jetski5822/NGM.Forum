@@ -82,18 +82,18 @@ namespace NGM.Forum.Services {
             var posts = _postService.Get(threadPart).ToArray();
 
             var question = posts.Where(o => o.IsParentThread()).First();
-            var questionScoreRecord = _votingService.Get(vote => vote.ContentItemRecord == question.Record.ContentItemRecord).FirstOrDefault();
+            var questionScoreRecord = _votingService.Get(vote => vote.ContentItemRecord == question.Record.ContentItemRecord && vote.Dimension == VotingConstants.RatingConstant).FirstOrDefault();
             if (questionScoreRecord != null) {
                 questionScore = questionScoreRecord.Value;
 
                 foreach (var answer in posts.Where(o => !o.IsParentThread())) {
-                    var answerScoreRecord = _votingService.Get(vote => vote.ContentItemRecord == answer.Record.ContentItemRecord).FirstOrDefault();
+                    var answerScoreRecord = _votingService.Get(vote => vote.ContentItemRecord == answer.Record.ContentItemRecord && vote.Dimension == VotingConstants.RatingConstant).FirstOrDefault();
                     if (answerScoreRecord != null)
                         answerScores.Add(answerScoreRecord.Value);
                 }
             }
 
-            var resultRecord = _votingService.GetResult(threadPart.ContentItem.Id, "count", "ContentViews");
+            var resultRecord = _votingService.GetResult(threadPart.ContentItem.Id, "count", VotingConstants.ViewConstant);
             var totalViews = resultRecord == null ? 0 : (int)resultRecord.Value;
 
             var threadCreatedDate = threadPart.As<ICommonPart>().CreatedUtc;

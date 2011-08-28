@@ -80,6 +80,7 @@
     <Compile Include="Permissions.cs" />
     <Compile Include="Services\PostService.cs" />
     <Compile Include="Services\ThreadService.cs" />
+    <Compile Include="Models\VotingConstants.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Images\answer-correct-16x16.gif" />
