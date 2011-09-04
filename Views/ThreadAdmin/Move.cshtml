@@ -1,0 +1,17 @@
+@using NGM.Forum.Models;
+@{
+    Html.AddTitleParts(T("Move Thread").ToString());
+}
+@using (Html.BeginFormAntiForgeryPost(Url.Action("Move", "ThreadAdmin", new { area = "NGM.Forum", id = Model.ContentItem.Id }))) {
+
+    <fieldset>
+    <legend>@T("Destination")</legend>
+    @Html.DropDownList("ForumToMove", ((IEnumerable<ForumPart>)Model.Forums).Select(o => new SelectListItem { Text = o.Title, Value = o.Id.ToString() }))
+  </fieldset>
+ 
+}
+@*@Display(Model.ContentItem)*@
+@*TODO :
+
+Redirect.
+Creash collision?*@

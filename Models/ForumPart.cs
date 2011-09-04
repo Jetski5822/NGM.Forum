@@ -1,7 +1,13 @@
 ﻿using Orchard.ContentManagement;
+using Orchard.Core.Routable.Models;
 
 namespace NGM.Forum.Models {
     public class ForumPart : ContentPart<ForumPartRecord> {
+        public string Title {
+            get { return this.As<RoutePart>().Title; }
+            set { this.As<RoutePart>().Title = value; }
+        }
+
         public int ThreadCount {
             get { return Record.ThreadCount; }
             set { Record.ThreadCount = value; }

@@ -45,6 +45,9 @@
             Parts_Threads_Thread_Status="Meta:2"
             Parts_Threads_Thread_LatestPost="Content:after.1"/>
     </Match>
+    <Match DisplayType="SummaryAdmin">
+      <Place Parts_Threads_Move_SummaryAdmin="Actions:1"/>
+    </Match>
   </Match>
 
   <Match ContentType="Post">

@@ -40,7 +40,9 @@ namespace NGM.Forum.Drivers {
                 ContentShape("Parts_Threads_Thread_LatestPost",
                              () => shapeHelper.Parts_Threads_Thread_LatestPost(ContentPart: latestPostPart)),
                 ContentShape("Parts_Threads_Thread_PostCount",
-                             () => shapeHelper.Parts_Threads_Thread_PostCount(ContentPart: threadPart, PostCount: threadPart.ReplyCount))
+                             () => shapeHelper.Parts_Threads_Thread_PostCount(ContentPart: threadPart, PostCount: threadPart.ReplyCount)),
+                ContentShape("Parts_Threads_Move_SummaryAdmin",
+                            () => shapeHelper.Parts_Threads_Move_SummaryAdmin(ContentPart: threadPart))
             });
 
             return Combined(contentShapeResults.ToArray());

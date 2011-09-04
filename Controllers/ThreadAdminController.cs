@@ -1,12 +1,10 @@
 using System.Linq;
 using System.Web.Mvc;
 using NGM.Forum.Models;
-using NGM.Forum.Extensions;
 using NGM.Forum.Routing;
 using NGM.Forum.Services;
 using Orchard;
 using Orchard.ContentManagement;
-using Orchard.ContentManagement.Aspects;
 using Orchard.DisplayManagement;
 using Orchard.Localization;
 using Orchard.Settings;
@@ -57,7 +55,7 @@ namespace NGM.Forum.Controllers {
 
             dynamic viewModel = _orchardServices.New.ViewModel()
                 .ContentItems(list);
-            // Casting to avoid invalid (under medium trust) reflection over the protected View method and force a static invocation.
+            
             return View((object)viewModel);
         }
 
@@ -77,8 +75,22 @@ namespace NGM.Forum.Controllers {
             list.AddRange(posts);
             thread.Content.Add(Shape.Parts_Threads_Post_ListAdmin(ContentItems: list), "5");
 
-            // Casting to avoid invalid (under medium trust) reflection over the protected View method and force a static invocation.
             return View((object)thread);
+        }
+
+        public ActionResult Move(int threadId) {
+            ThreadPart threadPart = _threadService.Get(threadId, VersionOptions.Latest).As<ThreadPart>();
+
+            if (threadPart == null)
+                return HttpNotFound();
+
+            var forums = _forumService.Get();
+
+            dynamic viewModel = _orchardServices.New.ViewModel()
+                .ContentItem(threadPart)
+                .Forums(forums);
+
+            return View((object)viewModel);
         }
 
         bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties) {

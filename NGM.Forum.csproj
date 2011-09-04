@@ -57,6 +57,7 @@
     <Compile Include="Drivers\ForumPartDriver.cs" />
     <Compile Include="Extensions\Constants.cs" />
     <Compile Include="Extensions\ContentPartConstants.cs" />
+    <Compile Include="Filters\ContentMediaFilter.cs" />
     <Compile Include="Handlers\PostPartHandler.cs" />
     <Compile Include="Handlers\ForumPartHandler.cs" />
     <Compile Include="Handlers\ThreadPartHandler.cs" />
@@ -241,7 +242,12 @@
   <ItemGroup>
     <Content Include="Views\EditorTemplates\Parts.Setting.Popularity.ForumPart.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Views\Parts.Threads.Move.SummaryAdmin.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ThreadAdmin\Move.cshtml" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -78,6 +78,20 @@ namespace NGM.Forum {
                                                  },
                              new RouteDescriptor {
                                                      Route = new Route(
+                                                         "Admin/Forums/{forumId}/Threads/{threadId}/Move",
+                                                         new RouteValueDictionary {
+                                                                                      {"area", Constants.LocalArea},
+                                                                                      {"controller", "ThreadAdmin"},
+                                                                                      {"action", "Move"}
+                                                                                  },
+                                                         new RouteValueDictionary (),
+                                                         new RouteValueDictionary {
+                                                                                      {"area", Constants.LocalArea}
+                                                                                  },
+                                                         new MvcRouteHandler())
+                                                 },
+                             new RouteDescriptor {
+                                                     Route = new Route(
                                                          "Forums",
                                                          new RouteValueDictionary {
                                                                                       {"area", Constants.LocalArea},
