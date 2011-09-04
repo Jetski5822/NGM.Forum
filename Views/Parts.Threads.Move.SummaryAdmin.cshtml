@@ -5,5 +5,5 @@
     var contentPart = Model.ContentPart;
     var returnUrl = ViewContext.RequestContext.HttpContext.Request.ToUrlString();
 }
-@Html.Link(T("Move").Text, Url.Action("Move", "ThreadAdmin", new { area = Constants.LocalArea, threadId = contentPart.Id, returnUrl }), new { itemprop = "MoveUrl UnsafeUrl" })
+@Html.Link(T("Move").Text, Url.Action("Move", "ThreadAdmin", new { area = Constants.LocalArea, threadId = contentPart.Id, returnUrl }), new { itemprop = "MoveUrl" })
 @T(" | ")

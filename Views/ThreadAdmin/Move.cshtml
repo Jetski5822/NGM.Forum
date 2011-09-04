@@ -1,15 +1,28 @@
+@model NGM.Forum.ViewModels.ThreadMoveAdminViewModel
+@using Orchard.Utility.Extensions;
 @using NGM.Forum.Models;
-@{
-    Html.AddTitleParts(T("Move Thread").ToString());
-}
-@using (Html.BeginFormAntiForgeryPost(Url.Action("Move", "ThreadAdmin", new { area = "NGM.Forum", id = Model.ContentItem.Id }))) {
 
-    <fieldset>
-    <legend>@T("Destination")</legend>
-    @Html.DropDownList("ForumToMove", ((IEnumerable<ForumPart>)Model.Forums).Select(o => new SelectListItem { Text = o.Title, Value = o.Id.ToString() }))
-  </fieldset>
+@{ Layout.Title = T("Move Thread").ToString(); }
+
+@using (Html.BeginFormAntiForgeryPost(Url.Action("Move", "ThreadAdmin", new { area = "NGM.Forum", threadId = Model.ThreadId, returnUrl = Request.QueryString["ReturnUrl"] }))) {
+<fieldset>
+  <legend>Details</legend>
+    <div>
+        @Html.LabelFor(m => m.ForumId, T("Destination"))
+        @Html.DropDownListFor(m => m.ForumId, new SelectList(Model.AvailableForums, "Id", "Title"))
+        <span class="hint">@T("This is the forum that the thread will be moved to")</span>
+    </div>
  
+    <div>
+        @Html.CheckBoxFor(m => m.AllowRedirect, new { @class="check-box"})
+        <label for="@Html.FieldIdFor(m => m.AllowRedirect)" class="forcheckbox">@T("Allow Redirect")</label>
+        <span class="hint">@T("This allows requests for the previous location to be redirected to the new location")</span>
+    </div>
+</fieldset>
+  
+  <button type="submit">@T("Do It")</button>
 }
+
 @*@Display(Model.ContentItem)*@
 @*TODO :
 

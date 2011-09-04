@@ -3,13 +3,18 @@ using System.Web.Mvc;
 using NGM.Forum.Models;
 using NGM.Forum.Routing;
 using NGM.Forum.Services;
+using NGM.Forum.ViewModels;
 using Orchard;
 using Orchard.ContentManagement;
+using Orchard.ContentManagement.Aspects;
+using Orchard.Core.Routable.Services;
 using Orchard.DisplayManagement;
 using Orchard.Localization;
 using Orchard.Settings;
 using Orchard.UI.Admin;
 using Orchard.UI.Navigation;
+using Orchard.UI.Notify;
+using Orchard.Mvc.Extensions;
 
 namespace NGM.Forum.Controllers {
 
@@ -21,6 +26,7 @@ namespace NGM.Forum.Controllers {
         private readonly IForumPathConstraint _forumPathConstraint;
         private readonly ISiteService _siteService;
         private readonly IPostService _postService;
+        private readonly IRoutableService _routableService;
 
         public ThreadAdminController(IOrchardServices orchardServices,
             IForumService forumService,
@@ -28,13 +34,15 @@ namespace NGM.Forum.Controllers {
             IForumPathConstraint forumPathConstraint,
             ISiteService siteService,
             IShapeFactory shapeFactory,
-            IPostService postService) {
+            IPostService postService,
+            IRoutableService routableService) {
             _orchardServices = orchardServices;
             _forumService = forumService;
             _threadService = threadService;
             _forumPathConstraint = forumPathConstraint;
             _siteService = siteService;
             _postService = postService;
+            _routableService = routableService;
 
             T = NullLocalizer.Instance;
             Shape = shapeFactory;
@@ -79,18 +87,49 @@ namespace NGM.Forum.Controllers {
         }
 
         public ActionResult Move(int threadId) {
-            ThreadPart threadPart = _threadService.Get(threadId, VersionOptions.Latest).As<ThreadPart>();
+            if (!_orchardServices.Authorizer.Authorize(Permissions.MoveThread, T("Not allowed to move thread")))
+                return new HttpUnauthorizedResult();
+
+            var threadPart = _threadService.Get(threadId, VersionOptions.Latest).As<ThreadPart>();
 
             if (threadPart == null)
-                return HttpNotFound();
+                return HttpNotFound(T("could not find thread").ToString());
 
             var forums = _forumService.Get();
+            //What if I have 1 forum?
 
-            dynamic viewModel = _orchardServices.New.ViewModel()
-                .ContentItem(threadPart)
-                .Forums(forums);
+            var viewModel = new ThreadMoveAdminViewModel {
+                ThreadId = threadPart.Id,
+                AvailableForums = forums
+            };
 
-            return View((object)viewModel);
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public ActionResult Move(int threadId, string returnUrl, ThreadMoveAdminViewModel viewModel) {
+            if (!_orchardServices.Authorizer.Authorize(Permissions.MoveThread, T("Not allowed to move thread")))
+                return new HttpUnauthorizedResult();
+
+            var threadPart = _threadService.Get(threadId, VersionOptions.Latest).As<ThreadPart>();
+
+            if (threadPart == null)
+                return HttpNotFound(T("could not find thread").ToString());
+
+            var forumPart = _forumService.Get(viewModel.ForumId, VersionOptions.Latest).As<ForumPart>();
+
+            if (forumPart == null)
+                return HttpNotFound(T("could not find forum").ToString());
+
+            threadPart.ForumPart = forumPart;
+            var routableAspect = threadPart.As<IRoutableAspect>();
+            _routableService.ProcessSlug(routableAspect);
+
+            _orchardServices.ContentManager.Publish(threadPart.ContentItem);
+
+            _orchardServices.Notifier.Information(T("{0} has been moved.", threadPart.TypeDefinition.DisplayName));
+
+            return this.RedirectLocal(returnUrl, "~/");
         }
 
         bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties) {
