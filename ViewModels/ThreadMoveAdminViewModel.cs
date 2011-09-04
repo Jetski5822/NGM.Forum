@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NGM.Forum.Models;
 
 namespace NGM.Forum.ViewModels {
@@ -9,5 +10,6 @@ namespace NGM.Forum.ViewModels {
         public IEnumerable<ForumPart> AvailableForums { get; set; }
 
         public bool AllowRedirect { get; set; }
+        public string ScheduledRedirectExpires { get; set; }
     }
 }

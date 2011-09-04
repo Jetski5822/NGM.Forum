@@ -2,6 +2,11 @@
 @using Orchard.Utility.Extensions;
 @using NGM.Forum.Models;
 
+@{
+    Script.Require("jQueryUI_DatePicker");
+    Style.Require("jQueryUI_DatePicker"); 
+}
+
 @{ Layout.Title = T("Move Thread").ToString(); }
 
 @using (Html.BeginFormAntiForgeryPost(Url.Action("Move", "ThreadAdmin", new { area = "NGM.Forum", threadId = Model.ThreadId, returnUrl = Request.QueryString["ReturnUrl"] }))) {
@@ -18,6 +23,12 @@
         <label for="@Html.FieldIdFor(m => m.AllowRedirect)" class="forcheckbox">@T("Allow Redirect")</label>
         <span class="hint">@T("This allows requests for the previous location to be redirected to the new location")</span>
     </div>
+
+    <div>
+        <label class="forpicker" for="@Html.FieldIdFor(m => m.ScheduledRedirectExpires)">@T("Allow Redirect")</label>
+        @Html.EditorFor(m => m.ScheduledRedirectExpires)
+    </div>
+
 </fieldset>
   
   <button type="submit">@T("Do It")</button>
@@ -28,3 +39,28 @@
 
 Redirect.
 Creash collision?*@
+
+@using(Script.Foot()) {
+<script type="text/javascript">
+//<![CDATA[
+    $(function () {
+        var clearHint = function ($this) { if ($this.val() == $this.data("hint")) { $this.removeClass("hinted").val("") } };
+        var resetHint = function ($this) { setTimeout(function () { if (!$this.val()) { $this.addClass("hinted").val($this.data("hint")) } }, 300) };
+
+        $("label.forpicker").each(function () {
+            var $this = $(this);
+            var pickerInput = $("#" + $this.attr("for"));
+            if (!pickerInput.val()) {
+                pickerInput.data("hint", $this.text());
+                pickerInput.addClass("hinted")
+                    .val(pickerInput.data("hint"))
+                    .focus(function() {clearHint($(this));})
+                    .blur(function() {resetHint($(this));});
+                $this.closest("form").submit(function() {clearHint(pickerInput); pickerInput = 0;});
+            }
+        });
+            $('#@ViewData.TemplateInfo.GetFullHtmlFieldId("ScheduledRedirectExpires")').datepicker({ showAnim: "" }).focus(function () { $('#@ViewData.TemplateInfo.GetFullHtmlFieldId("AllowRedirect")').attr("checked", "checked") });
+    })
+//]]>
+</script>
+}

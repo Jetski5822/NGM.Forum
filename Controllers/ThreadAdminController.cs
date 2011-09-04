@@ -1,5 +1,8 @@
+using System;
+using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
+using NGM.Forum.Extensions;
 using NGM.Forum.Models;
 using NGM.Forum.Routing;
 using NGM.Forum.Services;
@@ -23,26 +26,26 @@ namespace NGM.Forum.Controllers {
         private readonly IOrchardServices _orchardServices;
         private readonly IForumService _forumService;
         private readonly IThreadService _threadService;
-        private readonly IForumPathConstraint _forumPathConstraint;
         private readonly ISiteService _siteService;
         private readonly IPostService _postService;
         private readonly IRoutableService _routableService;
+        private readonly IRedirectRouteService _redirectRouteService;
 
         public ThreadAdminController(IOrchardServices orchardServices,
             IForumService forumService,
             IThreadService threadService,
-            IForumPathConstraint forumPathConstraint,
             ISiteService siteService,
             IShapeFactory shapeFactory,
             IPostService postService,
-            IRoutableService routableService) {
+            IRoutableService routableService,
+            IRedirectRouteService redirectRouteService) {
             _orchardServices = orchardServices;
             _forumService = forumService;
             _threadService = threadService;
-            _forumPathConstraint = forumPathConstraint;
             _siteService = siteService;
             _postService = postService;
             _routableService = routableService;
+            _redirectRouteService = redirectRouteService;
 
             T = NullLocalizer.Instance;
             Shape = shapeFactory;
@@ -121,9 +124,17 @@ namespace NGM.Forum.Controllers {
             if (forumPart == null)
                 return HttpNotFound(T("could not find forum").ToString());
 
+            if (viewModel.AllowRedirect) {
+                DateTime scheduled;
+                if (!DateTime.TryParse(viewModel.ScheduledRedirectExpires, CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.AssumeLocal, out scheduled))
+                    scheduled = DateTime.MaxValue;
+
+                _redirectRouteService.CreateRedirect(threadPart.ForumPart.As<IRoutableAspect>(), threadPart.As<IRoutableAspect>(), scheduled);
+            }
+            
             threadPart.ForumPart = forumPart;
-            var routableAspect = threadPart.As<IRoutableAspect>();
-            _routableService.ProcessSlug(routableAspect);
+            
+            _routableService.ProcessSlug(threadPart.As<IRoutableAspect>());
 
             _orchardServices.ContentManager.Publish(threadPart.ContentItem);
 

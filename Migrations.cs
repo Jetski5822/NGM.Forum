@@ -1,4 +1,5 @@
-﻿using Orchard.ContentManagement.MetaData;
+﻿using System;
+using Orchard.ContentManagement.MetaData;
 using Orchard.Data.Migration;
 
 namespace NGM.Forum {
@@ -83,6 +84,19 @@ namespace NGM.Forum {
             ContentDefinitionManager.AlterTypeDefinition("Thread", cfg => cfg.WithPart("UserViewPart", p => p.WithSetting("UserViewTypePartSettings.DisplayType", "Detail")));
 
             return 6;
+        }
+
+        public int UpdateFrom6() {
+            SchemaBuilder.CreateTable("RedirectRouteRecord",
+                table => table
+                    .Column<int>("Id", column => column.PrimaryKey().Identity())
+                    .Column<int>("ContentItemId")
+                    .Column<string>("PreviousContainerSlug")
+                    .Column<string>("PreviousSlug")
+                    .Column<DateTime>("Expires")
+                );
+
+            return 7;
         }
     }
 }

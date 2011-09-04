@@ -25,6 +25,7 @@ namespace NGM.Forum.Controllers {
         private readonly IThreadService _threadService;
         private readonly IPostService _postService;
         private readonly ISiteService _siteService;
+        private readonly IRedirectRouteService _redirectRouteService;
 
         public ThreadController(IOrchardServices orchardServices, 
             IForumService forumService,
@@ -32,13 +33,15 @@ namespace NGM.Forum.Controllers {
             IThreadService threadService,
             IPostService postService,
             ISiteService siteService,
-            IShapeFactory shapeFactory) {
+            IShapeFactory shapeFactory,
+            IRedirectRouteService redirectRouteService) {
             _orchardServices = orchardServices;
             _forumService = forumService;
             _forumPathConstraint = forumPathConstraint;
             _threadService = threadService;
             _postService = postService;
             _siteService = siteService;
+            _redirectRouteService = redirectRouteService;
 
             T = NullLocalizer.Instance;
             Shape = shapeFactory;
@@ -112,7 +115,6 @@ namespace NGM.Forum.Controllers {
             if (!_orchardServices.Authorizer.Authorize(Permissions.ViewPost, T("Not allowed to view thread")))
                 return new HttpUnauthorizedResult();
 
-            var pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
             var correctedPath = _forumPathConstraint.FindPath(forumPath);
             if (correctedPath == null)
                 return HttpNotFound();
@@ -122,9 +124,16 @@ namespace NGM.Forum.Controllers {
                 return HttpNotFound();
 
             var threadPart = _threadService.Get(forumPart, threadSlug, VersionOptions.Published);
-            if (threadPart == null)
+            if (threadPart == null) {
+                var redirectRouteRecord = _redirectRouteService.Get(forumPart.As<IRoutableAspect>(), threadSlug).FirstOrDefault();
+                if (redirectRouteRecord != null) {
+                    var threadToRedirect = _threadService.Get(redirectRouteRecord.ContentItemId, VersionOptions.Published);
+                    return new RedirectResult("~/" + threadToRedirect.As<IRoutableAspect>().Path);
+                }
                 return HttpNotFound();
+            }
 
+            var pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
             var posts = _postService.Get(threadPart, pager.GetStartIndex(), pager.PageSize)
                 .Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Detail"));
             dynamic thread = _orchardServices.ContentManager.BuildDisplay(threadPart);
