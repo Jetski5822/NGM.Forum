@@ -29,7 +29,7 @@ namespace NGM.Forum.Controllers {
         private readonly ISiteService _siteService;
         private readonly IPostService _postService;
         private readonly IRoutableService _routableService;
-        private readonly IRedirectRouteService _redirectRouteService;
+        private readonly IForumPathConstraint _forumPathConstraint;
 
         public ThreadAdminController(IOrchardServices orchardServices,
             IForumService forumService,
@@ -38,14 +38,14 @@ namespace NGM.Forum.Controllers {
             IShapeFactory shapeFactory,
             IPostService postService,
             IRoutableService routableService,
-            IRedirectRouteService redirectRouteService) {
+            IForumPathConstraint forumPathConstraint) {
             _orchardServices = orchardServices;
             _forumService = forumService;
             _threadService = threadService;
             _siteService = siteService;
             _postService = postService;
             _routableService = routableService;
-            _redirectRouteService = redirectRouteService;
+            _forumPathConstraint = forumPathConstraint;
 
             T = NullLocalizer.Instance;
             Shape = shapeFactory;
@@ -124,19 +124,13 @@ namespace NGM.Forum.Controllers {
             if (forumPart == null)
                 return HttpNotFound(T("could not find forum").ToString());
 
-            if (viewModel.AllowRedirect) {
-                DateTime scheduled;
-                if (!DateTime.TryParse(viewModel.ScheduledRedirectExpires, CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.AssumeLocal, out scheduled))
-                    scheduled = DateTime.MaxValue;
-
-                _redirectRouteService.CreateRedirect(threadPart.ForumPart.As<IRoutableAspect>(), threadPart.As<IRoutableAspect>(), scheduled);
-            }
-            
             threadPart.ForumPart = forumPart;
             
             _routableService.ProcessSlug(threadPart.As<IRoutableAspect>());
 
             _orchardServices.ContentManager.Publish(threadPart.ContentItem);
+
+            _forumPathConstraint.AddPath(threadPart.As<IRoutableAspect>().Path);
 
             _orchardServices.Notifier.Information(T("{0} has been moved.", threadPart.TypeDefinition.DisplayName));
 

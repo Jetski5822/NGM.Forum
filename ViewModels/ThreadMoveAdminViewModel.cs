@@ -8,8 +8,5 @@ namespace NGM.Forum.ViewModels {
         public int ForumId { get; set; }
 
         public IEnumerable<ForumPart> AvailableForums { get; set; }
-
-        public bool AllowRedirect { get; set; }
-        public string ScheduledRedirectExpires { get; set; }
     }
 }

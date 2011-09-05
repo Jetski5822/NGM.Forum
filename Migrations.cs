@@ -85,18 +85,5 @@ namespace NGM.Forum {
 
             return 6;
         }
-
-        public int UpdateFrom6() {
-            SchemaBuilder.CreateTable("RedirectRouteRecord",
-                table => table
-                    .Column<int>("Id", column => column.PrimaryKey().Identity())
-                    .Column<int>("ContentItemId")
-                    .Column<string>("PreviousContainerSlug")
-                    .Column<string>("PreviousSlug")
-                    .Column<DateTime>("Expires")
-                );
-
-            return 7;
-        }
     }
 }

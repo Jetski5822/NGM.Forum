@@ -47,8 +47,6 @@
   <ItemGroup>
     <Compile Include="AdminMenu.cs" />
     <Compile Include="Controllers\ThreadAdminController.cs" />
-    <Compile Include="Models\RedirectRouteRecord.cs" />
-    <Compile Include="Services\RedirectRouteService.cs" />
     <Compile Include="ViewModels\ThreadMoveAdminViewModel.cs" />
     <Compile Include="Extensions\DynamicZoneExtensions.cs" />
     <Compile Include="Controllers\ForumAdminController.cs" />
