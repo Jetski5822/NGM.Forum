@@ -118,6 +118,7 @@
     <Content Include="Content\Images\wrench-16x16.gif" />
     <Content Include="Module.txt" />
     <Content Include="Notes\Design.txt" />
+    <Content Include="Scripts\quick-edit.js" />
     <Content Include="Styles\forum.css" />
     <Content Include="Styles\menu.forum-admin.css" />
     <Content Include="Styles\ngm-forum-admin.css" />
@@ -249,7 +250,12 @@
   <ItemGroup>
     <Content Include="Views\ThreadAdmin\Move.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Scripts\Web.config">
+      <SubType>
+      </SubType>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

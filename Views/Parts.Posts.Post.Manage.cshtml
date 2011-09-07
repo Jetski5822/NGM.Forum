@@ -2,20 +2,22 @@
 @using NGM.Forum.Extensions
 @using NGM.Forum.Models
 @{
+    Script.Require("jQuery");
+    //Script.Include("quick-edit.js");
     var postPart = (PostPart)Model.ContentPart;
 }
-
+  
 <div class="item-properties actions">
     @if (!Model.IsClosed) {
-        <a href="@Url.ReplyPost(postPart)" class="create"><img src="../Modules/NGM.Forum/Content/Images/reply.png" /> @T("Reply")</a>
-        <a href="@Url.ReplyPostWithQuote(postPart)" class="create"><img src="../Modules/NGM.Forum/Content/Images/quote.gif" /> @T("Quote")</a>
+        <a href="@Url.ReplyPost(postPart)" class="create">@T("Reply")</a> @T("|")
+        <a href="@Url.ReplyPostWithQuote(postPart)" class="create">@T("Quote")</a> 
       
-        if (Model.CanMarkAsAnswer) {
-          if (postPart.IsAnswer) { 
-            <a href="@Url.UnMarkPostAsAnswer(postPart)"><img src="../Modules/NGM.Forum/Content/Images/folder_unanswered.png" /> @T("Un-mark as answer")</a>
-          } else if (!postPart.ThreadPart.IsAnswered) {
-            <a href="@Url.MarkPostAsAnswer(postPart)"><img src="../Modules/NGM.Forum/Content/Images/folder_answered.png" /> @T("Mark as answer")</a>
-          }
+      if (Model.CanMarkAsAnswer) {
+        if (postPart.IsAnswer) { 
+            @T("|") <a href="@Url.UnMarkPostAsAnswer(postPart)">@T("Un-mark as answer")</a>
+        } else if (!postPart.ThreadPart.IsAnswered) {
+            @T("|") <a href="@Url.MarkPostAsAnswer(postPart)">@T("Mark as answer")</a>
         }
+      }
     }
 </div>

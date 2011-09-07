@@ -46,6 +46,16 @@
   clear: left;
 }
 
+.post .actions > a {
+    color: #888888;
+    padding: 0px 3px 2px 3px;
+}
+
+.post .actions > a:hover {
+    color: #FFFFFF;
+    background-color: #777777;
+}
+
 .item-text {
   float: left;
   width: 85%;
