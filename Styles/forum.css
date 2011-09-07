@@ -37,7 +37,7 @@
   float: none;  
 }
 
-.post .metadata {
+.post .owner-metadata {
   padding-right: 20px;
   float: left;
 }
@@ -57,9 +57,8 @@
 }
 
 .item-text {
-  float: left;
-  width: 85%;
 }
+
 .item-text p {
   /* The following styles prevent unbroken strings from breaking the layout */
   overflow: auto;
