@@ -8,5 +8,5 @@
     var commonPart = postPart.As<ICommonPart>();
 }
 <div class="latestpost">
-    <a href="@Url.ViewThread(postPart.ThreadPart)">@T("Last Post")</a> @T("by") @commonPart.Owner.UserName <span class="meta">, @commonPart.PublishedUtc.Value.ToString("M/d/yyyy h:mm tt")</span>
+    <a href="@Url.ViewPost(postPart)">@T("Last Post")</a> @T("by") @commonPart.Owner.UserName <span class="meta">, @commonPart.PublishedUtc.Value.ToString("M/d/yyyy h:mm tt")</span>
 </div>

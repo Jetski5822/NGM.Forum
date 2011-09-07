@@ -22,6 +22,10 @@ namespace NGM.Forum.Extensions {
             return urlHelper.Action("Item", "Thread", new { forumPath = threadPart.ForumPart.As<IRoutableAspect>().Path, threadSlug = threadPart.As<IRoutableAspect>().GetEffectiveSlug(), area = Constants.LocalArea });
         }
 
+        public static string ViewPost(this UrlHelper urlHelper, PostPart postPart) {
+            return string.Format("{0}#{1}", ViewThread(urlHelper, postPart.ThreadPart), postPart.Id);
+        }
+
         public static string CreateThread(this UrlHelper urlHelper, ForumPart forumPart) {
             return urlHelper.Action("Create", "Thread", new { forumId = forumPart.Id, area = Constants.LocalArea });
         }
