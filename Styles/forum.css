@@ -1,14 +1,16 @@
-﻿.forum header, .thread header {
+﻿.forum > header, .thread > header {
   width: 75%;
   float: left;
+  padding-left: 3px;
 }
 
 .forum div {
   margin: 10px 0px 0px 0px;
 }
 
-.forum .thread-list {
+.forum .forum-threads {
   clear:left;
+  width:100%;
 }
 
 .thread header h2 { background: transparent none no-repeat left center; padding-left: 18px; }
@@ -56,7 +58,14 @@
     background-color: #777777;
 }
 
-.item-text {
+.latestpost > a {
+    color: #888888;
+    padding: 0px 3px 2px 3px;	
+}
+
+.latestpost > a:hover {
+    color: #FFFFFF;
+    background-color: #777777;
 }
 
 .item-text p {

@@ -4,10 +4,8 @@
     Model.ContentItems.Classes.Add("content-items");
     Model.ContentItems.Classes.Add("forum-threads");
 }
-<div class="thread-list">
-    <h2>@T("Threads")</h2>
-    @Display(Model.ContentItems)
-    @if (threads == null || threads.Count() < 1) {
-    <p>@T("There are no threads for this forum.")</p>
-    }
-</div>
+
+@Display(Model.ContentItems)
+@if (threads == null || threads.Count() < 1) {
+  <p>@T("There are no threads for this forum.")</p>
+}
