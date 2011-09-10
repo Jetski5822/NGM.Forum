@@ -7,6 +7,7 @@ using NGM.Forum.Services;
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
+using Orchard.Core.Feeds;
 using Orchard.DisplayManagement;
 using Orchard.Localization;
 using Orchard.Mvc;
@@ -25,6 +26,7 @@ namespace NGM.Forum.Controllers {
         private readonly IThreadService _threadService;
         private readonly IPostService _postService;
         private readonly ISiteService _siteService;
+        private readonly IFeedManager _feedManager;
 
         public ThreadController(IOrchardServices orchardServices, 
             IForumService forumService,
@@ -32,13 +34,15 @@ namespace NGM.Forum.Controllers {
             IThreadService threadService,
             IPostService postService,
             ISiteService siteService,
-            IShapeFactory shapeFactory) {
+            IShapeFactory shapeFactory,
+            IFeedManager feedManager) {
             _orchardServices = orchardServices;
             _forumService = forumService;
             _forumPathConstraint = forumPathConstraint;
             _threadService = threadService;
             _postService = postService;
             _siteService = siteService;
+            _feedManager = feedManager;
 
             T = NullLocalizer.Instance;
             Shape = shapeFactory;
@@ -123,6 +127,7 @@ namespace NGM.Forum.Controllers {
             if (threadPart == null)
                 return HttpNotFound();
 
+            _feedManager.Register(threadPart);
             var pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
             var posts = _postService.Get(threadPart, pager.GetStartIndex(), pager.PageSize)
                 .Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Detail"));

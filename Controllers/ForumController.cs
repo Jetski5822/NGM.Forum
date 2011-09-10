@@ -8,6 +8,7 @@ using NGM.Forum.Routing;
 using NGM.Forum.Services;
 using Orchard;
 using Orchard.ContentManagement;
+using Orchard.Core.Feeds;
 using Orchard.DisplayManagement;
 using Orchard.Localization;
 using Orchard.Mvc;
@@ -25,18 +26,21 @@ namespace NGM.Forum.Controllers {
         private readonly IForumPathConstraint _forumPathConstraint;
         private readonly IThreadService _threadService;
         private readonly ISiteService _siteService;
+        private readonly IFeedManager _feedManager;
 
         public ForumController(IOrchardServices orchardServices, 
             IForumService forumService,
             IForumPathConstraint forumPathConstraint,
             IThreadService threadService,
             ISiteService siteService,
-            IShapeFactory shapeFactory) {
+            IShapeFactory shapeFactory,
+            IFeedManager feedManager) {
             _orchardServices = orchardServices;
             _forumService = forumService;
             _forumPathConstraint = forumPathConstraint;
             _threadService = threadService;
             _siteService = siteService;
+            _feedManager = feedManager;
 
             T = NullLocalizer.Instance;
             Shape = shapeFactory;
@@ -99,6 +103,7 @@ namespace NGM.Forum.Controllers {
 
             dynamic forum = _orchardServices.ContentManager.BuildDisplay(forumPart);
 
+            _feedManager.Register(forumPart);
             var threadParts = _threadService.Get(forumPart, pager.GetStartIndex(), pager.PageSize);
             var stickyThreads = threadParts.Where(o => o.IsSticky).Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Summary"));
 
