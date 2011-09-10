@@ -111,8 +111,9 @@ namespace NGM.Forum.Controllers {
             else {
                 list.AddRange(stickyThreads.Union(threadParts.Where(o => !o.IsSticky).Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Summary"))));
             }
-            
-            forum.Content.Add(Shape.Parts_Forums_Thread_List(ContentItems: list), "5");
+
+            var pagerObject = Shape.Pager(pager).TotalItemCount(forumPart.ThreadCount);
+            forum.Content.Add(Shape.Parts_Forums_Thread_List(ContentItems: list, Pager: pagerObject), "5");
 
             return new ShapeResult(this, forum);
         }

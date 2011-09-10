@@ -95,3 +95,8 @@
 .owner-metadata {
   font-weight: bold;
 }
+
+/* Pager */
+.thread .pager {
+  overflow: hidden;
+}

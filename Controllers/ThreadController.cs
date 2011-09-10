@@ -133,9 +133,11 @@ namespace NGM.Forum.Controllers {
                 .Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Detail"));
             dynamic thread = _orchardServices.ContentManager.BuildDisplay(threadPart);
 
+            var pagerObject = Shape.Pager(pager).TotalItemCount(threadPart.PostCount);
+
             var list = Shape.List();
             list.AddRange(posts);
-            thread.Content.Add(Shape.Parts_Threads_Post_List(ContentItems: list), "5");
+            thread.Content.Add(Shape.Parts_Threads_Post_List(ContentItems: list, Pager: pagerObject), "5");
 
             return new ShapeResult(this, thread);
         }
