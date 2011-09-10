@@ -1,4 +1,6 @@
 using System.Linq;
+using System.Web.Routing;
+using NGM.Forum.Extensions;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
 using Orchard.ContentManagement;

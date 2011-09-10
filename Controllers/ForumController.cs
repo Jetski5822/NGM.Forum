@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Web.Mvc;
 using NGM.Forum.Extensions;
 using NGM.Forum.Models;
@@ -12,7 +10,6 @@ using Orchard.Core.Feeds;
 using Orchard.DisplayManagement;
 using Orchard.Localization;
 using Orchard.Mvc;
-using Orchard.Security;
 using Orchard.Settings;
 using Orchard.Themes;
 using Orchard.UI.Navigation;
@@ -103,7 +100,7 @@ namespace NGM.Forum.Controllers {
 
             dynamic forum = _orchardServices.ContentManager.BuildDisplay(forumPart);
 
-            _feedManager.Register(forumPart);
+            //_feedManager.Register(forumPart);
             var threadParts = _threadService.Get(forumPart, pager.GetStartIndex(), pager.PageSize);
             var stickyThreads = threadParts.Where(o => o.IsSticky).Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Summary"));
 

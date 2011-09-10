@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using NGM.Forum.Extensions;
 using NGM.Forum.Models;
 using Orchard;
@@ -8,7 +7,6 @@ using Orchard.Localization;
 using Orchard.Logging;
 using Orchard.Themes;
 using Orchard.UI.Notify;
-using Orchard.Utility.Extensions;
 
 namespace NGM.Forum.Controllers {
     [Themed]
