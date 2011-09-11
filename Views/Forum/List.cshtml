@@ -1,10 +1,18 @@
 @{
     Style.Require("Forums");
-    Model.ContentItems.Classes.Add("content-items");
-    Model.ContentItems.Classes.Add("forums");
 }
 <h1>@T("Forums")</h1>
-@Display(Model.ContentItems)
-@if (Model.ContentItems.Items.Count < 1) {
-<p>@T("No forums found.")</p>
+
+@foreach (var item in Model.ContentItems) { 
+    string categoryText = item.Key ?? T("Undefined");
+  
+    <h2 class="forums-category">@categoryText</h2>
+  
+    item.Value.Classes.Add("content-items");
+    item.Value.Classes.Add("forums");
+    @Display(item.Value)
+}
+
+@if (Model.ContentItems.Count < 1) {
+  <p class="nocontentitems">@T("No forums found.")</p>
 }

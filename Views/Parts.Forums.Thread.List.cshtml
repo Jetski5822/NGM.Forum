@@ -7,7 +7,7 @@
 
 @Display(Model.ContentItems)
 @if (threads == null || threads.Count() < 1) {
-  <p>@T("There are no threads for this forum.")</p>
+  <p class="nocontentitems">@T("There are no threads for this forum.")</p>
 } else { 
-@Display(Model.Pager)
+  @Display(Model.Pager)
 }

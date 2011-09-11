@@ -13,6 +13,10 @@
   width:100%;
 }
 
+.nocontentitems {
+	clear: left;
+}
+
 .thread header h2 { background: transparent none no-repeat left center; padding-left: 18px; }
 .thread header h2 a { padding-left:10px; display:block; }
 .thread header h2.question { background-image: url('../Content/Images/status_NotAnswered.gif'); }

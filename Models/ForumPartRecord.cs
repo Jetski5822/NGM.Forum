@@ -7,5 +7,7 @@ namespace NGM.Forum.Models {
         public virtual int PostCount { get; set; }
 
         public virtual bool UsePopularityAlgorithm { get; set; }
+
+        public virtual string Category { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using NGM.Forum.Extensions;
 using NGM.Forum.Models;
@@ -47,15 +48,21 @@ namespace NGM.Forum.Controllers {
         public Localizer T { get; set; }
 
         public ActionResult List() {
-            var forums = _forumService.Get().Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Summary"));
+            var forumPartsByCategory = _forumService.Get()
+                .GroupBy(o => o.Category);
 
-            var list = Shape.List();
-            list.AddRange(forums);
+            var forums = new Dictionary<string, dynamic>();
+            foreach (var forumsCategory in forumPartsByCategory) {
+                var category = forumsCategory.Key;
+
+                var list = Shape.List();
+                list.AddRange(forumsCategory.Select(fbc => _orchardServices.ContentManager.BuildDisplay(fbc, "Summary")));
+                forums.Add(category, list);
+            }
 
             dynamic viewModel = Shape.ViewModel()
-                .ContentItems(list);
+                .ContentItems(forums);
 
-            // Casting to avoid invalid (under medium trust) reflection over the protected View method and force a static invocation.
             return View((object)viewModel);
         }
 

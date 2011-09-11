@@ -85,5 +85,11 @@ namespace NGM.Forum {
 
             return 6;
         }
+
+        public int UpdateFrom6() {
+            SchemaBuilder.AlterTable("ForumPartRecord", t => t.AddColumn<string>("Category"));
+
+            return 7;
+        }
     }
 }

@@ -10,6 +10,7 @@ namespace NGM.Forum.Drivers {
     public class ForumPartDriver : ContentPartDriver<ForumPart> {
         private const string StatusCloseTemplateName = "Parts.Status.Close.ForumPart";
         private const string SettingPopularityTemplateName = "Parts.Setting.Popularity.ForumPart";
+        private const string SettingCategoryTemplateName = "Parts.Type.Category.ForumPart";
 
         private readonly IAuthenticationService _authenticationService;
         private readonly IAuthorizationService _authorizationService;
@@ -53,7 +54,9 @@ namespace NGM.Forum.Drivers {
                 Combined(ContentShape("Parts_Status_Close_Forum_Edit",
                                  () => shapeHelper.EditorTemplate(TemplateName: StatusCloseTemplateName, Model: part, Prefix: Prefix)),
                          ContentShape("Parts_Setting_Popularity_Forum_Edit",
-                                 () => shapeHelper.EditorTemplate(TemplateName: SettingPopularityTemplateName, Model: part, Prefix: Prefix)));
+                                 () => shapeHelper.EditorTemplate(TemplateName: SettingPopularityTemplateName, Model: part, Prefix: Prefix)),
+                         ContentShape("Parts_Type_Category_Forum_Edit",
+                                 () => shapeHelper.EditorTemplate(TemplateName: SettingCategoryTemplateName, Model: part, Prefix: Prefix)));
         }
 
         protected override DriverResult Editor(ForumPart part, IUpdateModel updater, dynamic shapeHelper) {

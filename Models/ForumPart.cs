@@ -1,4 +1,5 @@
-﻿using Orchard.ContentManagement;
+﻿using System;
+using Orchard.ContentManagement;
 using Orchard.Core.Routable.Models;
 
 namespace NGM.Forum.Models {
@@ -30,6 +31,11 @@ namespace NGM.Forum.Models {
 
         public int ReplyCount {
             get { return PostCount >= 1 ? PostCount - ThreadCount : 0; }
+        }
+
+        public string Category {
+            get { return Record.Category; }
+            set { Record.Category = value; }
         }
     }
 }
