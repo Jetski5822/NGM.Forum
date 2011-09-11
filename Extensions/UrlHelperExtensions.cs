@@ -1,8 +1,11 @@
+using System;
 using System.Web.Mvc;
 using NGM.Forum.Models;
+using Orchard;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
 using Orchard.Core.Routable.Services;
+using Orchard.Settings;
 
 namespace NGM.Forum.Extensions {
     public static class UrlHelperExtensions {
@@ -20,6 +23,24 @@ namespace NGM.Forum.Extensions {
 
         public static string ViewThread(this UrlHelper urlHelper, ThreadPart threadPart) {
             return urlHelper.Action("Item", "Thread", new { forumPath = threadPart.ForumPart.As<IRoutableAspect>().Path, threadSlug = threadPart.As<IRoutableAspect>().GetEffectiveSlug(), area = Constants.LocalArea });
+        }
+
+        public static string ViewLatestPost(this UrlHelper urlHelper, PostPart postPart) {
+            var siteSettings = urlHelper.Resolve<ISiteService>().GetSiteSettings();
+
+            var result = postPart.ThreadPart.PostCount % siteSettings.PageSize;
+
+            var numberOfPages = 0;
+            if (result == 0) {
+                numberOfPages = postPart.ThreadPart.PostCount / siteSettings.PageSize;
+            } else {
+                numberOfPages = postPart.ThreadPart.PostCount / siteSettings.PageSize + 1;
+            }
+
+            if (numberOfPages == 0)
+                return ViewPost(urlHelper, postPart);
+
+            return string.Format("{0}?page={1}#{2}", ViewThread(urlHelper, postPart.ThreadPart), numberOfPages, postPart.Id);
         }
 
         public static string ViewPost(this UrlHelper urlHelper, PostPart postPart) {

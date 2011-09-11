@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="AdminMenu.cs" />
     <Compile Include="Controllers\ThreadAdminController.cs" />
+    <Compile Include="Extensions\ContainerExtensions.cs" />
     <Compile Include="Extensions\FeedManagerExtensions.cs" />
     <Compile Include="ViewModels\ThreadMoveAdminViewModel.cs" />
     <Compile Include="Extensions\DynamicZoneExtensions.cs" />
