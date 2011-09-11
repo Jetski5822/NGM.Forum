@@ -1,6 +1,10 @@
 ﻿@model NGM.Forum.Models.ForumPart
 
 <fieldset>
-    @Html.LabelFor(m => m.Category, T("Category"))
-    @Html.TextBoxFor(m => m.Category, new { @class = "large text" })
+    @Html.LabelFor(m => m.CategoryTitle, T("Category Title"))
+    @Html.TextBoxFor(m => m.CategoryTitle, new { @class = "large text" })
+</fieldset>
+<fieldset>
+    @Html.LabelFor(m => m.CategoryPosition, T("Category"))
+    @Html.EditorFor(m => m.CategoryPosition, new { @class = "large text" })
 </fieldset>

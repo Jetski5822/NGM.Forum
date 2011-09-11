@@ -1,5 +1,6 @@
 ﻿using System;
 using Orchard.ContentManagement.MetaData;
+using Orchard.Core.Contents.Extensions;
 using Orchard.Data.Migration;
 
 namespace NGM.Forum {
@@ -87,8 +88,11 @@ namespace NGM.Forum {
         }
 
         public int UpdateFrom6() {
-            SchemaBuilder.AlterTable("ForumPartRecord", t => t.AddColumn<string>("Category"));
+            ContentDefinitionManager.AlterTypeDefinition("Thread", cfg => cfg.RemovePart("UserViewPart"));
 
+            SchemaBuilder.AlterTable("ForumPartRecord", t => t.AddColumn<int>("Position"));
+
+            
             return 7;
         }
     }

@@ -29,13 +29,24 @@ namespace NGM.Forum.Models {
             set { Record.UsePopularityAlgorithm = value; }
         }
 
+        public int Position {
+            get { return Record.Position; }
+            set { Record.Position = value; }
+        }
+
         public int ReplyCount {
             get { return PostCount >= 1 ? PostCount - ThreadCount : 0; }
         }
 
-        public string Category {
-            get { return Record.Category; }
-            set { Record.Category = value; }
+        /* Category.. Not sure if I should move Category out of Forum and attach it via a part. */
+        public string CategoryTitle {
+            get { return ""; }
+            set { }
+        }
+
+        public int CategoryPosition {
+            get { return 1; }
+            set { }
         }
     }
 }

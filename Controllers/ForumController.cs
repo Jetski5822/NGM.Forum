@@ -49,7 +49,8 @@ namespace NGM.Forum.Controllers {
 
         public ActionResult List() {
             var forumPartsByCategory = _forumService.Get()
-                .GroupBy(o => o.Category);
+                .OrderBy(o => o.CategoryPosition & o.Position)
+                .GroupBy(o => o.CategoryTitle);
 
             var forums = new Dictionary<string, dynamic>();
             foreach (var forumsCategory in forumPartsByCategory) {
