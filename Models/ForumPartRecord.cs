@@ -1,5 +1,4 @@
-﻿using System;
-using Orchard.ContentManagement.Records;
+﻿using Orchard.ContentManagement.Records;
 
 namespace NGM.Forum.Models {
     public class ForumPartRecord : ContentPartRecord {
@@ -10,8 +9,5 @@ namespace NGM.Forum.Models {
         public virtual int PostCount { get; set; }
 
         public virtual bool UsePopularityAlgorithm { get; set; }
-
-        //public virtual string CategoryTitle { get; set; }
-        //public virtual int CategoryPosition { get; set; }
     }
 }

@@ -48,21 +48,13 @@ namespace NGM.Forum.Controllers {
         public Localizer T { get; set; }
 
         public ActionResult List() {
-            var forumPartsByCategory = _forumService.Get()
-                .OrderBy(o => o.CategoryPosition & o.Position)
-                .GroupBy(o => o.CategoryTitle);
+            var forums = _forumService.Get().OrderBy(o => o.Position).Select(fbc => _orchardServices.ContentManager.BuildDisplay(fbc, "Summary"));
 
-            var forums = new Dictionary<string, dynamic>();
-            foreach (var forumsCategory in forumPartsByCategory) {
-                var category = forumsCategory.Key;
-
-                var list = Shape.List();
-                list.AddRange(forumsCategory.Select(fbc => _orchardServices.ContentManager.BuildDisplay(fbc, "Summary")));
-                forums.Add(category, list);
-            }
+            var list = Shape.List();
+            list.AddRange(forums);
 
             dynamic viewModel = Shape.ViewModel()
-                .ContentItems(forums);
+                .ContentItems(list);
 
             return View((object)viewModel);
         }

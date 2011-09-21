@@ -6,7 +6,6 @@
   <Match ContentType="Forum">
     <Place Parts_Status_Close_Forum_Edit="Content:2"/>
     <Place Parts_Setting_Popularity_Forum_Edit="Content:2"/>
-    <Place Parts_Type_Category_Forum_Edit="Content:2"/>
     
     <Match DisplayType="Detail">
       <Place

@@ -37,16 +37,5 @@ namespace NGM.Forum.Models {
         public int ReplyCount {
             get { return PostCount >= 1 ? PostCount - ThreadCount : 0; }
         }
-
-        /* Category.. Not sure if I should move Category out of Forum and attach it via a part. */
-        public string CategoryTitle {
-            get { return ""; }
-            set { }
-        }
-
-        public int CategoryPosition {
-            get { return 1; }
-            set { }
-        }
     }
 }

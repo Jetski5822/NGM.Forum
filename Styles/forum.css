@@ -15,6 +15,7 @@
 
 .nocontentitems {
 	clear: left;
+	padding-left: 3px;
 }
 
 .thread header h2 { background: transparent none no-repeat left center; padding-left: 18px; }
