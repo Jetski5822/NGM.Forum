@@ -7,14 +7,15 @@
     var postPart = (PostPart)Model.ContentPart;
 
     ICommonPart commonPart = null;
+    var username = string.Empty;
     if (postPart != null){
         commonPart = postPart.As<ICommonPart>();
+        username = commonPart.Owner != null ? commonPart.Owner.UserName : T("Anonymous user").Text;
     }
-    
 }
 @if (postPart != null) {
     <div class="latestpost">
-        <a href="@Url.ViewLatestPost(postPart)">@T("Last Post")</a> @T("by") @commonPart.Owner.UserName <span class="meta">, @commonPart.PublishedUtc.Value.ToString("M/d/yyyy h:mm tt")</span>
+        <a href="@Url.ViewLatestPost(postPart)">@T("Last Post")</a> @T("by") @username <span class="meta">, @commonPart.PublishedUtc.Value.ToString("M/d/yyyy h:mm tt")</span>
     </div>
 } else { 
     <div class="latestpost">@T("No posts yet...")</div>
