@@ -2,5 +2,16 @@
 
 <fieldset>
     @Html.LabelFor(m => m.Title, T("Title"))
-    @Html.TextBoxFor(m => m.Title, new { @class = "large text" })
+    <input type="text" id="Routable_Title" class="large text" name="Routable.Title" value="@Model.Title" />
+    @*
+        This didn't work because it was prepending Thread_ to the input's name
+        @Html.TextBox("Routable.Title", Model.Title, new { @class = "large text" })
+    *@
+
+    @*
+        This is the original. It wasn't working 100% correct because it would update Thread.Title
+        but then reset the title to null when RoutePartDriver.TryUpdateModel was executed after.
+        Maybe someone else has some insight on how to get it to work correctly?
+        @Html.TextBoxFor(m => m.Title, new { @class = "large text" })
+    *@
 </fieldset>
