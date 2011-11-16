@@ -27,8 +27,8 @@
 
   <Match ContentType="Thread">
     <Place Parts_Common_Owner_Edit="-"/>
-    <Place Parts_Routable_Edit="-"/>
-    <Place Parts_Routable_Thread_Edit="Content:before.5"/>
+    <Place Parts_Routable_Edit="Content:before.5"/>
+    <!--<Place Parts_Routable_Thread_Edit="-"/>-->
     <Place Parts_Status_Close_Thread_Edit="Content:after.5"/>
     <Place Parts_Status_Sticky_Thread_Edit="Content:after.6"/>
     <Place Parts_Type_Thread_Edit="Content:after.5"/>

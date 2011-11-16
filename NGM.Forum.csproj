@@ -126,6 +126,7 @@
     <Content Include="Styles\ngm-forum-admin.css" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Views\EditorTemplates\Parts.Routable.RoutePart.cshtml" />
     <Content Include="Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -188,9 +189,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Parts.Posts.Post.Title.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\EditorTemplates\Parts.Routable.ThreadPart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Web.config">

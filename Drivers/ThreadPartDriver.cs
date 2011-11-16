@@ -51,9 +51,10 @@ namespace NGM.Forum.Drivers {
         protected override DriverResult Editor(ThreadPart threadPart, dynamic shapeHelper) {
             List<ContentShapeResult> contentShapeResults = new List<ContentShapeResult>(new[] {
                 ContentShape("Parts_Type_Thread_Edit",
-                             () => shapeHelper.EditorTemplate(TemplateName: TypeTemplateName, Model: threadPart, Prefix: Prefix)),
-                ContentShape("Parts_Routable_Thread_Edit",
-                             () => shapeHelper.EditorTemplate(TemplateName: RoutableTemplateName, Model: threadPart, Prefix: Prefix))
+                             () => shapeHelper.EditorTemplate(TemplateName: TypeTemplateName, Model: threadPart, Prefix: Prefix))
+                //             ,
+                //ContentShape("Parts_Routable_Thread_Edit",
+                //             () => shapeHelper.EditorTemplate(TemplateName: RoutableTemplateName, Model: threadPart, Prefix: Prefix))
             });
 
             if (_authorizationService.TryCheckAccess(Permissions.ManageOpenCloseThread, _authenticationService.GetAuthenticatedUser(), threadPart)) {
