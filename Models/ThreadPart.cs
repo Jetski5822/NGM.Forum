@@ -1,6 +1,6 @@
 ﻿using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
-using Orchard.Core.Routable.Models;
+using Orchard.Core.Title.Models;
 using Orchard.Data.Conventions;
 
 namespace NGM.Forum.Models {
@@ -12,8 +12,8 @@ namespace NGM.Forum.Models {
         }
 
         public string Title {
-            get { return this.As<RoutePart>().Title; }
-            set { this.As<RoutePart>().Title = value; }
+            get { return this.As<TitlePart>().Title; }
+            set { this.As<TitlePart>().Title = value; }
         }
 
         public int PostCount {

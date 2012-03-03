@@ -1,8 +1,5 @@
-using System;
-using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
-using NGM.Forum.Extensions;
 using NGM.Forum.Models;
 using NGM.Forum.Routing;
 using NGM.Forum.Services;
@@ -10,7 +7,6 @@ using NGM.Forum.ViewModels;
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
-using Orchard.Core.Routable.Services;
 using Orchard.DisplayManagement;
 using Orchard.Localization;
 using Orchard.Settings;
@@ -28,7 +24,6 @@ namespace NGM.Forum.Controllers {
         private readonly IThreadService _threadService;
         private readonly ISiteService _siteService;
         private readonly IPostService _postService;
-        private readonly IRoutableService _routableService;
         private readonly IForumPathConstraint _forumPathConstraint;
 
         public ThreadAdminController(IOrchardServices orchardServices,
@@ -37,14 +32,12 @@ namespace NGM.Forum.Controllers {
             ISiteService siteService,
             IShapeFactory shapeFactory,
             IPostService postService,
-            IRoutableService routableService,
             IForumPathConstraint forumPathConstraint) {
             _orchardServices = orchardServices;
             _forumService = forumService;
             _threadService = threadService;
             _siteService = siteService;
             _postService = postService;
-            _routableService = routableService;
             _forumPathConstraint = forumPathConstraint;
 
             T = NullLocalizer.Instance;
@@ -126,8 +119,6 @@ namespace NGM.Forum.Controllers {
 
             threadPart.ForumPart = forumPart;
             
-            _routableService.ProcessSlug(threadPart.As<IRoutableAspect>());
-
             _orchardServices.ContentManager.Publish(threadPart.ContentItem);
 
             _forumPathConstraint.AddPath(threadPart.As<IRoutableAspect>().Path);
