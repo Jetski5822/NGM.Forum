@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using NGM.Forum.Models;
 using Orchard;
+using Orchard.Autoroute.Models;
 using Orchard.ContentManagement;
-using Orchard.Core.Routable.Models;
+using Orchard.Core.Title.Models;
 
 namespace NGM.Forum.Services {
     public interface IForumService : IDependency {
@@ -28,7 +28,7 @@ namespace NGM.Forum.Services {
 
         public ForumPart Get(string path) {
             return _contentManager.Query<ForumPart, ForumPartRecord>()
-                .Join<RoutePartRecord>().Where(rr => rr.Path == path)
+                .Join<AutoroutePartRecord>().Where(rr => rr.DisplayAlias == path)
                 .List().FirstOrDefault();
         }
 
@@ -46,7 +46,7 @@ namespace NGM.Forum.Services {
 
         public IEnumerable<ForumPart> Get(VersionOptions versionOptions) {
             return _contentManager.Query<ForumPart, ForumPartRecord>(versionOptions)
-                .Join<RoutePartRecord>()
+                .Join<TitlePartRecord>()
                 .OrderBy(br => br.Title)
                 .List();
         }

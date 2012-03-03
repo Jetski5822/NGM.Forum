@@ -1,10 +1,7 @@
-using System;
 using System.Web.Mvc;
 using NGM.Forum.Models;
-using Orchard;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
-using Orchard.Core.Routable.Services;
 using Orchard.Settings;
 
 namespace NGM.Forum.Extensions {
@@ -22,7 +19,7 @@ namespace NGM.Forum.Extensions {
         }
 
         public static string ViewThread(this UrlHelper urlHelper, ThreadPart threadPart) {
-            return urlHelper.Action("Item", "Thread", new { forumPath = threadPart.ForumPart.As<IRoutableAspect>().Path, threadSlug = threadPart.As<IRoutableAspect>().GetEffectiveSlug(), area = Constants.LocalArea });
+            return urlHelper.Action("Item", "Thread", new { forumPath = threadPart.ForumPart.As<IRoutableAspect>().Path, threadSlug = threadPart.As<IRoutableAspect>().Slug, area = Constants.LocalArea });
         }
 
         public static string ViewLatestPost(this UrlHelper urlHelper, PostPart postPart) {

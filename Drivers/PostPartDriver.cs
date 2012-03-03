@@ -3,8 +3,8 @@ using JetBrains.Annotations;
 using NGM.Forum.Models;
 using Orchard.ContentManagement.Aspects;
 using Orchard.ContentManagement.Drivers;
-using Orchard.Core.Routable.Models;
 using Orchard.ContentManagement;
+using Orchard.Core.Title.Models;
 using Orchard.Security;
 
 namespace NGM.Forum.Drivers {
@@ -36,7 +36,7 @@ namespace NGM.Forum.Drivers {
                 return Combined(contentShapeResults.ToArray());
 
             contentShapeResults.Add(ContentShape("Parts_Posts_Post_Title",
-                             () => shapeHelper.Parts_Posts_Post_Title(ContentPart: postPart, CommonPart: postPart.As<ICommonPart>(), RoutePart: postPart.ThreadPart.As<RoutePart>())));
+                             () => shapeHelper.Parts_Posts_Post_Title(ContentPart: postPart, CommonPart: postPart.As<ICommonPart>(), RoutePart: postPart.ThreadPart.As<TitlePart>())));
 
             return Combined(contentShapeResults.ToArray());
         }
