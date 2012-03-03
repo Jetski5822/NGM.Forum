@@ -1,12 +1,11 @@
-﻿using System;
-using Orchard.ContentManagement;
-using Orchard.Core.Routable.Models;
+﻿using Orchard.ContentManagement;
+using Orchard.Core.Title.Models;
 
 namespace NGM.Forum.Models {
     public class ForumPart : ContentPart<ForumPartRecord> {
         public string Title {
-            get { return this.As<RoutePart>().Title; }
-            set { this.As<RoutePart>().Title = value; }
+            get { return this.As<TitlePart>().Title; }
+            set { this.As<TitlePart>().Title = value; }
         }
 
         public int ThreadCount {
