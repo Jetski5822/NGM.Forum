@@ -9,9 +9,6 @@ using Orchard.Autoroute.Models;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
 using Orchard.Core.Common.Models;
-using Orchard.Core.Routable.Models;
-using Orchard.Core.Routable.Services;
-using Orchard.Core.Title.Models;
 
 namespace NGM.Forum.Services {
     public interface IThreadService : IDependency {
@@ -42,16 +39,14 @@ namespace NGM.Forum.Services {
         }
 
         public ThreadPart Get(ForumPart forumPart, string slug, VersionOptions versionOptions) {
-            var threadPath = forumPart.As<IRoutableAspect>().GetChildPath(slug);
-
-            return _contentManager.Query<ThreadPart, ThreadPartRecord>()
+            return _contentManager
+                .Query<ThreadPart, ThreadPartRecord>()
                 .Join<AutoroutePartRecord>()
-                .WithQueryHints(new QueryHints().ExpandRecords<TitlePartRecord>())
-                .Where(rr => rr.DisplayAlias == path)
-
-            return _contentManager.Query(versionOptions, ContentPartConstants.Thread).Join<AutoroutePartRecord>().Where(rr => rr.Path == threadPath).
-                    Join<CommonPartRecord>().Where(cr => cr.Container == forumPart.Record.ContentItemRecord).List().
-                    SingleOrDefault().As<ThreadPart>();
+                .Where(r => r.DisplayAlias == slug)
+                .Join<CommonPartRecord>()
+                .Where(cr => cr.Container == forumPart.Record.ContentItemRecord)
+                .List()
+                .FirstOrDefault();
         }
 
         public ContentItem Get(int id, VersionOptions versionOptions) {
