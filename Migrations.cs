@@ -1,6 +1,4 @@
-﻿using System;
-using Orchard.ContentManagement.MetaData;
-using Orchard.Core.Contents.Extensions;
+﻿using Orchard.ContentManagement.MetaData;
 using Orchard.Data.Migration;
 
 namespace NGM.Forum {
@@ -91,9 +89,33 @@ namespace NGM.Forum {
             ContentDefinitionManager.AlterTypeDefinition("Thread", cfg => cfg.RemovePart("UserViewPart"));
 
             SchemaBuilder.AlterTable("ForumPartRecord", t => t.AddColumn<int>("Position"));
-
-            
+  
             return 7;
+        }
+
+        public int UpdateFrom7() {
+            ContentDefinitionManager.AlterTypeDefinition("Forum",
+                cfg => cfg
+                    .RemovePart("RoutePart")
+                    .WithPart("TitlePart")
+                    .WithPart("AutoroutePart", builder => builder
+                        .WithSetting("AutorouteSettings.AllowCustomPattern", "true")
+                        .WithSetting("AutorouteSettings.AutomaticAdjustmentOnEdit", "false")
+                        .WithSetting("AutorouteSettings.PatternDefinitions", "[{Name:'Title', Pattern: '{Content.Slug}', Description: 'my-forum'}]")
+                        .WithSetting("AutorouteSettings.DefaultPatternIndex", "0")));
+
+            ContentDefinitionManager.AlterTypeDefinition("Thread",
+                cfg => cfg
+                    .RemovePart("RoutePart")
+                    .WithPart("TitlePart")
+                    .WithPart("AutoroutePart", builder => builder
+                        .WithSetting("AutorouteSettings.AllowCustomPattern", "true")
+                        .WithSetting("AutorouteSettings.AutomaticAdjustmentOnEdit", "false")
+                        .WithSetting("AutorouteSettings.PatternDefinitions", "[{Name:'Forum and Title', Pattern: '{Content.Container.Path}/{Content.Slug}', Description: 'my-forum/my-thread'}]")
+                        .WithSetting("AutorouteSettings.DefaultPatternIndex", "0")));
+                        
+
+            return 8;
         }
     }
 }
