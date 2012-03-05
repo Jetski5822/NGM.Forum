@@ -2,16 +2,11 @@ using System.Linq;
 using System.Web.Mvc;
 using NGM.Forum.Models;
 using NGM.Forum.Extensions;
-using NGM.Forum.Routing;
 using NGM.Forum.Services;
 using Orchard;
 using Orchard.ContentManagement;
-using Orchard.ContentManagement.Aspects;
-using Orchard.DisplayManagement;
 using Orchard.Localization;
-using Orchard.Settings;
 using Orchard.UI.Admin;
-using Orchard.UI.Navigation;
 
 namespace NGM.Forum.Controllers {
 
@@ -20,26 +15,17 @@ namespace NGM.Forum.Controllers {
         private readonly IOrchardServices _orchardServices;
         private readonly IForumService _forumService;
         private readonly IThreadService _threadService;
-        private readonly IForumPathConstraint _forumPathConstraint;
-        private readonly ISiteService _siteService;
 
         public ForumAdminController(IOrchardServices orchardServices, 
             IForumService forumService, 
-            IThreadService threadService,
-            IForumPathConstraint forumPathConstraint,
-            ISiteService siteService,
-            IShapeFactory shapeFactory) {
+            IThreadService threadService) {
             _orchardServices = orchardServices;
             _forumService = forumService;
             _threadService = threadService;
-            _forumPathConstraint = forumPathConstraint;
-            _siteService = siteService;
 
             T = NullLocalizer.Instance;
-            Shape = shapeFactory;
         }
 
-        dynamic Shape { get; set; }
         public Localizer T { get; set; }
 
         public ActionResult Create() {
@@ -70,7 +56,6 @@ namespace NGM.Forum.Controllers {
             }
 
             _orchardServices.ContentManager.Publish(forum.ContentItem);
-            _forumPathConstraint.AddPath(forum.As<IRoutableAspect>().Path);
 
             return Redirect(Url.AdminThreadsForForum(forum));
         }

@@ -3,8 +3,8 @@ using System.Linq;
 using JetBrains.Annotations;
 using NGM.Forum.Models;
 using Orchard;
-using Orchard.Autoroute.Models;
 using Orchard.ContentManagement;
+using Orchard.ContentManagement.Aspects;
 using Orchard.Core.Title.Models;
 
 namespace NGM.Forum.Services {
@@ -27,9 +27,7 @@ namespace NGM.Forum.Services {
         }
 
         public ForumPart Get(string path) {
-            return _contentManager.Query<ForumPart, ForumPartRecord>()
-                .Join<AutoroutePartRecord>().Where(rr => rr.DisplayAlias == path)
-                .List().FirstOrDefault();
+            return _contentManager.Query<ForumPart>().List().FirstOrDefault(rr => rr.As<IAliasAspect>().Path == path);
         }
 
         public void CloseForum(ForumPart forumPart) {
