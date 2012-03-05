@@ -1,6 +1,7 @@
-﻿@using Orchard.ContentManagement;
-@using Orchard.Utility.Extensions;
-@using NGM.Forum.Extensions;
+﻿@using Orchard.Mvc.Html
+@using Orchard.Utility.Extensions
+@using NGM.Forum.Extensions
+
 @{
     var contentPart = Model.ContentPart;
     var returnUrl = ViewContext.RequestContext.HttpContext.Request.ToUrlString();

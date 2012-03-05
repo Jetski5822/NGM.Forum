@@ -19,7 +19,8 @@ namespace NGM.Forum.Extensions {
         }
 
         public static string ViewThread(this UrlHelper urlHelper, ThreadPart threadPart) {
-            return urlHelper.Action("Item", "Thread", new { forumPath = threadPart.ForumPart.As<IRoutableAspect>().Path, threadSlug = threadPart.As<IRoutableAspect>().Slug, area = Constants.LocalArea });
+            return urlHelper.Action("Item", "Thread", 
+                new { forumPath = threadPart.ForumPart.As<IAliasAspect>().Path, threadSlug = threadPart.As<IAliasAspect>().Path, area = Constants.LocalArea });
         }
 
         public static string ViewLatestPost(this UrlHelper urlHelper, PostPart postPart) {
