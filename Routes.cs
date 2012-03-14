@@ -2,17 +2,10 @@
 using System.Web.Mvc;
 using System.Web.Routing;
 using NGM.Forum.Extensions;
-using NGM.Forum.Routing;
 using Orchard.Mvc.Routes;
 
 namespace NGM.Forum {
     public class Routes : IRouteProvider {
-        private readonly IForumPathConstraint _forumPathConstraint;
-
-        public Routes(IForumPathConstraint forumPathConstraint) {
-            _forumPathConstraint = forumPathConstraint;
-        }
-
         public void GetRoutes(ICollection<RouteDescriptor> routes) {
             foreach (var routeDescriptor in GetRoutes())
                 routes.Add(routeDescriptor);
@@ -169,9 +162,7 @@ namespace NGM.Forum {
                                                                                       {"controller", "Thread"},
                                                                                       {"action", "Item"}
                                                                                   },
-                                                         new RouteValueDictionary {
-                                                                                      {"forumPath", _forumPathConstraint}
-                                                                                  },
+                                                         new RouteValueDictionary(),
                                                          new RouteValueDictionary {
                                                                                       {"area", Constants.LocalArea}
                                                                                   },
@@ -187,9 +178,7 @@ namespace NGM.Forum {
                                                                                       {"action", "Item"},
                                                                                       {"forumPath", ""}
                                                                                   },
-                                                         new RouteValueDictionary {
-                                                                                      {"forumPath", _forumPathConstraint}
-                                                                                  },
+                                                         new RouteValueDictionary(),
                                                          new RouteValueDictionary {
                                                                                       {"area", Constants.LocalArea}
                                                                                   },
