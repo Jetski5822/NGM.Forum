@@ -121,7 +121,7 @@ namespace NGM.Forum.Controllers {
             
             _orchardServices.ContentManager.Publish(threadPart.ContentItem);
 
-            _forumPathConstraint.AddPath(threadPart.As<IRoutableAspect>().Path);
+            _forumPathConstraint.AddPath(threadPart.As<IAliasAspect>().Path);
 
             _orchardServices.Notifier.Information(T("{0} has been moved.", threadPart.TypeDefinition.DisplayName));
 
