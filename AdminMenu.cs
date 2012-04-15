@@ -23,9 +23,8 @@ namespace NGM.Forum {
 
         private void BuildMenu(NavigationItemBuilder menu) {
             var forums = _forumService.Get();
-            var forumCount = forums.Count();
 
-            if (forumCount > 0) {
+            if (forums.Any()) {
                 menu.Add(T("Manage Forums"), "3",
                          item => item.Action("List", "ForumAdmin", new { area = Constants.LocalArea }).Permission(Permissions.ManageForums));
             }
