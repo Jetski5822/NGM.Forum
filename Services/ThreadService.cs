@@ -42,7 +42,7 @@ namespace NGM.Forum.Services {
             return _contentManager
                 .Query<ThreadPart, ThreadPartRecord>()
                 .Join<AutoroutePartRecord>()
-                .Where(r => r.DisplayAlias == slug)
+                .Where(r => r.DisplayAlias.EndsWith(slug))
                 .Join<CommonPartRecord>()
                 .Where(cr => cr.Container == forumPart.Record.ContentItemRecord)
                 .List()

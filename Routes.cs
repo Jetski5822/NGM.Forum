@@ -85,7 +85,7 @@ namespace NGM.Forum {
                                                  },
                              new RouteDescriptor {
                                                      Route = new Route(
-                                                         "Forums",
+                                                         "Forum",
                                                          new RouteValueDictionary {
                                                                                       {"area", Constants.LocalArea},
                                                                                       {"controller", "Forum"},
@@ -98,6 +98,7 @@ namespace NGM.Forum {
                                                          new MvcRouteHandler())
                                                  },
                              new RouteDescriptor {
+                                                     Priority = 82, // Has to be higher than the {forumPath} routes
                                                      Route = new Route(
                                                          "Forum/Post/Create",
                                                          new RouteValueDictionary {
@@ -112,6 +113,7 @@ namespace NGM.Forum {
                                                          new MvcRouteHandler())
                                                  },
                              new RouteDescriptor {
+                                                     Priority = 82, // Has to be higher than the {forumPath} routes
                                                      Route = new Route(
                                                          "Forum/Post/CreateWithQuote",
                                                          new RouteValueDictionary {
@@ -126,6 +128,7 @@ namespace NGM.Forum {
                                                          new MvcRouteHandler())
                                                  },
                              new RouteDescriptor {
+                                                     Priority = 82, // Has to be higher than the {forumPath} routes
                                                      Route = new Route(
                                                          "Forum/Post/MarkPostAsAnswer",
                                                          new RouteValueDictionary {
@@ -140,6 +143,7 @@ namespace NGM.Forum {
                                                          new MvcRouteHandler())
                                                  },
                              new RouteDescriptor {
+                                                     Priority = 82, // Has to be higher than the {forumPath} routes
                                                      Route = new Route(
                                                          "Forum/Post/UnMarkPostAsAnswer",
                                                          new RouteValueDictionary {
@@ -154,12 +158,12 @@ namespace NGM.Forum {
                                                          new MvcRouteHandler())
                                                  },
                              new RouteDescriptor {
-                                                     Priority = 11,
-                                                     Route = new Route(
-                                                         "{forumPath}/{threadSlug}",
+                                                    Priority = 81, // Any value lower than this won't work (threads won't be visible)
+                                                    Route = new Route(
+                                                         "Forum/{forumPath}",
                                                          new RouteValueDictionary {
                                                                                       {"area", Constants.LocalArea},
-                                                                                      {"controller", "Thread"},
+                                                                                      {"controller", "Forum"},
                                                                                       {"action", "Item"}
                                                                                   },
                                                          new RouteValueDictionary(),
@@ -169,14 +173,13 @@ namespace NGM.Forum {
                                                          new MvcRouteHandler())
                                                  },
                              new RouteDescriptor {
-                                                    Priority = 11,
-                                                    Route = new Route(
-                                                         "{forumPath}",
+                                                     Priority = 81, // Any value lower than this won't work (threads won't be visible)
+                                                     Route = new Route(
+                                                         "Forum/{forumPath}/{threadSlug}",
                                                          new RouteValueDictionary {
                                                                                       {"area", Constants.LocalArea},
-                                                                                      {"controller", "Forum"},
-                                                                                      {"action", "Item"},
-                                                                                      {"forumPath", ""}
+                                                                                      {"controller", "Thread"},
+                                                                                      {"action", "Item"}
                                                                                   },
                                                          new RouteValueDictionary(),
                                                          new RouteValueDictionary {

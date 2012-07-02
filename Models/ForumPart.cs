@@ -34,7 +34,7 @@ namespace NGM.Forum.Models {
         }
 
         public int ReplyCount {
-            get { return PostCount >= 1 ? PostCount - ThreadCount : 0; }
+            get { return PostCount >= ThreadCount ? PostCount - ThreadCount : 0; }
         }
     }
 }

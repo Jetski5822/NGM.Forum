@@ -5,6 +5,6 @@
 }
 <div class="item-properties status">
   @if (forumPart.IsClosed) {
-        <img src="/Modules/NGM.Forum/Content/Images/topic_locked.png" alt="@T("Is Closed")" title="@T("Is Closed")" />
+      @Html.Image("~/Modules/NGM.Forum/Content/Images/topic_locked.png", T("Is Closed").Text, new { title = T("Is Closed") })
   }
 </div>

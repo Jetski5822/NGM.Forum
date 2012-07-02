@@ -117,5 +117,20 @@ namespace NGM.Forum {
 
             return 8;
         }
+
+        public int UpdateFrom8()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("Forum",
+                cfg => cfg
+                    .RemovePart("AutoroutePart")
+                    .WithPart("AutoroutePart", builder => builder
+                        .WithSetting("AutorouteSettings.AllowCustomPattern", "true")
+                        .WithSetting("AutorouteSettings.AutomaticAdjustmentOnEdit", "false")
+                        .WithSetting("AutorouteSettings.PatternDefinitions", "[{Name:'Title', Pattern: 'Forum/{Content.Slug}', Description: 'my-forum'}]")
+                        .WithSetting("AutorouteSettings.DefaultPatternIndex", "0")));
+
+
+            return 9;
+        }
     }
 }
