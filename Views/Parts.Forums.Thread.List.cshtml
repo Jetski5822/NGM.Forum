@@ -11,17 +11,5 @@
 @if (threads == null || threads.Count() < 1) {
   <p class="nocontentitems">@T("There are no threads for this forum.")</p>
 } else { 
-<!--    
-    <ul class="content-items">
-    @foreach (dynamic thread in threads)
-    {
-        string title = thread.Title;
-        ContentItem item = thread.ContentItem;
-        <li class="content-item-summary">
-            @Html.ItemDisplayLink(title, item)
-        </li>
-    }
-    </ul>
   @Display(Model.Pager)
--->
 }
