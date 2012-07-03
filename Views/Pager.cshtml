@@ -28,26 +28,31 @@
 
     var result = Model.TotalItemCount % Model.PageSize;
     var numberOfPages = 0;
-    if (result == 0)
-    {
+    if (result == 0) {
       numberOfPages = Model.TotalItemCount / Model.PageSize;
     }
-	  else
-    {
+	else {
       numberOfPages = Model.TotalItemCount / Model.PageSize + 1;
     }
     
     var hasNextPage = numberOfPages > 1;
 
     List<string> actionLinks = new List<string>();
-    actionLinks.Add(Html.ActionLink(T("0").ToString(), (string)routeData["action"], (string)routeData["controller"], null, null).ToString());
-    for (int i = 1; i < numberOfPages; i++)
-		{
-          routeData["page"] = i + 1;
-          var link = Html.ActionLink(T(i.ToString()).ToString(), (string)routeData["action"], (string)routeData["controller"], routeData, null).ToString();
-          actionLinks.Add(link);
+    IDictionary<string, object> htmlAttributes = new Dictionary<string, object>();
+    if (Model.Page == 1) {
+        htmlAttributes.Add("class", "current");
+    }
+    actionLinks.Add(Html.ActionLink(T("1").ToString(), (string)routeData["action"], (string)routeData["controller"], null, htmlAttributes).ToString());
+    for (int i = 1; i < numberOfPages; i++) {
+        routeData["page"] = i + 1;
+        htmlAttributes.Clear();
+        if (Model.Page == i + 1) {
+            htmlAttributes.Add("class", "current");
+        }
+        var link = Html.ActionLink(T((i + 1).ToString()).ToString(), (string)routeData["action"], (string)routeData["controller"], routeData, htmlAttributes).ToString();
+        actionLinks.Add(link);
     }
 }
 @if (hasNextPage) {
-    @Html.UnorderedList(actionLinks, (s, i) => MvcHtmlString.Create(s), "group pager");
+    <div class="pagerText">@T("Page:")</div> @Html.UnorderedList(actionLinks, (s, i) => MvcHtmlString.Create(s), "group pager");
 }

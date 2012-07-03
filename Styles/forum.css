@@ -191,13 +191,52 @@ header
     width: 70%;
 }
 
+ul.pager li a.current 
+{
+	color: Red;
+    font-weight: bold;
+}
+
+.pagerText 
+{
+    float: left;
+}
+
+.group.pager
+{
+    list-style: none;
+    margin: 10px 0px;
+}
+
+.group.pager li 
+{
+    float: left;
+    margin-right: 3px;
+    margin-left: 4px;
+}
+
+.group.pager li a.current 
+{
+    color: #137D1A;
+}
+
 /* threads */
+div.threads 
+{
+	margin: 0;
+}
+
 ul.forum-threads article
 {
     padding: 5px 10px 5px 80px;
     height: 55px;
     border-bottom: 1px solid #bababa;
     clear: both;
+}
+
+ul.forum-threads li.last article
+{
+    border-bottom: none;
 }
 
 ul .thread .post-count 
@@ -321,4 +360,9 @@ div.zone-content > article.thread > header
     height: 18px;
     float: right;
     margin-right: 10px;
+}
+
+div.threads 
+{
+	margin: 0;
 }

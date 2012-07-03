@@ -458,3 +458,9 @@ msgstr "Dit is het forum waar de disccusie naar verplaatst zal worden"
 msgctxt ~/Modules/NGM.Forum/Views/ThreadAdmin/Move.cshtml
 msgid "Update"
 msgstr "Bevestigen"
+
+#: ~/Modules/NGM.Forum/Views/Pager.cshtml
+#| msgid "Page:"
+msgctxt ~/Modules/NGM.Forum/Views/Pager.cshtml
+msgid "Page:"
+msgstr "Pagina:"
