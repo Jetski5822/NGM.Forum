@@ -4,7 +4,7 @@
 @using Orchard.ContentManagement.Aspects
 
 @{
-    var postPart = (PostPart)Model.ContentPart;
+    var postPart = Model.ContentPart as PostPart;
 
     ICommonPart commonPart = null;
     var username = string.Empty;
@@ -15,7 +15,7 @@
 }
 @if (postPart != null) {
     <div class="latestpost">
-        <a href="@Url.ViewLatestPost(postPart)">@T("Last Post")</a> @T("by") @username <span class="meta">, @commonPart.PublishedUtc.Value.ToString("M/d/yyyy h:mm tt")</span>
+        <a href="@Url.ViewLatestPost(postPart)">@T("Last Post")</a> <br /> @T("by") @username  <br /> <span class="meta">@Display.DateTimeRelative(dateTimeUtc: commonPart.PublishedUtc.Value)</span>
     </div>
 } else { 
     <div class="latestpost">@T("No posts yet...")</div>

@@ -29,7 +29,7 @@ namespace NGM.Forum.Routing {
         }
 
         private void Refresh() {
-            _forumPathConstraint.SetPaths(_forumService.Get().Select(b => b.As<IAliasAspect>().Path));
+            _forumPathConstraint.SetPaths(_forumService.Get().Select(b => b.As<IRoutableAspect>() == null ? string.Empty : b.As<IRoutableAspect>().Slug));
         }
     }
 }

@@ -14,6 +14,7 @@
     <Match DisplayType="Summary">
       <Place
             Parts_Common_Metadata_Summary="-"
+            Parts_Forums_Forum_Image="Content:1"
             Parts_Forums_Forum_Status="Meta:2"
             Parts_Forums_Forum_ThreadCount="Content:before.1"
             Parts_Forums_Forum_PostCount="Content:before.2"

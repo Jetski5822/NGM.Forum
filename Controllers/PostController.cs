@@ -7,6 +7,7 @@ using Orchard.Localization;
 using Orchard.Logging;
 using Orchard.Themes;
 using Orchard.UI.Notify;
+using Orchard.ContentManagement.Aspects;
 
 namespace NGM.Forum.Controllers {
     [Themed]
@@ -63,10 +64,10 @@ namespace NGM.Forum.Controllers {
                 if (IsNotAllowedToReplyToPost())
                     return new HttpUnauthorizedResult();
             }
-
+            
             var part = _orchardServices.ContentManager.New<PostPart>(ContentPartConstants.Post);
-
-            part.Text = string.Format("<blockquote>{0}</blockquote><br />", contentItem.As<PostPart>().Text);
+            
+            part.Text = string.Format("<blockquote><div class='quote-header'>Quote: {1}<div class='quote-logo'></div></div><div class='quote-content'>{0}</div></blockquote><br />", contentItem.As<PostPart>().Text, contentItem.As<ICommonPart>().Owner.UserName);
 
             dynamic model = _orchardServices.ContentManager.BuildEditor(part);
 

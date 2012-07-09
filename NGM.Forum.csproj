@@ -98,6 +98,12 @@
     <Content Include="Content\Images\expert_icon.gif" />
     <Content Include="Content\Images\folder_answered.png" />
     <Content Include="Content\Images\folder_unanswered.png" />
+    <Content Include="Content\Images\forum-locked.png" />
+    <Content Include="Content\Images\forum-image.png" />
+    <Content Include="Content\Images\forum-sticky.png" />
+    <Content Include="Content\Images\forum-thread-title.png" />
+    <Content Include="Content\Images\forum-title.png" />
+    <Content Include="Content\Images\forum-topic.png" />
     <Content Include="Content\Images\menu.forum.png" />
     <Content Include="Content\Images\guru_icon.gif" />
     <Content Include="Content\Images\Jhoos-Sticky-Postit-Notes.icon.gif" />
@@ -106,6 +112,8 @@
     <Content Include="Content\Images\question.png" />
     <Content Include="Content\Images\question2.gif" />
     <Content Include="Content\Images\question_mark.png" />
+    <Content Include="Content\Images\quote-header.png" />
+    <Content Include="Content\Images\quote-logo.png" />
     <Content Include="Content\Images\quote.gif" />
     <Content Include="Content\Images\reply.png" />
     <Content Include="Content\Images\status_Answered.gif" />
@@ -270,6 +278,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\EditorTemplates\Parts.Title.TitlePart.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Forums.Forum.Image.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

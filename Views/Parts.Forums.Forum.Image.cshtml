@@ -1,0 +1,11 @@
+﻿@using NGM.Forum.Extensions
+@using NGM.Forum.Models
+@using Orchard.ContentManagement
+@using Orchard.ContentManagement.Aspects
+
+@{
+    var postPart = Model.ContentPart as PostPart;
+
+}
+
+@Html.Image("~/Modules/NGM.Forum/Content/Images/forum-image.png", T("Read").Text, new { title = T("Read"), id = T("forum-image") })

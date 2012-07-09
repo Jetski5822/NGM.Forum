@@ -94,7 +94,7 @@ namespace NGM.Forum.Controllers {
             if (correctedPath == null)
                 return HttpNotFound();
 
-            var forumPart = _forumService.Get(correctedPath);
+            var forumPart = _forumService.Get(string.Format("Forum/{0}", correctedPath));
             if (forumPart == null)
                 return HttpNotFound();
 

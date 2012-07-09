@@ -1,0 +1,466 @@
+# Orchard resource strings - nl-NL
+# Copyright (c) 2010 Outercurve Foundation
+# All rights reserved
+# This file is distributed under the BSD license
+
+#: NGM.Forum.AdminMenu
+#| msgid "Manage Forums"
+msgctxt "NGM.Forum.AdminMenu"
+msgid "Manage Forums"
+msgstr "Forums beheren"
+
+#: NGM.Forum.AdminMenu
+#| msgid "New Forum"
+msgctxt "NGM.Forum.AdminMenu"
+msgid "New Forum"
+msgstr "Nieuw Forum"
+
+#: NGM.Forum.Controllers.ForumAdminController
+#| msgid "Not allowed to create forums"
+msgctxt "NGM.Forum.Controllers.ForumAdminController"
+msgid "Not allowed to create forums"
+msgstr "Het is niet toegestaan om forums aan te maken"
+
+#: NGM.Forum.Controllers.ForumController
+#| msgid "Not allowed to close forums"
+msgctxt "NGM.Forum.Controllers.ForumController"
+msgid "Not allowed to close forum"
+msgstr "Het is niet toegestaan om het forum te sluiten"
+
+#: NGM.Forum.Controllers.ForumController
+#| msgid "Not allowed to open forums"
+msgctxt "NGM.Forum.Controllers.ForumController"
+msgid "Not allowed to open forum"
+msgstr "Het is niet toegestaan om het forum te openen"
+
+#: NGM.Forum.Controllers.ForumController
+#| msgid "Not allowed to view forums"
+msgctxt "NGM.Forum.Controllers.ForumController"
+msgid "Not allowed to view forum"
+msgstr "Het is niet toegestaan om het forum te bekijken"
+
+#: NGM.Forum.Controllers.PostController
+#| msgid "Not allowed to create post"
+msgctxt "NGM.Forum.Controllers.PostController"
+msgid "Not allowed to create post"
+msgstr "Het is niet toegestaan om berichten aan te maken"
+
+#: NGM.Forum.Controllers.PostController
+#| msgid "Your {0} has been created."
+msgctxt "NGM.Forum.Controllers.PostController"
+msgid "Your {0} has been created."
+msgstr "Uw {0} is aangemaakt"
+
+#: NGM.Forum.Controllers.PostController
+#| msgid "Not allowed to mark post as answer"
+msgctxt "NGM.Forum.Controllers.PostController"
+msgid "Not allowed to mark post as answer"
+msgstr "Het is niet toegestaan om dit bericht als antwoord te markeren"
+
+#: NGM.Forum.Controllers.PostController
+#| msgid "{0} has been marked as answer."
+msgctxt "NGM.Forum.Controllers.PostController"
+msgid "{0} has been marked as answer."
+msgstr "{0} is gemarkeerd als antwoord."
+
+#: NGM.Forum.Controllers.PostController
+#| msgid "{0} has been un-marked as answer."
+msgctxt "NGM.Forum.Controllers.PostController"
+msgid "{0} has been un-marked as answer."
+msgstr "{0} is niet meer gemarkeerd als antwoord."
+
+#: NGM.Forum.Controllers.PostController
+#| msgid "Not allowed to reply to a post"
+msgctxt "NGM.Forum.Controllers.PostController"
+msgid "Not allowed to reply to a post"
+msgstr "Het is niet toegestaan om te antwoorden op een bericht"
+
+#: NGM.Forum.Controllers.ThreadAdminController
+#| msgid "Not allowed to move thread"
+msgctxt "NGM.Forum.Controllers.ThreadAdminController"
+msgid "Not allowed to move thread"
+msgstr "Het is niet toegestaan om deze discussie te verplaatsen"
+
+#: NGM.Forum.Controllers.ThreadAdminController
+#| msgid "could not find thread"
+msgctxt "NGM.Forum.Controllers.ThreadAdminController"
+msgid "could not find thread"
+msgstr "kon discussie niet vinden"
+
+#: NGM.Forum.Controllers.ThreadAdminController
+#| msgid "could not find forum"
+msgctxt "NGM.Forum.Controllers.ThreadAdminController"
+msgid "could not find forum"
+msgstr "kon forum niet vinden"
+
+#: NGM.Forum.Controllers.ThreadAdminController
+#| msgid "{0} has been moved."
+msgctxt "NGM.Forum.Controllers.ThreadAdminController"
+msgid "{0} has been moved."
+msgstr "{0} is verplaatst."
+
+#: NGM.Forum.Controllers.ThreadController
+#| msgid "Not allowed to create thread"
+msgctxt "NGM.Forum.Controllers.ThreadController"
+msgid "Not allowed to create thread"
+msgstr "Het is hier niet toegestaan om een discussie te starten"
+
+#: NGM.Forum.Controllers.ThreadController
+#| msgid "Your {0} has been created."
+msgctxt "NGM.Forum.Controllers.ThreadController"
+msgid "Your {0} has been created."
+msgstr "Uw {0} is aangemaakt"
+
+#: NGM.Forum.Controllers.ThreadController
+#| msgid "Not allowed to view thread"
+msgctxt "NGM.Forum.Controllers.ThreadController"
+msgid "Not allowed to view thread"
+msgstr "Het is niet toegestaan om deze discussie te bekijken"
+
+#: ~/Modules/NGM.Forum/Views/EditorTemplates/Parts.Setting.Popularity.ForumPart.cshtml
+#| msgid "Use Popularity Algorithm"
+msgctxt ~/Modules/NGM.Forum/Views/EditorTemplates/Parts.Setting.Popularity.ForumPart.cshtml
+msgid "Use Popularity Algorithm"
+msgstr "Gebruik populariteit algoritme"
+
+#: ~/Modules/NGM.Forum/Views/EditorTemplates/Parts.Status.Close.ForumPart.cshtml
+#| msgid "Is Closed"
+msgctxt ~/Modules/NGM.Forum/Views/EditorTemplates/Parts.Status.Close.ForumPart.cshtml
+msgid "Is Closed"
+msgstr "Is gesloten"
+
+#: ~/Modules/NGM.Forum/Views/EditorTemplates/Parts.Status.Close.ThreadPart.cshtml
+#| msgid "Is Closed"
+msgctxt ~/Modules/NGM.Forum/Views/EditorTemplates/Parts.Status.Close.ThreadPart.cshtml
+msgid "Is Closed"
+msgstr "Is gesloten"
+
+#: ~/Modules/NGM.Forum/Views/EditorTemplates/Parts.Status.Sticky.ThreadPart.cshtml
+#| msgid "Is Sticky"
+msgctxt ~/Modules/NGM.Forum/Views/EditorTemplates/Parts.Status.Sticky.ThreadPart.cshtml
+msgid "Is Sticky"
+msgstr "Is sticky"
+
+#: ~/Modules/NGM.Forum/Views/EditorTemplates/Parts.Title.TitlePart.cshtml
+#| msgid "Title"
+msgctxt ~/Modules/NGM.Forum/Views/EditorTemplates/Parts.Title.TitlePart.cshtml
+msgid "Title"
+msgstr "Titel"
+
+#: ~/Modules/NGM.Forum/Views/EditorTemplates/Parts.Type.ThreadPart.cshtml
+#| msgid "Type"
+msgctxt ~/Modules/NGM.Forum/Views/EditorTemplates/Parts.Type.ThreadPart.cshtml
+msgid "Type"
+msgstr "Type"
+
+#: ~/Modules/NGM.Forum/Views/Forum/List.cshtml
+#| msgid "No forums found."
+msgctxt ~/Modules/NGM.Forum/Views/Forum/List.cshtml
+msgid "No forums found."
+msgstr "Geen forums gevonden."
+
+#: ~/Modules/NGM.Forum/Views/ForumAdmin/Create.cshtml
+#| msgid "New Forum"
+msgctxt ~/Modules/NGM.Forum/Views/ForumAdmin/Create.cshtml
+msgid "New Forum"
+msgstr "Nieuw Forum"
+
+#: ~/Modules/NGM.Forum/Views/ForumAdmin/Edit.cshtml
+#| msgid "Forum Properties"
+msgctxt ~/Modules/NGM.Forum/Views/ForumAdmin/Edit.cshtml
+msgid "Forum Properties"
+msgstr "Forum eigenschappen"
+
+#: ~/Modules/NGM.Forum/Views/ForumAdmin/List.cshtml
+#| msgid "Manage Forums"
+msgctxt ~/Modules/NGM.Forum/Views/ForumAdmin/List.cshtml
+msgid "Manage Forums"
+msgstr "Forums beheren"
+
+#: ~/Modules/NGM.Forum/Views/ForumAdmin/List.cshtml
+#| msgid "New Forum"
+msgctxt ~/Modules/NGM.Forum/Views/ForumAdmin/List.cshtml
+msgid "New Forum"
+msgstr "Nieuw forum"
+
+#: ~/Modules/NGM.Forum/Views/ForumAdmin/List.cshtml
+#| msgid "Actions:"
+msgctxt ~/Modules/NGM.Forum/Views/ForumAdmin/List.cshtml
+msgid "Actions:"
+msgstr "Acties:"
+
+#: ~/Modules/NGM.Forum/Views/ForumAdmin/List.cshtml
+#| msgid "Choose action..."
+msgctxt ~/Modules/NGM.Forum/Views/ForumAdmin/List.cshtml
+msgid "Choose action..."
+msgstr "Kies actie..."
+
+#: ~/Modules/NGM.Forum/Views/ForumAdmin/List.cshtml
+#| msgid "Delete"
+msgctxt ~/Modules/NGM.Forum/Views/ForumAdmin/List.cshtml
+msgid "Delete"
+msgstr "Verwijderen"
+
+#: ~/Modules/NGM.Forum/Views/ForumAdmin/List.cshtml
+#| msgid "Apply"
+msgctxt ~/Modules/NGM.Forum/Views/ForumAdmin/List.cshtml
+msgid "Apply"
+msgstr "Toepassen"
+
+#: ~/Modules/NGM.Forum/Views/ForumAdmin/List.cshtml
+#| msgid "There are no forums for you to see. Want to <a href=\"{0}\">add one</a>?"
+msgctxt ~/Modules/NGM.Forum/Views/ForumAdmin/List.cshtml
+msgid "There are no forums for you to see. Want to <a href=\"{0}\">add one</a>?"
+msgstr "Er bestaan nog geen forums, wilt u er een <a href=\"{0}\">aanmaken</a>?"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Forums.Forum.LatestPost.cshtml
+#| msgid "Anonymous user"
+msgctxt ~/Modules/NGM.Forum/Views/Parts.Forums.Forum.LatestPost.cshtml
+msgid "Anonymous user"
+msgstr "Anonieme gebruiker"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Forums.Forum.LatestPost.cshtml
+#| msgid "Last Post"
+msgctxt ~/Modules/NGM.Forum/Views/Parts.Forums.Forum.LatestPost.cshtml
+msgid "Last Post"
+msgstr "Laatste bericht"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Forums.Forum.LatestPost.cshtml
+#| msgid "by"
+msgctxt ~/Modules/NGM.Forum/Views/Parts.Forums.Forum.LatestPost.cshtml
+msgid "by"
+msgstr "door"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Forums.Forum.LatestPost.cshtml
+#| msgid "No posts yet..."
+msgctxt ~/Modules/NGM.Forum/Views/Parts.Forums.Forum.LatestPost.cshtml
+msgid "No posts yet..."
+msgstr "Nog geen berichten..."
+
+#: ~/Modules/NGM.Forum/Views/Parts.Forums.Forum.Manage.cshtml
+#| msgid "Create Thread"
+msgctxt ~/Modules/NGM.Forum/Views/Parts.Forums.Forum.Manage.cshtml
+msgid "Create Thread"
+msgstr "Nieuwe discussie maken"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Forums.Forum.Status.cshtml
+#| msgid "Is Closed"
+msgctxt ~/Modules/NGM.Forum/Views/Parts.Forums.Forum.Status.cshtml
+msgid "Is Closed"
+msgstr "Is gesloten"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Forums.Forum.List.cshtml
+#| msgid "There are no threads for this forum."
+msgctxt ~/Modules/NGM.Forum/Views/Parts.Forums.Forum.List.cshtml
+msgid "There are no threads for this forum."
+msgstr "Er zijn nog geen discussies voor dit forum."
+
+#: ~/Modules/NGM.Forum/Views/Parts.Forums.Forum.ListAdmin.cshtml
+#| msgid "There are no threads for this forum."
+msgctxt ~/Modules/NGM.Forum/Views/Parts.Forums.Forum.ListAdmin.cshtml
+msgid "There are no threads for this forum."
+msgstr "Er zijn nog geen discussies voor dit forum."
+
+#: ~/Modules/NGM.Forum/Views/Parts.Posts.Post.Manage.cshtml
+#| msgid "Reply"
+msgctxt ~/Modules/NGM.Forum/Views/Parts.Posts.Post.Manage.cshtml
+msgid "Reply"
+msgstr "Reageren"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Posts.Post.Manage.cshtml
+#| msgid "Quote"
+msgctxt ~/Modules/NGM.Forum/Views/Parts.Posts.Post.Manage.cshtml
+msgid "Quote"
+msgstr "Citeren"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Posts.Post.Manage.cshtml
+#| msgid "Un-mark as answer"
+msgctxt ~/Modules/NGM.Forum/Views/Parts.Posts.Post.Manage.cshtml
+msgid "Un-mark as answer"
+msgstr "Niet meer markeren als antwoord"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Posts.Post.Manage.cshtml
+#| msgid "Mark as answer"
+msgctxt ~/Modules/NGM.Forum/Views/Parts.Posts.Post.Manage.cshtml
+msgid "Mark as answer"
+msgstr "Markeren als antwoord"
+
+#: ~/Modules/NGM.Forum/Views/Parts.RoutableTitle.Summary-Thread.cshtml
+#| msgid "Is Answer"
+msgctxt ~/Modules/NGM.Forum/Views/Parts.RoutableTitle.Summary-Thread.cshtml
+msgid "Is Answer"
+msgstr "Is een antwoord"
+
+#: ~/Modules/NGM.Forum/Views/Parts.RoutableTitle.Summary-Thread.cshtml
+#| msgid "Is Question"
+msgctxt ~/Modules/NGM.Forum/Views/Parts.RoutableTitle.Summary-Thread.cshtml
+msgid "Is Question"
+msgstr "Is een vraag"
+
+#: ~/Modules/NGM.Forum/Views/Parts.RoutableTitle.Summary-Thread.cshtml
+#| msgid "Is Discussion"
+msgctxt ~/Modules/NGM.Forum/Views/Parts.RoutableTitle.Summary-Thread.cshtml
+msgid "Is Discussion"
+msgstr "Is een discussie"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Threads.Move.SummaryAdmin.cshtml
+#| msgid "Move"
+msgctxt ~/Modules/NGM.Forum/Views/Parts.Threads.Move.SummaryAdmin.cshtml
+msgid "Move"
+msgstr "Verplaatsen"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Threads.Post.ListAdmin.cshtml
+#| msgid "Actions:"
+msgctxt ~/Modules/NGM.Forum/Views/Parts.Threads.Post.ListAdmin.cshtml
+msgid "Actions:"
+msgstr "Acties:"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Threads.Post.ListAdmin.cshtml
+#| msgid "Choose action..."
+msgctxt ~/Modules/NGM.Forum/Views/Parts.Threads.Post.ListAdmin.cshtml
+msgid "Choose action..."
+msgstr "Kies een actie..."
+
+#: ~/Modules/NGM.Forum/Views/Parts.Threads.Post.ListAdmin.cshtml
+#| msgid "Publish Now"
+msgctxt ~/Modules/NGM.Forum/Views/Parts.Threads.Post.ListAdmin.cshtml
+msgid "Publish Now"
+msgstr "Nu publiseren"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Threads.Post.ListAdmin.cshtml
+#| msgid "Unpublish"
+msgctxt ~/Modules/NGM.Forum/Views/Parts.Threads.Post.ListAdmin.cshtml
+msgid "Unpublish"
+msgstr "Niet meer publiseren"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Threads.Post.ListAdmin.cshtml
+#| msgid "Delete"
+msgctxt ~/Modules/NGM.Forum/Views/Parts.Threads.Post.ListAdmin.cshtml
+msgid "Delete"
+msgstr "Verwijderen"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Threads.Post.ListAdmin.cshtml
+#| msgid "Apply"
+msgctxt ~/Modules/NGM.Forum/Views/Parts.Threads.Post.ListAdmin.cshtml
+msgid "Apply"
+msgstr "Toepassen"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Threads.Post.ListAdmin.cshtml
+#| msgid "There are no posts for this thread."
+msgctxt ~/Modules/NGM.Forum/Views/Parts.Threads.Post.ListAdmin.cshtml
+msgid "There are no posts for this thread."
+msgstr "Er zijn nog geen berichten voor deze discussie."
+
+#: ~/Modules/NGM.Forum/Views/Parts.Threads.Thread.LatestPost.cshtml
+#| msgid "Anonymous user"
+msgctxt ~/Modules/NGM.Forum/Views/Parts.Threads.Thread.LatestPost.cshtml
+msgid "Anonymous user"
+msgstr "Anonieme gebruiker"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Threads.Thread.LatestPost.cshtml
+#| msgid "Last Post"
+msgctxt ~/Modules/NGM.Forum/Views/Parts.Threads.Thread.LatestPost.cshtml
+msgid "Last Post"
+msgstr "Laatste bericht"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Threads.Thread.LatestPost.cshtml
+#| msgid "by"
+msgctxt ~/Modules/NGM.Forum/Views/Parts.Threads.Thread.LatestPost.cshtml
+msgid "by"
+msgstr "door"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Threads.Thread.Status.cshtml
+#| msgid "Is Sticky"
+msgctxt ~/Modules/NGM.Forum/Views/Parts.Threads.Thread.Status.cshtml
+msgid "Is Sticky"
+msgstr "Is sticky"
+
+#: ~/Modules/NGM.Forum/Views/Parts.Threads.Thread.Status.cshtml
+#| msgid "Is Closed"
+msgctxt ~/Modules/NGM.Forum/Views/Parts.Threads.Thread.Status.cshtml
+msgid "Is Closed"
+msgstr "Is gesloten"
+
+#: ~/Modules/NGM.Forum/Views/Post/Create.cshtml
+#| msgid "New Post"
+msgctxt ~/Modules/NGM.Forum/Views/Post/Create.cshtml
+msgid "New Post"
+msgstr "Nieuw bericht"
+
+#: ~/Modules/NGM.Forum/Views/Thread/Create.cshtml
+#| msgid "New Thread"
+msgctxt ~/Modules/NGM.Forum/Views/Thread/Create.cshtml
+msgid "New Thread"
+msgstr "Nieuwe discussie"
+
+#: ~/Modules/NGM.Forum/Views/ThreadAdmin/Item.cshtml
+#| msgid "Manage Thread"
+msgctxt ~/Modules/NGM.Forum/Views/ThreadAdmin/Item.cshtml
+msgid "Manage Thread"
+msgstr "Discussie beheren"
+
+#: ~/Modules/NGM.Forum/Views/ThreadAdmin/List.cshtml
+#| msgid "Manage Threads"
+msgctxt ~/Modules/NGM.Forum/Views/ThreadAdmin/List.cshtml
+msgid "Manage Threads"
+msgstr "Discussies beheren"
+
+#: ~/Modules/NGM.Forum/Views/ThreadAdmin/List.cshtml
+#| msgid "Actions:"
+msgctxt ~/Modules/NGM.Forum/Views/ThreadAdmin/List.cshtml
+msgid "Actions:"
+msgstr "Acties:"
+
+#: ~/Modules/NGM.Forum/Views/ThreadAdmin/List.cshtml
+#| msgid "Choose action..."
+msgctxt ~/Modules/NGM.Forum/Views/ThreadAdmin/List.cshtml
+msgid "Choose action..."
+msgstr "Kies een actie..."
+
+#: ~/Modules/NGM.Forum/Views/ThreadAdmin/List.cshtml
+#| msgid "Delete"
+msgctxt ~/Modules/NGM.Forum/Views/ThreadAdmin/List.cshtml
+msgid "Delete"
+msgstr "Verwijderen"
+
+#: ~/Modules/NGM.Forum/Views/ThreadAdmin/List.cshtml
+#| msgid "Apply"
+msgctxt ~/Modules/NGM.Forum/Views/ThreadAdmin/List.cshtml
+msgid "Apply"
+msgstr "Toepassen"
+
+#: ~/Modules/NGM.Forum/Views/ThreadAdmin/List.cshtml
+#| msgid "There are no threads for you to see."
+msgctxt ~/Modules/NGM.Forum/Views/ThreadAdmin/List.cshtml
+msgid "There are no threads for you to see."
+msgstr "Er zijn nog geen discussies."
+
+#: ~/Modules/NGM.Forum/Views/ThreadAdmin/Move.cshtml
+#| msgid "Move Thread"
+msgctxt ~/Modules/NGM.Forum/Views/ThreadAdmin/Move.cshtml
+msgid "Move Thread"
+msgstr "Discussie verplaatsen"
+
+#: ~/Modules/NGM.Forum/Views/ThreadAdmin/Move.cshtml
+#| msgid "Destination"
+msgctxt ~/Modules/NGM.Forum/Views/ThreadAdmin/Move.cshtml
+msgid "Destination"
+msgstr "Bestemming"
+
+#: ~/Modules/NGM.Forum/Views/ThreadAdmin/Move.cshtml
+#| msgid "This is the forum that the thread will be moved to"
+msgctxt ~/Modules/NGM.Forum/Views/ThreadAdmin/Move.cshtml
+msgid "This is the forum that the thread will be moved to"
+msgstr "Dit is het forum waar de disccusie naar verplaatst zal worden"
+
+#: ~/Modules/NGM.Forum/Views/ThreadAdmin/Move.cshtml
+#| msgid "Update"
+msgctxt ~/Modules/NGM.Forum/Views/ThreadAdmin/Move.cshtml
+msgid "Update"
+msgstr "Bevestigen"
+
+#: ~/Modules/NGM.Forum/Views/Pager.cshtml
+#| msgid "Page:"
+msgctxt ~/Modules/NGM.Forum/Views/Pager.cshtml
+msgid "Page:"
+msgstr "Pagina:"
