@@ -1,19 +1,4 @@
-﻿.forum > header, .thread > header {
-  width: 75%;
-  float: left;
-  padding-left: 3px;
-}
-
-.forum div {
-  margin: 10px 0px 0px 0px;
-}
-
-.forum .forum-threads {
-  clear:left;
-  width:100%;
-}
-
-.nocontentitems {
+﻿.nocontentitems {
 	clear: left;
 	padding-left: 3px;
 }
@@ -23,10 +8,6 @@
 .thread header h2.question { background-image: url('../Content/Images/status_NotAnswered.gif'); }
 .thread header h2.answer { background-image: url('../Content/Images/status_Answered.gif'); }
 .thread header h2.discussion { background-image: url('../Content/Images/Discussion-small.png'); }
-
-.latestpost {
-  clear: left;
-}
 
 .thread-posts {
   clear: left;
@@ -40,50 +21,9 @@
   height: 85px;
 }
 
-.post header {
-  float: none;  
-}
-
 .post .owner-metadata {
   padding-right: 20px;
   float: left;
-}
-
-.post .actions {
-  clear: left;
-}
-
-.post .actions > a {
-    color: #888888;
-    padding: 0px 3px 2px 3px;
-}
-
-.post .actions > a:hover {
-    color: #FFFFFF;
-    /*background-color: #777777;*/
-}
-
-.latestpost > a {
-    color: #888888;
-    padding: 0px 3px 2px 3px;	
-}
-
-.latestpost > a:hover {
-    color: #FFFFFF;
-    /*background-color: #777777;*/
-}
-
-.item-text p {
-  /* The following styles prevent unbroken strings from breaking the layout */
-  overflow: auto;
-  white-space: -moz-pre-wrap; /* Mozilla */
-  white-space: -hp-pre-wrap; /* HP printers */
-  white-space: -o-pre-wrap; /* Opera 7 */
-  white-space: -pre-wrap; /* Opera 4-6 */
-  white-space: pre-wrap; /* CSS 2.1 */
-  white-space: pre-line; /* CSS 3 (and 2.1 as well, actually) */
-  word-wrap: break-word; /* IE */
-  -moz-binding: url('xbl.xml#wordwrap'); /* Firefox (using XBL) */
 }
 
 .item-text blockquote {
@@ -107,22 +47,6 @@
 }
 
 /* Custom Skin */
-ul.content-items
-{
-    list-style-image: none;
-    margin: 0;
-    padding: 0;
-    border-left: 1px solid #bababa;
-    border-right: 1px solid #bababa;
-    border-bottom: 1px solid #bababa;
-    
-    -moz-border-radius-bottomright: 4px;
-    -moz-border-radius-bottomleft: 4px;
-	-webkit-border-bottom-right-radius: 4px;
-	-webkit-border-bottom-left-radius: 4px;
-	border-bottom-right-radius: 4px;
-	border-bottom-left-radius: 4px;
-}
 
 .forum-title 
 {
@@ -179,18 +103,6 @@ ul .forum .latestpost
     margin-top: -50px;
 }
 
-h1 
-{
-    font-size: 18px;
-    margin-bottom: 0px;
-}
-
-header 
-{
-    float:none;
-    width: 70%;
-}
-
 ul.pager li a.current 
 {
 	color: Red;
@@ -226,36 +138,14 @@ div.threads
 	margin: 0;
 }
 
-ul.forum-threads article
-{
-    padding: 5px 10px 5px 80px;
-    height: 55px;
-    border-bottom: 1px solid #bababa;
-    clear: both;
-}
-
 ul.forum-threads li.last article
 {
     border-bottom: none;
 }
 
-ul .thread .post-count 
-{
-    float: right;
-    margin-right: 180px;
-    margin-top: -15px;
-}
-
 ul .thread h1 
 {
     margin-top: 5px;
-}
-
-ul .thread .latestpost 
-{
-    width: 140px;
-    float: right;
-    margin-top: -45px;
 }
 
 ul .thread .status 
@@ -265,46 +155,6 @@ ul .thread .status
     width: 48px;
     margin-left: -65px;
     margin-top: -28px;
-}
-
-div.zone-content > article.content-item > header 
-{
-    background-image: url('../content/images/forum-thread-title.png');
-    height: 53px;
-    border-top: 1px solid #bababa;
-    border-left: 1px solid #bababa;
-    border-right: 1px solid #bababa;
-    width: 877px;
-    
-    -moz-border-radius-topright: 4px;
-    -moz-border-radius-topleft: 4px;
-	-webkit-border-top-right-radius: 4px;
-	-webkit-border-top-left-radius: 4px;
-	border-top-right-radius: 4px;
-	border-top-left-radius: 4px;
-}
-
-div.zone-content > article.content-item > header > h1 
-{
-    color: #ededed;
-    padding: 8px 20px;
-    font-size: 18px;
-}
-
-div.zone-content > article.content-item > header .status 
-{
-    float: right;
-}
-
-div.zone-content > article.content-item > header .actions
-{
-    margin-top: -15px;
-}
-
-div.zone-content > article.content-item > header .actions a
-{
-    color: #ededed;
-    padding: 0px 20px;
 }
 
 /* topics */
