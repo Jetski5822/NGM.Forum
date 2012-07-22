@@ -3,11 +3,7 @@
     Style.Require("Forums");
     Model.ContentItems.Classes.Add("content-items");
     Model.ContentItems.Classes.Add("forums");
-    IEnumerable<object> threads = Model.ContentItems;
 }
-<div class="forum-title">
-Obec forum
-</div>
 @Display(Model.ContentItems)
 @if (Model.ContentItems.Items.Count < 1) {
 <p>@T("No forums found.")</p>
