@@ -55,9 +55,6 @@ namespace NGM.Forum.Controllers {
 
             var contentItem = _orchardServices.ContentManager.Get(contentId, VersionOptions.Latest);
             if (contentItem.As<PostPart>() == null) {
-                if (IsNotAllowedToCreatePost())
-                    return new HttpUnauthorizedResult();
-
                 if (contentItem.As<ThreadPart>() == null)
                     return HttpNotFound();
 
@@ -81,9 +78,6 @@ namespace NGM.Forum.Controllers {
 
             var contentItem = _orchardServices.ContentManager.Get(contentId, VersionOptions.Latest);
             if (contentItem.As<PostPart>() == null) {
-                if (IsNotAllowedToCreatePost())
-                    return new HttpUnauthorizedResult();
-
                 if (contentItem.As<ThreadPart>() == null)
                     return HttpNotFound();
 
