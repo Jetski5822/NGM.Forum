@@ -101,7 +101,7 @@ namespace NGM.Forum.Controllers {
             dynamic forum = _orchardServices.ContentManager.BuildDisplay(forumPart);
 
             //_feedManager.Register(forumPart);
-            var threadParts = _threadService.Get(forumPart, pager.GetStartIndex(), pager.PageSize);
+            var threadParts = _threadService.Get(forumPart, pager.GetStartIndex(), pager.PageSize).ToList();
             var stickyThreads = threadParts.Where(o => o.IsSticky).Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Summary"));
 
             var list = Shape.List();
