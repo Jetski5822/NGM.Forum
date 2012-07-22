@@ -271,9 +271,6 @@
     <Content Include="Views\Content-Post.Detail.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Pager.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>

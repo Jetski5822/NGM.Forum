@@ -3,7 +3,7 @@
 
 @{
     Orchard.ContentManagement.ContentItem contentItem = Model.ContentPart.ContentItem;
-    NGM.Forum.Models.ThreadPart thread = contentItem.As<NGM.Forum.Models.ThreadPart>();
+    var thread = contentItem.As<NGM.Forum.Models.ThreadPart>();
     string title = Model.Title.ToString();
 
     string titleClass;

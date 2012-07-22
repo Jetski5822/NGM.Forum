@@ -69,8 +69,6 @@
 
 ul.forums article
 {
-    padding: 10px 10px 10px 80px;
-    height: 55px;
     border-bottom: 1px solid #bababa;
     clear: both;
 }
@@ -80,27 +78,6 @@ ul.forums article
     margin-top: -25px;
     margin-left: -65px;
     float: left;
-}
-
-ul .thread-count 
-{
-    float: right;
-    margin-right: 180px;
-    margin-top: -20px;
-}
-
-ul .forum .post-count 
-{
-    float: right;
-    margin-right: 180px;
-    margin-top: 0px;
-}
-
-ul .forum .latestpost 
-{
-    width: 140px;
-    float: right;
-    margin-top: -50px;
 }
 
 ul.pager li a.current 
