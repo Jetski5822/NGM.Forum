@@ -66,9 +66,6 @@ namespace NGM.Forum {
                     .WithPart("CommonPart")
                 );
 
-            SchemaBuilder.AlterTable("PostPartRecord", t => t.AddColumn<string>("Text", column => column.Unlimited()));
-            SchemaBuilder.AlterTable("PostPartRecord", t => t.AddColumn<string>("Format"));
-
             return 10;
         }
 
