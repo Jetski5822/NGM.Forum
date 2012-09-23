@@ -25,6 +25,7 @@ namespace NGM.Forum.Controllers {
         private readonly IThreadService _threadService;
         private readonly ISiteService _siteService;
         private readonly IFeedManager _feedManager;
+        private readonly IPopularityService _popularityService;
 
         public ForumController(IOrchardServices orchardServices, 
             IForumService forumService,
@@ -32,13 +33,15 @@ namespace NGM.Forum.Controllers {
             IThreadService threadService,
             ISiteService siteService,
             IShapeFactory shapeFactory,
-            IFeedManager feedManager) {
+            IFeedManager feedManager,
+            IPopularityService popularityService) {
             _orchardServices = orchardServices;
             _forumService = forumService;
             _forumPathConstraint = forumPathConstraint;
             _threadService = threadService;
             _siteService = siteService;
             _feedManager = feedManager;
+            _popularityService = popularityService;
 
             T = NullLocalizer.Instance;
             Shape = shapeFactory;
@@ -107,7 +110,7 @@ namespace NGM.Forum.Controllers {
             var list = Shape.List();
 
             if (forumPart.UsePopularityAlgorithm)
-                list.AddRange(stickyThreads.Union(threadParts.Where(o => !o.IsSticky).OrderByDescending(p => _threadService.CalculatePopularity(p)).Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Summary"))));
+                list.AddRange(stickyThreads.Union(threadParts.Where(o => !o.IsSticky).OrderByDescending(p => _popularityService.Calculate(p)).Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Summary"))));
             else {
                 list.AddRange(stickyThreads.Union(threadParts.Where(o => !o.IsSticky).Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Summary"))));
             }

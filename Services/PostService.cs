@@ -55,7 +55,7 @@ namespace NGM.Forum.Services {
 
         public IEnumerable<PostPart> Get(ThreadPart threadPart, VersionOptions versionOptions) {
             return _contentManager
-                .Query(versionOptions, ContentPartConstants.Post)
+                .Query(versionOptions, Constants.Parts.Post)
                 .Join<CommonPartRecord>().Where(cpr => cpr.Container == threadPart.ContentItem.Record)
                 .List()
                 .ToList()
@@ -68,7 +68,7 @@ namespace NGM.Forum.Services {
 
         public IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count, VersionOptions versionOptions) {
             return _contentManager
-                .Query(versionOptions, ContentPartConstants.Post)
+                .Query(versionOptions, Constants.Parts.Post)
                 .Join<CommonPartRecord>().Where(cpr => cpr.Container == threadPart.ContentItem.Record)
                 .Slice(skip, count)
                 .ToList()

@@ -59,9 +59,9 @@ namespace NGM.Forum.Controllers {
             if (forum == null)
                 return HttpNotFound();
 
-            var thread = _orchardServices.ContentManager.New<ThreadPart>(ContentPartConstants.Thread);
+            var thread = _orchardServices.ContentManager.New<ThreadPart>(Constants.Parts.Thread);
             thread.ForumPart = forum;
-            var post = _orchardServices.ContentManager.New<PostPart>(ContentPartConstants.Post);
+            var post = _orchardServices.ContentManager.New<PostPart>(Constants.Parts.Post);
             post.ThreadPart = thread;
 
             dynamic threadModel = _orchardServices.ContentManager.BuildEditor(thread);
@@ -85,10 +85,10 @@ namespace NGM.Forum.Controllers {
             if (forum == null)
                 return HttpNotFound();
 
-            var thread = _orchardServices.ContentManager.Create<ThreadPart>(ContentPartConstants.Thread, VersionOptions.Draft, (o) => { o.ForumPart = forum; });
+            var thread = _orchardServices.ContentManager.Create<ThreadPart>(Constants.Parts.Thread, VersionOptions.Draft, (o) => { o.ForumPart = forum; });
             var threadModel = _orchardServices.ContentManager.UpdateEditor(thread, this);
 
-            var post = _orchardServices.ContentManager.Create<PostPart>(ContentPartConstants.Post, VersionOptions.Draft, (o) => { o.ThreadPart = thread; });
+            var post = _orchardServices.ContentManager.Create<PostPart>(Constants.Parts.Post, VersionOptions.Draft, (o) => { o.ThreadPart = thread; });
             var postModel = _orchardServices.ContentManager.UpdateEditor(post, this);
             post.ThreadPart = thread;
             

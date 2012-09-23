@@ -11,6 +11,8 @@ namespace NGM.Forum {
                     .Column<bool>("IsClosed")
                     .Column<int>("ThreadCount")
                     .Column<int>("PostCount")
+                    .Column<bool>("UsePopularityAlgorithm")
+                    .Column<int>("Position")
                 );
 
             SchemaBuilder.CreateTable("ThreadPartRecord",
@@ -27,14 +29,22 @@ namespace NGM.Forum {
                 table => table
                     .ContentPartRecord()
                     .Column<int>("ParentPostId")
+                    .Column<int>("IsAnswer")
+                    .Column<string>("Text", column => column.Unlimited())
+                    .Column<string>("Format")
                 );
 
             ContentDefinitionManager.AlterTypeDefinition("Forum",
                 cfg => cfg
                     .WithPart("ForumPart")
                     .WithPart("CommonPart")
-                    .WithPart("RoutePart")
                     .WithPart("BodyPart")
+                    .WithPart("TitlePart")
+                    .WithPart("AutoroutePart", builder => builder
+                        .WithSetting("AutorouteSettings.AllowCustomPattern", "true")
+                        .WithSetting("AutorouteSettings.AutomaticAdjustmentOnEdit", "false")
+                        .WithSetting("AutorouteSettings.PatternDefinitions", "[{Name:'Title', Pattern: 'Forum/{Content.Slug}', Description: 'my-forum'}]")
+                        .WithSetting("AutorouteSettings.DefaultPatternIndex", "0"))
                     .WithPart("MenuPart")
                 );
 
@@ -42,17 +52,24 @@ namespace NGM.Forum {
                 cfg => cfg
                     .WithPart("ThreadPart")
                     .WithPart("CommonPart")
-                    .WithPart("RoutePart")
+                    .WithPart("TitlePart")
+                    .WithPart("AutoroutePart", builder => builder
+                        .WithSetting("AutorouteSettings.AllowCustomPattern", "true")
+                        .WithSetting("AutorouteSettings.AutomaticAdjustmentOnEdit", "false")
+                        .WithSetting("AutorouteSettings.PatternDefinitions", "[{Name:'Forum and Title', Pattern: '{Content.Container.Path}/{Content.Slug}', Description: 'my-forum/my-thread'}]")
+                        .WithSetting("AutorouteSettings.DefaultPatternIndex", "0"))
                 );
 
             ContentDefinitionManager.AlterTypeDefinition("Post",
                 cfg => cfg
                     .WithPart("PostPart")
                     .WithPart("CommonPart")
-                    .WithPart("BodyPart")
                 );
 
-            return 1;
+            SchemaBuilder.AlterTable("PostPartRecord", t => t.AddColumn<string>("Text", column => column.Unlimited()));
+            SchemaBuilder.AlterTable("PostPartRecord", t => t.AddColumn<string>("Format"));
+
+            return 10;
         }
 
         public int UpdateFrom1() {
@@ -131,6 +148,18 @@ namespace NGM.Forum {
 
 
             return 9;
+        }
+
+        public int UpdateFrom9() {
+            ContentDefinitionManager.AlterTypeDefinition("Post",
+                cfg => cfg
+                    .RemovePart("BodyPart")
+                );
+
+            SchemaBuilder.AlterTable("PostPartRecord", t => t.AddColumn<string>("Text", column => column.Unlimited()));
+            SchemaBuilder.AlterTable("PostPartRecord", t => t.AddColumn<string>("Format"));
+
+            return 10;
         }
     }
 }

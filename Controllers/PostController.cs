@@ -42,7 +42,7 @@ namespace NGM.Forum.Controllers {
                     return new HttpUnauthorizedResult();
             }
 
-            var part = _orchardServices.ContentManager.New<PostPart>(ContentPartConstants.Post);
+            var part = _orchardServices.ContentManager.New<PostPart>(Constants.Parts.Post);
 
             dynamic model = _orchardServices.ContentManager.BuildEditor(part);
             
@@ -61,8 +61,8 @@ namespace NGM.Forum.Controllers {
                 if (IsNotAllowedToReplyToPost())
                     return new HttpUnauthorizedResult();
             }
-            
-            var part = _orchardServices.ContentManager.New<PostPart>(ContentPartConstants.Post);
+
+            var part = _orchardServices.ContentManager.New<PostPart>(Constants.Parts.Post);
             
             part.Text = string.Format("<blockquote><div class='quote-header'>Quote: {1}<div class='quote-logo'></div></div><div class='quote-content'>{0}</div></blockquote><br />", contentItem.As<PostPart>().Text, contentItem.As<ICommonPart>().Owner.UserName);
 
@@ -85,7 +85,7 @@ namespace NGM.Forum.Controllers {
                     return new HttpUnauthorizedResult();
             }
 
-            var post = _orchardServices.ContentManager.New<PostPart>(ContentPartConstants.Post);
+            var post = _orchardServices.ContentManager.New<PostPart>(Constants.Parts.Post);
             
             if (contentItem.As<PostPart>() == null) {
                 post.ThreadPart = contentItem.As<ThreadPart>();

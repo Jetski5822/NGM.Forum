@@ -32,7 +32,7 @@ namespace NGM.Forum.Controllers {
             if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Not allowed to create forums")))
                 return new HttpUnauthorizedResult();
 
-            var forum = _orchardServices.ContentManager.New<ForumPart>(ContentPartConstants.Forum);
+            var forum = _orchardServices.ContentManager.New<ForumPart>(Constants.Parts.Forum);
             if (forum == null)
                 return HttpNotFound();
 
@@ -45,7 +45,7 @@ namespace NGM.Forum.Controllers {
             if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Not allowed to create forums")))
                 return new HttpUnauthorizedResult();
 
-            var forum = _orchardServices.ContentManager.New<ForumPart>(ContentPartConstants.Forum);
+            var forum = _orchardServices.ContentManager.New<ForumPart>(Constants.Parts.Forum);
 
             _orchardServices.ContentManager.Create(forum, VersionOptions.Draft);
             dynamic model = _orchardServices.ContentManager.UpdateEditor(forum, this);
