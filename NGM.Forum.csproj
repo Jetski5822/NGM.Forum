@@ -63,8 +63,6 @@
     <Compile Include="AdminMenu.cs" />
     <Compile Include="Controllers\ThreadAdminController.cs" />
     <Compile Include="Extensions\ContainerExtensions.cs" />
-    <Compile Include="Extensions\FeedManagerExtensions.cs" />
-    <Compile Include="Models\ThreadType.cs" />
     <Compile Include="Services\PopularityService.cs" />
     <Compile Include="ViewModels\ThreadMoveAdminViewModel.cs" />
     <Compile Include="Extensions\DynamicZoneExtensions.cs" />
@@ -233,9 +231,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\EditorTemplates\Parts.Type.ThreadPart.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Parts.RoutableTitle.Summary-Thread.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Parts.Forums.Forum.LatestPost.cshtml" />

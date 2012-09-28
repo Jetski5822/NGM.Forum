@@ -24,7 +24,6 @@ namespace NGM.Forum.Controllers {
         private readonly IForumPathConstraint _forumPathConstraint;
         private readonly IThreadService _threadService;
         private readonly ISiteService _siteService;
-        private readonly IFeedManager _feedManager;
         private readonly IPopularityService _popularityService;
 
         public ForumController(IOrchardServices orchardServices, 
@@ -33,14 +32,12 @@ namespace NGM.Forum.Controllers {
             IThreadService threadService,
             ISiteService siteService,
             IShapeFactory shapeFactory,
-            IFeedManager feedManager,
             IPopularityService popularityService) {
             _orchardServices = orchardServices;
             _forumService = forumService;
             _forumPathConstraint = forumPathConstraint;
             _threadService = threadService;
             _siteService = siteService;
-            _feedManager = feedManager;
             _popularityService = popularityService;
 
             T = NullLocalizer.Instance;
@@ -51,7 +48,7 @@ namespace NGM.Forum.Controllers {
         public Localizer T { get; set; }
 
         public ActionResult List() {
-            var forums = _forumService.Get().OrderBy(o => o.Position).Select(fbc => _orchardServices.ContentManager.BuildDisplay(fbc, "Summary"));
+            var forums = _forumService.Get().Select(fbc => _orchardServices.ContentManager.BuildDisplay(fbc, "Summary"));
 
             var list = Shape.List();
             list.AddRange(forums);
@@ -103,7 +100,6 @@ namespace NGM.Forum.Controllers {
 
             dynamic forum = _orchardServices.ContentManager.BuildDisplay(forumPart);
 
-            //_feedManager.Register(forumPart);
             var threadParts = _threadService.Get(forumPart, pager.GetStartIndex(), pager.PageSize);
             var stickyThreads = threadParts.Where(o => o.IsSticky).Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Summary"));
 

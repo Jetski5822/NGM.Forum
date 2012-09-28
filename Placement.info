@@ -24,7 +24,6 @@
 
   <Match ContentType="Thread">
     <Place Parts_Common_Owner_Edit="-"/>
-    <Place Parts_Autoroute_Edit="-"/>
     <Place Parts_Status_Close_Thread_Edit="Content:after.5"/>
     <Place Parts_Status_Sticky_Thread_Edit="Content:after.6"/>
     <Place Parts_Type_Thread_Edit="Content:after.5"/>

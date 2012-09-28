@@ -28,11 +28,6 @@ namespace NGM.Forum.Models {
             set { Record.UsePopularityAlgorithm = value; }
         }
 
-        public int Position {
-            get { return Record.Position; }
-            set { Record.Position = value; }
-        }
-
         public int ReplyCount {
             get { return PostCount >= ThreadCount ? PostCount - ThreadCount : 0; }
         }

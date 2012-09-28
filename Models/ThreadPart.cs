@@ -1,6 +1,5 @@
 ﻿using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
-using Orchard.Core.Title.Models;
 using Orchard.Data.Conventions;
 
 namespace NGM.Forum.Models {
@@ -9,11 +8,6 @@ namespace NGM.Forum.Models {
         public ForumPart ForumPart {
             get { return this.As<ICommonPart>().Container.As<ForumPart>(); }
             set { this.As<ICommonPart>().Container = value; }
-        }
-
-        public string Title {
-            get { return this.As<TitlePart>().Title; }
-            set { this.As<TitlePart>().Title = value; }
         }
 
         public int PostCount {
@@ -29,16 +23,6 @@ namespace NGM.Forum.Models {
         public bool IsClosed {
             get { return Record.IsClosed; }
             set { Record.IsClosed = value; }
-        }
-
-        public ThreadType Type {
-            get { return (ThreadType)Record.Type; }
-            set { Record.Type = (int)value; }
-        }
-
-        public bool IsAnswered {
-            get { return Record.IsAnswered; }
-            set { Record.IsAnswered = value; }            
         }
 
         public int ReplyCount {

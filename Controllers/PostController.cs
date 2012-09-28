@@ -109,38 +109,6 @@ namespace NGM.Forum.Controllers {
             return Redirect(Url.ViewThread(post.ThreadPart));
         }
 
-        public ActionResult MarkPostAsAnswer(int contentId) {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.MarkPostAsAnswer, T("Not allowed to mark post as answer")))
-                return new HttpUnauthorizedResult();
-
-            var contentItem = _orchardServices.ContentManager.Get(contentId, VersionOptions.Latest);
-
-            var post = contentItem.As<PostPart>();
-
-            post.IsAnswer = true;
-            post.ThreadPart.IsAnswered = true;
-
-            _orchardServices.Notifier.Information(T("{0} has been marked as answer.", post.TypeDefinition.DisplayName));
-
-            return Redirect(Url.ViewThread(post.ThreadPart));
-        }
-
-        public ActionResult UnMarkPostAsAnswer(int contentId) {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.MarkPostAsAnswer, T("Not allowed to mark post as answer")))
-                return new HttpUnauthorizedResult();
-
-            var contentItem = _orchardServices.ContentManager.Get(contentId, VersionOptions.Latest);
-
-            var post = contentItem.As<PostPart>();
-
-            post.IsAnswer = false;
-            post.ThreadPart.IsAnswered = false;
-
-            _orchardServices.Notifier.Information(T("{0} has been un-marked as answer.", post.TypeDefinition.DisplayName));
-
-            return Redirect(Url.ViewThread(post.ThreadPart));
-        }
-
         bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties) {
             return TryUpdateModel(model, prefix, includeProperties, excludeProperties);
         }
