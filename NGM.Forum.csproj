@@ -63,7 +63,12 @@
     <Compile Include="AdminMenu.cs" />
     <Compile Include="Controllers\ThreadAdminController.cs" />
     <Compile Include="Extensions\ContainerExtensions.cs" />
+    <Compile Include="Routing\ForumPathConstraint.cs" />
+    <Compile Include="Routing\ForumPathConstraintUpdator.cs" />
+    <Compile Include="Routing\IForumPathConstraint.cs" />
     <Compile Include="Services\PopularityService.cs" />
+    <Compile Include="Settings\PostSettings.cs" />
+    <Compile Include="ViewModels\PostBodyEditorViewModel.cs" />
     <Compile Include="ViewModels\ThreadMoveAdminViewModel.cs" />
     <Compile Include="Extensions\DynamicZoneExtensions.cs" />
     <Compile Include="Controllers\ForumAdminController.cs" />
@@ -84,9 +89,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourceManifest.cs" />
     <Compile Include="Routes.cs" />
-    <Compile Include="Routing\ForumPathConstraint.cs" />
-    <Compile Include="Routing\ForumPathConstraintUpdator.cs" />
-    <Compile Include="Routing\IForumPathConstraint.cs" />
     <Compile Include="Security\ForumAuthorizationEventHandler.cs" />
     <Compile Include="Services\ForumService.cs" />
     <Compile Include="Extensions\UrlHelperExtensions.cs" />
@@ -141,6 +143,7 @@
     <Content Include="Module.txt" />
     <Content Include="Notes\Design.txt" />
     <Content Include="Scripts\quick-edit.js" />
+    <Content Include="Styles\thread.css" />
     <Content Include="Styles\forum.css" />
     <Content Include="Styles\menu.forum-admin.css" />
     <Content Include="Styles\ngm-forum-admin.css" />
@@ -169,28 +172,16 @@
     <Content Include="Views\Parts.Forums.Thread.List.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Parts.Forums.Forum.Manage.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Parts.Threads.Post.List.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\ForumAdmin\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Post\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Parts.Forums.Forum.ThreadCount.cshtml" />
+    <Content Include="Views\Parts.Forums.Forum.ForumThreadCount.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Parts.Forums.Forum.PostCount.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Parts.Threads.Thread.PostCount.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Parts.Posts.Post.Manage.cshtml" />
+    <Content Include="Views\Parts.Forums.Forum.ForumReplyCount.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -211,9 +202,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Parts.Posts.Post.Title.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Content\Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -224,45 +212,13 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Parts.Threads.Thread.Status.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Parts.Forums.Forum.Status.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\EditorTemplates\Parts.Type.ThreadPart.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Parts.Forums.Forum.LatestPost.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\ForumAdmin\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Parts.Threads.Thread.LatestPost.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\EditorTemplates\Parts.Status.Close.ForumPart.cshtml" />
-    <Content Include="Views\EditorTemplates\Parts.Status.Close.ThreadPart.cshtml" />
-    <Content Include="Views\EditorTemplates\Parts.Status.Sticky.ThreadPart.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Parts.Threads.Post.ListAdmin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\ThreadAdmin\Item.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Parts.Posts.Post.Metadata.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\ThreadAdmin\List.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\EditorTemplates\Parts.Setting.Popularity.ForumPart.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Parts.Threads.Move.SummaryAdmin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\ThreadAdmin\Move.cshtml" />
@@ -277,10 +233,64 @@
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\EditorTemplates\Parts.Title.TitlePart.cshtml" />
+    <Content Include="Views\EditorTemplates\Parts.Forums.Forum.Fields.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Parts.Forums.Forum.Image.cshtml" />
+    <Content Include="Views\Parts.Forums.Forum.Description.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Forums.Forum.SummaryAdmin.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Forums.Forum.Manage.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DefinitionTemplates\PostPartSettings.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DefinitionTemplates\PostTypePartSettings.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Threads.Thread.SummaryAdmin.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\EditorTemplates\Parts.Threads.Post.Body.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Post.Body.Editor.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Threads.Post.Body.Summary.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Threads.Post.Body.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Threads.Thread.ThreadReplyCount.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Threads.Post.List.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Threads.Post.ListAdmin.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Threads.Post.Summary.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Thread.Manage.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ForumAdmin\Item.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Content-Forum.DetailAdmin.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Forum.Manage.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Thread.Post.Create.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

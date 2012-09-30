@@ -1,0 +1,10 @@
+﻿@using NGM.Forum.Extensions;
+@using NGM.Forum.Models;
+@using Orchard.ContentManagement;
+@using Orchard.Utility.Extensions;
+@{
+    ContentItem contentItem = Model.ContentItem;
+    ThreadPart thread = (ThreadPart)contentItem.Get(typeof(ThreadPart));
+}
+<a href="@Url.ThreadForAdmin(thread)" title="@T("List Posts")">@T("List Posts")</a>@T(" | ")
+<a href="@Url.ThreadMoveForAdmin(thread)" title="@T("Move")">@T("Move")</a>@T(" | ")

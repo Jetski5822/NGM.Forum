@@ -14,6 +14,7 @@ namespace NGM.Forum.Services {
         IEnumerable<PostPart> Get(ThreadPart threadPart, VersionOptions versionOptions);
         IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count);
         IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count, VersionOptions versionOptions);
+        PostPart GetFirstPost(ThreadPart threadPart, VersionOptions versionOptions);
         PostPart GetLatestPost(ForumPart forumPart, VersionOptions versionOptions);
         PostPart GetLatestPost(ThreadPart threadPart, VersionOptions versionOptions);
     }
@@ -43,6 +44,13 @@ namespace NGM.Forum.Services {
                 .Select(o => GetLatestPost(o, versionOptions))
                 .OrderBy(o => o.As<ICommonPart>().PublishedUtc)
                 .LastOrDefault();
+        }
+
+        public PostPart GetFirstPost(ThreadPart threadPart, VersionOptions versionOptions) {
+            return _contentManager
+                .Query<PostPart, PostPartRecord>(versionOptions)
+                .Join<CommonPartRecord>().Where(cpr => cpr.Container == threadPart.ContentItem.Record)
+                .List().FirstOrDefault(o => o.IsParentThread());
         }
 
         public PostPart GetLatestPost(ThreadPart threadPart, VersionOptions versionOptions) {

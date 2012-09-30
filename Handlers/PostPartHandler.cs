@@ -39,6 +39,10 @@ namespace NGM.Forum.Handlers {
                     .Get(context.ContentItem.As<ThreadPart>())
                     .ToList()
                     .ForEach(post => context.ContentManager.Remove(post.ContentItem)));
+
+            OnIndexing<PostPart>((context, postPart) => context.DocumentIndex
+                                                    .Add("body", postPart.Record.Text).RemoveTags().Analyze()
+                                                    .Add("format", postPart.Record.Format).Store());
         }
 
         private void SetModelProperties(BuildShapeContext context, PostPart postPart) {

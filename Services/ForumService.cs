@@ -13,9 +13,6 @@ namespace NGM.Forum.Services {
         IEnumerable<ForumPart> Get();
         IEnumerable<ForumPart> Get(VersionOptions versionOptions);
         ForumPart Get(string path);
-
-        void CloseForum(ForumPart forumPart);
-        void OpenForum(ForumPart forumPart);
     }
 
     [UsedImplicitly]
@@ -28,14 +25,6 @@ namespace NGM.Forum.Services {
 
         public ForumPart Get(string path) {
             return _contentManager.Query<ForumPart>().List().FirstOrDefault(rr => rr.As<IAliasAspect>().Path == path);
-        }
-
-        public void CloseForum(ForumPart forumPart) {
-            forumPart.IsClosed = true;
-        }
-
-        public void OpenForum(ForumPart forumPart) {
-            forumPart.IsClosed = false;
         }
 
         public IEnumerable<ForumPart> Get() {

@@ -8,6 +8,6 @@
     var commonPart = postPart.As<ICommonPart>();
     var username = commonPart.Owner != null ? commonPart.Owner.UserName : T("Anonymous user").Text;
 }
-<div class="latestpost">
-    <a href="@Url.ViewLatestPost(postPart)">@T("Last Post")</a> @T("by") @username <span class="meta">@Display.DateTimeRelative(dateTimeUtc: commonPart.PublishedUtc.Value)</span>
+<div class="postsummary">
+    <a href="@Url.PostView(postPart)">@T("Last Post")</a> @T("by") @username <span class="meta">@Display.DateTimeRelative(dateTimeUtc: commonPart.PublishedUtc.Value)</span>
 </div>

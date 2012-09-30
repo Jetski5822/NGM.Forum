@@ -15,9 +15,7 @@ namespace NGM.Forum.Services {
         IEnumerable<ThreadPart> Get(ForumPart forumPart, VersionOptions versionOptions);
         IEnumerable<ThreadPart> Get(ForumPart forumPart, int skip, int count);
         IEnumerable<ThreadPart> Get(ForumPart forumPart, int skip, int count, VersionOptions versionOptions);
-
-        void CloseThread(ThreadPart threadPart);
-        void OpenThread(ThreadPart threadPart);
+        int ThreadCount(ForumPart forumPart, VersionOptions versionOptions);
     }
 
     public class ThreadService : IThreadService {
@@ -58,18 +56,15 @@ namespace NGM.Forum.Services {
             return GetForumQuery(forumPart, versionOptions).Slice(skip, count).ToList().Select(ci => ci.As<ThreadPart>());
         }
 
-        public void CloseThread(ThreadPart threadPart) {
-            threadPart.IsClosed = true;
-        }
-
-        public void OpenThread(ThreadPart threadPart) {
-            threadPart.IsClosed = false;
+        public int ThreadCount(ForumPart forumPart, VersionOptions versionOptions) {
+            return GetForumQuery(forumPart, versionOptions).Count();
         }
 
         private IContentQuery<ContentItem, CommonPartRecord> GetForumQuery(ContentPart<ForumPartRecord> forum, VersionOptions versionOptions) {
             return
                 _contentManager.Query(versionOptions, Constants.Parts.Thread).Join<CommonPartRecord>().Where(
-                    cr => cr.Container == forum.Record.ContentItemRecord).OrderByDescending(cr => cr.CreatedUtc);
+                    cr => cr.Container == forum.Record.ContentItemRecord).OrderByDescending(cr => cr.CreatedUtc)
+                    .WithQueryHintsFor(Constants.Parts.Thread);
         }
     }
 }

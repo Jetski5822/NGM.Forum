@@ -1,0 +1,6 @@
+﻿@model NGM.Forum.Settings.PostTypePartSettings
+    <fieldset>
+        <label for="@Html.FieldIdFor(m => m.Flavor)">@T("Flavor")</label>
+        @Html.EditorFor(m => m.Flavor)
+        @Html.ValidationMessageFor(m => m.Flavor)
+    </fieldset>

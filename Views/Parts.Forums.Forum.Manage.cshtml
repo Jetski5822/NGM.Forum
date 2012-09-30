@@ -1,13 +1,10 @@
-﻿@using NGM.Forum.Extensions
-@using NGM.Forum.Models
+﻿@using NGM.Forum.Extensions;
+@using NGM.Forum.Models;
 @{
-    var forumPart = (ForumPart)Model.ContentPart;
+    Style.Require("ForumsAdmin");
 }
-
+@if (AuthorizedFor(NGM.Forum.Permissions.ManageForums)) {
 <div class="item-properties actions">
-  <p>
-    @if (!forumPart.IsClosed) {
-        <a href="@Url.CreateThread(forumPart)" class="create">@T("Create Thread")</a>
-    }
-  </p>
+    <p><a href="@Url.ForumEdit((ForumPart)Model.ContentPart)" class="edit">@T("Forum Properties")</a></p>
 </div>
+}

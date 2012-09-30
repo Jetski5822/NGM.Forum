@@ -1,78 +1,47 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 using JetBrains.Annotations;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
+using NGM.Forum.Settings;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Drivers;
-using Orchard.Security;
+using Orchard.Services;
 
 namespace NGM.Forum.Drivers {
     [UsedImplicitly]
     public class ThreadPartDriver : ContentPartDriver<ThreadPart> {
-        private const string RoutableTemplateName = "Parts.Routable.ThreadPart";
-        private const string StatusCloseTemplateName = "Parts.Status.Close.ThreadPart";
-        private const string StatusStickyTemplateName = "Parts.Status.Sticky.ThreadPart";
-        private const string TypeTemplateName = "Parts.Type.ThreadPart";
-
-        private readonly IAuthenticationService _authenticationService;
-        private readonly IAuthorizationService _authorizationService;
         private readonly IPostService _postService;
+        private readonly IEnumerable<IHtmlFilter> _htmlFilters;
 
         public ThreadPartDriver(
-            IAuthenticationService authenticationService,
-            IAuthorizationService authorizationService,
-            IPostService postService) {
-            _authenticationService = authenticationService;
-            _authorizationService = authorizationService;
+            IPostService postService,
+            IEnumerable<IHtmlFilter> htmlFilters) {
             _postService = postService;
+            _htmlFilters = htmlFilters;
         }
 
         protected override string Prefix {
             get { return "ThreadPart"; }
         }
 
-        protected override DriverResult Display(ThreadPart threadPart, string displayType, dynamic shapeHelper) {
-            var latestPostPart = _postService.GetLatestPost(threadPart, VersionOptions.Published);
+        protected override DriverResult Display(ThreadPart part, string displayType, dynamic shapeHelper) {
+            var firstPost = _postService.GetFirstPost(part, VersionOptions.Published);
+            //var latestPost = _postService.GetLatestPost(part, VersionOptions.Published);
 
-            List<ContentShapeResult> contentShapeResults = new List<ContentShapeResult>(new[] {
-                ContentShape("Parts_Threads_Thread_Status",
-                             () => shapeHelper.Parts_Threads_Thread_Status(ContentPart: threadPart)),
-                ContentShape("Parts_Threads_Thread_LatestPost",
-                             () => shapeHelper.Parts_Threads_Thread_LatestPost(ContentPart: latestPostPart)),
-                ContentShape("Parts_Threads_Thread_PostCount",
-                             () => shapeHelper.Parts_Threads_Thread_PostCount(ContentPart: threadPart, PostCount: threadPart.ReplyCount)),
-                ContentShape("Parts_Threads_Move_SummaryAdmin",
-                            () => shapeHelper.Parts_Threads_Move_SummaryAdmin(ContentPart: threadPart))
-            });
-
-            return Combined(contentShapeResults.ToArray());
-        }
-
-        protected override DriverResult Editor(ThreadPart threadPart, dynamic shapeHelper) {
-            List<ContentShapeResult> contentShapeResults = new List<ContentShapeResult>(new[] {
-                ContentShape("Parts_Type_Thread_Edit",
-                             () => shapeHelper.EditorTemplate(TemplateName: TypeTemplateName, Model: threadPart, Prefix: Prefix))
-                //             ,
-                //ContentShape("Parts_Routable_Thread_Edit",
-                //             () => shapeHelper.EditorTemplate(TemplateName: RoutableTemplateName, Model: threadPart, Prefix: Prefix))
-            });
-
-            if (_authorizationService.TryCheckAccess(Permissions.ManageOpenCloseThread, _authenticationService.GetAuthenticatedUser(), threadPart)) {
-                contentShapeResults.Add(ContentShape("Parts_Status_Close_Thread_Edit",
-                                                     () => shapeHelper.EditorTemplate(TemplateName: StatusCloseTemplateName, Model: threadPart, Prefix: Prefix)));
-            }
-
-            if (_authorizationService.TryCheckAccess(Permissions.ManageStickyThread, _authenticationService.GetAuthenticatedUser(), threadPart)) {
-                contentShapeResults.Add(ContentShape("Parts_Status_Sticky_Thread_Edit",
-                                                     () => shapeHelper.EditorTemplate(TemplateName: StatusStickyTemplateName, Model: threadPart, Prefix: Prefix)));                
-            }
-
-            return Combined(contentShapeResults.ToArray());
-        }
-
-        protected override DriverResult Editor(ThreadPart part, IUpdateModel updater, dynamic shapeHelper) {
-            updater.TryUpdateModel(part, Prefix, null, null);
-            return Editor(part, shapeHelper);
+            return Combined(
+                ContentShape("Parts_Threads_Thread_SummaryAdmin",
+                    () => shapeHelper.Parts_Threads_Thread_SummaryAdmin()),
+                ContentShape("Parts_Threads_Thread_ThreadReplyCount",
+                    () => shapeHelper.Parts_Threads_Thread_ThreadReplyCount(ReplyCount: part.ReplyCount)),
+                ContentShape("Parts_Thread_Manage",
+                    () => shapeHelper.Parts_Thread_Manage(ContentPart: firstPost))
+                //ContentShape("Parts_Threads_Thread_FirstPostSummary",
+                //    () => shapeHelper.Parts_Threads_Post_Summary(ContentPart: firstPost)),
+                //ContentShape("Parts_Threads_Thread_LatestPostSummary",
+                //    () => shapeHelper.Parts_Threads_Post_Summary(ContentPart: latestPost))
+                );
         }
     }
 }

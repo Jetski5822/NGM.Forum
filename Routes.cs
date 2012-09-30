@@ -71,21 +71,7 @@ namespace NGM.Forum {
                                                  },
                              new RouteDescriptor {
                                                      Route = new Route(
-                                                         "Admin/Forums/{forumId}/Threads/{threadId}/Move",
-                                                         new RouteValueDictionary {
-                                                                                      {"area", Constants.LocalArea},
-                                                                                      {"controller", "ThreadAdmin"},
-                                                                                      {"action", "Move"}
-                                                                                  },
-                                                         new RouteValueDictionary (),
-                                                         new RouteValueDictionary {
-                                                                                      {"area", Constants.LocalArea}
-                                                                                  },
-                                                         new MvcRouteHandler())
-                                                 },
-                             new RouteDescriptor {
-                                                     Route = new Route(
-                                                         "Forum",
+                                                         "Forums",
                                                          new RouteValueDictionary {
                                                                                       {"area", Constants.LocalArea},
                                                                                       {"controller", "Forum"},
@@ -97,96 +83,51 @@ namespace NGM.Forum {
                                                                                   },
                                                          new MvcRouteHandler())
                                                  },
-                             new RouteDescriptor {
-                                                     Priority = 82, // Has to be higher than the {forumPath} routes
-                                                     Route = new Route(
-                                                         "Forum/Post/Create",
-                                                         new RouteValueDictionary {
-                                                                                      {"area", Constants.LocalArea},
-                                                                                      {"controller", "Post"},
-                                                                                      {"action", "Create"}
-                                                                                  },
-                                                         new RouteValueDictionary(),
-                                                         new RouteValueDictionary {
-                                                                                      {"area", Constants.LocalArea}
-                                                                                  },
-                                                         new MvcRouteHandler())
-                                                 },
-                             new RouteDescriptor {
-                                                     Priority = 82, // Has to be higher than the {forumPath} routes
-                                                     Route = new Route(
-                                                         "Forum/Post/CreateWithQuote",
-                                                         new RouteValueDictionary {
-                                                                                      {"area", Constants.LocalArea},
-                                                                                      {"controller", "Post"},
-                                                                                      {"action", "CreateWithQuote"}
-                                                                                  },
-                                                         new RouteValueDictionary(),
-                                                         new RouteValueDictionary {
-                                                                                      {"area", Constants.LocalArea}
-                                                                                  },
-                                                         new MvcRouteHandler())
-                                                 },
-                             new RouteDescriptor {
-                                                     Priority = 82, // Has to be higher than the {forumPath} routes
-                                                     Route = new Route(
-                                                         "Forum/Post/MarkPostAsAnswer",
-                                                         new RouteValueDictionary {
-                                                                                      {"area", Constants.LocalArea},
-                                                                                      {"controller", "Post"},
-                                                                                      {"action", "MarkPostAsAnswer"}
-                                                                                  },
-                                                         new RouteValueDictionary(),
-                                                         new RouteValueDictionary {
-                                                                                      {"area", Constants.LocalArea}
-                                                                                  },
-                                                         new MvcRouteHandler())
-                                                 },
-                             new RouteDescriptor {
-                                                     Priority = 82, // Has to be higher than the {forumPath} routes
-                                                     Route = new Route(
-                                                         "Forum/Post/UnMarkPostAsAnswer",
-                                                         new RouteValueDictionary {
-                                                                                      {"area", Constants.LocalArea},
-                                                                                      {"controller", "Post"},
-                                                                                      {"action", "UnMarkPostAsAnswer"}
-                                                                                  },
-                                                         new RouteValueDictionary(),
-                                                         new RouteValueDictionary {
-                                                                                      {"area", Constants.LocalArea}
-                                                                                  },
-                                                         new MvcRouteHandler())
-                                                 },
-                             new RouteDescriptor {
-                                                    Priority = 81, // Any value lower than this won't work (threads won't be visible)
-                                                    Route = new Route(
-                                                         "Forum/{forumPath}",
-                                                         new RouteValueDictionary {
-                                                                                      {"area", Constants.LocalArea},
-                                                                                      {"controller", "Forum"},
-                                                                                      {"action", "Item"}
-                                                                                  },
-                                                         new RouteValueDictionary(),
-                                                         new RouteValueDictionary {
-                                                                                      {"area", Constants.LocalArea}
-                                                                                  },
-                                                         new MvcRouteHandler())
-                                                 },
-                             new RouteDescriptor {
-                                                     Priority = 81, // Any value lower than this won't work (threads won't be visible)
-                                                     Route = new Route(
-                                                         "Forum/{forumPath}/{threadSlug}",
-                                                         new RouteValueDictionary {
-                                                                                      {"area", Constants.LocalArea},
-                                                                                      {"controller", "Thread"},
-                                                                                      {"action", "Item"}
-                                                                                  },
-                                                         new RouteValueDictionary(),
-                                                         new RouteValueDictionary {
-                                                                                      {"area", Constants.LocalArea}
-                                                                                  },
-                                                         new MvcRouteHandler())
-                                                 }
+                             //new RouteDescriptor {
+                             //                        Priority = 82, // Has to be higher than the {forumPath} routes
+                             //                        Route = new Route(
+                             //                            "Forum/Post/Create",
+                             //                            new RouteValueDictionary {
+                             //                                                         {"area", Constants.LocalArea},
+                             //                                                         {"controller", "Post"},
+                             //                                                         {"action", "Create"}
+                             //                                                     },
+                             //                            new RouteValueDictionary(),
+                             //                            new RouteValueDictionary {
+                             //                                                         {"area", Constants.LocalArea}
+                             //                                                     },
+                             //                            new MvcRouteHandler())
+                             //                    },
+                             //new RouteDescriptor {
+                             //                        Priority = 82, // Has to be higher than the {forumPath} routes
+                             //                        Route = new Route(
+                             //                            "Forum/Post/CreateWithQuote",
+                             //                            new RouteValueDictionary {
+                             //                                                         {"area", Constants.LocalArea},
+                             //                                                         {"controller", "Post"},
+                             //                                                         {"action", "CreateWithQuote"}
+                             //                                                     },
+                             //                            new RouteValueDictionary(),
+                             //                            new RouteValueDictionary {
+                             //                                                         {"area", Constants.LocalArea}
+                             //                                                     },
+                             //                            new MvcRouteHandler())
+                             //                    },
+                             //new RouteDescriptor {
+                             //                        Priority = 81, // Any value lower than this won't work (threads won't be visible)
+                             //                        Route = new Route(
+                             //                            "Forum/{forumPath}/{threadSlug}",
+                             //                            new RouteValueDictionary {
+                             //                                                         {"area", Constants.LocalArea},
+                             //                                                         {"controller", "Thread"},
+                             //                                                         {"action", "Item"}
+                             //                                                     },
+                             //                            new RouteValueDictionary(),
+                             //                            new RouteValueDictionary {
+                             //                                                         {"area", Constants.LocalArea}
+                             //                                                     },
+                             //                            new MvcRouteHandler())
+                             //                    }
                          };
         }
     }

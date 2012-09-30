@@ -1,0 +1,10 @@
+﻿@using NGM.Forum
+@using NGM.Forum.Extensions
+@using NGM.Forum.Models
+@{
+    var forumPart = (ForumPart)Model.ContentPart;
+}
+  
+<div class="item-properties actions">
+    <a href="@Url.ThreadCreate(forumPart)">@T("Create Thread")</a>
+</div>

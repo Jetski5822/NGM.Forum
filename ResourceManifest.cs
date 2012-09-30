@@ -6,6 +6,9 @@ namespace NGM.Forum {
             var resourceManifest = builder.Add();
             resourceManifest.DefineStyle("ForumsAdmin").SetUrl("ngm-forum-admin.css");
             resourceManifest.DefineStyle("Forums").SetUrl("forum.css");
+
+            resourceManifest.DefineStyle("ThreadsAdmin").SetUrl("ngm-thread-admin.css");
+            resourceManifest.DefineStyle("Threads").SetUrl("thread.css");
         }
     }
 }

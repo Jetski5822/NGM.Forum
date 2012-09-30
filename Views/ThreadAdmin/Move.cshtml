@@ -1,16 +1,15 @@
 @model NGM.Forum.ViewModels.ThreadMoveAdminViewModel
-@using Orchard.Utility.Extensions;
-@using NGM.Forum.Models;
+@using NGM.Forum.Extensions;
 
 @{ Layout.Title = T("Move Thread").ToString(); }
 
-@using (Html.BeginFormAntiForgeryPost(Url.Action("Move", "ThreadAdmin", new { area = "NGM.Forum", threadId = Model.ThreadId, returnUrl = Request.QueryString["ReturnUrl"] }))) {
+@using (Html.BeginFormAntiForgeryPost(Url.Action("Move", "ThreadAdmin", new { area = Constants.LocalArea, threadId = Model.ThreadId, returnUrl = Request.QueryString["ReturnUrl"] }))) {
 <fieldset>
   <legend>Details</legend>
     <div>
         @Html.LabelFor(m => m.ForumId, T("Destination"))
         @Html.DropDownListFor(m => m.ForumId, new SelectList(Model.AvailableForums, "Id", "Title"))
-        <span class="hint">@T("This is the forum that the thread will be moved to")</span>
+        <span class="hint">@T("This is the forum that the thread will be moved to.")</span>
     </div>
 
 </fieldset>

@@ -1,44 +1,83 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Routing;
 using JetBrains.Annotations;
 using NGM.Forum.Models;
+using NGM.Forum.Services;
+using NGM.Forum.Settings;
+using NGM.Forum.ViewModels;
+using Orchard;
 using Orchard.ContentManagement.Aspects;
 using Orchard.ContentManagement.Drivers;
 using Orchard.ContentManagement;
 using Orchard.Core.Title.Models;
 using Orchard.Security;
+using Orchard.Services;
 
 namespace NGM.Forum.Drivers {
     [UsedImplicitly]
     public class PostPartDriver : ContentPartDriver<PostPart> {
-        private readonly IAuthenticationService _authenticationService;
-        private readonly IAuthorizationService _authorizationService;
+        private readonly IEnumerable<IHtmlFilter> _htmlFilters;
+        private readonly RequestContext _requestContext;
 
-        public PostPartDriver(IAuthenticationService authenticationService,
-            IAuthorizationService authorizationService) {
-            _authenticationService = authenticationService;
-            _authorizationService = authorizationService;
+        private const string TemplateName = "Parts.Threads.Post.Body";
+
+        public PostPartDriver(IOrchardServices services, 
+            IEnumerable<IHtmlFilter> htmlFilters, 
+            RequestContext requestContext) {
+            _htmlFilters = htmlFilters;
+            Services = services;
+            _requestContext = requestContext;
         }
+
+        public IOrchardServices Services { get; set; }
 
         protected override string Prefix {
             get { return "PostPart"; }
         }
 
-        protected override DriverResult Display(PostPart postPart, string displayType, dynamic shapeHelper) {
-            var contentShapeResults = new List<ContentShapeResult>(new[] {
-                ContentShape("Parts_Posts_Post_Manage",
-                    () => shapeHelper.Parts_Posts_Post_Manage(ContentPart: postPart, IsClosed: postPart.ThreadPart.IsClosed)),
-                ContentShape("Parts_Posts_Post_Metadata",
-                    () => shapeHelper.Parts_Posts_Post_Metadata(ContentPart: postPart, CommonPart: postPart.As<ICommonPart>()))
-            });
+        protected override DriverResult Display(PostPart part, string displayType, dynamic shapeHelper) {
+            return Combined(
+                ContentShape("Parts_Threads_Post_Body",
+                             () => {
+                                 var bodyText = _htmlFilters.Aggregate(part.Text, (text, filter) => filter.ProcessContent(text, GetFlavor(part)));
+                                 return shapeHelper.Parts_Common_Body(Html: new HtmlString(bodyText));
+                             }),
+                ContentShape("Parts_Threads_Post_Body_Summary",
+                             () => {
+                                 var bodyText = _htmlFilters.Aggregate(part.Text, (text, filter) => filter.ProcessContent(text, GetFlavor(part)));
+                                 return shapeHelper.Parts_Common_Body_Summary(Html: new HtmlString(bodyText));
+                             })
+                );
+        }
 
+        protected override DriverResult Editor(PostPart part, dynamic shapeHelper) {
+            var model = BuildEditorViewModel(part, _requestContext);
+            return ContentShape("Parts_Threads_Post_Body_Edit",
+                                () => shapeHelper.EditorTemplate(TemplateName: TemplateName, Model: model, Prefix: Prefix));
+        }
 
-            if (postPart.IsParentThread())
-                return Combined(contentShapeResults.ToArray());
+        protected override DriverResult Editor(PostPart part, IUpdateModel updater, dynamic shapeHelper) {
+            var model = BuildEditorViewModel(part, _requestContext);
+            updater.TryUpdateModel(model, Prefix, null, null);
 
-            contentShapeResults.Add(ContentShape("Parts_Posts_Post_Title",
-                             () => shapeHelper.Parts_Posts_Post_Title(ContentPart: postPart, CommonPart: postPart.As<ICommonPart>(), RoutePart: postPart.ThreadPart.As<TitlePart>())));
+            return ContentShape("Parts_Threads_Post_Body_Edit",
+                                () => shapeHelper.EditorTemplate(TemplateName: TemplateName, Model: model, Prefix: Prefix));
+        }
 
-            return Combined(contentShapeResults.ToArray());
+        private static PostBodyEditorViewModel BuildEditorViewModel(PostPart part, RequestContext requestContext) {
+            return new PostBodyEditorViewModel {
+                PostPart = part,
+                EditorFlavor = GetFlavor(part),
+            };
+        }
+
+        private static string GetFlavor(PostPart part) {
+            var typePartSettings = part.Settings.GetModel<PostTypePartSettings>();
+            return (typePartSettings != null && !string.IsNullOrWhiteSpace(typePartSettings.Flavor))
+                       ? typePartSettings.Flavor
+                       : part.PartDefinition.Settings.GetModel<PostPartSettings>().FlavorDefault;
         }
     }
 }

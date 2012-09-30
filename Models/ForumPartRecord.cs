@@ -1,11 +1,12 @@
 ﻿using Orchard.ContentManagement.Records;
+using Orchard.Data.Conventions;
 
 namespace NGM.Forum.Models {
     public class ForumPartRecord : ContentPartRecord {
-        public virtual bool IsClosed { get; set; }
+        [StringLengthMax]
+        public virtual string Description { get; set; }
+
         public virtual int ThreadCount { get; set; }
         public virtual int PostCount { get; set; }
-
-        public virtual bool UsePopularityAlgorithm { get; set; }
     }
 }

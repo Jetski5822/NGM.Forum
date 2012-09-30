@@ -12,6 +12,7 @@ using Orchard.ContentManagement.Aspects;
 namespace NGM.Forum.Services {
     public interface IPopularityService : IDependency {
         double Calculate(ThreadPart thread);
+        string Name { get; }
     }
 
     public class PopularityService : IPopularityService {
@@ -54,5 +55,7 @@ namespace NGM.Forum.Services {
 
             return top / bottom;
         }
+
+        public string Name { get { return "Stack Overflow Algorithm"; } }
     }
 }

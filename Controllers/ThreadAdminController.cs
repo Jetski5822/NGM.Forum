@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using NGM.Forum.Models;
-using NGM.Forum.Routing;
+//using NGM.Forum.Routing;
 using NGM.Forum.Services;
 using NGM.Forum.ViewModels;
 using Orchard;
@@ -24,21 +24,22 @@ namespace NGM.Forum.Controllers {
         private readonly IThreadService _threadService;
         private readonly ISiteService _siteService;
         private readonly IPostService _postService;
-        private readonly IForumPathConstraint _forumPathConstraint;
+        //private readonly IForumPathConstraint _forumPathConstraint;
 
         public ThreadAdminController(IOrchardServices orchardServices,
             IForumService forumService,
             IThreadService threadService,
             ISiteService siteService,
             IShapeFactory shapeFactory,
-            IPostService postService,
-            IForumPathConstraint forumPathConstraint) {
+            IPostService postService
+            //IForumPathConstraint forumPathConstraint
+            ) {
             _orchardServices = orchardServices;
             _forumService = forumService;
             _threadService = threadService;
             _siteService = siteService;
             _postService = postService;
-            _forumPathConstraint = forumPathConstraint;
+            //_forumPathConstraint = forumPathConstraint;
 
             T = NullLocalizer.Instance;
             Shape = shapeFactory;
@@ -121,7 +122,7 @@ namespace NGM.Forum.Controllers {
             
             _orchardServices.ContentManager.Publish(threadPart.ContentItem);
 
-            _forumPathConstraint.AddPath(threadPart.As<IAliasAspect>().Path);
+            //_forumPathConstraint.AddPath(threadPart.As<IAliasAspect>().Path);
 
             _orchardServices.Notifier.Information(T("{0} has been moved.", threadPart.TypeDefinition.DisplayName));
 

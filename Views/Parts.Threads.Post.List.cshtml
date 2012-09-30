@@ -1,8 +1,12 @@
 ﻿@{
-    Style.Require("Forums");
+    Style.Require("Threads");
     IEnumerable<object> posts = Model.ContentItems;
     Model.ContentItems.Classes.Add("content-items");
     Model.ContentItems.Classes.Add("thread-posts");
 }
 @Display(Model.ContentItems)
-@Display(Model.Pager)
+@if (posts.Count() == 1) {
+    <p class="nocontentitems">@T("There are no replies to this post.")</p>
+} else { 
+  @Display(Model.Pager)
+}

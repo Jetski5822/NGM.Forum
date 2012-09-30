@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Web.Mvc;
 using NGM.Forum.Models;
@@ -5,8 +6,11 @@ using NGM.Forum.Extensions;
 using NGM.Forum.Services;
 using Orchard;
 using Orchard.ContentManagement;
+using Orchard.DisplayManagement;
 using Orchard.Localization;
+using Orchard.Settings;
 using Orchard.UI.Admin;
+using Orchard.UI.Navigation;
 
 namespace NGM.Forum.Controllers {
 
@@ -15,17 +19,26 @@ namespace NGM.Forum.Controllers {
         private readonly IOrchardServices _orchardServices;
         private readonly IForumService _forumService;
         private readonly IThreadService _threadService;
+        private readonly ISiteService _siteService;
+        private readonly IContentManager _contentManager;
 
         public ForumAdminController(IOrchardServices orchardServices, 
             IForumService forumService, 
-            IThreadService threadService) {
+            IThreadService threadService,
+            ISiteService siteService,
+            IContentManager contentManager,
+            IShapeFactory shapeFactory) {
             _orchardServices = orchardServices;
             _forumService = forumService;
             _threadService = threadService;
+            _siteService = siteService;
+            _contentManager = contentManager;
 
             T = NullLocalizer.Instance;
+            Shape = shapeFactory;
         }
 
+        dynamic Shape { get; set; }
         public Localizer T { get; set; }
 
         public ActionResult Create() {
@@ -57,7 +70,7 @@ namespace NGM.Forum.Controllers {
 
             _orchardServices.ContentManager.Publish(forum.ContentItem);
 
-            return Redirect(Url.AdminThreadsForForum(forum));
+            return Redirect(Url.ForumForAdmin(forum));
         }
 
         public ActionResult List() {
@@ -73,6 +86,30 @@ namespace NGM.Forum.Controllers {
                 .ContentItems(list);
             // Casting to avoid invalid (under medium trust) reflection over the protected View method and force a static invocation.
             return View((object)viewModel);
+        }
+
+        public ActionResult Item(int forumId, PagerParameters pagerParameters) {
+            Pager pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
+
+            ForumPart forumPart = _forumService.Get(forumId, VersionOptions.Latest).As<ForumPart>();
+
+            if (forumPart == null)
+                return HttpNotFound();
+
+            var threads = _threadService.Get(forumPart, pager.GetStartIndex(), pager.PageSize, VersionOptions.Latest).ToArray();
+            var threadsShapes = threads.Select(bp => _contentManager.BuildDisplay(bp, "SummaryAdmin")).ToArray();
+
+            dynamic forum = _orchardServices.ContentManager.BuildDisplay(forumPart, "DetailAdmin");
+
+            var list = Shape.List();
+            list.AddRange(threadsShapes);
+            forum.Content.Add(Shape.Parts_Forums_Thread_ListAdmin(ContentItems: list), "5");
+
+            var totalItemCount = _threadService.ThreadCount(forumPart, VersionOptions.Latest);
+            forum.Content.Add(Shape.Pager(pager).TotalItemCount(totalItemCount), "Content:after");
+
+            // Casting to avoid invalid (under medium trust) reflection over the protected View method and force a static invocation.
+            return View((object)forum);
         }
 
         bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties) {

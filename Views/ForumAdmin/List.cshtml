@@ -5,7 +5,7 @@
 @{ Layout.Title = T("Manage Forums").ToString(); }
 
 @if (Model.ContentItems.Items.Count > 0) { 
-<div class="actions"><a class="add button primaryAction" href="@Url.AdminForumCreate()">@T("New Forum")</a></div>
+<div class="actions"><a class="add button primaryAction" href="@Url.ForumCreateForAdmin()">@T("New Forum")</a></div>
     using(Html.BeginFormAntiForgeryPost(Url.Action("List", "Admin", new { area = "Contents", id = "" }))) {
         <fieldset class="bulk-actions">
             <label for="publishActions">@T("Actions:")</label>
@@ -21,5 +21,5 @@
         </fieldset>
     }
 } else {
-<div class="info message">@T("There are no forums for you to see. Want to <a href=\"{0}\">add one</a>?", Url.AdminForumCreate())</div>
+<div class="info message">@T("There are no forums for you to see. Want to <a href=\"{0}\">add one</a>?", Url.ForumCreateForAdmin())</div>
 }

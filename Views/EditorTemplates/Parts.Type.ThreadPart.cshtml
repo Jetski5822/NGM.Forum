@@ -1,9 +1,0 @@
-﻿@model NGM.Forum.Models.ThreadPart
-@using System.Web.Mvc
-@using System.Web.Mvc.Html
-@using Orchard.Mvc.Html
-
-<fieldset>
-        <label for="@Html.FieldIdFor(m => m.Type)">@T("Type")</label>
-        @Html.DropDownList("Type", Enum.GetNames(typeof(NGM.Forum.Models.ThreadType)).Select(o => new SelectListItem { Text = o, Value = o }))
-</fieldset>

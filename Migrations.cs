@@ -8,23 +8,20 @@ namespace NGM.Forum {
             SchemaBuilder.CreateTable("ForumPartRecord",
                 table => table
                     .ContentPartRecord()
-                    .Column<bool>("IsClosed")
+                    .Column<string>("Description", column => column.Unlimited())
                     .Column<int>("ThreadCount")
                     .Column<int>("PostCount")
-                    .Column<bool>("UsePopularityAlgorithm")
                 );
 
             SchemaBuilder.CreateTable("ThreadPartRecord",
                 table => table
                     .ContentPartRecord()
-                    .Column<bool>("IsSticky")
-                    .Column<bool>("IsClosed")
                     .Column<int>("PostCount")
                 );
 
             SchemaBuilder.CreateTable("PostPartRecord",
                 table => table
-                    .ContentPartRecord()
+                    .ContentPartVersionRecord()
                     .Column<int>("ParentPostId")
                     .Column<string>("Text", column => column.Unlimited())
                     .Column<string>("Format")
@@ -34,12 +31,11 @@ namespace NGM.Forum {
                 cfg => cfg
                     .WithPart("ForumPart")
                     .WithPart("CommonPart")
-                    .WithPart("BodyPart")
                     .WithPart("TitlePart")
                     .WithPart("AutoroutePart", builder => builder
                         .WithSetting("AutorouteSettings.AllowCustomPattern", "true")
                         .WithSetting("AutorouteSettings.AutomaticAdjustmentOnEdit", "false")
-                        .WithSetting("AutorouteSettings.PatternDefinitions", "[{Name:'Title', Pattern: 'Forum/{Content.Slug}', Description: 'my-forum'}]")
+                        .WithSetting("AutorouteSettings.PatternDefinitions", "[{Name:'Title', Pattern: '{Content.Slug}', Description: 'my-forum'}]")
                         .WithSetting("AutorouteSettings.DefaultPatternIndex", "0"))
                     .WithPart("MenuPart")
                 );
@@ -60,7 +56,6 @@ namespace NGM.Forum {
                 cfg => cfg
                     .WithPart("PostPart")
                     .WithPart("CommonPart")
-                    .WithPart("TitlePart")
                 );
 
             return 1;

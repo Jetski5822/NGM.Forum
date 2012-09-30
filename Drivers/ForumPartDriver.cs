@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
 using Orchard.ContentManagement;
@@ -8,57 +9,44 @@ using Orchard.Security;
 namespace NGM.Forum.Drivers {
     [UsedImplicitly]
     public class ForumPartDriver : ContentPartDriver<ForumPart> {
-        private const string StatusCloseTemplateName = "Parts.Status.Close.ForumPart";
-        private const string SettingPopularityTemplateName = "Parts.Setting.Popularity.ForumPart";
-
-        private readonly IAuthenticationService _authenticationService;
-        private readonly IAuthorizationService _authorizationService;
-        private readonly IPostService _postService;
-
-        public ForumPartDriver(
-            IAuthenticationService authenticationService,
-            IAuthorizationService authorizationService,
-            IPostService postService) {
-            _authenticationService = authenticationService;
-            _authorizationService = authorizationService;
-            _postService = postService;
-        }
-
         protected override string Prefix {
             get { return "ForumPart"; }
         }
 
-        protected override DriverResult Display(ForumPart forumPart, string displayType, dynamic shapeHelper) {
-            var latestPostPart = _postService.GetLatestPost(forumPart, VersionOptions.Published);
-            
+        protected override DriverResult Display(ForumPart part, string displayType, dynamic shapeHelper) {
             return Combined(
-                ContentShape("Parts_Forums_Forum_Status",
-                             () => shapeHelper.Parts_Forums_Forum_Status(ContentPart: forumPart)),
                 ContentShape("Parts_Forums_Forum_Manage",
-                             () => shapeHelper.Parts_Forums_Forum_Manage(ContentPart: forumPart)),
-                ContentShape("Parts_Forums_Forum_LatestPost",
-                             () => shapeHelper.Parts_Forums_Forum_LatestPost(ContentPart: latestPostPart)),
-                ContentShape("Parts_Forums_Forum_ThreadCount",
-                             () => shapeHelper.Parts_Forums_Forum_ThreadCount(ContentPart: forumPart, ThreadCount: forumPart.ThreadCount)),
-                ContentShape("Parts_Forums_Forum_PostCount",
-                             () => shapeHelper.Parts_Forums_Forum_PostCount(ContentPart: forumPart, PostCount: forumPart.ReplyCount))
+                    () => shapeHelper.Parts_Forums_Forum_Manage()),
+                ContentShape("Parts_Forums_Forum_Description",
+                    () => shapeHelper.Parts_Forums_Forum_Description(Description: part.Description)),
+                ContentShape("Parts_Forums_Forum_SummaryAdmin",
+                    () => shapeHelper.Parts_Forums_Forum_SummaryAdmin()),
+                ContentShape("Parts_Forums_Forum_ForumReplyCount",
+                    () => shapeHelper.Parts_Forums_Forum_ForumReplyCount(ReplyCount: part.ReplyCount)),
+                ContentShape("Parts_Forums_Forum_ForumThreadCount",
+                    () => shapeHelper.Parts_Forums_Forum_ForumThreadCount(ThreadCount: part.ThreadCount)),
+                ContentShape("Parts_Forum_Manage",
+                    () => shapeHelper.Parts_Forum_Manage())
                 );
         }
 
-        protected override DriverResult Editor(ForumPart part, dynamic shapeHelper) {
-            if (!_authorizationService.TryCheckAccess(Permissions.ManageForums, _authenticationService.GetAuthenticatedUser(), part))
-                return null;
+        protected override DriverResult Editor(ForumPart forumPart, dynamic shapeHelper) {
+            var results = new List<DriverResult> {
+                ContentShape("Parts_Forums_Forum_Fields",
+                             () => shapeHelper.EditorTemplate(TemplateName: "Parts.Forums.Forum.Fields", Model: forumPart, Prefix: Prefix))
+            };
 
-            return
-                Combined(ContentShape("Parts_Status_Close_Forum_Edit",
-                                 () => shapeHelper.EditorTemplate(TemplateName: StatusCloseTemplateName, Model: part, Prefix: Prefix)),
-                         ContentShape("Parts_Setting_Popularity_Forum_Edit",
-                                 () => shapeHelper.EditorTemplate(TemplateName: SettingPopularityTemplateName, Model: part, Prefix: Prefix)));
+
+            if (forumPart.Id > 0)
+                results.Add(ContentShape("Forum_DeleteButton",
+                    deleteButton => deleteButton));
+
+            return Combined(results.ToArray());
         }
 
-        protected override DriverResult Editor(ForumPart part, IUpdateModel updater, dynamic shapeHelper) {
-            updater.TryUpdateModel(part, Prefix, null, null);
-            return Editor(part, shapeHelper);
+        protected override DriverResult Editor(ForumPart forumPart, IUpdateModel updater, dynamic shapeHelper) {
+            updater.TryUpdateModel(forumPart, Prefix, null, null);
+            return Editor(forumPart, shapeHelper);
         }
     }
 }

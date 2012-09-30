@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using NGM.Forum.Extensions;
 using NGM.Forum.Models;
 using Orchard;
@@ -25,29 +26,29 @@ namespace NGM.Forum.Controllers {
         public ILogger Logger { get; set; }
         public Localizer T { get; set; }
 
-        public ActionResult Create(int contentId) {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.CreatePost, T("Not allowed to create post")))
-                return new HttpUnauthorizedResult();
+        //public ActionResult Create(int contentId) {
+        //    if (!_orchardServices.Authorizer.Authorize(Permissions.CreatePost, T("Not allowed to create post")))
+        //        return new HttpUnauthorizedResult();
 
-            var contentItem = _orchardServices.ContentManager.Get(contentId, VersionOptions.Latest);
-            if (contentItem.As<PostPart>() == null)
-            {
-                if (IsNotAllowedToCreatePost())
-                    return new HttpUnauthorizedResult();
+        //    var contentItem = _orchardServices.ContentManager.Get(contentId, VersionOptions.Latest);
+        //    if (contentItem.As<PostPart>() == null)
+        //    {
+        //        if (IsNotAllowedToCreatePost())
+        //            return new HttpUnauthorizedResult();
 
-                if (contentItem.As<ThreadPart>() == null)
-                    return HttpNotFound();
+        //        if (contentItem.As<ThreadPart>() == null)
+        //            return HttpNotFound();
 
-                if (IsNotAllowedToReplyToPost())
-                    return new HttpUnauthorizedResult();
-            }
+        //        if (IsNotAllowedToReplyToPost())
+        //            return new HttpUnauthorizedResult();
+        //    }
 
-            var part = _orchardServices.ContentManager.New<PostPart>(Constants.Parts.Post);
+        //    var part = _orchardServices.ContentManager.New<PostPart>(Constants.Parts.Post);
 
-            dynamic model = _orchardServices.ContentManager.BuildEditor(part);
+        //    dynamic model = _orchardServices.ContentManager.BuildEditor(part);
             
-            return View((object)model);
-        }
+        //    return View((object)model);
+        //}
 
         public ActionResult CreateWithQuote(int contentId) {
             if (!_orchardServices.Authorizer.Authorize(Permissions.CreatePost, T("Not allowed to create post")))
@@ -106,7 +107,8 @@ namespace NGM.Forum.Controllers {
             _orchardServices.ContentManager.Publish(post.ContentItem);
 
             _orchardServices.Notifier.Information(T("Your {0} has been created.", post.TypeDefinition.DisplayName));
-            return Redirect(Url.ViewThread(post.ThreadPart));
+
+            return Redirect(Url.ThreadView(post.ThreadPart));
         }
 
         bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties) {
@@ -117,9 +119,9 @@ namespace NGM.Forum.Controllers {
             ModelState.AddModelError(key, errorMessage.ToString());
         }
 
-        private bool IsNotAllowedToCreatePost() {
-            return !_orchardServices.Authorizer.Authorize(Permissions.CreatePost, T("Not allowed to create post"));
-        }
+        //private bool IsNotAllowedToCreatePost() {
+        //    return !_orchardServices.Authorizer.Authorize(Permissions.CreatePost, T("Not allowed to create post"));
+        //}
 
         private bool IsNotAllowedToReplyToPost() {
             return !_orchardServices.Authorizer.Authorize(Permissions.ReplyPost, T("Not allowed to reply to a post"));

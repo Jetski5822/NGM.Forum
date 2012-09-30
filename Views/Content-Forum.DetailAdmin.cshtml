@@ -1,0 +1,9 @@
+﻿@using NGM.Forum.Extensions;
+@using NGM.Forum.Models;
+
+@{ Layout.Title = (string)Model.Title; }
+
+@Display(Model.Header)
+@Display(Model.Actions)
+<div class="manage"><a href="@Url.ThreadCreate((ForumPart)Model.ContentItem.Get(typeof(ForumPart)))" class="add button primaryAction">@T("New Thread")</a></div>
+@Display(Model.Content)
