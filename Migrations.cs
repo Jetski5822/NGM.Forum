@@ -43,7 +43,8 @@ namespace NGM.Forum {
             ContentDefinitionManager.AlterTypeDefinition("Thread",
                 cfg => cfg
                     .WithPart("ThreadPart")
-                    .WithPart("CommonPart")
+                    .WithPart("CommonPart", builder => builder
+                        .WithSetting("OwnerEditorSettings.ShowOwnerEditor", "false"))
                     .WithPart("TitlePart")
                     .WithPart("AutoroutePart", builder => builder
                         .WithSetting("AutorouteSettings.AllowCustomPattern", "false")
@@ -55,7 +56,8 @@ namespace NGM.Forum {
             ContentDefinitionManager.AlterTypeDefinition("Post",
                 cfg => cfg
                     .WithPart("PostPart")
-                    .WithPart("CommonPart")
+                    .WithPart("CommonPart", builder => builder
+                        .WithSetting("OwnerEditorSettings.ShowOwnerEditor", "false"))
                 );
 
             return 1;

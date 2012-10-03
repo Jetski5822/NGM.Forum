@@ -35,8 +35,6 @@
     </Match>
   </Match>
   <Match ContentType="Thread">
-    <Place Parts_Common_Owner_Edit="-"/>
-    
     <Match DisplayType="Detail">
       <Place Parts_Common_Metadata="-"
              Parts_Thread_Manage="Content:after"/>
@@ -49,6 +47,5 @@
     </Match>
   </Match>
   <Match ContentType="Post">
-    <Place Parts_Common_Owner_Edit="-"/>
   </Match>
 </Placement>
