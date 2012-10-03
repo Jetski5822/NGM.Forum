@@ -6,11 +6,13 @@ using NGM.Forum.Extensions;
 using NGM.Forum.Services;
 using Orchard;
 using Orchard.ContentManagement;
+using Orchard.Core.Contents.Controllers;
 using Orchard.DisplayManagement;
 using Orchard.Localization;
 using Orchard.Settings;
 using Orchard.UI.Admin;
 using Orchard.UI.Navigation;
+using Orchard.UI.Notify;
 
 namespace NGM.Forum.Controllers {
 
@@ -71,6 +73,77 @@ namespace NGM.Forum.Controllers {
             _orchardServices.ContentManager.Publish(forum.ContentItem);
 
             return Redirect(Url.ForumForAdmin(forum));
+        }
+
+        public ActionResult Edit(int forumId) {
+            var blog = _forumService.Get(forumId, VersionOptions.Latest);
+
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, blog, T("Not allowed to edit forum")))
+                return new HttpUnauthorizedResult();
+
+            if (blog == null)
+                return HttpNotFound();
+
+            dynamic model = _orchardServices.ContentManager.BuildEditor(blog);
+            // Casting to avoid invalid (under medium trust) reflection over the protected View method and force a static invocation.
+            return View((object)model);
+        }
+
+        [HttpPost, ActionName("Edit")]
+        [FormValueRequired("submit.Delete")]
+        public ActionResult EditDeletePOST(int forumId) {
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Couldn't delete forum")))
+                return new HttpUnauthorizedResult();
+
+            var forum = _forumService.Get(forumId, VersionOptions.DraftRequired);
+            if (forum == null)
+                return HttpNotFound();
+            _forumService.Delete(forum);
+
+            _orchardServices.Notifier.Information(T("Forum deleted"));
+
+            return Redirect(Url.ForumsForAdmin());
+        }
+
+
+        [HttpPost, ActionName("Edit")]
+        [FormValueRequired("submit.Save")]
+        public ActionResult EditPOST(int forumId) {
+            var forum = _forumService.Get(forumId, VersionOptions.DraftRequired);
+
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, forum, T("Couldn't edit forum")))
+                return new HttpUnauthorizedResult();
+
+            if (forum == null)
+                return HttpNotFound();
+
+            dynamic model = _orchardServices.ContentManager.UpdateEditor(forum, this);
+            if (!ModelState.IsValid) {
+                _orchardServices.TransactionManager.Cancel();
+                // Casting to avoid invalid (under medium trust) reflection over the protected View method and force a static invocation.
+                return View((object)model);
+            }
+
+            _contentManager.Publish(forum);
+            _orchardServices.Notifier.Information(T("Forum information updated"));
+
+            return Redirect(Url.ForumsForAdmin());
+        }
+
+        [HttpPost]
+        public ActionResult Remove(int forumId) {
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Couldn't delete forum")))
+                return new HttpUnauthorizedResult();
+
+            var forum = _forumService.Get(forumId, VersionOptions.Latest);
+
+            if (forum == null)
+                return HttpNotFound();
+
+            _forumService.Delete(forum);
+
+            _orchardServices.Notifier.Information(T("Forum was successfully deleted"));
+            return Redirect(Url.ForumsForAdmin());
         }
 
         public ActionResult List() {

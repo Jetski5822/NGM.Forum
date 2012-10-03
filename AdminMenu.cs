@@ -23,15 +23,21 @@ namespace NGM.Forum {
 
         private void BuildMenu(NavigationItemBuilder menu) {
             var forums = _forumService.Get();
+            var forumCount = forums.Count();
+            var singleForum = forumCount == 1 ? forums.ElementAt(0) : null;
 
-            if (forums.Any()) {
+            if (forumCount > 0 && singleForum == null) {
                 menu.Add(T("Manage Forums"), "3",
-                         item => item.Action("List", "ForumAdmin", new { area = Constants.LocalArea }).Permission(Permissions.ManageForums));
+                         item => item.Action("List", "ForumAdmin", new { area = Constants.LocalArea }).Permission(Permissions.MetaListForums));
             }
-
-            menu.Add(T("New Forum"), "1.0",
+            else if (singleForum != null)
+                menu.Add(T("Manage Forum"), "1.0",
+                        item => item.Action("Item", "ForumAdmin", new { area = Constants.LocalArea, forumId = singleForum.Id }).Permission(Permissions.MetaListOwnForums));
+            
+            menu.Add(T("New Forum"), "1.1",
                      item =>
                      item.Action("Create", "ForumAdmin", new { area = Constants.LocalArea }).Permission(Permissions.ManageForums));
+
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Linq;
 using JetBrains.Annotations;
 using NGM.Forum.Models;
+using NGM.Forum.Routing;
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
@@ -13,14 +14,17 @@ namespace NGM.Forum.Services {
         IEnumerable<ForumPart> Get();
         IEnumerable<ForumPart> Get(VersionOptions versionOptions);
         ForumPart Get(string path);
+        void Delete(ContentItem forum);
     }
 
     [UsedImplicitly]
     public class ForumService : IForumService {
         private readonly IContentManager _contentManager;
+        private readonly IForumPathConstraint _forumPathConstraint;
 
-        public ForumService(IContentManager contentManager) {
+        public ForumService(IContentManager contentManager, IForumPathConstraint forumPathConstraint) {
             _contentManager = contentManager;
+            _forumPathConstraint = forumPathConstraint;
         }
 
         public ForumPart Get(string path) {
@@ -40,6 +44,11 @@ namespace NGM.Forum.Services {
 
         public ContentItem Get(int id, VersionOptions versionOptions) {
             return _contentManager.Get(id, versionOptions);
+        }
+
+        public void Delete(ContentItem forum) {
+            _contentManager.Remove(forum);
+            _forumPathConstraint.RemovePath(forum.As<IAliasAspect>().Path);
         }
     }
 }

@@ -4,7 +4,9 @@ using Orchard.Security.Permissions;
 
 namespace NGM.Forum {
     public class Permissions : IPermissionProvider {
-        public static readonly Permission ManageForums = new Permission { Description = "Manage forums", Name = "ManageForums" };
+        public static readonly Permission ManageForums = new Permission { Description = "Manage forums for others", Name = "ManageForums" };
+        public static readonly Permission ManageOwnForums = new Permission { Description = "Manage own forums", Name = "ManageOwnForums", ImpliedBy = new[] { ManageForums } };
+
         public static readonly Permission ViewForum = new Permission { Description = "View forum", Name = "ViewForum" };
 
         public static readonly Permission CreatePost = new Permission { Description = "Create a post", Name = "CreatePost" };
@@ -20,14 +22,12 @@ namespace NGM.Forum {
         public static readonly Permission MoveThread = new Permission { Description = "Move thread to another forum", Name = "MoveThread" };
 
         //public static readonly Permission MoveAnyPost = new Permission { Description = "Move any post", Name = "MoveAnyPost" };
-
-        public static readonly Permission ManageOpenCloseThread = new Permission { Description = "Can open/close a thread", Name = "ManageOpenCloseThread" };
-        public static readonly Permission ManageStickyThread = new Permission { Description = "Can create a thread that is sticky", Name = "ManageStickyThread" };
-
-        public static readonly Permission MarkPostInOwnThreadAsAnswer = new Permission { Description = "Can mark your a post in your own thread as an answer", Name = "MarkPostInOwnThreadAsAnswer" };
-        public static readonly Permission MarkPostAsAnswer = new Permission { Description = "Can mark any post as an answer", Name = "MarkPostAsAnswer" };
       
         public virtual Feature Feature { get; set; }
+
+        public static readonly Permission MetaListForums = new Permission {};// ImpliedBy = new[] { EditBlogPost, PublishBlogPost, DeleteBlogPost } };
+
+        public static readonly Permission MetaListOwnForums = new Permission {};// ImpliedBy = new[] { EditOwnBlogPost, PublishOwnBlogPost, DeleteOwnBlogPost } };
 
         public IEnumerable<Permission> GetPermissions() {
             return new[] {
@@ -46,12 +46,6 @@ namespace NGM.Forum {
                 
                 MoveThread,
                 //MoveAnyPost,
-                
-                ManageOpenCloseThread,
-                ManageStickyThread,
-        
-                MarkPostInOwnThreadAsAnswer,
-                MarkPostAsAnswer
             };
         }
 
@@ -63,28 +57,27 @@ namespace NGM.Forum {
                     Permissions = new[] {ManageForums}
                 },
                 new PermissionStereotype {
+                    Name = "Editor",
+                },
+                new PermissionStereotype {
+                    Name = "Moderator",
+                },
+                new PermissionStereotype {
+                    Name = "Author",
+                    Permissions = new[] {ManageOwnForums}
+                },
+                new PermissionStereotype {
+                    Name = "Contributor",
+                },
+
+                /*Need to handle*/
+                new PermissionStereotype {
                     Name = "Anonymous",
                     Permissions = new[] {ViewForum, ViewPost},
                 },
                 new PermissionStereotype {
                     Name = "Authenticated",
                     Permissions = new[] {ViewForum, ViewPost},
-                },
-                new PermissionStereotype {
-                    Name = "Editor",
-                    Permissions = new[] {ViewForum, ViewPost},
-                },
-                new PermissionStereotype {
-                    Name = "Moderator",
-                    Permissions = new[] {ViewForum, ViewPost},
-                },
-                new PermissionStereotype {
-                    Name = "Author",
-                    Permissions = new[] {ViewForum, ViewPost},
-                },
-                new PermissionStereotype {
-                    Name = "Contributor",
-                    Permissions = new[] {ViewForum, ViewPost, CreatePost, ReplyPost},
                 },
             };
         }
