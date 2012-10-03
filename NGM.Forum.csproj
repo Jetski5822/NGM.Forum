@@ -68,6 +68,7 @@
     <Compile Include="Routing\IForumPathConstraint.cs" />
     <Compile Include="Services\PopularityService.cs" />
     <Compile Include="Settings\PostSettings.cs" />
+    <Compile Include="Shapes.cs" />
     <Compile Include="ViewModels\PostBodyEditorViewModel.cs" />
     <Compile Include="ViewModels\ThreadMoveAdminViewModel.cs" />
     <Compile Include="Extensions\DynamicZoneExtensions.cs" />
