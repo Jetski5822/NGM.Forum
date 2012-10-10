@@ -42,12 +42,12 @@ namespace NGM.Forum.Drivers {
                 ContentShape("Parts_Threads_Post_Body",
                              () => {
                                  var bodyText = _htmlFilters.Aggregate(part.Text, (text, filter) => filter.ProcessContent(text, GetFlavor(part)));
-                                 return shapeHelper.Parts_Common_Body(Html: new HtmlString(bodyText));
+                                 return shapeHelper.Parts_Threads_Post_Body(Html: new HtmlString(bodyText));
                              }),
                 ContentShape("Parts_Threads_Post_Body_Summary",
                              () => {
                                  var bodyText = _htmlFilters.Aggregate(part.Text, (text, filter) => filter.ProcessContent(text, GetFlavor(part)));
-                                 return shapeHelper.Parts_Common_Body_Summary(Html: new HtmlString(bodyText));
+                                 return shapeHelper.Parts_Threads_Post_Body_Summary(Html: new HtmlString(bodyText));
                              }),
                 ContentShape("Parts_Post_Manage", () => 
                     shapeHelper.Parts_Post_Manage(ContentPart: part))

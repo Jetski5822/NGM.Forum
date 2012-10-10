@@ -7,7 +7,7 @@ namespace NGM.Forum.Handlers {
         public UserForumPartHandler(IRepository<UserForumPartRecord> repository) {
             Filters.Add(StorageFilter.For(repository));
 
-            OnCreating<UserForumPart>((context, part) => { part.RequiresModeration = true; });
+            OnInitializing<UserForumPart>((context, part) => { part.RequiresModeration = true; });
         }
     }
 }

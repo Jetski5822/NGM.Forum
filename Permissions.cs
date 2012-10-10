@@ -32,6 +32,7 @@ namespace NGM.Forum {
         public IEnumerable<Permission> GetPermissions() {
             return new[] {
                 ManageForums,
+                ManageOwnForums,
                 ViewForum,
                 
                 CreatePost,
