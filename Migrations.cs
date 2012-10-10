@@ -62,5 +62,24 @@ namespace NGM.Forum {
 
             return 1;
         }
+
+        public int UpdateFrom1() {
+            SchemaBuilder.CreateTable("UserForumPartRecord",
+                table => table
+                    .ContentPartRecord()
+                    .Column<bool>("RequiresModeration")
+                );
+
+            ContentDefinitionManager.AlterTypeDefinition("User",
+                cfg => cfg
+                    .WithPart("UserForumPart")
+                );
+
+            SchemaBuilder.AlterTable("PostPartRecord", table => table.AddColumn<bool>("RequiresModeration"));
+
+            return 2;
+        }
+
+        /* A Rule should be defined to switch 'RequiresModeration' against the user' off once a number of posts has been created, etc... */
     }
 }

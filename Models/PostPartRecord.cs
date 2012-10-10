@@ -9,5 +9,7 @@ namespace NGM.Forum.Models {
         public virtual string Text { get; set; }
 
         public virtual string Format { get; set; }
+
+        public virtual bool RequiresModeration { get; set; }
     }
 }

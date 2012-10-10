@@ -48,7 +48,9 @@ namespace NGM.Forum.Drivers {
                              () => {
                                  var bodyText = _htmlFilters.Aggregate(part.Text, (text, filter) => filter.ProcessContent(text, GetFlavor(part)));
                                  return shapeHelper.Parts_Common_Body_Summary(Html: new HtmlString(bodyText));
-                             })
+                             }),
+                ContentShape("Parts_Post_Manage", () => 
+                    shapeHelper.Parts_Post_Manage(ContentPart: part))
                 );
         }
 

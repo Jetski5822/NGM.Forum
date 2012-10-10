@@ -1,0 +1,10 @@
+﻿@using Orchard.ContentManagement
+@using Orchard.Core.Common.Models
+@{
+    var contentItem = (ContentItem)Model.ContentPart.ContentItem;
+    var commonPart = contentItem.As<CommonPart>();
+}
+<div class="latestPost">
+    <span class="author">@commonPart.Owner.UserName@T(",")</span>
+    <span class="published">@Display.PublishedState(createdDateTimeUtc: commonPart.CreatedUtc, publisheddateTimeUtc: commonPart.PublishedUtc)</span>
+</div>

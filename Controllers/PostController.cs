@@ -26,31 +26,7 @@ namespace NGM.Forum.Controllers {
         public ILogger Logger { get; set; }
         public Localizer T { get; set; }
 
-        //public ActionResult Create(int contentId) {
-        //    if (!_orchardServices.Authorizer.Authorize(Permissions.CreatePost, T("Not allowed to create post")))
-        //        return new HttpUnauthorizedResult();
-
-        //    var contentItem = _orchardServices.ContentManager.Get(contentId, VersionOptions.Latest);
-        //    if (contentItem.As<PostPart>() == null)
-        //    {
-        //        if (IsNotAllowedToCreatePost())
-        //            return new HttpUnauthorizedResult();
-
-        //        if (contentItem.As<ThreadPart>() == null)
-        //            return HttpNotFound();
-
-        //        if (IsNotAllowedToReplyToPost())
-        //            return new HttpUnauthorizedResult();
-        //    }
-
-        //    var part = _orchardServices.ContentManager.New<PostPart>(Constants.Parts.Post);
-
-        //    dynamic model = _orchardServices.ContentManager.BuildEditor(part);
-            
-        //    return View((object)model);
-        //}
-
-        public ActionResult CreateWithQuote(int contentId) {
+        public ActionResult Create(int contentId) {
             if (!_orchardServices.Authorizer.Authorize(Permissions.CreatePost, T("Not allowed to create post")))
                 return new HttpUnauthorizedResult();
 
@@ -64,13 +40,36 @@ namespace NGM.Forum.Controllers {
             }
 
             var part = _orchardServices.ContentManager.New<PostPart>(Constants.Parts.Post);
-            
-            part.Text = string.Format("<blockquote><div class='quote-header'>Quote: {1}<div class='quote-logo'></div></div><div class='quote-content'>{0}</div></blockquote><br />", contentItem.As<PostPart>().Text, contentItem.As<ICommonPart>().Owner.UserName);
 
             dynamic model = _orchardServices.ContentManager.BuildEditor(part);
 
-            return View("Create", (object)model);
+            return View((object)model);
         }
+
+        //public ActionResult CreateWithQuote(int contentId) {
+        //    if (!_orchardServices.Authorizer.Authorize(Permissions.CreatePost, T("Not allowed to create post")))
+        //        return new HttpUnauthorizedResult();
+
+        //    var contentItem = _orchardServices.ContentManager.Get(contentId, VersionOptions.Latest);
+        //    if (contentItem.As<PostPart>() == null) {
+        //        if (contentItem.As<ThreadPart>() == null)
+        //            return HttpNotFound();
+
+        //        if (IsNotAllowedToReplyToPost())
+        //            return new HttpUnauthorizedResult();
+        //    }
+
+        //    var part = _orchardServices.ContentManager.New<PostPart>(Constants.Parts.Post);
+
+        //    part.Text =
+        //        string.Format("<blockquote><div class='quote-header'>Quote: {0}<div class='quote-logo'></div></div><div class='quote-content'>{1}</div></blockquote><br />",
+        //        contentItem.As<ICommonPart>().Owner.UserName,
+        //        contentItem.As<PostPart>().Text);
+
+        //    dynamic model = _orchardServices.ContentManager.BuildEditor(part);
+
+        //    return View("Create", (object)model);
+        //}
 
         [HttpPost, ActionName("Create")]
         public ActionResult CreatePOST(int contentId) {

@@ -25,6 +25,11 @@ namespace NGM.Forum.Models {
             set { this.As<ICommonPart>().Container = value; }
         }
 
+        public bool RequiresModeration {
+            get { return Record.RequiresModeration; }
+            set { Record.RequiresModeration = value; }
+        }
+
         public bool IsParentThread() {
             return ParentPostId == 0;
         }

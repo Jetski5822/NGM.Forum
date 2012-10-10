@@ -1,0 +1,5 @@
+﻿@model NGM.Forum.Models.UserForumPart
+<fieldset>
+    @Html.EditorFor(m => m.RequiresModeration)
+    <label class="forcheckbox" for="@Html.FieldIdFor( m => m.RequiresModeration)">@T("Users posts must be approved before they are shown.")</label>
+</fieldset>

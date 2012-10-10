@@ -41,8 +41,8 @@ namespace NGM.Forum.Security {
                 return Permissions.DeleteOwnPost;
             if (permission.Name == Permissions.EditPost.Name)
                 return Permissions.EditOwnPost;
-            if (permission.Name == Permissions.MarkPostAsAnswer.Name)
-                return Permissions.MarkPostInOwnThreadAsAnswer;
+            //if (permission.Name == Permissions.MarkPostAsAnswer.Name)
+            //    return Permissions.MarkPostInOwnThreadAsAnswer;
             return null;
         }
     }

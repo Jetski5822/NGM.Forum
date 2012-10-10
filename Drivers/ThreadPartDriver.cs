@@ -27,20 +27,21 @@ namespace NGM.Forum.Drivers {
         }
 
         protected override DriverResult Display(ThreadPart part, string displayType, dynamic shapeHelper) {
-            var firstPost = _postService.GetFirstPost(part, VersionOptions.Published);
-            //var latestPost = _postService.GetLatestPost(part, VersionOptions.Published);
-
             return Combined(
                 ContentShape("Parts_Threads_Thread_SummaryAdmin",
                     () => shapeHelper.Parts_Threads_Thread_SummaryAdmin()),
                 ContentShape("Parts_Threads_Thread_ThreadReplyCount",
                     () => shapeHelper.Parts_Threads_Thread_ThreadReplyCount(ReplyCount: part.ReplyCount)),
-                ContentShape("Parts_Thread_Manage",
-                    () => shapeHelper.Parts_Thread_Manage(ContentPart: firstPost))
+                ContentShape("Parts_Thread_Manage", () => {
+                        var post = _postService.GetFirstPost(part, VersionOptions.Published);
+                        return shapeHelper.Parts_Thread_Manage(ContentPart: post);
+                    }),
                 //ContentShape("Parts_Threads_Thread_FirstPostSummary",
                 //    () => shapeHelper.Parts_Threads_Post_Summary(ContentPart: firstPost)),
-                //ContentShape("Parts_Threads_Thread_LatestPostSummary",
-                //    () => shapeHelper.Parts_Threads_Post_Summary(ContentPart: latestPost))
+                ContentShape("Forum_Metadata_Latest", () => {
+                        var post = _postService.GetLatestPost(part, VersionOptions.Published);
+                        return shapeHelper.Forum_Metadata_Latest(ContentPart: post);
+                    })
                 );
         }
     }

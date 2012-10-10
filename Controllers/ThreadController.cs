@@ -64,7 +64,7 @@ namespace NGM.Forum.Controllers {
             thread.ForumPart = forum;
             var post = _orchardServices.ContentManager.New<PostPart>(Constants.Parts.Post);
             post.ThreadPart = thread;
-
+            
             dynamic threadModel = _orchardServices.ContentManager.BuildEditor(thread);
             dynamic postModel = _orchardServices.ContentManager.BuildEditor(post);
 

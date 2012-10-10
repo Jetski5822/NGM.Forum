@@ -62,7 +62,11 @@
   <ItemGroup>
     <Compile Include="AdminMenu.cs" />
     <Compile Include="Controllers\ThreadAdminController.cs" />
+    <Compile Include="Drivers\UserForumPartDriver.cs" />
     <Compile Include="Extensions\ContainerExtensions.cs" />
+    <Compile Include="Handlers\UserForumPartHandler.cs" />
+    <Compile Include="Models\UserForumPart.cs" />
+    <Compile Include="Models\UserForumPartRecord.cs" />
     <Compile Include="Routing\ForumPathConstraint.cs" />
     <Compile Include="Routing\ForumPathConstraintUpdator.cs" />
     <Compile Include="Routing\IForumPathConstraint.cs" />
@@ -295,6 +299,21 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Forum.DeleteButton.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Post.Manage.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Common.Metadata.Summary-Thread.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Forum.Metadata.Latest.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Common.Metadata-Post.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\EditorTemplates\Parts.User.Forums.Edit.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

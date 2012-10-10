@@ -28,6 +28,7 @@ namespace NGM.Forum.Handlers {
             OnGetEditorShape<PostPart>(SetModelProperties);
             OnUpdateEditorShape<PostPart>(SetModelProperties);
 
+            OnCreating<PostPart>(SetInitialModelProperties);
             OnCreated<PostPart>((context, part) => UpdatePostCount(part));
             OnPublished<PostPart>((context, part) => UpdatePostCount(part));
             OnUnpublished<PostPart>((context, part) => UpdatePostCount(part));
@@ -43,6 +44,11 @@ namespace NGM.Forum.Handlers {
             OnIndexing<PostPart>((context, postPart) => context.DocumentIndex
                                                     .Add("body", postPart.Record.Text).RemoveTags().Analyze()
                                                     .Add("format", postPart.Record.Format).Store());
+        }
+
+        private void SetInitialModelProperties(CreateContentContext createContentContext, PostPart postPart) {
+            //postPart.RequiresModeration = 
+            //contexwww.t.Shape.Thread = postPart.ThreadPart;
         }
 
         private void SetModelProperties(BuildShapeContext context, PostPart postPart) {

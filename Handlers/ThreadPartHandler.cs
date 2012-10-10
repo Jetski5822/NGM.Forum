@@ -25,7 +25,6 @@ namespace NGM.Forum.Handlers {
             Filters.Add(StorageFilter.For(repository));
 
             OnGetDisplayShape<ThreadPart>(SetModelProperties);
-
             OnGetEditorShape<ThreadPart>(SetModelProperties);
             OnUpdateEditorShape<ThreadPart>(SetModelProperties);
 

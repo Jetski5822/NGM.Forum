@@ -15,9 +15,10 @@
 
   <Match ContentType="Forum">
     <Match DisplayType="Detail">
-      <Place Parts_Forums_Thread_List="Content"
+      <Place Parts_Common_Metadata="-"
+             Parts_Forums_Thread_List="Content"
              Parts_Forums_Forum_Description="Content:before"
-             Parts_Forum_Manage="Content:after"/>
+             Parts_Forum_Manage="Content:after.1"/>
     </Match>
     <Match DisplayType="DetailAdmin">
       <Place Parts_Forums_Thread_List_Admin="Content:5"
@@ -34,18 +35,24 @@
              Parts_Forums_Forum_Description="Content:before"/>
     </Match>
   </Match>
+  
   <Match ContentType="Thread">
     <Match DisplayType="Detail">
       <Place Parts_Common_Metadata="-"
-             Parts_Thread_Manage="Content:after"/>
+             Parts_Thread_Manage="Content:before"/>
     </Match>
     <Match DisplayType="Summary">
-      <Place Parts_Threads_Thread_ThreadReplyCount="Meta:3"/>
+      <Place Parts_Threads_Thread_ThreadReplyCount="Meta:3"
+             Forum_Metadata_Latest="Content:after"/>
     </Match>
     <Match DisplayType="SummaryAdmin">
       <Place Parts_Threads_Thread_SummaryAdmin="Actions:10"/>
     </Match>
   </Match>
   <Match ContentType="Post">
+    <Match DisplayType="Detail">
+      <Place Parts_Post_Manage="Content:after"/>
+    </Match>
+    
   </Match>
 </Placement>
