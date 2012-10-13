@@ -1,8 +1,14 @@
-﻿using Orchard.ContentManagement.MetaData;
+﻿using Contrib.ImportExport.Services;
+using Orchard.ContentManagement.MetaData;
 using Orchard.Data.Migration;
 
 namespace NGM.Forum {
     public class Migrations : DataMigrationImpl {
+        private readonly ITaxonomyImportService _taxonomyImportService;
+
+        public Migrations(ITaxonomyImportService taxonomyImportService) {
+            _taxonomyImportService = taxonomyImportService;
+        }
 
         public int Create() {
             SchemaBuilder.CreateTable("ForumPartRecord",
@@ -25,7 +31,28 @@ namespace NGM.Forum {
                     .Column<int>("ParentPostId")
                     .Column<string>("Text", column => column.Unlimited())
                     .Column<string>("Format")
+                    .Column<bool>("RequiresModeration")
                 );
+
+
+            SchemaBuilder.CreateTable("UserForumPartRecord",
+                table => table
+                    .ContentPartRecord()
+                    .Column<bool>("RequiresModeration")
+                );
+
+            var categoryTaxonomyPart = _taxonomyImportService.CreateTaxonomy("Categories");
+            var tagsTaxonomyPart = _taxonomyImportService.CreateTaxonomy("Tags");
+
+            ContentDefinitionManager.AlterPartDefinition("ThreadPart", builder => builder
+                .WithField("Categories", cfg => cfg
+                    .OfType("TaxonomyField")
+                    .WithSetting("TaxonomyFieldSettings.AllowCustomTerms", "true")
+                    .WithSetting("TaxonomyFieldSettings.Taxonomy", categoryTaxonomyPart.Name))
+                .WithField("Tags", cfg => cfg
+                    .OfType("TaxonomyField")
+                    .WithSetting("TaxonomyFieldSettings.AllowCustomTerms", "true")
+                    .WithSetting("TaxonomyFieldSettings.Taxonomy", tagsTaxonomyPart.Name)));
 
             ContentDefinitionManager.AlterTypeDefinition("Forum",
                 cfg => cfg
@@ -60,24 +87,12 @@ namespace NGM.Forum {
                         .WithSetting("OwnerEditorSettings.ShowOwnerEditor", "false"))
                 );
 
-            return 1;
-        }
-
-        public int UpdateFrom1() {
-            SchemaBuilder.CreateTable("UserForumPartRecord",
-                table => table
-                    .ContentPartRecord()
-                    .Column<bool>("RequiresModeration")
-                );
-
             ContentDefinitionManager.AlterTypeDefinition("User",
                 cfg => cfg
                     .WithPart("UserForumPart")
                 );
 
-            SchemaBuilder.AlterTable("PostPartRecord", table => table.AddColumn<bool>("RequiresModeration"));
-
-            return 2;
+            return 1;
         }
 
         /* A Rule should be defined to switch 'RequiresModeration' against the user' off once a number of posts has been created, etc... */
