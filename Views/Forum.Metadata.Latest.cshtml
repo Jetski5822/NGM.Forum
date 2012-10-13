@@ -5,6 +5,6 @@
     var commonPart = contentItem.As<CommonPart>();
 }
 <div class="latestPost">
-    <span class="author">@commonPart.Owner.UserName@T(",")</span>
+    <span class="author">@T("Latest post by {0},", commonPart.Owner.UserName)</span>
     <span class="published">@Display.PublishedState(createdDateTimeUtc: commonPart.CreatedUtc, publisheddateTimeUtc: commonPart.PublishedUtc)</span>
 </div>

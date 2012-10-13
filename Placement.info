@@ -5,6 +5,8 @@
 
   <Place Parts_Threads_Post_Body_Edit="Content:2"/>
 
+  <Place Parts_User_Forums_Edit="Content:15"/>
+
   <Match DisplayType="Detail">
     <Place Parts_Threads_Post_Body_Summary="-"
            Parts_Threads_Post_Body="Content:5"/>
@@ -18,7 +20,7 @@
       <Place Parts_Common_Metadata="-"
              Parts_Forums_Thread_List="Content"
              Parts_Forums_Forum_Description="Content:before"
-             Parts_Forum_Manage="Content:after.1"/>
+             Parts_Forum_Manage="Content:before.1"/>
     </Match>
     <Match DisplayType="DetailAdmin">
       <Place Parts_Forums_Thread_List_Admin="Content:5"
