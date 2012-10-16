@@ -1,5 +1,6 @@
 ﻿using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
+using Orchard.ContentManagement.Records;
 using Orchard.Data.Conventions;
 
 namespace NGM.Forum.Models {
@@ -25,13 +26,24 @@ namespace NGM.Forum.Models {
             set { this.As<ICommonPart>().Container = value; }
         }
 
-        public bool RequiresModeration {
-            get { return Record.RequiresModeration; }
-            set { Record.RequiresModeration = value; }
+        public bool Approved {
+            get { return Record.Approved; }
+            set { Record.Approved = value; }
         }
 
         public bool IsParentThread() {
             return ParentPostId == 0;
         }
+    }
+
+    public class PostPartRecord : ContentPartRecord {
+        public virtual int ParentPostId { get; set; }
+
+        [StringLengthMax]
+        public virtual string Text { get; set; }
+
+        public virtual string Format { get; set; }
+
+        public virtual bool Approved { get; set; }
     }
 }

@@ -7,12 +7,17 @@
 
   <Place Parts_User_Forums_Edit="Content:15"/>
 
+  <Place Fields_Contrib_TaxonomyField_Edit-Categories="Content:before.6" />
+  <!--<Place Fields_Contrib_TaxonomyField_Edit-Tags="Content:1" />-->
+  
+  
   <Match DisplayType="Detail">
     <Place Parts_Threads_Post_Body_Summary="-"
            Parts_Threads_Post_Body="Content:5"/>
   </Match>
   <Match DisplayType="SummaryAdmin">
-    <Place Parts_Threads_Post_Body_Summary="-"/>
+    <Place Parts_Threads_Post_Body_Summary="Content:before.1"
+           Parts_Thread_Post_SummaryAdmin="Actions:10"/>
   </Match>
 
   <Match ContentType="Forum">

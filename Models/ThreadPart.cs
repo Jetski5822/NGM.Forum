@@ -1,5 +1,6 @@
 ﻿using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
+using Orchard.ContentManagement.Records;
 using Orchard.Core.Title.Models;
 using Orchard.Data.Conventions;
 
@@ -24,5 +25,9 @@ namespace NGM.Forum.Models {
         public int ReplyCount {
             get { return PostCount >= 1 ? PostCount - 1 : 0; }
         }
+    }
+
+    public class ThreadPartRecord : ContentPartRecord {
+        public virtual int PostCount { get; set; }
     }
 }

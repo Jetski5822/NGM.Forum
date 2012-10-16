@@ -51,7 +51,7 @@ namespace NGM.Forum.Handlers {
         }
 
         private void SetInitialModelProperties(CreateContentContext createContentContext, PostPart postPart) {
-            postPart.RequiresModeration = _authenticationService.GetAuthenticatedUser().As<UserForumPart>().RequiresModeration;
+            postPart.Approved = !_authenticationService.GetAuthenticatedUser().As<UserForumPart>().RequiresModeration;
             //contexwww.t.Shape.Thread = postPart.ThreadPart;
         }
 

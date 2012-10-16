@@ -29,7 +29,7 @@ namespace NGM.Forum.Extensions {
         /* Thread */
 
         public static string ThreadForAdmin(this UrlHelper urlHelper, ThreadPart threadPart) {
-            return urlHelper.Action("Item", "ThreadAdmin", new { forumId = threadPart.Id, area = Constants.LocalArea });
+            return urlHelper.Action("Item", "ThreadAdmin", new { threadId = threadPart.Id, area = Constants.LocalArea });
         }
 
         public static string ThreadMoveForAdmin(this UrlHelper urlHelper, ThreadPart threadPart) {
@@ -42,7 +42,7 @@ namespace NGM.Forum.Extensions {
         }
 
         public static string ThreadView(this UrlHelper urlHelper, ThreadPart threadPart) {
-            return urlHelper.Action("Item", "Thread", new { forumID = threadPart.ForumPart.Id, threadId = threadPart.Id, area = Constants.LocalArea });
+            return urlHelper.Action("Item", "Thread", new { forumId = threadPart.ForumPart.Id, threadId = threadPart.Id, area = Constants.LocalArea });
         }
 
         /* Post */
@@ -59,6 +59,9 @@ namespace NGM.Forum.Extensions {
             return string.Format("{0}#{1}", ThreadView(urlHelper, postPart.ThreadPart), postPart.Id);
         }
 
+        public static string PostApprove(this UrlHelper urlHelper, PostPart postPart) {
+            return urlHelper.Action("Approve", "Post", new { postId = postPart.Id, area = Constants.LocalArea });
+        }
 
 
         private static string PostCreateByContent(this UrlHelper urlHelper, IContent content) {

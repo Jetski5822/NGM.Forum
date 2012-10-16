@@ -1,0 +1,9 @@
+﻿@using NGM.Forum.Extensions;
+@using NGM.Forum.Models;
+@using Orchard.ContentManagement;
+@using Orchard.Utility.Extensions;
+@{
+    ContentItem contentItem = Model.ContentItem;
+    PostPart post = (PostPart)contentItem.Get(typeof(PostPart));
+}
+<a href="@Url.PostApprove" title="@T("Approve")">@T("Approve")</a>@T(" | ")

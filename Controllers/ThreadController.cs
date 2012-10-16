@@ -125,7 +125,6 @@ namespace NGM.Forum.Controllers {
             if (threadPart == null)
                 return HttpNotFound();
 
-            //_feedManager.Register(threadPart);
             var pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
             var posts = _postService.Get(threadPart, pager.GetStartIndex(), pager.PageSize)
                 .Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Detail"));

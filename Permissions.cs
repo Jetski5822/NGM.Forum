@@ -12,6 +12,7 @@ namespace NGM.Forum {
         public static readonly Permission CreatePost = new Permission { Description = "Create a post", Name = "CreatePost" };
         public static readonly Permission ReplyPost = new Permission { Description = "Reply to a post", Name = "ReplyPost" };
         public static readonly Permission ViewPost = new Permission { Description = "View post", Name = "ViewPost" };
+        public static readonly Permission ApprovePost = new Permission { Description = "Approve a post", Name = "ApprovePost" };
 
         public static readonly Permission DeleteOwnPost = new Permission { Description = "Delete your own post", Name = "DeleteOwnPost" };
         public static readonly Permission DeletePost = new Permission { Description = "Delete any post", Name = "DeletePost" };
@@ -38,6 +39,7 @@ namespace NGM.Forum {
                 CreatePost,
                 ReplyPost, 
                 ViewPost,
+                ApprovePost,
 
                 DeleteOwnPost,
                 DeletePost,

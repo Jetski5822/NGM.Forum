@@ -31,7 +31,7 @@ namespace NGM.Forum {
                     .Column<int>("ParentPostId")
                     .Column<string>("Text", column => column.Unlimited())
                     .Column<string>("Format")
-                    .Column<bool>("RequiresModeration")
+                    .Column<bool>("Approved")
                 );
 
 

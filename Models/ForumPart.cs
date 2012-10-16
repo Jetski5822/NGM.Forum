@@ -1,5 +1,7 @@
 ﻿using Orchard.ContentManagement;
+using Orchard.ContentManagement.Records;
 using Orchard.Core.Title.Models;
+using Orchard.Data.Conventions;
 
 namespace NGM.Forum.Models {
     public class ForumPart : ContentPart<ForumPartRecord> {
@@ -26,5 +28,13 @@ namespace NGM.Forum.Models {
         public int ReplyCount {
             get { return PostCount >= ThreadCount ? PostCount - ThreadCount : 0; }
         }
+    }
+
+    public class ForumPartRecord : ContentPartRecord {
+        [StringLengthMax]
+        public virtual string Description { get; set; }
+
+        public virtual int ThreadCount { get; set; }
+        public virtual int PostCount { get; set; }
     }
 }
