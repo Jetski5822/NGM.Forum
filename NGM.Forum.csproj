@@ -65,6 +65,8 @@
     <Compile Include="Controllers\ThreadAdminController.cs" />
     <Compile Include="Drivers\UserForumPartDriver.cs" />
     <Compile Include="Extensions\ContainerExtensions.cs" />
+    <Compile Include="Extensions\PostExtensions.cs" />
+    <Compile Include="Extensions\ThreadExtensions.cs" />
     <Compile Include="Handlers\UserForumPartHandler.cs" />
     <Compile Include="Models\ModerationPart.cs" />
     <Compile Include="Models\UserForumPart.cs" />
@@ -257,9 +259,6 @@
     <Content Include="Views\DefinitionTemplates\PostPartSettings.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\DefinitionTemplates\PostTypePartSettings.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Parts.Threads.Thread.SummaryAdmin.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -321,6 +320,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Parts.Thread.Post.SummaryAdmin.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DefinitionTemplates\PostTypePartSettings.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Threads.Thread.Metadata.SummaryAdmin.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Thread.Post.Metadata.SummaryAdmin.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

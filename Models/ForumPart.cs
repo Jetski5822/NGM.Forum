@@ -1,13 +1,12 @@
 ﻿using Orchard.ContentManagement;
+using Orchard.ContentManagement.Aspects;
 using Orchard.ContentManagement.Records;
-using Orchard.Core.Title.Models;
 using Orchard.Data.Conventions;
 
 namespace NGM.Forum.Models {
     public class ForumPart : ContentPart<ForumPartRecord> {
         public string Title {
-            get { return this.As<TitlePart>().Title; }
-            set { this.As<TitlePart>().Title = value; }
+            get { return this.As<ITitleAspect>().Title; }
         }
 
         public string Description {

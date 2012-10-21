@@ -1,14 +1,12 @@
 ﻿using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
 using Orchard.ContentManagement.Records;
-using Orchard.Core.Title.Models;
 using Orchard.Data.Conventions;
 
 namespace NGM.Forum.Models {
     public class ThreadPart : ContentPart<ThreadPartRecord> {
         public string Title {
-            get { return this.As<TitlePart>().Title; }
-            set { this.As<TitlePart>().Title = value; }
+            get { return this.As<ITitleAspect>().Title; }
         }
 
         [CascadeAllDeleteOrphan]
@@ -22,6 +20,11 @@ namespace NGM.Forum.Models {
             set { Record.PostCount = value; }
         }
 
+        public bool Approved {
+            get { return Record.Approved; }
+            set { Record.Approved = value; }
+        }
+
         public int ReplyCount {
             get { return PostCount >= 1 ? PostCount - 1 : 0; }
         }
@@ -29,5 +32,7 @@ namespace NGM.Forum.Models {
 
     public class ThreadPartRecord : ContentPartRecord {
         public virtual int PostCount { get; set; }
+
+        public virtual bool Approved { get; set; }
     }
 }

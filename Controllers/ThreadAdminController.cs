@@ -111,12 +111,15 @@ namespace NGM.Forum.Controllers {
             var threadPart = _threadService.Get(threadId, VersionOptions.Latest).As<ThreadPart>();
 
             if (threadPart == null)
-                return HttpNotFound(T("could not find thread").ToString());
+                return HttpNotFound(T("Could not find thread").ToString());
 
             var forumPart = _forumService.Get(viewModel.ForumId, VersionOptions.Latest).As<ForumPart>();
 
             if (forumPart == null)
-                return HttpNotFound(T("could not find forum").ToString());
+                return HttpNotFound(T("Could not find forum").ToString());
+
+            var currentForumName = threadPart.ForumPart.As<ITitleAspect>().Title;
+            var newForumName = forumPart.As<ITitleAspect>().Title;
 
             threadPart.ForumPart = forumPart;
             
@@ -124,7 +127,7 @@ namespace NGM.Forum.Controllers {
 
             //_forumPathConstraint.AddPath(threadPart.As<IAliasAspect>().Path);
 
-            _orchardServices.Notifier.Information(T("{0} has been moved.", threadPart.TypeDefinition.DisplayName));
+            _orchardServices.Notifier.Information(T("{0} has been moved from {1} to {2}.", threadPart.TypeDefinition.DisplayName, currentForumName, newForumName));
 
             return this.RedirectLocal(returnUrl, "~/");
         }

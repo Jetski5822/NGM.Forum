@@ -7,20 +7,24 @@ using Orchard.ContentManagement;
 using Orchard.ContentManagement.Handlers;
 using Orchard.Core.Common.Models;
 using Orchard.Data;
+using Orchard.Security;
 
 namespace NGM.Forum.Handlers {
     public class ThreadPartHandler : ContentHandler {
         private readonly IPostService _postService;
         private readonly IThreadService _threadService;
         private readonly IForumService _forumService;
+        private readonly IAuthenticationService _authenticationService;
 
         public ThreadPartHandler(IRepository<ThreadPartRecord> repository, 
             IPostService postService,
-            IThreadService threadService, 
-            IForumService forumService) {
+            IThreadService threadService,
+            IForumService forumService,
+            IAuthenticationService authenticationService) {
             _postService = postService;
             _threadService = threadService;
             _forumService = forumService;
+            _authenticationService = authenticationService;
 
             Filters.Add(StorageFilter.For(repository));
 
@@ -42,6 +46,8 @@ namespace NGM.Forum.Handlers {
         }
 
         private void SetModelProperties(BuildShapeContext context, ThreadPart threadPart) {
+            threadPart.Approved = !_authenticationService.GetAuthenticatedUser().As<UserForumPart>().RequiresModeration;
+
             context.Shape.Forum = threadPart.ForumPart;
         }
 

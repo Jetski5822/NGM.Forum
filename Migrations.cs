@@ -23,6 +23,7 @@ namespace NGM.Forum {
                 table => table
                     .ContentPartRecord()
                     .Column<int>("PostCount")
+                    .Column<bool>("Approved")
                 );
 
             SchemaBuilder.CreateTable("PostPartRecord",
@@ -94,6 +95,14 @@ namespace NGM.Forum {
             );
 
             return 1;
+        }
+
+        public int UpdateFrom2() {
+            SchemaBuilder.AlterTable("ThreadPartRecord", table => table
+                    .AddColumn<bool>("Approved")
+            );
+
+            return 2;
         }
 
         /* A Rule should be defined to switch 'RequiresModeration' against the user' off once a number of posts has been created, etc... */
