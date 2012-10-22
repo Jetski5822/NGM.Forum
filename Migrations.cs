@@ -1,4 +1,5 @@
 ﻿using Contrib.ImportExport.Services;
+using NGM.Forum.Extensions;
 using Orchard.ContentManagement.MetaData;
 using Orchard.Data.Migration;
 
@@ -42,17 +43,17 @@ namespace NGM.Forum {
                     .Column<bool>("RequiresModeration")
                 );
 
-            var categoryTaxonomyPart = _taxonomyImportService.CreateTaxonomy("Categories");
-            var tagsTaxonomyPart = _taxonomyImportService.CreateTaxonomy("Tags");
+            var categoryTaxonomyPart = _taxonomyImportService.CreateTaxonomy(Constants.Taxonomies.Categories);
+            var tagsTaxonomyPart = _taxonomyImportService.CreateTaxonomy(Constants.Taxonomies.Tags);
 
             ContentDefinitionManager.AlterPartDefinition("ThreadPart", builder => builder
-                .WithField("Categories", cfg => cfg
+                .WithField(Constants.Taxonomies.Categories, cfg => cfg
                     .OfType("TaxonomyField")
                     .WithSetting("TaxonomyFieldSettings.AllowCustomTerms", "false")
                     .WithSetting("TaxonomyFieldSettings.SingleChoice", "true")
                     .WithSetting("TaxonomyFieldSettings.Required", "true")
                     .WithSetting("TaxonomyFieldSettings.Taxonomy", categoryTaxonomyPart.Name))
-                .WithField("Tags", cfg => cfg
+                .WithField(Constants.Taxonomies.Tags, cfg => cfg
                     .OfType("TaxonomyField")
                     .WithSetting("TaxonomyFieldSettings.AllowCustomTerms", "true")
                     .WithSetting("TaxonomyFieldSettings.Autocomplete", "true")
@@ -95,14 +96,6 @@ namespace NGM.Forum {
             );
 
             return 1;
-        }
-
-        public int UpdateFrom2() {
-            SchemaBuilder.AlterTable("ThreadPartRecord", table => table
-                    .AddColumn<bool>("Approved")
-            );
-
-            return 2;
         }
 
         /* A Rule should be defined to switch 'RequiresModeration' against the user' off once a number of posts has been created, etc... */

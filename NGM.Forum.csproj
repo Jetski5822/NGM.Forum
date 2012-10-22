@@ -63,6 +63,7 @@
     <Compile Include="AdminMenu.cs" />
     <Compile Include="Controllers\PostAdminController.cs" />
     <Compile Include="Controllers\ThreadAdminController.cs" />
+    <Compile Include="DefaultTaxonomyUpdater.cs" />
     <Compile Include="Drivers\UserForumPartDriver.cs" />
     <Compile Include="Extensions\ContainerExtensions.cs" />
     <Compile Include="Extensions\PostExtensions.cs" />
