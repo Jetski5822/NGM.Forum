@@ -3,11 +3,14 @@ using System.Web.Routing;
 using NGM.Forum.Extensions;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
+using Orchard;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Handlers;
 using Orchard.Core.Common.Models;
 using Orchard.Data;
+using Orchard.Localization;
 using Orchard.Security;
+using Orchard.UI.Notify;
 
 namespace NGM.Forum.Handlers {
     public class PostPartHandler : ContentHandler {
@@ -15,16 +18,21 @@ namespace NGM.Forum.Handlers {
         private readonly IThreadService _threadService;
         private readonly IForumService _forumService;
         private readonly IAuthenticationService _authenticationService;
+        private readonly IOrchardServices _orchardServices;
 
         public PostPartHandler(IRepository<PostPartRecord> repository, 
             IPostService postService, 
             IThreadService threadService, 
             IForumService forumService,
-            IAuthenticationService authenticationService) {
+            IAuthenticationService authenticationService,
+            IOrchardServices orchardServices) {
             _postService = postService;
             _threadService = threadService;
             _forumService = forumService;
             _authenticationService = authenticationService;
+            _orchardServices = orchardServices;
+
+            T = NullLocalizer.Instance;
 
             Filters.Add(StorageFilter.For(repository));
 
@@ -34,7 +42,11 @@ namespace NGM.Forum.Handlers {
 
             OnCreating<PostPart>(SetInitialModelProperties);
             OnCreated<PostPart>((context, part) => UpdatePostCount(part));
-            OnPublished<PostPart>((context, part) => UpdatePostCount(part));
+            OnPublished<PostPart>((context, part) => { 
+                UpdatePostCount(part);
+                PostNotifications(part);
+                                                         VerifyThreadUnicity(part);
+            });
             OnUnpublished<PostPart>((context, part) => UpdatePostCount(part));
             OnVersioned<PostPart>((context, part, newVersionPart) => UpdatePostCount(newVersionPart));
             OnRemoved<PostPart>((context, part) => UpdatePostCount(part));
@@ -48,6 +60,22 @@ namespace NGM.Forum.Handlers {
             OnIndexing<PostPart>((context, postPart) => context.DocumentIndex
                                                     .Add("body", postPart.Record.Text).RemoveTags().Analyze()
                                                     .Add("format", postPart.Record.Format).Store());
+        }
+
+        public Localizer T { get; set; }
+
+        private void PostNotifications(PostPart part) {
+            if (!part.Approved)
+                _orchardServices.Notifier.Information(T("Your post will be available once it has been approved by a moderator."));
+
+        }
+
+        private void VerifyThreadUnicity(PostPart part) {
+            if (!part.IsParentThread())
+                return;
+
+            part.ThreadPart.Approved = part.Approved;
+
         }
 
         private void SetInitialModelProperties(CreateContentContext createContentContext, PostPart postPart) {

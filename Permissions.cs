@@ -12,7 +12,7 @@ namespace NGM.Forum {
         public static readonly Permission CreatePost = new Permission { Description = "Create a post", Name = "CreatePost" };
         public static readonly Permission ReplyPost = new Permission { Description = "Reply to a post", Name = "ReplyPost" };
         public static readonly Permission ViewPost = new Permission { Description = "View post", Name = "ViewPost" };
-        public static readonly Permission ApprovePost = new Permission { Description = "Approve a post", Name = "ApprovePost" };
+        public static readonly Permission ApprovingPost = new Permission { Description = "Approve or Unapprove a post", Name = "ApprovingPost" };
 
         public static readonly Permission DeleteOwnPost = new Permission { Description = "Delete your own post", Name = "DeleteOwnPost" };
         public static readonly Permission DeletePost = new Permission { Description = "Delete any post", Name = "DeletePost" };
@@ -21,7 +21,7 @@ namespace NGM.Forum {
         public static readonly Permission EditPost = new Permission { Description = "Edit any post", Name = "EditPost" };
 
         public static readonly Permission MoveThread = new Permission { Description = "Move thread to another forum", Name = "MoveThread" };
-
+        public static readonly Permission ApprovingThread = new Permission { Description = "Approve or Unapprove a thread", Name = "ApprovingThread" };
         //public static readonly Permission MoveAnyPost = new Permission { Description = "Move any post", Name = "MoveAnyPost" };
       
         public virtual Feature Feature { get; set; }
@@ -39,7 +39,7 @@ namespace NGM.Forum {
                 CreatePost,
                 ReplyPost, 
                 ViewPost,
-                ApprovePost,
+                ApprovingPost,
 
                 DeleteOwnPost,
                 DeletePost,
@@ -48,6 +48,7 @@ namespace NGM.Forum {
                 EditPost,
                 
                 MoveThread,
+                ApprovingThread
                 //MoveAnyPost,
             };
         }

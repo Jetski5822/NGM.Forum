@@ -26,6 +26,11 @@ namespace NGM.Forum.Extensions {
             return urlHelper.Action("Edit", "ForumAdmin", new { forumId = forumPart.Id, area = Constants.LocalArea });
         }
 
+
+        public static string ForumView(this UrlHelper urlHelper, ForumPart forumPart) {
+            return urlHelper.Action("Item", "Forum", new { forumId = forumPart.Id, area = Constants.LocalArea });
+        }
+
         /* Thread */
 
         public static string ThreadForAdmin(this UrlHelper urlHelper, ThreadPart threadPart) {
@@ -34,6 +39,10 @@ namespace NGM.Forum.Extensions {
 
         public static string ThreadMoveForAdmin(this UrlHelper urlHelper, ThreadPart threadPart) {
             return urlHelper.Action("Move", "ThreadAdmin", new { threadId = threadPart.Id, area = Constants.LocalArea, returnUrl = urlHelper.RequestContext.HttpContext.Request.ToUrlString() });
+        }
+
+        public static string ThreadApprovingForAdmin(this UrlHelper urlHelper, ThreadPart threadPart, bool isApproved) {
+            return urlHelper.Action("Approving", "ThreadAdmin", new { threadId = threadPart.Id, area = Constants.LocalArea, isApproved = isApproved, returnUrl = urlHelper.RequestContext.HttpContext.Request.ToUrlString() });
         }
 
         
@@ -47,6 +56,11 @@ namespace NGM.Forum.Extensions {
 
         /* Post */
 
+        public static string PostApprovingForAdmin(this UrlHelper urlHelper, PostPart postPart, bool isApproved) {
+            return urlHelper.Action("Approving", "PostAdmin", new { postId = postPart.Id, area = Constants.LocalArea, isApproved = isApproved, returnUrl = urlHelper.RequestContext.HttpContext.Request.ToUrlString() });
+        }
+
+
         public static string PostReply(this UrlHelper urlHelper, PostPart postPart) {
             return PostCreateByContent(urlHelper, postPart);
         }
@@ -58,11 +72,6 @@ namespace NGM.Forum.Extensions {
         public static string PostView(this UrlHelper urlHelper, PostPart postPart) {
             return string.Format("{0}#{1}", ThreadView(urlHelper, postPart.ThreadPart), postPart.Id);
         }
-
-        public static string PostApprove(this UrlHelper urlHelper, PostPart postPart) {
-            return urlHelper.Action("Approve", "Post", new { postId = postPart.Id, area = Constants.LocalArea });
-        }
-
 
         private static string PostCreateByContent(this UrlHelper urlHelper, IContent content) {
             return urlHelper.Action("Create", "Post", new { contentId = content.Id, area = Constants.LocalArea });

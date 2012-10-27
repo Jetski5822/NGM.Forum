@@ -48,24 +48,21 @@ namespace NGM.Forum.Controllers {
         dynamic Shape { get; set; }
         public Localizer T { get; set; }
 
-        //public ActionResult Approve(int postId, string returnUrl) {
-        //    if (!_orchardServices.Authorizer.Authorize(Permissions.ApprovePost, T("Not allowed to move thread")))
-        //        return new HttpUnauthorizedResult();
+        public ActionResult Approving(int postId, bool isApproved, string returnUrl) {
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ApprovingPost, T("Not allowed to approve/unapprove Post")))
+                return new HttpUnauthorizedResult();
 
-        //    var postPart = _postService.Get(postId, VersionOptions.Published).As<PostPart>();
+            var postPart = _postService.Get(postId, VersionOptions.Published).As<PostPart>();
 
-        //    if (postPart == null)
-        //        return HttpNotFound(T("could not find post").ToString());
+            if (postPart == null)
+                return HttpNotFound(T("could not find post").ToString());
 
-        //    postPart.RequiresModeration = true;
+            postPart.Approved = isApproved;
 
-        //    _orchardServices.ContentManager.Publish(threadPart.ContentItem);
+            _orchardServices.Notifier.Information(isApproved ? T("Post has been Approved.") : T("Post has been Unapproved."));
 
-
-        //    _orchardServices.Notifier.Information(T("Post has been approved."));
-
-        //    return this.RedirectLocal(returnUrl, "~/");
-        //}
+            return this.RedirectLocal(returnUrl, "~/");
+        }
 
         bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties) {
             return TryUpdateModel(model, prefix, includeProperties, excludeProperties);

@@ -125,6 +125,11 @@ namespace NGM.Forum.Controllers {
             if (threadPart == null)
                 return HttpNotFound();
 
+            if (!threadPart.Approved) {
+                _orchardServices.Notifier.Information(T("This Thread is awaiting approval."));
+                return Redirect(Url.ForumView(forumPart));
+            }
+
             var pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
             var posts = _postService.Get(threadPart, pager.GetStartIndex(), pager.PageSize)
                 .Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Detail"));

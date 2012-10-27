@@ -32,6 +32,8 @@ namespace NGM.Forum.Handlers {
             OnGetEditorShape<ThreadPart>(SetModelProperties);
             OnUpdateEditorShape<ThreadPart>(SetModelProperties);
 
+            OnCreating<ThreadPart>(SetInitialProperties);
+
             OnCreated<ThreadPart>((context, part) => UpdateForumPartCounters(part));
             OnPublished<ThreadPart>((context, part) => UpdateForumPartCounters(part));
             OnUnpublished<ThreadPart>((context, part) => UpdateForumPartCounters(part));
@@ -45,9 +47,14 @@ namespace NGM.Forum.Handlers {
                     .ForEach(thread => context.ContentManager.Remove(thread.ContentItem)));
         }
 
-        private void SetModelProperties(BuildShapeContext context, ThreadPart threadPart) {
-            threadPart.Approved = !_authenticationService.GetAuthenticatedUser().As<UserForumPart>().RequiresModeration;
+        private void SetInitialProperties(CreateContentContext context, ThreadPart part) {
+            part.Approved = !_authenticationService.GetAuthenticatedUser().As<UserForumPart>().RequiresModeration;
+        }
 
+        //UpdateAssociateParentPost(part);
+        
+
+        private void SetModelProperties(BuildShapeContext context, ThreadPart threadPart) {
             context.Shape.Forum = threadPart.ForumPart;
         }
 

@@ -65,6 +65,7 @@
     <Compile Include="Controllers\ThreadAdminController.cs" />
     <Compile Include="DefaultTaxonomyUpdater.cs" />
     <Compile Include="Drivers\UserForumPartDriver.cs" />
+    <Compile Include="Models\ApprovalOptions.cs" />
     <Compile Include="Extensions\ContainerExtensions.cs" />
     <Compile Include="Extensions\PostExtensions.cs" />
     <Compile Include="Extensions\ThreadExtensions.cs" />

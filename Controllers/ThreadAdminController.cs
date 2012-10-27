@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Web.Mvc;
+using NGM.Forum.Extensions;
 using NGM.Forum.Models;
 //using NGM.Forum.Routing;
 using NGM.Forum.Services;
@@ -71,7 +72,7 @@ namespace NGM.Forum.Controllers {
             if (threadPart == null)
                 return HttpNotFound();
 
-            var posts = _postService.Get(threadPart, pager.GetStartIndex(), pager.PageSize, VersionOptions.Latest)
+            var posts = _postService.Get(threadPart, pager.GetStartIndex(), pager.PageSize, VersionOptions.Latest, ApprovalOptions.All)
                 .Select(bp => _orchardServices.ContentManager.BuildDisplay(bp, "SummaryAdmin"));
 
             dynamic thread = _orchardServices.ContentManager.BuildDisplay(threadPart, "DetailAdmin");
@@ -128,6 +129,22 @@ namespace NGM.Forum.Controllers {
             //_forumPathConstraint.AddPath(threadPart.As<IAliasAspect>().Path);
 
             _orchardServices.Notifier.Information(T("{0} has been moved from {1} to {2}.", threadPart.TypeDefinition.DisplayName, currentForumName, newForumName));
+
+            return this.RedirectLocal(returnUrl, "~/");
+        }
+
+        public ActionResult Approving(int threadId, bool isApproved, string returnUrl) {
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ApprovingThread, T("Not allowed to approve/unapprove Thread")))
+                return new HttpUnauthorizedResult();
+
+            var threadPart = _threadService.Get(threadId, VersionOptions.Published).As<ThreadPart>();
+
+            if (threadPart == null)
+                return HttpNotFound(T("could not find thread").ToString());
+
+            threadPart.Approved = isApproved;
+
+            _orchardServices.Notifier.Information(isApproved ? T("Thread has been Approved.") : T("Thread has been Unapproved."));
 
             return this.RedirectLocal(returnUrl, "~/");
         }

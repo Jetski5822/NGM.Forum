@@ -13,7 +13,7 @@ namespace NGM.Forum.Services {
         IEnumerable<PostPart> Get(ThreadPart threadPart);
         IEnumerable<PostPart> Get(ThreadPart threadPart, VersionOptions versionOptions);
         IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count);
-        IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count, VersionOptions versionOptions);
+        IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count, VersionOptions versionOptions, ApprovalOptions approvalOptions);
         PostPart GetFirstPost(ThreadPart threadPart, VersionOptions versionOptions);
         PostPart GetLatestPost(ForumPart forumPart, VersionOptions versionOptions);
         PostPart GetLatestPost(ThreadPart threadPart, VersionOptions versionOptions);
@@ -71,16 +71,20 @@ namespace NGM.Forum.Services {
         }
 
         public IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count) {
-            return Get(threadPart, skip, count, VersionOptions.Published);
+            return Get(threadPart, skip, count, VersionOptions.Published, ApprovalOptions.Approved);
         }
 
-        public IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count, VersionOptions versionOptions) {
-            return _contentManager
-                .Query(versionOptions, Constants.Parts.Post)
-                .Join<CommonPartRecord>().Where(cpr => cpr.Container == threadPart.ContentItem.Record)
-                .Slice(skip, count)
-                .ToList()
-                .Select(ci => ci.As<PostPart>());
+        public IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count, VersionOptions versionOptions, ApprovalOptions approvalOptions) {
+            var query = _contentManager.Query(versionOptions, Constants.Parts.Post);
+
+            if (approvalOptions == ApprovalOptions.All) {
+                query = query.Join<ThreadPartRecord>().Where(trd => trd.Approved == approvalOptions.IsApproved);
+            }
+
+            return query.Join<CommonPartRecord>().Where(cpr => cpr.Container == threadPart.ContentItem.Record)
+            .Slice(skip, count)
+            .ToList()
+            .Select(ci => ci.As<PostPart>());
         }
 
     }
