@@ -8,15 +8,3 @@
 }
 <a href="@Url.ThreadForAdmin(thread)" title="@T("List Posts")">@T("List Posts")</a>@T(" | ")
 <a href="@Url.ThreadMoveForAdmin(thread)" title="@T("Move")">@T("Move")</a>@T(" | ")
-@if (!thread.Moderation.Approved) {
-    if (thread.Moderation.ApprovalUtc == null) {
-        <a href="@Url.ThreadApprovingForAdmin(thread, true)" title="@T("Approve")">@T("Approve")</a>@T(" | ")
-        <a href="@Url.ThreadApprovingForAdmin(thread, false)" title="@T("Not Approved")">@T("Not Approved")</a>@T(" | ")
-    }
-    else {
-        <a href="@Url.ThreadApprovingForAdmin(thread, true)" title="@T("Approve")">@T("Approve")</a>@T(" | ")
-    }
-}
-else {
-    <a href="@Url.ThreadApprovingForAdmin(thread, false)" title="@T("Unapprove")">@T("Unapprove")</a>@T(" | ")
-}

@@ -61,11 +61,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdminMenu.cs" />
+    <Compile Include="Controllers\ModerationAdminController.cs" />
     <Compile Include="Controllers\PostAdminController.cs" />
     <Compile Include="Controllers\ThreadAdminController.cs" />
     <Compile Include="DefaultTaxonomyUpdater.cs" />
     <Compile Include="Drivers\ModerationPartDriver.cs" />
     <Compile Include="Drivers\UserForumPartDriver.cs" />
+    <Compile Include="Events\ApprovingContext.cs" />
+    <Compile Include="Events\PostModerationEventHandler.cs" />
+    <Compile Include="Events\ThreadModerationEventHandler.cs" />
     <Compile Include="Handlers\ModerationPartHandler.cs" />
     <Compile Include="Models\ModerationOptions.cs" />
     <Compile Include="Extensions\ContainerExtensions.cs" />
@@ -75,6 +79,8 @@
     <Compile Include="Routing\ForumPathConstraint.cs" />
     <Compile Include="Routing\ForumPathConstraintUpdator.cs" />
     <Compile Include="Routing\IForumPathConstraint.cs" />
+    <Compile Include="Events\IModerationEventHandler.cs" />
+    <Compile Include="Services\ModerationService.cs" />
     <Compile Include="Services\PopularityService.cs" />
     <Compile Include="Services\TaxonomyImportService.cs" />
     <Compile Include="Settings\PostSettings.cs" />
@@ -324,18 +330,14 @@
     <Content Include="Views\EditorTemplates\Parts.User.Forums.Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Parts.Thread.Post.SummaryAdmin.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\DefinitionTemplates\PostTypePartSettings.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Parts.Threads.Thread.Metadata.SummaryAdmin.cshtml" />
+    <Content Include="Views\Parts.Moderation.Metadata.SummaryAdmin.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Parts.Thread.Post.Metadata.SummaryAdmin.cshtml" />
+    <Content Include="Views\Parts.Moderation.SummaryAdmin.cshtml" />
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

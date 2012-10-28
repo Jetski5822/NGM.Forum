@@ -44,7 +44,6 @@ namespace NGM.Forum.Handlers {
             OnPublished<PostPart>((context, part) => { 
                 UpdatePostCount(part);
                 PostNotifications(part);
-                VerifyThreadUnicity(part);
             });
             OnUnpublished<PostPart>((context, part) => UpdatePostCount(part));
             OnVersioned<PostPart>((context, part, newVersionPart) => UpdatePostCount(newVersionPart));
@@ -66,16 +65,7 @@ namespace NGM.Forum.Handlers {
         private void PostNotifications(PostPart part) {
             if (!part.Moderation.Approved)
                 _orchardServices.Notifier.Information(T("Your post will be available once it has been approved by a moderator."));
-
         }
-
-        private void VerifyThreadUnicity(PostPart part) {
-            if (!part.IsParentThread())
-                return;
-
-            part.ThreadPart.Moderation.Approved = part.Moderation.Approved;
-            part.ThreadPart.Moderation.ApprovalUtc = part.Moderation.ApprovalUtc;
-            }
 
         private void SetModelProperties(BuildShapeContext context, PostPart postPart) {
             context.Shape.Thread = postPart.ThreadPart;

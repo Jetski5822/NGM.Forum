@@ -41,10 +41,6 @@ namespace NGM.Forum.Extensions {
             return urlHelper.Action("Move", "ThreadAdmin", new { threadId = threadPart.Id, area = Constants.LocalArea, returnUrl = urlHelper.RequestContext.HttpContext.Request.ToUrlString() });
         }
 
-        public static string ThreadApprovingForAdmin(this UrlHelper urlHelper, ThreadPart threadPart, bool isApproved) {
-            return urlHelper.Action("Approving", "ThreadAdmin", new { threadId = threadPart.Id, area = Constants.LocalArea, isApproved = isApproved, returnUrl = urlHelper.RequestContext.HttpContext.Request.ToUrlString() });
-        }
-
         
         public static string ThreadCreate(this UrlHelper urlHelper, ForumPart forumPart) {
             return urlHelper.Action("Create", "Thread", new { forumId = forumPart.Id, area = Constants.LocalArea });
@@ -75,6 +71,12 @@ namespace NGM.Forum.Extensions {
 
         private static string PostCreateByContent(this UrlHelper urlHelper, IContent content) {
             return urlHelper.Action("Create", "Post", new { contentId = content.Id, area = Constants.LocalArea });
+        }
+
+
+        /* Moderation */
+        public static string ModerationApproveForAdmin(this UrlHelper urlHelper, ModerationPart moderationPart, bool approve) {
+            return urlHelper.Action("Approve", "ModerationAdmin", new { moderationId = moderationPart.Id, area = Constants.LocalArea, isApproved = approve, returnUrl = urlHelper.RequestContext.HttpContext.Request.ToUrlString() });
         }
 
         //public static string ViewLatestPost(this UrlHelper urlHelper, PostPart postPart) {

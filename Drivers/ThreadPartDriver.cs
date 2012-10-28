@@ -13,13 +13,10 @@ namespace NGM.Forum.Drivers {
     [UsedImplicitly]
     public class ThreadPartDriver : ContentPartDriver<ThreadPart> {
         private readonly IPostService _postService;
-        private readonly IEnumerable<IHtmlFilter> _htmlFilters;
 
         public ThreadPartDriver(
-            IPostService postService,
-            IEnumerable<IHtmlFilter> htmlFilters) {
+            IPostService postService) {
             _postService = postService;
-            _htmlFilters = htmlFilters;
         }
 
         protected override string Prefix {
@@ -41,9 +38,7 @@ namespace NGM.Forum.Drivers {
                 ContentShape("Forum_Metadata_Latest", () => {
                         var post = _postService.GetLatestPost(part, VersionOptions.Published, ModerationOptions.Approved);
                         return shapeHelper.Forum_Metadata_Latest(ContentPart: post);
-                    }),
-                ContentShape("Parts_Threads_Thread_Metadata_SummaryAdmin", 
-                    () => shapeHelper.Parts_Threads_Thread_Metadata_SummaryAdmin(ContentPart: part))
+                    })
                 );
         }
     }

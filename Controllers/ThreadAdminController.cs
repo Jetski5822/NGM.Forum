@@ -129,23 +129,6 @@ namespace NGM.Forum.Controllers {
             return this.RedirectLocal(returnUrl, "~/");
         }
 
-        public ActionResult Approving(int threadId, bool isApproved, string returnUrl) {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ApprovingThread, T("Not allowed to approve/unapprove Thread")))
-                return new HttpUnauthorizedResult();
-
-            var threadPart = _threadService.Get(threadId, VersionOptions.Published).As<ThreadPart>();
-
-            if (threadPart == null)
-                return HttpNotFound(T("could not find thread").ToString());
-
-            threadPart.Moderation.Approved = isApproved;
-            threadPart.Moderation.ApprovalUtc = _clock.UtcNow;
-
-            _orchardServices.Notifier.Information(isApproved ? T("Thread has been Approved.") : T("Thread has been Unapproved."));
-
-            return this.RedirectLocal(returnUrl, "~/");
-        }
-
         bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties) {
             return TryUpdateModel(model, prefix, includeProperties, excludeProperties);
         }

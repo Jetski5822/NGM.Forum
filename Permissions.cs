@@ -22,7 +22,7 @@ namespace NGM.Forum {
 
         public static readonly Permission MoveOwnThread = new Permission { Description = "Move your own thread to another forum", Name = "MoveOwnThread" };
         public static readonly Permission MoveThread = new Permission { Description = "Move any thread to another forum", Name = "MoveThread" };
-        public static readonly Permission ApprovingThread = new Permission { Description = "Approve or Unapprove a thread", Name = "ApprovingThread" };
+        public static readonly Permission ApproveUnapprove = new Permission { Description = "Approve or Unapprove", Name = "ApproveUnapprove" };
         
       
         public virtual Feature Feature { get; set; }
@@ -50,7 +50,8 @@ namespace NGM.Forum {
                 
                 MoveOwnThread,
                 MoveThread,
-                ApprovingThread
+
+                ApproveUnapprove
                 //MoveAnyPost,
             };
         }

@@ -29,23 +29,6 @@ namespace NGM.Forum.Controllers {
 
         public Localizer T { get; set; }
 
-        public ActionResult Approving(int postId, bool isApproved, string returnUrl) {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ApprovingPost, T("Not allowed to approve/unapprove Post")))
-                return new HttpUnauthorizedResult();
-
-            var postPart = _postService.Get(postId, VersionOptions.Published).As<PostPart>();
-
-            if (postPart == null)
-                return HttpNotFound(T("could not find post").ToString());
-
-            postPart.Moderation.Approved = isApproved;
-            postPart.Moderation.ApprovalUtc = _clock.UtcNow;
-
-            _orchardServices.Notifier.Information(isApproved ? T("Post has been Approved.") : T("Post has been Unapproved."));
-
-            return this.RedirectLocal(returnUrl, "~/");
-        }
-
         bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties) {
             return TryUpdateModel(model, prefix, includeProperties, excludeProperties);
         }
