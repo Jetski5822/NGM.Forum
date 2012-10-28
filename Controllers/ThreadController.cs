@@ -131,7 +131,7 @@ namespace NGM.Forum.Controllers {
             }
 
             var pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
-            var posts = _postService.Get(threadPart, pager.GetStartIndex(), pager.PageSize)
+            var posts = _postService.Get(threadPart, pager.GetStartIndex(), pager.PageSize, VersionOptions.Published, ApprovalOptions.Approved)
                 .Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Detail"));
 
             dynamic thread = _orchardServices.ContentManager.BuildDisplay(threadPart);

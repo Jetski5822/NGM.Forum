@@ -169,7 +169,7 @@ namespace NGM.Forum.Controllers {
             if (forumPart == null)
                 return HttpNotFound();
 
-            var threads = _threadService.Get(forumPart, pager.GetStartIndex(), pager.PageSize, VersionOptions.Latest).ToArray();
+            var threads = _threadService.Get(forumPart, pager.GetStartIndex(), pager.PageSize, VersionOptions.Latest, ApprovalOptions.All).ToArray();
             var threadsShapes = threads.Select(bp => _contentManager.BuildDisplay(bp, "SummaryAdmin")).ToArray();
 
             dynamic forum = _orchardServices.ContentManager.BuildDisplay(forumPart, "DetailAdmin");

@@ -14,7 +14,7 @@ namespace NGM.Forum.Services {
         IEnumerable<ThreadPart> Get(ForumPart forumPart);
         IEnumerable<ThreadPart> Get(ForumPart forumPart, VersionOptions versionOptions);
         IEnumerable<ThreadPart> Get(ForumPart forumPart, int skip, int count);
-        IEnumerable<ThreadPart> Get(ForumPart forumPart, int skip, int count, VersionOptions versionOptions);
+        IEnumerable<ThreadPart> Get(ForumPart forumPart, int skip, int count, VersionOptions versionOptions, ApprovalOptions approvalOptions);
         int ThreadCount(ForumPart forumPart, VersionOptions versionOptions);
     }
 
@@ -45,26 +45,34 @@ namespace NGM.Forum.Services {
         }
 
         public IEnumerable<ThreadPart> Get(ForumPart forumPart, VersionOptions versionOptions) {
-            return GetForumQuery(forumPart, versionOptions).List().Select(ci => ci.As<ThreadPart>());
+            return GetForumQuery(forumPart, versionOptions, ApprovalOptions.All).List().Select(ci => ci.As<ThreadPart>());
         }
 
         public IEnumerable<ThreadPart> Get(ForumPart forumPart, int skip, int count) {
-            return Get(forumPart, skip, count, VersionOptions.Published);
+            return Get(forumPart, skip, count, VersionOptions.Published, ApprovalOptions.All);
         }
 
-        public IEnumerable<ThreadPart> Get(ForumPart forumPart, int skip, int count, VersionOptions versionOptions) {
-            return GetForumQuery(forumPart, versionOptions).Slice(skip, count).ToList().Select(ci => ci.As<ThreadPart>());
+        public IEnumerable<ThreadPart> Get(ForumPart forumPart, int skip, int count, VersionOptions versionOptions, ApprovalOptions approvalOptions) {
+            return GetForumQuery(forumPart, versionOptions, approvalOptions)
+                .Slice(skip, count)
+                .ToList()
+                .Select(ci => ci.As<ThreadPart>());
         }
 
         public int ThreadCount(ForumPart forumPart, VersionOptions versionOptions) {
-            return GetForumQuery(forumPart, versionOptions).Count();
+            return GetForumQuery(forumPart, versionOptions, ApprovalOptions.All).Count();
         }
 
-        private IContentQuery<ContentItem, CommonPartRecord> GetForumQuery(ContentPart<ForumPartRecord> forum, VersionOptions versionOptions) {
-            return
-                _contentManager.Query(versionOptions, Constants.Parts.Thread).Join<CommonPartRecord>().Where(
-                    cr => cr.Container == forum.Record.ContentItemRecord).OrderByDescending(cr => cr.CreatedUtc)
-                    .WithQueryHintsFor(Constants.Parts.Thread);
+        private IContentQuery<ContentItem, CommonPartRecord> GetForumQuery(ContentPart<ForumPartRecord> forum, VersionOptions versionOptions, ApprovalOptions approvalOptions) {
+            var query = _contentManager.Query(versionOptions, Constants.Parts.Thread);
+
+            if (!Equals(approvalOptions, ApprovalOptions.All)) {
+                query = query.Join<ThreadPartRecord>().Where(trd => trd.Approved == approvalOptions.IsApproved);
+            }
+
+            return query.Join<CommonPartRecord>().Where(
+                cr => cr.Container == forum.Record.ContentItemRecord).OrderByDescending(cr => cr.CreatedUtc)
+                .WithQueryHintsFor(Constants.Parts.Thread);
         }
     }
 }
