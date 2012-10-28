@@ -1,17 +1,11 @@
-using System.Linq;
 using System.Web.Mvc;
 using NGM.Forum.Models;
-//using NGM.Forum.Routing;
 using NGM.Forum.Services;
-using NGM.Forum.ViewModels;
 using Orchard;
 using Orchard.ContentManagement;
-using Orchard.ContentManagement.Aspects;
-using Orchard.DisplayManagement;
 using Orchard.Localization;
-using Orchard.Settings;
+using Orchard.Services;
 using Orchard.UI.Admin;
-using Orchard.UI.Navigation;
 using Orchard.UI.Notify;
 using Orchard.Mvc.Extensions;
 
@@ -20,32 +14,19 @@ namespace NGM.Forum.Controllers {
     [ValidateInput(false), Admin]
     public class PostAdminController : Controller, IUpdateModel {
         private readonly IOrchardServices _orchardServices;
-        private readonly IForumService _forumService;
-        private readonly IThreadService _threadService;
-        private readonly ISiteService _siteService;
         private readonly IPostService _postService;
-        //private readonly IForumPathConstraint _forumPathConstraint;
+        private readonly IClock _clock;
 
         public PostAdminController(IOrchardServices orchardServices,
-            IForumService forumService,
-            IThreadService threadService,
-            ISiteService siteService,
-            IShapeFactory shapeFactory,
-            IPostService postService
-            //IForumPathConstraint forumPathConstraint
-            ) {
+            IPostService postService,
+            IClock clock) {
             _orchardServices = orchardServices;
-            _forumService = forumService;
-            _threadService = threadService;
-            _siteService = siteService;
             _postService = postService;
-            //_forumPathConstraint = forumPathConstraint;
+            _clock = clock;
 
             T = NullLocalizer.Instance;
-            Shape = shapeFactory;
         }
 
-        dynamic Shape { get; set; }
         public Localizer T { get; set; }
 
         public ActionResult Approving(int postId, bool isApproved, string returnUrl) {
@@ -57,7 +38,8 @@ namespace NGM.Forum.Controllers {
             if (postPart == null)
                 return HttpNotFound(T("could not find post").ToString());
 
-            postPart.Approved = isApproved;
+            postPart.Moderation.Approved = isApproved;
+            postPart.Moderation.ApprovalUtc = _clock.UtcNow;
 
             _orchardServices.Notifier.Information(isApproved ? T("Post has been Approved.") : T("Post has been Unapproved."));
 

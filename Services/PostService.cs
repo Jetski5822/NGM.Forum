@@ -13,10 +13,10 @@ namespace NGM.Forum.Services {
         IEnumerable<PostPart> Get(ThreadPart threadPart);
         IEnumerable<PostPart> Get(ThreadPart threadPart, VersionOptions versionOptions);
         IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count);
-        IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count, VersionOptions versionOptions, ApprovalOptions approvalOptions);
-        PostPart GetFirstPost(ThreadPart threadPart, VersionOptions versionOptions, ApprovalOptions approvalOptions);
-        PostPart GetLatestPost(ForumPart forumPart, VersionOptions versionOptions, ApprovalOptions approvalOptions);
-        PostPart GetLatestPost(ThreadPart threadPart, VersionOptions versionOptions, ApprovalOptions approvalOptions);
+        IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count, VersionOptions versionOptions, ModerationOptions moderationOptions);
+        PostPart GetFirstPost(ThreadPart threadPart, VersionOptions versionOptions, ModerationOptions moderationOptions);
+        PostPart GetLatestPost(ForumPart forumPart, VersionOptions versionOptions, ModerationOptions moderationOptions);
+        PostPart GetLatestPost(ThreadPart threadPart, VersionOptions versionOptions, ModerationOptions moderationOptions);
     }
 
     public class PostService : IPostService {
@@ -34,31 +34,33 @@ namespace NGM.Forum.Services {
             return _contentManager.Get(id, versionOptions);
         }
 
-        public PostPart GetLatestPost(ForumPart forumPart, VersionOptions versionOptions, ApprovalOptions approvalOptions) {
+        public PostPart GetLatestPost(ForumPart forumPart, VersionOptions versionOptions, ModerationOptions moderationOptions) {
             var threadParts = _contentManager
                 .Query<ThreadPart, ThreadPartRecord>(versionOptions)
                 .Join<CommonPartRecord>().Where(cpr => cpr.Container == forumPart.ContentItem.Record)
                 .List();
 
             return threadParts
-                .Select(o => GetLatestPost(o, versionOptions, approvalOptions))
+                .Select(o => GetLatestPost(o, versionOptions, moderationOptions))
                 .OrderBy(o => o.As<ICommonPart>().PublishedUtc)
                 .LastOrDefault();
         }
 
-        public PostPart GetFirstPost(ThreadPart threadPart, VersionOptions versionOptions, ApprovalOptions approvalOptions) {
-            return GetQuery(threadPart, versionOptions, approvalOptions).FirstOrDefault(o => o.IsParentThread());
+        public PostPart GetFirstPost(ThreadPart threadPart, VersionOptions versionOptions, ModerationOptions moderationOptions) {
+            return GetQuery(threadPart, versionOptions, moderationOptions).FirstOrDefault(o => o.IsParentThread());
         }
 
-        public PostPart GetLatestPost(ThreadPart threadPart, VersionOptions versionOptions, ApprovalOptions approvalOptions) {
-            return GetQuery(threadPart, versionOptions, approvalOptions).LastOrDefault();
+        public PostPart GetLatestPost(ThreadPart threadPart, VersionOptions versionOptions, ModerationOptions moderationOptions) {
+            return GetQuery(threadPart, versionOptions, moderationOptions).LastOrDefault();
         }
 
-        private IEnumerable<PostPart> GetQuery(ThreadPart threadPart, VersionOptions versionOptions, ApprovalOptions approvalOptions) {
+        private IEnumerable<PostPart> GetQuery(ThreadPart threadPart, VersionOptions versionOptions, ModerationOptions moderationOptions) {
             var query = _contentManager.Query<PostPart, PostPartRecord>(versionOptions);
 
-            if (approvalOptions == ApprovalOptions.All) {
-                query = query.Join<PostPartRecord>().Where(trd => trd.Approved == approvalOptions.IsApproved);
+            if (!Equals(moderationOptions, ModerationOptions.All)) {
+                return query.Join<ModerationPartRecord>().Where(trd => trd.Approved == moderationOptions.IsApproved)
+                            .Join<CommonPartRecord>().Where(cpr => cpr.Container == threadPart.ContentItem.Record)
+                            .List();
             }
 
             return query.Join<CommonPartRecord>().Where(cpr => cpr.Container == threadPart.ContentItem.Record)
@@ -75,14 +77,14 @@ namespace NGM.Forum.Services {
         }
 
         public IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count) {
-            return Get(threadPart, skip, count, VersionOptions.Published, ApprovalOptions.Approved);
+            return Get(threadPart, skip, count, VersionOptions.Published, ModerationOptions.Approved);
         }
 
-        public IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count, VersionOptions versionOptions, ApprovalOptions approvalOptions) {
+        public IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count, VersionOptions versionOptions, ModerationOptions moderationOptions) {
             var query = _contentManager.Query(versionOptions, Constants.Parts.Post);
 
-            if (!Equals(approvalOptions, ApprovalOptions.All)) {
-                query = query.Join<ThreadPartRecord>().Where(trd => trd.Approved == approvalOptions.IsApproved);
+            if (!Equals(moderationOptions, ModerationOptions.All)) {
+                query = query.Join<ModerationPartRecord>().Where(trd => trd.Approved == moderationOptions.IsApproved);
             }
 
             return query.Join<CommonPartRecord>().Where(cpr => cpr.Container == threadPart.ContentItem.Record)

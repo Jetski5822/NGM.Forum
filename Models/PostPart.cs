@@ -26,9 +26,8 @@ namespace NGM.Forum.Models {
             set { this.As<ICommonPart>().Container = value; }
         }
 
-        public bool Approved {
-            get { return Record.Approved; }
-            set { Record.Approved = value; }
+        public ModerationPart Moderation {
+            get { return this.As<ModerationPart>(); }
         }
 
         public bool IsParentThread() {
@@ -43,7 +42,5 @@ namespace NGM.Forum.Models {
         public virtual string Text { get; set; }
 
         public virtual string Format { get; set; }
-
-        public virtual bool Approved { get; set; }
     }
 }

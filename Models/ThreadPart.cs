@@ -15,14 +15,13 @@ namespace NGM.Forum.Models {
             set { this.As<ICommonPart>().Container = value; }
         }
 
+        public ModerationPart Moderation {
+            get { return this.As<ModerationPart>(); }
+        }
+
         public int PostCount {
             get { return Record.PostCount; }
             set { Record.PostCount = value; }
-        }
-
-        public bool Approved {
-            get { return Record.Approved; }
-            set { Record.Approved = value; }
         }
 
         public int ReplyCount {
@@ -32,7 +31,5 @@ namespace NGM.Forum.Models {
 
     public class ThreadPartRecord : ContentPartRecord {
         public virtual int PostCount { get; set; }
-
-        public virtual bool Approved { get; set; }
     }
 }

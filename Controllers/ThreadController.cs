@@ -1,14 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Web.Mvc;
 using NGM.Forum.Extensions;
 using NGM.Forum.Models;
-//using NGM.Forum.Routing;
 using NGM.Forum.Services;
 using Orchard;
 using Orchard.ContentManagement;
-using Orchard.ContentManagement.Aspects;
-using Orchard.Core.Feeds;
 using Orchard.DisplayManagement;
 using Orchard.Localization;
 using Orchard.Mvc;
@@ -23,27 +19,21 @@ namespace NGM.Forum.Controllers {
     public class ThreadController : Controller, IUpdateModel {
         private readonly IOrchardServices _orchardServices;
         private readonly IForumService _forumService;
-        //private readonly IForumPathConstraint _forumPathConstraint;
         private readonly IThreadService _threadService;
         private readonly IPostService _postService;
         private readonly ISiteService _siteService;
-        private readonly IFeedManager _feedManager;
 
         public ThreadController(IOrchardServices orchardServices,
             IForumService forumService,
-            //IForumPathConstraint forumPathConstraint,
             IThreadService threadService,
             IPostService postService,
             ISiteService siteService,
-            IShapeFactory shapeFactory,
-            IFeedManager feedManager) {
+            IShapeFactory shapeFactory) {
             _orchardServices = orchardServices;
             _forumService = forumService;
-            //_forumPathConstraint = forumPathConstraint;
             _threadService = threadService;
             _postService = postService;
             _siteService = siteService;
-            _feedManager = feedManager;
 
             T = NullLocalizer.Instance;
             Shape = shapeFactory;
@@ -86,10 +76,10 @@ namespace NGM.Forum.Controllers {
             if (forum == null)
                 return HttpNotFound();
 
-            var thread = _orchardServices.ContentManager.Create<ThreadPart>(Constants.Parts.Thread, VersionOptions.Draft, (o) => { o.ForumPart = forum; });
+            var thread = _orchardServices.ContentManager.Create<ThreadPart>(Constants.Parts.Thread, VersionOptions.Draft, o => { o.ForumPart = forum; });
             var threadModel = _orchardServices.ContentManager.UpdateEditor(thread, this);
 
-            var post = _orchardServices.ContentManager.Create<PostPart>(Constants.Parts.Post, VersionOptions.Draft, (o) => { o.ThreadPart = thread; });
+            var post = _orchardServices.ContentManager.Create<PostPart>(Constants.Parts.Post, VersionOptions.Draft, o => { o.ThreadPart = thread; });
             var postModel = _orchardServices.ContentManager.UpdateEditor(post, this);
             post.ThreadPart = thread;
 
@@ -125,13 +115,13 @@ namespace NGM.Forum.Controllers {
             if (threadPart == null)
                 return HttpNotFound();
 
-            if (!threadPart.Approved) {
+            if (!threadPart.Moderation.Approved) {
                 _orchardServices.Notifier.Information(T("This Thread is awaiting approval."));
                 return Redirect(Url.ForumView(forumPart));
             }
 
             var pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
-            var posts = _postService.Get(threadPart, pager.GetStartIndex(), pager.PageSize, VersionOptions.Published, ApprovalOptions.Approved)
+            var posts = _postService.Get(threadPart, pager.GetStartIndex(), pager.PageSize, VersionOptions.Published, ModerationOptions.Approved)
                 .Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Detail"));
 
             dynamic thread = _orchardServices.ContentManager.BuildDisplay(threadPart);

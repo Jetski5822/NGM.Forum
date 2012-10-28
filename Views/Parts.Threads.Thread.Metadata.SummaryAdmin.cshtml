@@ -4,11 +4,13 @@
     ThreadPart threadPart = Model.ContentPart;
 }
 <ul class="contentItemStatus">
-    @* Published or not *@
-    @if (threadPart.IsApproved()) {
+    @if (threadPart.Moderation.Approved) {
         <li><img class="icon" src="@Href("~/Modules/NGM.Forum/Content/Admin/images/approved.gif")" alt="@T("Approved")" title="@T("The thread is currently approved")" /> </li> <li>@T("Approved")&nbsp;&#124;&nbsp;</li>
     }
-    else {
+    else if (!threadPart.Moderation.Approved && threadPart.Moderation.ApprovalUtc == null) {
         <li><img class="icon" src="@Href("~/Modules/NGM.Forum/Content/Admin/images/awaitingapproval.gif")" alt="@T("Awaiting approval")" title="@T("The thread is awaiting approval")" /> </li> <li>@T("Awaiting Approval")&nbsp;&#124;&nbsp;</li>
+    }
+    else if (!threadPart.Moderation.Approved && threadPart.Moderation.ApprovalUtc != null) {
+        <li><img class="icon" src="@Href("~/Modules/NGM.Forum/Content/Admin/images/notapproved.gif")" alt="@T("Not approved")" title="@T("The thread is not approved")" /> </li> <li>@T("Not Approved")&nbsp;&#124;&nbsp;</li>
     }
 </ul>

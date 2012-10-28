@@ -64,11 +64,11 @@
     <Compile Include="Controllers\PostAdminController.cs" />
     <Compile Include="Controllers\ThreadAdminController.cs" />
     <Compile Include="DefaultTaxonomyUpdater.cs" />
+    <Compile Include="Drivers\ModerationPartDriver.cs" />
     <Compile Include="Drivers\UserForumPartDriver.cs" />
-    <Compile Include="Models\ApprovalOptions.cs" />
+    <Compile Include="Handlers\ModerationPartHandler.cs" />
+    <Compile Include="Models\ModerationOptions.cs" />
     <Compile Include="Extensions\ContainerExtensions.cs" />
-    <Compile Include="Extensions\PostExtensions.cs" />
-    <Compile Include="Extensions\ThreadExtensions.cs" />
     <Compile Include="Handlers\UserForumPartHandler.cs" />
     <Compile Include="Models\ModerationPart.cs" />
     <Compile Include="Models\UserForumPart.cs" />
@@ -109,6 +109,9 @@
     <Compile Include="Services\ThreadService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Admin\Images\approved.gif" />
+    <Content Include="Content\Admin\Images\awaitingapproval.gif" />
+    <Content Include="Content\Admin\Images\notapproved.gif" />
     <Content Include="Content\Images\answer-correct-16x16.gif" />
     <Content Include="Content\Images\answer-correct-2-16x16.gif" />
     <Content Include="Content\Images\answer-helpful-16x16.gif" />
@@ -332,6 +335,7 @@
   <ItemGroup>
     <Content Include="Views\Parts.Thread.Post.Metadata.SummaryAdmin.cshtml" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

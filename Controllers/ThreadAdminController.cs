@@ -1,8 +1,6 @@
 using System.Linq;
 using System.Web.Mvc;
-using NGM.Forum.Extensions;
 using NGM.Forum.Models;
-//using NGM.Forum.Routing;
 using NGM.Forum.Services;
 using NGM.Forum.ViewModels;
 using Orchard;
@@ -10,6 +8,7 @@ using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
 using Orchard.DisplayManagement;
 using Orchard.Localization;
+using Orchard.Services;
 using Orchard.Settings;
 using Orchard.UI.Admin;
 using Orchard.UI.Navigation;
@@ -25,22 +24,21 @@ namespace NGM.Forum.Controllers {
         private readonly IThreadService _threadService;
         private readonly ISiteService _siteService;
         private readonly IPostService _postService;
-        //private readonly IForumPathConstraint _forumPathConstraint;
+        private readonly IClock _clock;
 
         public ThreadAdminController(IOrchardServices orchardServices,
             IForumService forumService,
             IThreadService threadService,
             ISiteService siteService,
             IShapeFactory shapeFactory,
-            IPostService postService
-            //IForumPathConstraint forumPathConstraint
-            ) {
+            IPostService postService,
+            IClock clock) {
             _orchardServices = orchardServices;
             _forumService = forumService;
             _threadService = threadService;
             _siteService = siteService;
             _postService = postService;
-            //_forumPathConstraint = forumPathConstraint;
+            _clock = clock;
 
             T = NullLocalizer.Instance;
             Shape = shapeFactory;
@@ -55,9 +53,7 @@ namespace NGM.Forum.Controllers {
             var forum = _forumService.Get(forumId, VersionOptions.Latest).As<ForumPart>();
 
             list.AddRange(_threadService.Get(forum)
-                              .Select(b => {
-                                  return _orchardServices.ContentManager.BuildDisplay(b, "SummaryAdmin");
-                              }));
+                              .Select(b => _orchardServices.ContentManager.BuildDisplay(b, "SummaryAdmin")));
 
             dynamic viewModel = _orchardServices.New.ViewModel()
                 .ContentItems(list);
@@ -66,13 +62,13 @@ namespace NGM.Forum.Controllers {
         }
 
         public ActionResult Item(int threadId, PagerParameters pagerParameters) {
-            Pager pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
-            ThreadPart threadPart = _threadService.Get(threadId, VersionOptions.Latest).As<ThreadPart>();
+            var pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
+            var threadPart = _threadService.Get(threadId, VersionOptions.Latest).As<ThreadPart>();
 
             if (threadPart == null)
                 return HttpNotFound();
 
-            var posts = _postService.Get(threadPart, pager.GetStartIndex(), pager.PageSize, VersionOptions.Latest, ApprovalOptions.All)
+            var posts = _postService.Get(threadPart, pager.GetStartIndex(), pager.PageSize, VersionOptions.Latest, ModerationOptions.All)
                 .Select(bp => _orchardServices.ContentManager.BuildDisplay(bp, "SummaryAdmin"));
 
             dynamic thread = _orchardServices.ContentManager.BuildDisplay(threadPart, "DetailAdmin");
@@ -142,7 +138,8 @@ namespace NGM.Forum.Controllers {
             if (threadPart == null)
                 return HttpNotFound(T("could not find thread").ToString());
 
-            threadPart.Approved = isApproved;
+            threadPart.Moderation.Approved = isApproved;
+            threadPart.Moderation.ApprovalUtc = _clock.UtcNow;
 
             _orchardServices.Notifier.Information(isApproved ? T("Thread has been Approved.") : T("Thread has been Unapproved."));
 

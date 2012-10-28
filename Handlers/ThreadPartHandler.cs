@@ -7,32 +7,26 @@ using Orchard.ContentManagement;
 using Orchard.ContentManagement.Handlers;
 using Orchard.Core.Common.Models;
 using Orchard.Data;
-using Orchard.Security;
 
 namespace NGM.Forum.Handlers {
     public class ThreadPartHandler : ContentHandler {
         private readonly IPostService _postService;
         private readonly IThreadService _threadService;
         private readonly IForumService _forumService;
-        private readonly IAuthenticationService _authenticationService;
 
         public ThreadPartHandler(IRepository<ThreadPartRecord> repository, 
             IPostService postService,
             IThreadService threadService,
-            IForumService forumService,
-            IAuthenticationService authenticationService) {
+            IForumService forumService) {
             _postService = postService;
             _threadService = threadService;
             _forumService = forumService;
-            _authenticationService = authenticationService;
 
             Filters.Add(StorageFilter.For(repository));
 
             OnGetDisplayShape<ThreadPart>(SetModelProperties);
             OnGetEditorShape<ThreadPart>(SetModelProperties);
             OnUpdateEditorShape<ThreadPart>(SetModelProperties);
-
-            OnCreating<ThreadPart>(SetInitialProperties);
 
             OnCreated<ThreadPart>((context, part) => UpdateForumPartCounters(part));
             OnPublished<ThreadPart>((context, part) => UpdateForumPartCounters(part));
@@ -47,19 +41,12 @@ namespace NGM.Forum.Handlers {
                     .ForEach(thread => context.ContentManager.Remove(thread.ContentItem)));
         }
 
-        private void SetInitialProperties(CreateContentContext context, ThreadPart part) {
-            part.Approved = !_authenticationService.GetAuthenticatedUser().As<UserForumPart>().RequiresModeration;
-        }
-
-        //UpdateAssociateParentPost(part);
-        
-
         private void SetModelProperties(BuildShapeContext context, ThreadPart threadPart) {
             context.Shape.Forum = threadPart.ForumPart;
         }
 
         private void UpdateForumPartCounters(ThreadPart threadPart) {
-            CommonPart commonPart = threadPart.As<CommonPart>();
+            var commonPart = threadPart.As<CommonPart>();
             if (commonPart != null &&
                 commonPart.Record.Container != null) {
 

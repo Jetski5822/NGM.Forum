@@ -1,4 +1,5 @@
-﻿using Contrib.ImportExport.Services;
+﻿using System;
+using Contrib.ImportExport.Services;
 using NGM.Forum.Extensions;
 using Orchard.ContentManagement.MetaData;
 using Orchard.Data.Migration;
@@ -24,7 +25,6 @@ namespace NGM.Forum {
                 table => table
                     .ContentPartRecord()
                     .Column<int>("PostCount")
-                    .Column<bool>("Approved")
                 );
 
             SchemaBuilder.CreateTable("PostPartRecord",
@@ -33,7 +33,6 @@ namespace NGM.Forum {
                     .Column<int>("ParentPostId")
                     .Column<string>("Text", column => column.Unlimited())
                     .Column<string>("Format")
-                    .Column<bool>("Approved")
                 );
 
 
@@ -41,6 +40,13 @@ namespace NGM.Forum {
                 table => table
                     .ContentPartRecord()
                     .Column<bool>("RequiresModeration")
+                );
+
+            SchemaBuilder.CreateTable("ModerationPartRecord",
+                table => table
+                    .ContentPartRecord()
+                    .Column<bool>("Approved")
+                    .Column<DateTime>("ApprovalUtc")
                 );
 
             var categoryTaxonomyPart = _taxonomyImportService.CreateTaxonomy(Constants.Taxonomies.Categories);
@@ -78,6 +84,7 @@ namespace NGM.Forum {
                 .WithPart("CommonPart", builder => builder
                     .WithSetting("OwnerEditorSettings.ShowOwnerEditor", "false"))
                 .WithPart("TitlePart")
+                .WithPart("ModerationPart")
                 .WithPart("AutoroutePart", builder => builder
                     .WithSetting("AutorouteSettings.AllowCustomPattern", "false")
                     .WithSetting("AutorouteSettings.AutomaticAdjustmentOnEdit", "false")
@@ -87,6 +94,7 @@ namespace NGM.Forum {
 
             ContentDefinitionManager.AlterTypeDefinition("Post", cfg => cfg
                 .WithPart("PostPart")
+                .WithPart("ModerationPart")
                 .WithPart("CommonPart", builder => builder
                     .WithSetting("OwnerEditorSettings.ShowOwnerEditor", "false"))
             );

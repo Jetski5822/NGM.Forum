@@ -33,15 +33,17 @@ namespace NGM.Forum.Drivers {
                 ContentShape("Parts_Threads_Thread_ThreadReplyCount",
                     () => shapeHelper.Parts_Threads_Thread_ThreadReplyCount(ReplyCount: part.ReplyCount)),
                 ContentShape("Parts_Thread_Manage", () => {
-                        var post = _postService.GetFirstPost(part, VersionOptions.Published, ApprovalOptions.Approved);
+                        var post = _postService.GetFirstPost(part, VersionOptions.Published, ModerationOptions.Approved);
                         return shapeHelper.Parts_Thread_Manage(ContentPart: post);
                     }),
                 //ContentShape("Parts_Threads_Thread_FirstPostSummary",
                 //    () => shapeHelper.Parts_Threads_Post_Summary(ContentPart: firstPost)),
                 ContentShape("Forum_Metadata_Latest", () => {
-                        var post = _postService.GetLatestPost(part, VersionOptions.Published, ApprovalOptions.Approved);
+                        var post = _postService.GetLatestPost(part, VersionOptions.Published, ModerationOptions.Approved);
                         return shapeHelper.Forum_Metadata_Latest(ContentPart: post);
-                    })
+                    }),
+                ContentShape("Parts_Threads_Thread_Metadata_SummaryAdmin", 
+                    () => shapeHelper.Parts_Threads_Thread_Metadata_SummaryAdmin(ContentPart: part))
                 );
         }
     }
