@@ -138,7 +138,9 @@ namespace NGM.Forum.Controllers {
 
                 dynamic model = _orchardServices.ContentManager.BuildEditor(part);
 
-                thread.Content.Add(Shape.Parts_Thread_Post_Create(ContentEditor: model, ContentId: threadPart.Id), "10");
+                var firstPostId =  _postService.GetFirstPost(threadPart, VersionOptions.Published, ModerationOptions.Approved).Id;
+
+                thread.Content.Add(Shape.Parts_Thread_Post_Create(ContentEditor: model, ContentId: firstPostId), "10");
             }
 
             return new ShapeResult(this, thread);

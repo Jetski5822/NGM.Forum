@@ -1,0 +1,13 @@
+﻿@using NGM.Forum.Extensions
+@using NGM.Forum.Models
+@{
+    PostPart contentPart = Model.ContentPart;
+}
+<ul>
+    @if (contentPart.IsParentThread()) {
+        <li>@T("Parent post")@T(" | ")</li>
+    }
+    else {
+        <li>@T("In reply to {0}", contentPart.ParentPostId)@T(" | ")</li>
+    }
+</ul>

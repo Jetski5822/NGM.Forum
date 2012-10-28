@@ -63,6 +63,9 @@
     <Match DisplayType="Detail">
       <Place Parts_Post_Manage="Content:after"/>
     </Match>
+    <Match DisplayType="SummaryAdmin">
+      <Place Parts_Thread_Post_Metadata_SummaryAdmin="Meta:1.2"/>
+    </Match>
     
   </Match>
 </Placement>

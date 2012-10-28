@@ -46,7 +46,9 @@ namespace NGM.Forum.Drivers {
                                  return shapeHelper.Parts_Threads_Post_Body_Summary(Html: new HtmlString(bodyText));
                              }),
                 ContentShape("Parts_Post_Manage", () => 
-                    shapeHelper.Parts_Post_Manage(ContentPart: part))
+                    shapeHelper.Parts_Post_Manage(ContentPart: part)),
+                ContentShape("Parts_Thread_Post_Metadata_SummaryAdmin", () =>
+                    shapeHelper.Parts_Thread_Post_Metadata_SummaryAdmin(ContentPart: part))
                 );
         }
 

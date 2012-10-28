@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using NGM.Forum.Extensions;
 using NGM.Forum.Models;
+using NGM.Forum.Services;
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.Localization;
@@ -12,9 +13,11 @@ namespace NGM.Forum.Controllers {
     [Themed]
     [ValidateInput(false)]
     public class PostController : Controller, IUpdateModel {
+        private readonly IPostService _postService;
         private readonly IOrchardServices _orchardServices;
 
-        public PostController(IOrchardServices orchardServices) {
+        public PostController(IOrchardServices orchardServices, IPostService postService) {
+            _postService = postService;
             _orchardServices = orchardServices;
 
             Logger = NullLogger.Instance;
@@ -86,6 +89,12 @@ namespace NGM.Forum.Controllers {
             var post = _orchardServices.ContentManager.New<PostPart>(Constants.Parts.Post);
             
             if (contentItem.As<PostPart>() == null) {
+                // Perform a check
+                if (_postService.GetFirstPost(contentItem.As<ThreadPart>(), VersionOptions.Published, ModerationOptions.All) != null) {
+                    _orchardServices.Notifier.Error(T("You cannot attach two parent posts to a thread."));
+                    return Redirect(Url.ThreadView(contentItem.As<ThreadPart>()));
+                }
+
                 post.ThreadPart = contentItem.As<ThreadPart>();
             }
             else {
