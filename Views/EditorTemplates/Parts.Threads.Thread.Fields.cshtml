@@ -1,0 +1,10 @@
+﻿@using NGM.Forum
+@model NGM.Forum.Models.ThreadPart
+
+@if (AuthorizedFor(Permissions.StickyThread)) {
+    <div>
+        @Html.EditorFor(m => m.IsSticky)
+        <label class="forcheckbox" for="@Html.FieldIdFor(m => m.IsSticky)">@T("Is Sticky")</label>
+        <span class="hint">@T("Threads that are important but rarely receive posts are stickyed. A sticky thread will always appear in front of normal threads.")</span>
+    </div>
+}

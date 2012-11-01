@@ -39,6 +39,8 @@ namespace NGM.Forum.Handlers {
                     .Get(context.ContentItem.As<ForumPart>())
                     .ToList()
                     .ForEach(thread => context.ContentManager.Remove(thread.ContentItem)));
+
+
         }
 
         private void SetModelProperties(BuildShapeContext context, ThreadPart threadPart) {

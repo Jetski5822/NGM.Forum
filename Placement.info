@@ -1,6 +1,8 @@
 ﻿<Placement>
   <!-- edit "shapes" -->
   <Place Parts_Forums_Forum_Fields="Content:2"/>
+  <Place Parts_Threads_Thread_Fields="Content:2"/>
+  
   <Place Forum_DeleteButton="Sidebar:25" />
 
   <Place Parts_Threads_Post_Body_Edit="Content:2"/>

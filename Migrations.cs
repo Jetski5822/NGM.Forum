@@ -25,6 +25,7 @@ namespace NGM.Forum {
                 table => table
                     .ContentPartRecord()
                     .Column<int>("PostCount")
+                    .Column<bool>("IsSticky")
                 );
 
             SchemaBuilder.CreateTable("PostPartRecord",
@@ -40,6 +41,9 @@ namespace NGM.Forum {
                 table => table
                     .ContentPartRecord()
                     .Column<bool>("RequiresModeration")
+                    // Is this a default somewhere?
+                    // More thought requried
+                    //.Column<int>("ApprovalsUntilModerationNotRequired")
                 );
 
             SchemaBuilder.CreateTable("ModerationPartRecord",

@@ -24,6 +24,11 @@ namespace NGM.Forum.Models {
             set { Record.PostCount = value; }
         }
 
+        public bool IsSticky {
+            get { return Record.IsSticky; }
+            set { Record.IsSticky = value; }
+        }
+        
         public int ReplyCount {
             get { return PostCount >= 1 ? PostCount - 1 : 0; }
         }
@@ -31,5 +36,6 @@ namespace NGM.Forum.Models {
 
     public class ThreadPartRecord : ContentPartRecord {
         public virtual int PostCount { get; set; }
+        public virtual bool IsSticky { get; set; }
     }
 }

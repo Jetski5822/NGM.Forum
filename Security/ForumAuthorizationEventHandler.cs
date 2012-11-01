@@ -45,6 +45,8 @@ namespace NGM.Forum.Security {
                 return Permissions.EditOwnPost;
             if (permission.Name == Permissions.MoveThread.Name)
                 return Permissions.MoveOwnThread;
+            if (permission.Name == Permissions.StickyThread.Name)
+                return Permissions.StickyOwnThread;
             //if (permission.Name == Permissions.MarkPostAsAnswer.Name)
             //    return Permissions.MarkPostInOwnThreadAsAnswer;
             return null;

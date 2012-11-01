@@ -7,6 +7,7 @@ using NGM.Forum.Services;
 using NGM.Forum.Settings;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Drivers;
+using Orchard.Security;
 using Orchard.Services;
 
 namespace NGM.Forum.Drivers {
@@ -40,6 +41,18 @@ namespace NGM.Forum.Drivers {
                         return shapeHelper.Forum_Metadata_Latest(ContentPart: post);
                     })
                 );
+        }
+
+        protected override DriverResult Editor(ThreadPart part, dynamic shapeHelper) {
+            return ContentShape("Parts_Threads_Thread_Fields", () => 
+                shapeHelper.EditorTemplate(TemplateName: "Parts.Threads.Thread.Fields", Model: part, Prefix: Prefix));
+        }
+
+        protected override DriverResult Editor(ThreadPart part, IUpdateModel updater, dynamic shapeHelper) {
+            if (updater.TryUpdateModel(part, Prefix, null, null)) {
+            }
+
+            return Editor(part, shapeHelper);
         }
     }
 }
