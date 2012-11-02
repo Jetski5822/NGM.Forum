@@ -117,6 +117,7 @@
   <ItemGroup>
     <Content Include="Content\Admin\Images\approved.gif" />
     <Content Include="Content\Admin\Images\awaitingapproval.gif" />
+    <Content Include="Content\Admin\Images\sticky.gif" />
     <Content Include="Content\Admin\Images\notapproved.gif" />
     <Content Include="Content\Images\answer-correct-16x16.gif" />
     <Content Include="Content\Images\answer-correct-2-16x16.gif" />
@@ -342,6 +343,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\EditorTemplates\Parts.Threads.Thread.Fields.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Threads.Thread.Metadata.SummaryAdmin.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

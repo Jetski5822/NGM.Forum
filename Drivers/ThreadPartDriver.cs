@@ -39,7 +39,11 @@ namespace NGM.Forum.Drivers {
                 ContentShape("Forum_Metadata_Latest", () => {
                         var post = _postService.GetLatestPost(part, VersionOptions.Published, ModerationOptions.Approved);
                         return shapeHelper.Forum_Metadata_Latest(ContentPart: post);
+                    }),
+                ContentShape("Parts_Threads_Thread_Metadata_SummaryAdmin", () => {
+                        return shapeHelper.Parts_Threads_Thread_Metadata_SummaryAdmin(ContentPart: part);
                     })
+
                 );
         }
 

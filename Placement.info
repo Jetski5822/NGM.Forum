@@ -58,7 +58,8 @@
              Forum_Metadata_Latest="Content:after"/>
     </Match>
     <Match DisplayType="SummaryAdmin">
-      <Place Parts_Threads_Thread_SummaryAdmin="Actions:10"/>
+      <Place Parts_Threads_Thread_SummaryAdmin="Actions:10"
+             Parts_Threads_Thread_Metadata_SummaryAdmin="Meta:1.3"/>
     </Match>
   </Match>
   <Match ContentType="Post">
