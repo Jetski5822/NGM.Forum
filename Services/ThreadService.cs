@@ -45,18 +45,25 @@ namespace NGM.Forum.Services {
         }
 
         public IEnumerable<ThreadPart> Get(ForumPart forumPart, VersionOptions versionOptions) {
-            return GetForumQuery(forumPart, versionOptions, ModerationOptions.All).List().Select(ci => ci.As<ThreadPart>());
+            return GetForumQuery(forumPart, versionOptions, ModerationOptions.All)
+                .OrderByDescending(cr => cr.CreatedUtc)
+                .ForPart<ThreadPart>()
+                .List();
         }
 
         public IEnumerable<ThreadPart> Get(ForumPart forumPart, int skip, int count) {
             return Get(forumPart, skip, count, VersionOptions.Published, ModerationOptions.All);
         }
 
+        // The order by on this record needs to be revisited.
         public IEnumerable<ThreadPart> Get(ForumPart forumPart, int skip, int count, VersionOptions versionOptions, ModerationOptions moderationOptions) {
             return GetForumQuery(forumPart, versionOptions, moderationOptions)
-                .Slice(skip, count)
-                .ToList()
-                .Select(ci => ci.As<ThreadPart>());
+                .Join<ThreadPartRecord>()
+                .OrderByDescending(t => t.IsSticky)
+                .Join<CommonPartRecord>()
+                .OrderByDescending(cr => cr.CreatedUtc)
+                .ForPart<ThreadPart>()
+                .Slice(skip, count);
         }
 
         public int ThreadCount(ForumPart forumPart, VersionOptions versionOptions) {
@@ -71,7 +78,7 @@ namespace NGM.Forum.Services {
             }
 
             return query.Join<CommonPartRecord>().Where(
-                cr => cr.Container == forum.Record.ContentItemRecord).OrderByDescending(cr => cr.CreatedUtc)
+                cr => cr.Container == forum.Record.ContentItemRecord)
                 .WithQueryHintsFor(Constants.Parts.Thread);
         }
     }

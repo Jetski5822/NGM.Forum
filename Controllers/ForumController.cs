@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Web.Mvc;
-using NGM.Forum.Extensions;
 using NGM.Forum.Models;
-//using NGM.Forum.Routing;
 using NGM.Forum.Services;
 using Orchard;
 using Orchard.ContentManagement;
-using Orchard.Core.Feeds;
 using Orchard.DisplayManagement;
 using Orchard.Localization;
 using Orchard.Logging;
@@ -66,7 +62,8 @@ namespace NGM.Forum.Controllers {
             if (forumPart == null)
                 return HttpNotFound();
 
-            var threads = _threadService.Get(forumPart, pager.GetStartIndex(), pager.PageSize, VersionOptions.Published, ModerationOptions.Approved)
+            var threads = _threadService
+                .Get(forumPart, pager.GetStartIndex(), pager.PageSize, VersionOptions.Published, ModerationOptions.Approved)
                 .Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Summary"));
 
             dynamic forum = _orchardServices.ContentManager.BuildDisplay(forumPart);
