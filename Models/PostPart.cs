@@ -5,9 +5,9 @@ using Orchard.Data.Conventions;
 
 namespace NGM.Forum.Models {
     public class PostPart : ContentPart<PostPartRecord> {
-        public int ParentPostId {
-            get { return Record.ParentPostId; }
-            set { Record.ParentPostId = value; }
+        public int? RepliedOn {
+            get { return Record.RepliedOn; }
+            set { Record.RepliedOn = value; }
         }
 
         public string Text {
@@ -31,12 +31,12 @@ namespace NGM.Forum.Models {
         }
 
         public bool IsParentThread() {
-            return ParentPostId == 0;
+            return RepliedOn == null;
         }
     }
 
     public class PostPartRecord : ContentPartRecord {
-        public virtual int ParentPostId { get; set; }
+        public virtual int? RepliedOn { get; set; }
 
         [StringLengthMax]
         public virtual string Text { get; set; }

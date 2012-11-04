@@ -99,7 +99,7 @@ namespace NGM.Forum.Controllers {
             }
             else {
                 post.ThreadPart = contentItem.As<PostPart>().ThreadPart;
-                post.ParentPostId = contentItem.As<PostPart>().Id;
+                post.RepliedOn = contentItem.As<PostPart>().Id;
             }
 
             _orchardServices.ContentManager.Create(post, VersionOptions.Draft);

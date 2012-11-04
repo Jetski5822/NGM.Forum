@@ -31,7 +31,7 @@ namespace NGM.Forum {
             SchemaBuilder.CreateTable("PostPartRecord",
                 table => table
                     .ContentPartVersionRecord()
-                    .Column<int>("ParentPostId")
+                    .Column<int>("RepliedOn", column => column.WithDefault(null))
                     .Column<string>("Text", column => column.Unlimited())
                     .Column<string>("Format")
                 );
