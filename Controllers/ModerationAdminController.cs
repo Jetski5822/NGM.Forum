@@ -1,6 +1,8 @@
 using System.Web.Mvc;
+using System.Linq;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
+using NGM.Forum.ViewModels;
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.Localization;
@@ -29,21 +31,32 @@ namespace NGM.Forum.Controllers {
 
         public Localizer T { get; set; }
 
-        public ActionResult Approve(int moderationId, bool isApproved, string returnUrl) {
+        public ActionResult Index() {
             if (!_orchardServices.Authorizer.Authorize(Permissions.ApproveUnapprove, T("Not allowed to approve/unapprove")))
                 return new HttpUnauthorizedResult();
 
-            var moderationPart = _contentManager.Get(moderationId, VersionOptions.Published).As<ModerationPart>();
+            var parts = _moderationService.Get(ModerationOptions.NotApproved);
 
-            if (moderationPart == null)
-                return HttpNotFound(T("could not find thread").ToString());
+            ModerationIndexViewModel viewModel = new ModerationIndexViewModel {Items = parts.};
 
-            _moderationService.Approve(moderationPart, isApproved);
-            
-            _orchardServices.Notifier.Information(isApproved ? T("Content has been Approved.") : T("Content has been Unapproved."));
-
-            return this.RedirectLocal(returnUrl, "~/");
+            return View();
         }
+
+        //public ActionResult Approve(int moderationId, bool isApproved, string returnUrl) {
+        //    if (!_orchardServices.Authorizer.Authorize(Permissions.ApproveUnapprove, T("Not allowed to approve/unapprove")))
+        //        return new HttpUnauthorizedResult();
+
+        //    var moderationPart = _contentManager.Get(moderationId, VersionOptions.Published).As<ModerationPart>();
+
+        //    if (moderationPart == null)
+        //        return HttpNotFound(T("Could not find thread").ToString());
+
+        //    _moderationService.Approve(moderationPart, isApproved);
+            
+        //    _orchardServices.Notifier.Information(isApproved ? T("Content has been Approved.") : T("Content has been Unapproved."));
+
+        //    return this.RedirectLocal(returnUrl, "~/");
+        //}
 
         bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties) {
             return TryUpdateModel(model, prefix, includeProperties, excludeProperties);

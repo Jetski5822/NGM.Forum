@@ -18,10 +18,11 @@ namespace NGM.Forum.Models {
 
     public class ModerationPartRecord : ContentPartRecord {
         public virtual bool Approved { get; set; }
-
         public virtual DateTime? ApprovalUtc { get; set; }
 
-        //[StringLengthMax]
-        //public virtual string Text { get; set; }
+        public virtual ModerationStatusRecord ModerationStatus { get; set; }
+
+        [StringLengthMax]
+        public virtual string AlternativeStatusText { get; set; }
     }
 }

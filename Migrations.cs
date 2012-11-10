@@ -51,7 +51,16 @@ namespace NGM.Forum {
                     .ContentPartRecord()
                     .Column<bool>("Approved")
                     .Column<DateTime>("ApprovalUtc")
+                    .Column<int>("ModerationStatus_Id")
+                    .Column<string>("Text", column => column.Unlimited())
                 );
+
+            SchemaBuilder.CreateTable("ModerationStatusRecord",
+                table => table
+                    .Column<int>("Id", column => column.PrimaryKey().Identity())
+                    .Column<string>("Name")
+                    .Column<string>("Text", column => column.Unlimited())
+            );
 
             var categoryTaxonomyPart = _taxonomyImportService.CreateTaxonomy(Constants.Taxonomies.Categories);
             var tagsTaxonomyPart = _taxonomyImportService.CreateTaxonomy(Constants.Taxonomies.Tags);

@@ -75,6 +75,7 @@
     <Compile Include="Extensions\ContainerExtensions.cs" />
     <Compile Include="Handlers\UserForumPartHandler.cs" />
     <Compile Include="Models\ModerationPart.cs" />
+    <Compile Include="Models\ModerationStatusRecord.cs" />
     <Compile Include="Models\UserForumPart.cs" />
     <Compile Include="Routing\ForumPathConstraint.cs" />
     <Compile Include="Routing\ForumPathConstraintUpdator.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Settings\PostSettings.cs" />
     <Compile Include="Shapes.cs" />
     <Compile Include="ViewModels\PostBodyEditorViewModel.cs" />
+    <Compile Include="ViewModels\ModerationIndexViewModel.cs" />
     <Compile Include="ViewModels\ThreadMoveAdminViewModel.cs" />
     <Compile Include="Extensions\DynamicZoneExtensions.cs" />
     <Compile Include="Controllers\ForumAdminController.cs" />
@@ -346,6 +348,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Parts.Threads.Thread.Metadata.SummaryAdmin.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ModerationAdmin\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
