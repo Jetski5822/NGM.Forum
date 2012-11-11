@@ -2,6 +2,7 @@
 using System.Linq;
 using NGM.Forum.Extensions;
 using NGM.Forum.Models;
+using NGM.Moderation.Models;
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;

@@ -2,6 +2,7 @@
 using System.Linq;
 using NGM.Forum.Extensions;
 using NGM.Forum.Models;
+using NGM.Moderation.Models;
 using Orchard;
 using Orchard.Autoroute.Models;
 using Orchard.ContentManagement;

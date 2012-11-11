@@ -1,4 +1,6 @@
 using NGM.Forum.Models;
+using NGM.Moderation.Events;
+using NGM.Moderation.Models;
 using Orchard.ContentManagement;
 
 namespace NGM.Forum.Events {

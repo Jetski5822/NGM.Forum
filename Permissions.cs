@@ -25,8 +25,6 @@ namespace NGM.Forum {
         public static readonly Permission StickyOwnThread = new Permission { Description = "Allows you to mark your own thread as Sticky", Name = "StickyOwnThread" };
         public static readonly Permission StickyThread = new Permission { Description = "Allows you to mark any thread as Sticky", Name = "StickyThread" };
 
-        public static readonly Permission ApproveUnapprove = new Permission { Description = "Approve or Unapprove", Name = "ApproveUnapprove" };
-
         public virtual Feature Feature { get; set; }
 
         public static readonly Permission MetaListForums = new Permission {};// ImpliedBy = new[] { EditBlogPost, PublishBlogPost, DeleteBlogPost } };
@@ -54,9 +52,6 @@ namespace NGM.Forum {
                 MoveThread,
                 StickyOwnThread,
                 StickyThread,
-
-                ApproveUnapprove
-                //MoveAnyPost,
             };
         }
 

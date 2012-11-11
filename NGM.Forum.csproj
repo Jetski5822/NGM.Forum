@@ -61,33 +61,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdminMenu.cs" />
-    <Compile Include="Controllers\ModerationAdminController.cs" />
     <Compile Include="Controllers\PostAdminController.cs" />
     <Compile Include="Controllers\ThreadAdminController.cs" />
     <Compile Include="DefaultTaxonomyUpdater.cs" />
-    <Compile Include="Drivers\ModerationPartDriver.cs" />
-    <Compile Include="Drivers\UserForumPartDriver.cs" />
-    <Compile Include="Events\ApprovingContext.cs" />
     <Compile Include="Events\PostModerationEventHandler.cs" />
     <Compile Include="Events\ThreadModerationEventHandler.cs" />
-    <Compile Include="Handlers\ModerationPartHandler.cs" />
-    <Compile Include="Models\ModerationOptions.cs" />
     <Compile Include="Extensions\ContainerExtensions.cs" />
-    <Compile Include="Handlers\UserForumPartHandler.cs" />
-    <Compile Include="Models\ModerationPart.cs" />
-    <Compile Include="Models\ModerationStatusRecord.cs" />
-    <Compile Include="Models\UserForumPart.cs" />
     <Compile Include="Routing\ForumPathConstraint.cs" />
     <Compile Include="Routing\ForumPathConstraintUpdator.cs" />
     <Compile Include="Routing\IForumPathConstraint.cs" />
-    <Compile Include="Events\IModerationEventHandler.cs" />
-    <Compile Include="Services\ModerationService.cs" />
     <Compile Include="Services\PopularityService.cs" />
     <Compile Include="Services\TaxonomyImportService.cs" />
     <Compile Include="Settings\PostSettings.cs" />
     <Compile Include="Shapes.cs" />
     <Compile Include="ViewModels\PostBodyEditorViewModel.cs" />
-    <Compile Include="ViewModels\ModerationIndexViewModel.cs" />
     <Compile Include="ViewModels\ThreadMoveAdminViewModel.cs" />
     <Compile Include="Extensions\DynamicZoneExtensions.cs" />
     <Compile Include="Controllers\ForumAdminController.cs" />
@@ -98,7 +85,6 @@
     <Compile Include="Drivers\ThreadPartDriver.cs" />
     <Compile Include="Drivers\ForumPartDriver.cs" />
     <Compile Include="Extensions\Constants.cs" />
-    <Compile Include="Filters\ContentMediaFilter.cs" />
     <Compile Include="Handlers\PostPartHandler.cs" />
     <Compile Include="Handlers\ForumPartHandler.cs" />
     <Compile Include="Handlers\ThreadPartHandler.cs" />
@@ -204,6 +190,10 @@
     <Content Include="Views\Parts.Forums.Forum.ForumReplyCount.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Modules\NGM.Moderation\NGM.Moderation.csproj">
+      <Project>{f4a27a5d-6b51-422b-8a54-c352dbf655b1}</Project>
+      <Name>NGM.Moderation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
       <Project>{2D1D92BB-4555-4CBE-8D0E-63563D6CE4C6}</Project>
       <Name>Orchard.Framework</Name>
@@ -335,12 +325,6 @@
     <Content Include="Views\DefinitionTemplates\PostTypePartSettings.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Parts.Moderation.Metadata.SummaryAdmin.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Parts.Moderation.SummaryAdmin.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Parts.Thread.Post.Metadata.SummaryAdmin.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -348,9 +332,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Parts.Threads.Thread.Metadata.SummaryAdmin.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\ModerationAdmin\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

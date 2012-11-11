@@ -37,10 +37,6 @@ namespace NGM.Forum {
             menu.Add(T("New Forum"), "1.1",
                     item =>
                     item.Action("Create", "ForumAdmin", new { area = Constants.LocalArea }).Permission(Permissions.ManageForums));
-
-            menu.Add(T("Moderation Inbox"), "1.2",
-                    item =>
-                    item.Action("List", "ModerationAdmin", new { area = Constants.LocalArea }).Permission(Permissions.ApproveUnapprove));
         }
     }
 }

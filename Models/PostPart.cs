@@ -1,4 +1,5 @@
-﻿using Orchard.ContentManagement;
+﻿using NGM.Moderation.Models;
+using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
 using Orchard.ContentManagement.Records;
 using Orchard.Data.Conventions;
