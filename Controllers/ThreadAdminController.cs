@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
 using NGM.Forum.ViewModels;
+using NGM.Moderation.Models;
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;

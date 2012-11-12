@@ -190,10 +190,6 @@
     <Content Include="Views\Parts.Forums.Forum.ForumReplyCount.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Modules\NGM.Moderation\NGM.Moderation.csproj">
-      <Project>{f4a27a5d-6b51-422b-8a54-c352dbf655b1}</Project>
-      <Name>NGM.Moderation</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
       <Project>{2D1D92BB-4555-4CBE-8D0E-63563D6CE4C6}</Project>
       <Name>Orchard.Framework</Name>
@@ -209,6 +205,10 @@
     <ProjectReference Include="..\Contrib.Voting\Contrib.Voting.csproj">
       <Project>{4DA5F35F-E62C-4B49-B5A8-379503257B3A}</Project>
       <Name>Contrib.Voting</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NGM.Moderation\NGM.Moderation.csproj">
+      <Project>{f4a27a5d-6b51-422b-8a54-c352dbf655b1}</Project>
+      <Name>NGM.Moderation</Name>
     </ProjectReference>
     <ProjectReference Include="..\Orchard.Autoroute\Orchard.Autoroute.csproj">
       <Project>{66FCCD76-2761-47E3-8D11-B45D0001DDAA}</Project>

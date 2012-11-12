@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
+using NGM.Moderation.Models;
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.DisplayManagement;
