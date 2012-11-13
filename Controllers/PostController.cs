@@ -2,6 +2,7 @@
 using NGM.Forum.Extensions;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
+using NGM.Moderation.Models;
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.Localization;

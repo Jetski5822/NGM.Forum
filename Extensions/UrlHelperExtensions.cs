@@ -72,12 +72,7 @@ namespace NGM.Forum.Extensions {
         private static string PostCreateByContent(this UrlHelper urlHelper, IContent content) {
             return urlHelper.Action("Create", "Post", new { contentId = content.Id, area = Constants.LocalArea });
         }
-
-
-        /* Moderation */
-        public static string ModerationApproveForAdmin(this UrlHelper urlHelper, ModerationPart moderationPart, bool approve) {
-            return urlHelper.Action("Approve", "ModerationAdmin", new { moderationId = moderationPart.Id, area = Constants.LocalArea, isApproved = approve, returnUrl = urlHelper.RequestContext.HttpContext.Request.ToUrlString() });
-        }
+        
 
         //public static string ViewLatestPost(this UrlHelper urlHelper, PostPart postPart) {
         //    var siteSettings = urlHelper.Resolve<ISiteService>().GetSiteSettings();

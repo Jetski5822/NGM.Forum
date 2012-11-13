@@ -1,5 +1,4 @@
-﻿using System;
-using Contrib.ImportExport.Services;
+﻿using Contrib.ImportExport.Services;
 using NGM.Forum.Extensions;
 using Orchard.ContentManagement.MetaData;
 using Orchard.Data.Migration;
@@ -34,23 +33,6 @@ namespace NGM.Forum {
                     .Column<int>("RepliedOn", column => column.WithDefault(null))
                     .Column<string>("Text", column => column.Unlimited())
                     .Column<string>("Format")
-                );
-
-
-            SchemaBuilder.CreateTable("UserForumPartRecord",
-                table => table
-                    .ContentPartRecord()
-                    .Column<bool>("RequiresModeration")
-                    // Is this a default somewhere?
-                    // More thought requried
-                    //.Column<int>("ApprovalsUntilModerationNotRequired")
-                );
-
-            SchemaBuilder.CreateTable("ModerationPartRecord",
-                table => table
-                    .ContentPartRecord()
-                    .Column<bool>("Approved")
-                    .Column<DateTime>("ApprovalUtc")
                 );
 
             var categoryTaxonomyPart = _taxonomyImportService.CreateTaxonomy(Constants.Taxonomies.Categories);
@@ -101,10 +83,6 @@ namespace NGM.Forum {
                 .WithPart("ModerationPart")
                 .WithPart("CommonPart", builder => builder
                     .WithSetting("OwnerEditorSettings.ShowOwnerEditor", "false"))
-            );
-
-            ContentDefinitionManager.AlterTypeDefinition("User", cfg => cfg
-                .WithPart("UserForumPart")
             );
 
             return 1;

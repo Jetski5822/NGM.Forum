@@ -35,9 +35,8 @@ namespace NGM.Forum {
                         item => item.Action("Item", "ForumAdmin", new { area = Constants.LocalArea, forumId = singleForum.Id }).Permission(Permissions.MetaListOwnForums));
             
             menu.Add(T("New Forum"), "1.1",
-                     item =>
-                     item.Action("Create", "ForumAdmin", new { area = Constants.LocalArea }).Permission(Permissions.ManageForums));
-
+                    item =>
+                    item.Action("Create", "ForumAdmin", new { area = Constants.LocalArea }).Permission(Permissions.ManageForums));
         }
     }
 }

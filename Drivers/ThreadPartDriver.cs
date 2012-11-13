@@ -1,14 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
-using NGM.Forum.Settings;
+using NGM.Moderation.Models;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Drivers;
-using Orchard.Security;
-using Orchard.Services;
 
 namespace NGM.Forum.Drivers {
     [UsedImplicitly]
@@ -40,10 +35,8 @@ namespace NGM.Forum.Drivers {
                         var post = _postService.GetLatestPost(part, VersionOptions.Published, ModerationOptions.Approved);
                         return shapeHelper.Forum_Metadata_Latest(ContentPart: post);
                     }),
-                ContentShape("Parts_Threads_Thread_Metadata_SummaryAdmin", () => {
-                        return shapeHelper.Parts_Threads_Thread_Metadata_SummaryAdmin(ContentPart: part);
-                    })
-
+                ContentShape("Parts_Threads_Thread_Metadata_SummaryAdmin", () => 
+                    shapeHelper.Parts_Threads_Thread_Metadata_SummaryAdmin(ContentPart: part))
                 );
         }
 
