@@ -3,7 +3,6 @@ using System.Web.Mvc;
 using NGM.Forum.Extensions;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
-using NGM.Moderation.Models;
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.DisplayManagement;
@@ -116,13 +115,8 @@ namespace NGM.Forum.Controllers {
             if (threadPart == null)
                 return HttpNotFound();
 
-            if (!threadPart.Moderation.Approved) {
-                _orchardServices.Notifier.Information(T("This Thread is awaiting approval."));
-                return Redirect(Url.ForumView(forumPart));
-            }
-
             var pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
-            var posts = _postService.Get(threadPart, pager.GetStartIndex(), pager.PageSize, VersionOptions.Published, ModerationOptions.Approved)
+            var posts = _postService.Get(threadPart, pager.GetStartIndex(), pager.PageSize, VersionOptions.Published)
                 .Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Detail"));
 
             dynamic thread = _orchardServices.ContentManager.BuildDisplay(threadPart);
@@ -139,7 +133,7 @@ namespace NGM.Forum.Controllers {
 
                 dynamic model = _orchardServices.ContentManager.BuildEditor(part);
 
-                var firstPostId =  _postService.GetFirstPost(threadPart, VersionOptions.Published, ModerationOptions.Approved).Id;
+                var firstPostId =  _postService.GetFirstPost(threadPart, VersionOptions.Published).Id;
 
                 thread.Content.Add(Shape.Parts_Thread_Post_Create(ContentEditor: model, ContentId: firstPostId), "10");
             }

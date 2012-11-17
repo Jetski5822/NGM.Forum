@@ -10,4 +10,4 @@ Features:
         Name: Forums
         Category: Content
         Description: Introduces a forum module allowing users to create forums, threads and posts.
-        Dependencies: Contrib.Taxonomies, Contrib.Voting, NGM.Moderation
+        Dependencies: Contrib.Taxonomies, Contrib.Voting

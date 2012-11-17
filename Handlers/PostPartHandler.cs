@@ -1,36 +1,25 @@
 using System.Linq;
-using System.Web.Routing;
-using NGM.Forum.Extensions;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
-using Orchard;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Handlers;
 using Orchard.Core.Common.Models;
 using Orchard.Data;
 using Orchard.Localization;
-using Orchard.Security;
-using Orchard.UI.Notify;
 
 namespace NGM.Forum.Handlers {
     public class PostPartHandler : ContentHandler {
         private readonly IPostService _postService;
         private readonly IThreadService _threadService;
         private readonly IForumService _forumService;
-        private readonly IAuthenticationService _authenticationService;
-        private readonly IOrchardServices _orchardServices;
 
         public PostPartHandler(IRepository<PostPartRecord> repository, 
             IPostService postService, 
             IThreadService threadService, 
-            IForumService forumService,
-            IAuthenticationService authenticationService,
-            IOrchardServices orchardServices) {
+            IForumService forumService) {
             _postService = postService;
             _threadService = threadService;
             _forumService = forumService;
-            _authenticationService = authenticationService;
-            _orchardServices = orchardServices;
 
             T = NullLocalizer.Instance;
 
@@ -41,10 +30,7 @@ namespace NGM.Forum.Handlers {
             OnUpdateEditorShape<PostPart>(SetModelProperties);
 
             OnCreated<PostPart>((context, part) => UpdatePostCount(part));
-            OnPublished<PostPart>((context, part) => { 
-                UpdatePostCount(part);
-                PostNotifications(part);
-            });
+            OnPublished<PostPart>((context, part) => UpdatePostCount(part));
             OnUnpublished<PostPart>((context, part) => UpdatePostCount(part));
             OnVersioned<PostPart>((context, part, newVersionPart) => UpdatePostCount(newVersionPart));
             OnRemoved<PostPart>((context, part) => UpdatePostCount(part));
@@ -62,11 +48,6 @@ namespace NGM.Forum.Handlers {
 
         public Localizer T { get; set; }
 
-        private void PostNotifications(PostPart part) {
-            if (!part.Moderation.Approved)
-                _orchardServices.Notifier.Information(T("Your post will be available once it has been approved by a moderator."));
-        }
-
         private void SetModelProperties(BuildShapeContext context, PostPart postPart) {
             context.Shape.Thread = postPart.ThreadPart;
         }
@@ -79,7 +60,7 @@ namespace NGM.Forum.Handlers {
         }
 
         private void UpdateThreadPartCounters(PostPart postPart) {
-            CommonPart commonPart = postPart.As<CommonPart>();
+            var commonPart = postPart.As<CommonPart>();
             if (commonPart != null &&
                 commonPart.Record.Container != null) {
 
@@ -94,7 +75,7 @@ namespace NGM.Forum.Handlers {
         }
 
         private void UpdateForumPartCounters(ThreadPart threadPart) {
-            CommonPart commonPart = threadPart.As<CommonPart>();
+            var commonPart = threadPart.As<CommonPart>();
             if (commonPart != null &&
                 commonPart.Record.Container != null) {
 

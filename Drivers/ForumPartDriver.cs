@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using JetBrains.Annotations;
 using NGM.Forum.Models;
-using NGM.Forum.Services;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Drivers;
-using Orchard.Security;
 
 namespace NGM.Forum.Drivers {
     [UsedImplicitly]

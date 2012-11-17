@@ -2,7 +2,6 @@
 using NGM.Forum.Extensions;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
-using NGM.Moderation.Models;
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.Localization;
@@ -91,7 +90,7 @@ namespace NGM.Forum.Controllers {
             
             if (contentItem.As<PostPart>() == null) {
                 // Perform a check
-                if (_postService.GetFirstPost(contentItem.As<ThreadPart>(), VersionOptions.Published, ModerationOptions.All) != null) {
+                if (_postService.GetFirstPost(contentItem.As<ThreadPart>(), VersionOptions.Published) != null) {
                     _orchardServices.Notifier.Error(T("You cannot attach two parent posts to a thread."));
                     return Redirect(Url.ThreadView(contentItem.As<ThreadPart>()));
                 }

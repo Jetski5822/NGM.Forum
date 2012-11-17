@@ -1,7 +1,6 @@
 ﻿using JetBrains.Annotations;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
-using NGM.Moderation.Models;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Drivers;
 
@@ -26,13 +25,13 @@ namespace NGM.Forum.Drivers {
                 ContentShape("Parts_Threads_Thread_ThreadReplyCount",
                     () => shapeHelper.Parts_Threads_Thread_ThreadReplyCount(ReplyCount: part.ReplyCount)),
                 ContentShape("Parts_Thread_Manage", () => {
-                        var post = _postService.GetFirstPost(part, VersionOptions.Published, ModerationOptions.Approved);
+                        var post = _postService.GetFirstPost(part, VersionOptions.Published);
                         return shapeHelper.Parts_Thread_Manage(ContentPart: post);
                     }),
                 //ContentShape("Parts_Threads_Thread_FirstPostSummary",
                 //    () => shapeHelper.Parts_Threads_Post_Summary(ContentPart: firstPost)),
                 ContentShape("Forum_Metadata_Latest", () => {
-                        var post = _postService.GetLatestPost(part, VersionOptions.Published, ModerationOptions.Approved);
+                        var post = _postService.GetLatestPost(part, VersionOptions.Published);
                         return shapeHelper.Forum_Metadata_Latest(ContentPart: post);
                     }),
                 ContentShape("Parts_Threads_Thread_Metadata_SummaryAdmin", () => 

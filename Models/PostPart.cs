@@ -1,5 +1,4 @@
-﻿using NGM.Moderation.Models;
-using Orchard.ContentManagement;
+﻿using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
 using Orchard.ContentManagement.Records;
 using Orchard.Data.Conventions;
@@ -25,10 +24,6 @@ namespace NGM.Forum.Models {
         public ThreadPart ThreadPart {
             get { return this.As<ICommonPart>().Container.As<ThreadPart>(); }
             set { this.As<ICommonPart>().Container = value; }
-        }
-
-        public ModerationPart Moderation {
-            get { return this.As<ModerationPart>(); }
         }
 
         public bool IsParentThread() {

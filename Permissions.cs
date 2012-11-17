@@ -25,6 +25,9 @@ namespace NGM.Forum {
         public static readonly Permission StickyOwnThread = new Permission { Description = "Allows you to mark your own thread as Sticky", Name = "StickyOwnThread" };
         public static readonly Permission StickyThread = new Permission { Description = "Allows you to mark any thread as Sticky", Name = "StickyThread" };
 
+        public static readonly Permission CloseOwnThread = new Permission { Description = "Allows you to close your own thread", Name = "CloseOwnThread" };
+        public static readonly Permission CloseThread = new Permission { Description = "Allows you to close any thread", Name = "CloseThread" };
+
         public virtual Feature Feature { get; set; }
 
         public static readonly Permission MetaListForums = new Permission {};// ImpliedBy = new[] { EditBlogPost, PublishBlogPost, DeleteBlogPost } };
@@ -52,6 +55,9 @@ namespace NGM.Forum {
                 MoveThread,
                 StickyOwnThread,
                 StickyThread,
+
+                CloseOwnThread,
+                CloseThread,
             };
         }
 

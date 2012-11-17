@@ -1,10 +1,8 @@
-using System;
 using System.Linq;
 using System.Web.Mvc;
 using NGM.Forum.Models;
 using NGM.Forum.Extensions;
 using NGM.Forum.Services;
-using NGM.Moderation.Models;
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.Core.Contents.Controllers;
@@ -170,7 +168,7 @@ namespace NGM.Forum.Controllers {
             if (forumPart == null)
                 return HttpNotFound();
 
-            var threads = _threadService.Get(forumPart, pager.GetStartIndex(), pager.PageSize, VersionOptions.Latest, ModerationOptions.All).ToArray();
+            var threads = _threadService.Get(forumPart, pager.GetStartIndex(), pager.PageSize, VersionOptions.Latest).ToArray();
             var threadsShapes = threads.Select(bp => _contentManager.BuildDisplay(bp, "SummaryAdmin")).ToArray();
 
             dynamic forum = _orchardServices.ContentManager.BuildDisplay(forumPart, "DetailAdmin");

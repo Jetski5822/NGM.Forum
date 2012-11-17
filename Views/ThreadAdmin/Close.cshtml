@@ -1,0 +1,18 @@
+@model NGM.Forum.ViewModels.ThreadCloseAdminViewModel
+@using NGM.Forum.Extensions;
+
+@{ Layout.Title = T("Close Thread").ToString(); }
+
+@using (Html.BeginFormAntiForgeryPost(Url.Action("Close", "ThreadAdmin", new {area = Constants.LocalArea, threadId = Model.ThreadId, returnUrl = Request.QueryString["ReturnUrl"]}))) {
+    <fieldset>
+        <legend>Details</legend>
+        <div>
+            @Html.LabelFor(m => m.Description, T("Destination"))
+            @Html.TextArea("Destination", (string) Model.Description, 25, 80, null)
+            <span class="hint">@T("This is why you are closing the thread.")</span>
+        </div>
+
+    </fieldset>
+
+    <button type="submit">@T("Close")</button>
+}

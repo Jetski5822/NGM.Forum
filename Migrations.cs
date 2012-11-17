@@ -1,4 +1,5 @@
-﻿using Contrib.ImportExport.Services;
+﻿using System;
+using Contrib.ImportExport.Services;
 using NGM.Forum.Extensions;
 using Orchard.ContentManagement.MetaData;
 using Orchard.Data.Migration;
@@ -25,6 +26,9 @@ namespace NGM.Forum {
                     .ContentPartRecord()
                     .Column<int>("PostCount")
                     .Column<bool>("IsSticky")
+                    .Column<bool>("IsClosed")
+                    .Column<DateTime>("ClosedOn", column => column.WithDefault(null))
+                    .Column<string>("ClosedDescription", column => column.Unlimited())
                 );
 
             SchemaBuilder.CreateTable("PostPartRecord",

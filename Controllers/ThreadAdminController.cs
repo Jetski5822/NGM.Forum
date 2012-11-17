@@ -3,7 +3,6 @@ using System.Web.Mvc;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
 using NGM.Forum.ViewModels;
-using NGM.Moderation.Models;
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
@@ -69,7 +68,7 @@ namespace NGM.Forum.Controllers {
             if (threadPart == null)
                 return HttpNotFound();
 
-            var posts = _postService.Get(threadPart, pager.GetStartIndex(), pager.PageSize, VersionOptions.Latest, ModerationOptions.All)
+            var posts = _postService.Get(threadPart, pager.GetStartIndex(), pager.PageSize, VersionOptions.Latest)
                 .Select(bp => _orchardServices.ContentManager.BuildDisplay(bp, "SummaryAdmin"));
 
             dynamic thread = _orchardServices.ContentManager.BuildDisplay(threadPart, "DetailAdmin");
@@ -129,6 +128,44 @@ namespace NGM.Forum.Controllers {
 
             return this.RedirectLocal(returnUrl, "~/");
         }
+
+        public ActionResult Close(int threadId) {
+            if (!_orchardServices.Authorizer.Authorize(Permissions.CloseThread, T("Not allowed to close thread")))
+                return new HttpUnauthorizedResult();
+
+            var threadPart = _threadService.Get(threadId, VersionOptions.Latest).As<ThreadPart>();
+
+            if (threadPart == null)
+                return HttpNotFound(T("could not find thread").ToString());
+
+            var viewModel = new ThreadCloseAdminViewModel {
+                ThreadId = threadPart.Id,
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public ActionResult Close(int threadId, string returnUrl, ThreadCloseAdminViewModel viewModel) {
+            if (!_orchardServices.Authorizer.Authorize(Permissions.MoveThread, T("Not allowed to close thread")))
+                return new HttpUnauthorizedResult();
+
+            var threadPart = _threadService.Get(threadId, VersionOptions.Latest).As<ThreadPart>();
+
+            if (threadPart == null)
+                return HttpNotFound(T("Could not find thread").ToString());
+
+            threadPart.ClosedBy = _orchardServices.WorkContext.CurrentUser;
+            threadPart.ClosedOnUtc = _clock.UtcNow;
+            threadPart.ClosedDescription = viewModel.Description;
+
+            _orchardServices.ContentManager.Publish(threadPart.ContentItem);
+
+            _orchardServices.Notifier.Information(T("{0} has been closed.", threadPart.TypeDefinition.DisplayName));
+
+            return this.RedirectLocal(returnUrl, "~/");
+        }
+
 
         bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties) {
             return TryUpdateModel(model, prefix, includeProperties, excludeProperties);
