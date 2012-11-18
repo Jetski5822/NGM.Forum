@@ -27,6 +27,8 @@ namespace NGM.Forum.Services {
 
         public double Calculate(ThreadPart thread) {
             double questionScore = 0D;
+            DateTime defaultValue = DateTime.UtcNow;
+
             IList<double> answerScores = new List<double>();
 
             var posts = _postService.Get(thread).ToArray();
@@ -51,7 +53,8 @@ namespace NGM.Forum.Services {
             var threadModifiedDate = thread.As<ICommonPart>().ModifiedUtc;
 
             var top = ((Math.Log(totalViews) * 4) + ((thread.PostCount * questionScore) / 5) + answerScores.Sum());
-            var bottom = Math.Pow(Convert.ToDouble((threadCreatedDate.GetValueOrDefault(DateTime.Now).AddHours(1).Hour) - ((threadCreatedDate.GetValueOrDefault(DateTime.Now).Subtract(threadModifiedDate.GetValueOrDefault(DateTime.Now))).Hours / 2)), 1.5);
+            
+            var bottom = Math.Pow(Convert.ToDouble((threadCreatedDate.GetValueOrDefault(defaultValue).AddHours(1).Hour) - ((threadCreatedDate.GetValueOrDefault(defaultValue).Subtract(threadModifiedDate.GetValueOrDefault(defaultValue))).Hours / 2)), 1.5);
 
             return top / bottom;
         }
