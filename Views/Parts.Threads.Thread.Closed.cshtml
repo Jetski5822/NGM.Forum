@@ -3,7 +3,7 @@
     ThreadPart contentPart = Model.ContentPart;
 }
 
-<fieldset>
+<fieldset class="thread-closed">
     <h2>@T("Closed on {0} by {1}", contentPart.ClosedOnUtc, contentPart.ClosedBy.UserName)</h2>
     <p>@contentPart.ClosedDescription</p>
 </fieldset>
