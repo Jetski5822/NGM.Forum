@@ -1,4 +1,6 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using System.Collections.Generic;
+using JetBrains.Annotations;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
 using Orchard.ContentManagement;
@@ -19,24 +21,35 @@ namespace NGM.Forum.Drivers {
         }
 
         protected override DriverResult Display(ThreadPart part, string displayType, dynamic shapeHelper) {
-            return Combined(
-                ContentShape("Parts_Threads_Thread_SummaryAdmin",
-                    () => shapeHelper.Parts_Threads_Thread_SummaryAdmin()),
+            List<DriverResult> results = new List<DriverResult>();
+
+            if (displayType.Equals("SummaryAdmin", StringComparison.OrdinalIgnoreCase)) {
+                results.Add(ContentShape("Parts_Threads_Thread_SummaryAdmin",
+                    () => shapeHelper.Parts_Threads_Thread_SummaryAdmin()));
+                results.Add(ContentShape("Parts_Threads_Thread_Metadata_SummaryAdmin", 
+                    () => shapeHelper.Parts_Threads_Thread_Metadata_SummaryAdmin(ContentPart: part)));
+            }
+
+            if (part.IsClosed) {
+                results.Add(ContentShape("Parts_Threads_Thread_Closed",
+                        () => shapeHelper.Parts_Threads_Thread_Closed(ContentPart: part)));
+            }
+
+            results.AddRange(new [] { 
                 ContentShape("Parts_Threads_Thread_ThreadReplyCount",
                     () => shapeHelper.Parts_Threads_Thread_ThreadReplyCount(ReplyCount: part.ReplyCount)),
-                ContentShape("Parts_Thread_Manage", () => {
+                ContentShape("Parts_Thread_Manage", 
+                    () => {
                         var post = _postService.GetFirstPost(part, VersionOptions.Published);
                         return shapeHelper.Parts_Thread_Manage(ContentPart: post);
                     }),
-                //ContentShape("Parts_Threads_Thread_FirstPostSummary",
-                //    () => shapeHelper.Parts_Threads_Post_Summary(ContentPart: firstPost)),
-                ContentShape("Forum_Metadata_Latest", () => {
+                ContentShape("Forum_Metadata_Latest", 
+                    () => {
                         var post = _postService.GetLatestPost(part, VersionOptions.Published);
                         return shapeHelper.Forum_Metadata_Latest(ContentPart: post);
-                    }),
-                ContentShape("Parts_Threads_Thread_Metadata_SummaryAdmin", () => 
-                    shapeHelper.Parts_Threads_Thread_Metadata_SummaryAdmin(ContentPart: part))
-                );
+                    })});
+
+            return Combined(results.ToArray());
         }
 
         protected override DriverResult Editor(ThreadPart part, dynamic shapeHelper) {

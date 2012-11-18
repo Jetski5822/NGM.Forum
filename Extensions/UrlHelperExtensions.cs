@@ -41,7 +41,15 @@ namespace NGM.Forum.Extensions {
             return urlHelper.Action("Move", "ThreadAdmin", new { threadId = threadPart.Id, area = Constants.LocalArea, returnUrl = urlHelper.RequestContext.HttpContext.Request.ToUrlString() });
         }
 
+        public static string ThreadCloseForAdmin(this UrlHelper urlHelper, ThreadPart threadPart) {
+            return urlHelper.Action("Close", "ThreadAdmin", new { threadId = threadPart.Id, area = Constants.LocalArea, returnUrl = urlHelper.RequestContext.HttpContext.Request.ToUrlString() });
+        }
+
+        public static string ThreadOpenForAdmin(this UrlHelper urlHelper, ThreadPart threadPart) {
+            return urlHelper.Action("Open", "ThreadAdmin", new { threadId = threadPart.Id, area = Constants.LocalArea, returnUrl = urlHelper.RequestContext.HttpContext.Request.ToUrlString() });
+        }
         
+
         public static string ThreadCreate(this UrlHelper urlHelper, ForumPart forumPart) {
             return urlHelper.Action("Create", "Thread", new { forumId = forumPart.Id, area = Constants.LocalArea });
         }

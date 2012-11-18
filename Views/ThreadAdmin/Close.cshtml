@@ -7,8 +7,8 @@
     <fieldset>
         <legend>Details</legend>
         <div>
-            @Html.LabelFor(m => m.Description, T("Destination"))
-            @Html.TextArea("Destination", (string) Model.Description, 25, 80, null)
+            @Html.LabelFor(m => m.Description, T("Description"))
+            @Html.TextArea("Description", (string) Model.Description, 25, 80, null)
             <span class="hint">@T("This is why you are closing the thread.")</span>
         </div>
 

@@ -128,7 +128,7 @@ namespace NGM.Forum.Controllers {
             thread.Content.Add(Shape.Parts_Threads_Post_List(ContentItems: list, Pager: pagerObject), "5");
 
             /* Get Edit Post*/
-            if (IsAllowedToCreatePost()) {
+            if (!threadPart.IsClosed && IsAllowedToCreatePost()) {
                 var part = _orchardServices.ContentManager.New<PostPart>(Constants.Parts.Post);
 
                 dynamic model = _orchardServices.ContentManager.BuildEditor(part);

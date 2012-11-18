@@ -166,6 +166,23 @@ namespace NGM.Forum.Controllers {
             return this.RedirectLocal(returnUrl, "~/");
         }
 
+        public ActionResult Open(int threadId, string returnUrl) {
+            if (!_orchardServices.Authorizer.Authorize(Permissions.CloseThread, T("Not allowed to open thread")))
+                return new HttpUnauthorizedResult();
+
+            var threadPart = _threadService.Get(threadId, VersionOptions.Latest).As<ThreadPart>();
+
+            if (threadPart == null)
+                return HttpNotFound(T("could not find thread").ToString());
+
+            threadPart.ClosedBy = null;
+            threadPart.ClosedDescription = null;
+            threadPart.ClosedOnUtc = null;
+
+            _orchardServices.Notifier.Information(T("{0} has been opened.", threadPart.TypeDefinition.DisplayName));
+
+            return this.RedirectLocal(returnUrl, "~/");
+        }
 
         bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties) {
             return TryUpdateModel(model, prefix, includeProperties, excludeProperties);

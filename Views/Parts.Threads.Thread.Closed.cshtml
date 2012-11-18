@@ -1,0 +1,9 @@
+﻿@using NGM.Forum.Models
+@{
+    ThreadPart contentPart = Model.ContentPart;
+}
+
+<fieldset>
+    <h2>@T("Closed on {0} by {1}", contentPart.ClosedOnUtc, contentPart.ClosedBy.UserName)</h2>
+    <p>@contentPart.ClosedDescription</p>
+</fieldset>

@@ -26,8 +26,8 @@ namespace NGM.Forum {
                     .ContentPartRecord()
                     .Column<int>("PostCount")
                     .Column<bool>("IsSticky")
-                    .Column<bool>("IsClosed")
-                    .Column<DateTime>("ClosedOn", column => column.WithDefault(null))
+                    .Column<int>("ClosedById")
+                    .Column<DateTime>("ClosedOnUtc", column => column.WithDefault(null))
                     .Column<string>("ClosedDescription", column => column.Unlimited())
                 );
 

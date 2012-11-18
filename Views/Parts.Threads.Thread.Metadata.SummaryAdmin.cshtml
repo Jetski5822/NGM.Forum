@@ -7,4 +7,7 @@
     @if(threadPart.IsSticky) {
         <li><img class="icon" src="@Href("~/Modules/NGM.Forum/Content/Admin/images/sticky.gif")" alt="@T("Sticky Thread")" title="@T("The thread is a Sticky Thread")" /> </li> <li>@T("Sticky")&nbsp;&#124;&nbsp;</li>
     }
+    @if (threadPart.IsClosed) {
+        <li><img class="icon" src="@Href("~/Modules/NGM.Forum/Content/Admin/images/notapproved.gif")" alt="@T("Closed Thread")" title="@T("The thread is closed")" /> </li> <li>@T("Closed")&nbsp;&#124;&nbsp;</li>
+    }
 </ul>

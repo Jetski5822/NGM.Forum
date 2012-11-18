@@ -8,3 +8,10 @@
 }
 <a href="@Url.ThreadForAdmin(thread)" title="@T("List Posts")">@T("List Posts")</a>@T(" | ")
 <a href="@Url.ThreadMoveForAdmin(thread)" title="@T("Move")">@T("Move")</a>@T(" | ")
+
+@if (thread.IsClosed) {
+    <a href="@Url.ThreadOpenForAdmin(thread)" title="@T("Reopen")">@T("Reopen")</a>@T(" | ")
+}
+else {
+    <a href="@Url.ThreadCloseForAdmin(thread)" title="@T("Close")">@T("Close")</a>@T(" | ")
+}

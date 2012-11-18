@@ -51,7 +51,7 @@ namespace NGM.Forum.Models {
             get { return PostCount >= 1 ? PostCount - 1 : 0; }
         }
 
-        protected bool IsClosed {
+        public bool IsClosed {
             get { return ClosedOnUtc != null; }
         }
     }

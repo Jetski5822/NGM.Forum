@@ -44,7 +44,8 @@
   <Match ContentType="Thread">
     <Match DisplayType="Detail">
       <Place Parts_Common_Metadata="-"
-             Parts_Thread_Manage="Content:before"/>
+             Parts_Thread_Manage="Content:before"
+             Parts_Threads_Thread_Closed="Content:before.2"/>
     </Match>
     <Match DisplayType="Summary">
       <Place Parts_Threads_Thread_ThreadReplyCount="Meta:3"
