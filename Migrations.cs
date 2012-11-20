@@ -42,6 +42,21 @@ namespace NGM.Forum {
             var categoryTaxonomyPart = _taxonomyImportService.CreateTaxonomy(Constants.Taxonomies.Categories);
             var tagsTaxonomyPart = _taxonomyImportService.CreateTaxonomy(Constants.Taxonomies.Tags);
 
+            ContentDefinitionManager.AlterPartDefinition("ForumPart", builder => builder
+                .WithField(Constants.Taxonomies.Categories, cfg => cfg
+                    .OfType("TaxonomyField")
+                    .WithSetting("TaxonomyFieldSettings.AllowCustomTerms", "false")
+                    .WithSetting("TaxonomyFieldSettings.SingleChoice", "true")
+                    .WithSetting("TaxonomyFieldSettings.Required", "true")
+                    .WithSetting("TaxonomyFieldSettings.Taxonomy", categoryTaxonomyPart.Name))
+                .WithField(Constants.Taxonomies.Tags, cfg => cfg
+                    .OfType("TaxonomyField")
+                    .WithSetting("TaxonomyFieldSettings.AllowCustomTerms", "true")
+                    .WithSetting("TaxonomyFieldSettings.Autocomplete", "true")
+                    .WithSetting("TaxonomyFieldSettings.Required", "false")
+                    .WithSetting("TaxonomyFieldSettings.Taxonomy", tagsTaxonomyPart.Name))
+            );
+
             ContentDefinitionManager.AlterPartDefinition("ThreadPart", builder => builder
                 .WithField(Constants.Taxonomies.Categories, cfg => cfg
                     .OfType("TaxonomyField")
@@ -53,7 +68,7 @@ namespace NGM.Forum {
                     .OfType("TaxonomyField")
                     .WithSetting("TaxonomyFieldSettings.AllowCustomTerms", "true")
                     .WithSetting("TaxonomyFieldSettings.Autocomplete", "true")
-                    .WithSetting("TaxonomyFieldSettings.Required", "true")
+                    .WithSetting("TaxonomyFieldSettings.Required", "false")
                     .WithSetting("TaxonomyFieldSettings.Taxonomy", tagsTaxonomyPart.Name))
             );
 
