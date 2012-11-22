@@ -4,6 +4,6 @@
     @Html.TextAreaFor(m => m.Description, 5, 60, null)
 </fieldset>
 <fieldset>
-    @Html.LabelFor(m => m.ThreadedPosts, T("Threaded Posts"))
-    @Html.CheckBoxFor(m => m.ThreadedPosts, new { @class ="forcheckbox" })
+    @Html.EditorFor(m => m.ThreadedPosts) 
+    <label class="forcheckbox" for="@Html.FieldIdFor( m => m.ThreadedPosts)">@T("Threaded Posts")</label>
 </fieldset>
