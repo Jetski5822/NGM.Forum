@@ -73,6 +73,7 @@
     <Compile Include="Services\Popularity\IPopularityService.cs" />
     <Compile Include="Services\Popularity\StackOverflowPopularityService.cs" />
     <Compile Include="Services\TaxonomyImportService.cs" />
+    <Compile Include="Settings\ForumSettings.cs" />
     <Compile Include="Settings\PostSettings.cs" />
     <Compile Include="Shapes.cs" />
     <Compile Include="ViewModels\PostBodyEditorViewModel.cs" />
@@ -329,6 +330,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Parts.Threads.Thread.Closed.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DefinitionTemplates\ForumPartSettings.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

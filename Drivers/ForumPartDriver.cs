@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using JetBrains.Annotations;
 using NGM.Forum.Models;
+using NGM.Forum.Settings;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Drivers;
 
@@ -29,9 +30,15 @@ namespace NGM.Forum.Drivers {
         }
 
         protected override DriverResult Editor(ForumPart forumPart, dynamic shapeHelper) {
+
             var results = new List<DriverResult> {
-                ContentShape("Parts_Forums_Forum_Fields",
-                             () => shapeHelper.EditorTemplate(TemplateName: "Parts.Forums.Forum.Fields", Model: forumPart, Prefix: Prefix))
+                ContentShape("Parts_Forums_Forum_Fields", () => {
+                    if (!forumPart.ContentItem.HasDraft() && !forumPart.ContentItem.HasPublished()) {
+                        var settings = forumPart.TypePartDefinition.Settings.GetModel<ForumPartSettings>();
+                        forumPart.ThreadedPosts = settings.DefaultThreadedPosts;
+                    }
+                    return shapeHelper.EditorTemplate(TemplateName: "Parts.Forums.Forum.Fields", Model: forumPart, Prefix: Prefix);
+                })
             };
 
 

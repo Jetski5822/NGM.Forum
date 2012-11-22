@@ -116,7 +116,7 @@ namespace NGM.Forum.Controllers {
                 return HttpNotFound();
 
             var pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
-            var posts = _postService.Get(threadPart, pager.GetStartIndex(), pager.PageSize, VersionOptions.Published)
+            var posts = _postService.Get(threadPart, forumPart.ThreadedPosts, pager.GetStartIndex(), pager.PageSize, VersionOptions.Published)
                 .Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Detail"));
 
             dynamic thread = _orchardServices.ContentManager.BuildDisplay(threadPart);

@@ -68,7 +68,7 @@ namespace NGM.Forum.Controllers {
             if (threadPart == null)
                 return HttpNotFound();
 
-            var posts = _postService.Get(threadPart, pager.GetStartIndex(), pager.PageSize, VersionOptions.Latest)
+            var posts = _postService.Get(threadPart, threadPart.ForumPart.ThreadedPosts, pager.GetStartIndex(), pager.PageSize, VersionOptions.Latest)
                 .Select(bp => _orchardServices.ContentManager.BuildDisplay(bp, "SummaryAdmin"));
 
             dynamic thread = _orchardServices.ContentManager.BuildDisplay(threadPart, "DetailAdmin");

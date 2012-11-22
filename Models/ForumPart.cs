@@ -24,6 +24,11 @@ namespace NGM.Forum.Models {
             set { Record.PostCount = value; }
         }
 
+        public bool ThreadedPosts {
+            get { return Record.ThreadedPosts; }
+            set { Record.ThreadedPosts = value; }
+        }
+
         public int ReplyCount {
             get { return PostCount >= ThreadCount ? PostCount - ThreadCount : 0; }
         }
@@ -35,5 +40,7 @@ namespace NGM.Forum.Models {
 
         public virtual int ThreadCount { get; set; }
         public virtual int PostCount { get; set; }
+
+        public virtual bool ThreadedPosts { get; set; }
     }
 }

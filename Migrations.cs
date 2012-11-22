@@ -19,6 +19,7 @@ namespace NGM.Forum {
                     .Column<string>("Description", column => column.Unlimited())
                     .Column<int>("ThreadCount")
                     .Column<int>("PostCount")
+                    .Column<bool>("ThreadedPosts")
                 );
 
             SchemaBuilder.CreateTable("ThreadPartRecord",
@@ -89,7 +90,6 @@ namespace NGM.Forum {
                 .WithPart("CommonPart", builder => builder
                     .WithSetting("OwnerEditorSettings.ShowOwnerEditor", "false"))
                 .WithPart("TitlePart")
-                .WithPart("ModerationPart")
                 .WithPart("AutoroutePart", builder => builder
                     .WithSetting("AutorouteSettings.AllowCustomPattern", "false")
                     .WithSetting("AutorouteSettings.AutomaticAdjustmentOnEdit", "false")
@@ -99,7 +99,6 @@ namespace NGM.Forum {
 
             ContentDefinitionManager.AlterTypeDefinition("Post", cfg => cfg
                 .WithPart("PostPart")
-                .WithPart("ModerationPart")
                 .WithPart("CommonPart", builder => builder
                     .WithSetting("OwnerEditorSettings.ShowOwnerEditor", "false"))
             );

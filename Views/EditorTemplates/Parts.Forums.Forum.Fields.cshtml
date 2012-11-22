@@ -3,3 +3,7 @@
     @Html.LabelFor(m => m.Description, T("Description"))
     @Html.TextAreaFor(m => m.Description, 5, 60, null)
 </fieldset>
+<fieldset>
+    @Html.LabelFor(m => m.ThreadedPosts, T("Threaded Posts"))
+    @Html.CheckBoxFor(m => m.ThreadedPosts, new { @class ="forcheckbox" })
+</fieldset>

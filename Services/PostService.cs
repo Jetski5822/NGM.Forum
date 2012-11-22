@@ -12,8 +12,8 @@ namespace NGM.Forum.Services {
         ContentItem Get(int id, VersionOptions versionOptions);
         IEnumerable<PostPart> Get(ThreadPart threadPart);
         IEnumerable<PostPart> Get(ThreadPart threadPart, VersionOptions versionOptions);
-        IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count);
-        IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count, VersionOptions versionOptions);
+        IEnumerable<PostPart> Get(ThreadPart threadPart, bool isthreaded, int skip, int count);
+        IEnumerable<PostPart> Get(ThreadPart threadPart, bool isthreaded, int skip, int count, VersionOptions versionOptions);
         PostPart GetFirstPost(ThreadPart threadPart, VersionOptions versionOptions);
         PostPart GetLatestPost(ForumPart forumPart, VersionOptions versionOptions);
         PostPart GetLatestPost(ThreadPart threadPart, VersionOptions versionOptions);
@@ -69,16 +69,28 @@ namespace NGM.Forum.Services {
                 .Select(ci => ci.As<PostPart>());            
         }
 
-        public IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count) {
-            return Get(threadPart, skip, count, VersionOptions.Published);
+        public IEnumerable<PostPart> Get(ThreadPart threadPart, bool isthreaded, int skip, int count) {
+            return Get(threadPart, isthreaded, skip, count, VersionOptions.Published);
         }
 
-        public IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count, VersionOptions versionOptions) {
-            return _contentManager.Query(versionOptions, Constants.Parts.Post)
-                .Join<CommonPartRecord>().Where(cpr => cpr.Container == threadPart.ContentItem.Record)
-                .Slice(skip, count)
-                .ToList()
-                .Select(ci => ci.As<PostPart>());
+        public IEnumerable<PostPart> Get(ThreadPart threadPart, bool isthreaded, int skip, int count, VersionOptions versionOptions) {
+
+            var query = _contentManager.Query<PostPart, PostPartRecord>(versionOptions);
+
+            if (isthreaded) {
+                // Order by the Replied on, then by the published date... That should be good enough
+                return query
+                    .OrderBy(p => p.RepliedOn)
+                    .Join<CommonPartRecord>().OrderBy(c => c.PublishedUtc)
+                    .Where(cpr => cpr.Container == threadPart.ContentItem.Record)
+                        .Slice(skip, count)
+                        .ToList();
+            }
+
+            return query.Join<CommonPartRecord>()
+                        .Where(cpr => cpr.Container == threadPart.ContentItem.Record)
+                        .Slice(skip, count)
+                        .ToList();
         }
 
     }
