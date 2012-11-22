@@ -1,0 +1,5 @@
+﻿	NGM.Forum.Popularty.StackOverflow
+	    Name: Stack Overflow Popularity Algorithm for Threads
+        Category: Algorithms
+        Description: Introduces the stack overflow algorithm to calculate popularity of a Thread compared to other threads.
+        Dependencies: NGM.Forums, Contrib.Voting, NGM.ContentViewCounter

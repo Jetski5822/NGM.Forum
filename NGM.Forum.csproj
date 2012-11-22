@@ -64,10 +64,14 @@
     <Compile Include="Controllers\ThreadAdminController.cs" />
     <Compile Include="DefaultTaxonomyUpdater.cs" />
     <Compile Include="Extensions\ContainerExtensions.cs" />
+    <Compile Include="Projections\SortThreadPopularityFilterProvider.cs" />
+    <Compile Include="Projections\SortThreadPopularityFilterFormProvider.cs" />
     <Compile Include="Routing\ForumPathConstraint.cs" />
     <Compile Include="Routing\ForumPathConstraintUpdator.cs" />
     <Compile Include="Routing\IForumPathConstraint.cs" />
-    <Compile Include="Services\PopularityService.cs" />
+    <Compile Include="Services\Popularity\DefaultPopularityService.cs" />
+    <Compile Include="Services\Popularity\IPopularityService.cs" />
+    <Compile Include="Services\Popularity\StackOverflowPopularityService.cs" />
     <Compile Include="Services\TaxonomyImportService.cs" />
     <Compile Include="Settings\PostSettings.cs" />
     <Compile Include="Shapes.cs" />
@@ -145,6 +149,7 @@
     <Content Include="Content\Images\VoteDown.jpg" />
     <Content Include="Content\Images\wrench-16x16.gif" />
     <Content Include="Module.txt" />
+    <Content Include="Services\Popularity\Module_Value.txt" />
     <Content Include="Styles\thread.css" />
     <Content Include="Styles\forum.css" />
     <Content Include="Styles\menu.forum-admin.css" />

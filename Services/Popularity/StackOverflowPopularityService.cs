@@ -1,26 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Contrib.Voting.Services;
 using NGM.Forum.Extensions;
 using NGM.Forum.Models;
-using Orchard;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
+using Orchard.Environment.Extensions;
 
-namespace NGM.Forum.Services {
-    public interface IPopularityService : IDependency {
-        double Calculate(ThreadPart thread);
-        string Name { get; }
-    }
-
-    public class PopularityService : IPopularityService {
+namespace NGM.Forum.Services.Popularity {
+    [OrchardFeature("NGM.Forum.Popularty.StackOverflow")]
+    public class StackOverflowPopularityService : IPopularityService {
         private readonly IPostService _postService;
         private readonly IVotingService _votingService;
 
-        public PopularityService(IPostService postService,
-            IVotingService votingService) {
+        public StackOverflowPopularityService(IPostService postService,
+                                              IVotingService votingService) {
             _postService = postService;
             _votingService = votingService;
         }

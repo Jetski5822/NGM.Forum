@@ -106,7 +106,5 @@ namespace NGM.Forum {
 
             return 1;
         }
-
-        /* A Rule should be defined to switch 'RequiresModeration' against the user' off once a number of posts has been created, etc... */
     }
 }
