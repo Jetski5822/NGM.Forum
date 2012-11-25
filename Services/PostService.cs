@@ -47,26 +47,15 @@ namespace NGM.Forum.Services {
         }
 
         public PostPart GetFirstPost(ThreadPart threadPart, VersionOptions versionOptions) {
-            return GetQuery(threadPart, versionOptions).FirstOrDefault(o => o.IsParentThread());
+            return GetQuery(threadPart, versionOptions).List().FirstOrDefault(o => o.IsParentThread());
         }
 
         public PostPart GetLatestPost(ThreadPart threadPart, VersionOptions versionOptions) {
-            return GetQuery(threadPart, versionOptions).LastOrDefault();
-        }
-
-        private IEnumerable<PostPart> GetQuery(ThreadPart threadPart, VersionOptions versionOptions) {
-            return _contentManager.Query<PostPart, PostPartRecord>(versionOptions)
-                .Join<CommonPartRecord>().Where(cpr => cpr.Container == threadPart.ContentItem.Record)
-                .List();
+            return GetQuery(threadPart, versionOptions).List().LastOrDefault();
         }
 
         public IEnumerable<PostPart> Get(ThreadPart threadPart, VersionOptions versionOptions) {
-            return _contentManager
-                .Query(versionOptions, Constants.Parts.Post)
-                .Join<CommonPartRecord>().Where(cpr => cpr.Container == threadPart.ContentItem.Record)
-                .List()
-                .ToList()
-                .Select(ci => ci.As<PostPart>());            
+            return (Get(threadPart, false, 0, 0, versionOptions));
         }
 
         public IEnumerable<PostPart> Get(ThreadPart threadPart, bool isthreaded, int skip, int count) {
@@ -74,23 +63,30 @@ namespace NGM.Forum.Services {
         }
 
         public IEnumerable<PostPart> Get(ThreadPart threadPart, bool isthreaded, int skip, int count, VersionOptions versionOptions) {
-
-            var query = _contentManager.Query<PostPart, PostPartRecord>(versionOptions);
-
             if (isthreaded) {
+                var query = _contentManager.Query<PostPart, PostPartRecord>(versionOptions);
                 // Order by the Replied on, then by the published date... That should be good enough
-                return query
-                    .OrderBy(p => p.RepliedOn)
-                    .Join<CommonPartRecord>().OrderBy(c => c.PublishedUtc)
+                var pp = query
+                    .Join<CommonPartRecord>()//.OrderBy(c => c.PublishedUtc)
                     .Where(cpr => cpr.Container == threadPart.ContentItem.Record)
+                    .Join<PostPartRecord>()
+                    .OrderBy(p => p.RepliedOn)
                         .Slice(skip, count)
                         .ToList();
+
+                return pp;
             }
 
-            return query.Join<CommonPartRecord>()
-                        .Where(cpr => cpr.Container == threadPart.ContentItem.Record)
+            return GetQuery(threadPart, versionOptions)
                         .Slice(skip, count)
                         .ToList();
+        }
+
+        private IContentQuery<PostPart, CommonPartRecord> GetQuery(ThreadPart threadPart, VersionOptions versionOptions) {
+            return _contentManager.Query<PostPart, PostPartRecord>(versionOptions)
+                .Join<CommonPartRecord>()
+                .Where(cpr => cpr.Container == threadPart.ContentItem.Record)
+                .OrderBy(c => c.PublishedUtc);
         }
 
     }
