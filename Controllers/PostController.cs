@@ -86,8 +86,9 @@ namespace NGM.Forum.Controllers {
                     return new HttpUnauthorizedResult();
             }
 
-            var post = _orchardServices.ContentManager.New<PostPart>(Constants.Parts.Post);
-            
+            var post = _orchardServices.ContentManager.Create<PostPart>(Constants.Parts.Post, VersionOptions.Draft);
+            var model = _orchardServices.ContentManager.UpdateEditor(post, this);
+
             if (contentItem.As<PostPart>() == null) {
                 // Perform a check
                 if (_postService.GetFirstPost(contentItem.As<ThreadPart>(), VersionOptions.Published) != null) {
@@ -101,9 +102,6 @@ namespace NGM.Forum.Controllers {
                 post.ThreadPart = contentItem.As<PostPart>().ThreadPart;
                 post.RepliedOn = contentItem.As<PostPart>().Id;
             }
-
-            _orchardServices.ContentManager.Create(post, VersionOptions.Draft);
-            var model = _orchardServices.ContentManager.UpdateEditor(post, this);
 
             if (!ModelState.IsValid) {
                 _orchardServices.TransactionManager.Cancel();

@@ -1,12 +1,9 @@
-﻿@using NGM.Forum
-@using NGM.Forum.Extensions
+﻿@using NGM.Forum.Extensions
 @using NGM.Forum.Models
 @{
     var postPart = (PostPart)Model.ContentPart;
 }
   
 <div class="item-properties actions">
-    @*// TODO: copy tumblrs icons :)*@
-@*    <a href="@Url.PostReplyWithQuote(postPart)" class="create">@T("Reply quoting selection")</a> @T("|") 
-    <a href="@Url.PostReplyWithQuote(postPart)" class="create">@T("Reply with quote")</a>*@
+    <a href="@Url.PostReply(postPart)" class="create">@T("Reply")</a>
 </div>
