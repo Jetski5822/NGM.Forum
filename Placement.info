@@ -44,7 +44,7 @@
   <Match ContentType="Thread">
     <Match DisplayType="Detail">
       <Place Parts_Common_Metadata="-"
-             Parts_Thread_Manage="Content:before"
+             Parts_Thread_Manage="Actions:1"
              Parts_Threads_Thread_Closed="Meta:1"/>
     </Match>
     <Match DisplayType="Summary">
@@ -58,7 +58,7 @@
   </Match>
   <Match ContentType="Post">
     <Match DisplayType="Detail">
-      <Place Parts_Post_Manage="Content:after"/>
+      <Place Parts_Post_Manage="Actions:1"/>
     </Match>
     <Match DisplayType="SummaryAdmin">
       <Place Parts_Thread_Post_Metadata_SummaryAdmin="Meta:1.2"/>
