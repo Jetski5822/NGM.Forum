@@ -86,7 +86,7 @@ namespace NGM.Forum.Services {
             return _contentManager.Query<PostPart, PostPartRecord>(versionOptions)
                 .Join<CommonPartRecord>()
                 .Where(cpr => cpr.Container == threadPart.ContentItem.Record)
-                .OrderBy(c => c.PublishedUtc);
+                .OrderBy(c => c.CreatedUtc);
         }
 
     }
