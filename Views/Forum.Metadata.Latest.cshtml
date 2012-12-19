@@ -1,10 +1,13 @@
-﻿@using Orchard.ContentManagement
+﻿@using NGM.Forum.Extensions
+@using NGM.Forum.Models
+@using Orchard.ContentManagement
 @using Orchard.Core.Common.Models
 @{
     var contentItem = (ContentItem)Model.ContentPart.ContentItem;
     var commonPart = contentItem.As<CommonPart>();
+    var postPart = contentItem.As<PostPart>();
 }
 <div class="latestPost">
     <span class="author">@T("Latest post by {0},", commonPart.Owner.UserName)</span>
-    <span class="published">@Display.PublishedState(createdDateTimeUtc: commonPart.CreatedUtc, publisheddateTimeUtc: commonPart.PublishedUtc)</span>
+    <span class="published"><a href="@Url.PostView(postPart)">@Display.PublishedState(createdDateTimeUtc: commonPart.CreatedUtc, publisheddateTimeUtc: commonPart.PublishedUtc)</a></span>
 </div>

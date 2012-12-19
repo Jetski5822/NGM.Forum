@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
+using NGM.Forum.Services.Sorting;
 using NGM.Forum.ViewModels;
 using Orchard;
 using Orchard.ContentManagement;

@@ -5,8 +5,9 @@
     }
     
     var contentTypeClassName = ((string)Model.ContentItem.ContentType).HtmlClassify();
+    var contentItemId = Model.ContentItem.Id;
 }
-<article class="content-item @contentTypeClassName">
+<article id="@contentItemId" class="content-item @contentTypeClassName">
     <header>
         @Display(Model.Header)
         @if (Model.Meta != null) {

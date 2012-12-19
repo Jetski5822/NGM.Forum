@@ -60,17 +60,8 @@ namespace NGM.Forum.Extensions {
 
         /* Post */
 
-        public static string PostApprovingForAdmin(this UrlHelper urlHelper, PostPart postPart, bool isApproved) {
-            return urlHelper.Action("Approving", "PostAdmin", new { postId = postPart.Id, area = Constants.LocalArea, isApproved = isApproved, returnUrl = urlHelper.RequestContext.HttpContext.Request.ToUrlString() });
-        }
-
-
         public static string PostReply(this UrlHelper urlHelper, PostPart postPart) {
             return PostCreateByContent(urlHelper, postPart);
-        }
-
-        public static string PostReplyWithQuote(this UrlHelper urlHelper, PostPart postPart) {
-            return urlHelper.Action("CreateWithQuote", "Post", new { contentId = postPart.Id, area = Constants.LocalArea });
         }
 
         public static string PostView(this UrlHelper urlHelper, PostPart postPart) {

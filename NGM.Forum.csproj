@@ -61,7 +61,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdminMenu.cs" />
-    <Compile Include="ViewModels\SortingParameters.cs" />
+    <Compile Include="Services\Sorting\ISortCriterion.cs" />
+    <Compile Include="Services\Sorting\SortCriterionProvider.cs" />
+    <Compile Include="Services\Sorting\SortingParameters.cs" />
     <Compile Include="Controllers\ThreadAdminController.cs" />
     <Compile Include="DefaultTaxonomyUpdater.cs" />
     <Compile Include="Extensions\ContainerExtensions.cs" />
@@ -277,9 +279,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Parts.Threads.Post.ListAdmin.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Parts.Threads.Post.Summary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Parts.Thread.Manage.cshtml" />
