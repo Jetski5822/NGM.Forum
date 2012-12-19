@@ -14,16 +14,14 @@
                 @Display(Model.Meta)
             </div>
         }
+    </header>
+    @Display(Model.Content)
+    <footer>
+        @Display(Model.Footer)
         @if (Model.Actions != null) {
             <div class="actions">
                 @Display(Model.Actions)
             </div>
         }
-    </header>
-    @Display(Model.Content)
-    @if(Model.Footer != null) {
-    <footer>
-        @Display(Model.Footer)
     </footer>
-    }
 </article>

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using NGM.Forum.Extensions;
 using NGM.Forum.Models;
 using Orchard;
 using Orchard.ContentManagement;

@@ -1,0 +1,13 @@
+﻿@using NGM.Forum.Models
+@using Orchard.ContentManagement
+@using Orchard.Core.Common.Models
+@{
+    var contentItem = (ContentItem)Model.ContentPart.ContentItem;
+    var commonPart = contentItem.As<CommonPart>();
+    var postPart = contentItem.As<PostPart>();
+
+    var body = new HtmlString(Html.Excerpt(postPart.Text, 200).ToString().Replace(Environment.NewLine, "</p>" + Environment.NewLine + "<p>"));
+}
+<div class="firstPost">
+    @body
+</div>

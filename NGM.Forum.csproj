@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdminMenu.cs" />
+    <Compile Include="ViewModels\SortingParameters.cs" />
     <Compile Include="Controllers\ThreadAdminController.cs" />
     <Compile Include="DefaultTaxonomyUpdater.cs" />
     <Compile Include="Extensions\ContainerExtensions.cs" />
@@ -339,6 +340,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Content-Thread.Detail.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Forum.Metadata.First.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

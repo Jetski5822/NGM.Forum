@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
+using NGM.Forum.ViewModels;
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.DisplayManagement;
@@ -52,16 +53,16 @@ namespace NGM.Forum.Controllers {
             return View((object)viewModel);
         }
 
-        public ActionResult Item(int forumId, PagerParameters pagerParameters) {
+        public ActionResult Item(int forumId, PagerParameters pagerParameters, SortingParameters sortingParameters) {
             if (!_orchardServices.Authorizer.Authorize(Permissions.ViewForum, T("Not allowed to view forum")))
                 return new HttpUnauthorizedResult();
-
-            Pager pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
 
             var forumPart = _forumService.Get(forumId, VersionOptions.Published).As<ForumPart>();
             if (forumPart == null)
                 return HttpNotFound();
 
+            Pager pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
+            
             var threads = _threadService
                 .Get(forumPart, pager.GetStartIndex(), pager.PageSize, VersionOptions.Published)
                 .Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Summary"));

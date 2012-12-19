@@ -49,6 +49,7 @@
     </Match>
     <Match DisplayType="Summary">
       <Place Parts_Threads_Thread_ThreadReplyCount="Meta:3"
+             Forum_Metadata_First="Content:after"
              Forum_Metadata_Latest="Content:after"/>
     </Match>
     <Match DisplayType="SummaryAdmin">

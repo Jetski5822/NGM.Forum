@@ -1,8 +1,8 @@
 ﻿using System;
-using Contrib.ImportExport.Services;
 using Contrib.Taxonomies.Services;
 using JetBrains.Annotations;
 using NGM.Forum.Extensions;
+using NGM.Forum.Services;
 using Orchard.Environment;
 using Orchard.Environment.Extensions.Models;
 using Orchard.Logging;

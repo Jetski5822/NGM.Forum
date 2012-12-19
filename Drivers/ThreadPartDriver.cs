@@ -35,14 +35,15 @@ namespace NGM.Forum.Drivers {
                         () => shapeHelper.Parts_Threads_Thread_Closed(ContentPart: part)));
             }
 
+            var firstPost = _postService.GetFirstPost(part, VersionOptions.Published);
+
             results.AddRange(new [] { 
                 ContentShape("Parts_Threads_Thread_ThreadReplyCount",
                     () => shapeHelper.Parts_Threads_Thread_ThreadReplyCount(ReplyCount: part.ReplyCount)),
                 ContentShape("Parts_Thread_Manage", 
-                    () => {
-                        var post = _postService.GetFirstPost(part, VersionOptions.Published);
-                        return shapeHelper.Parts_Thread_Manage(ContentPart: post);
-                    }),
+                    () => shapeHelper.Parts_Thread_Manage(ContentPart: firstPost)),
+                ContentShape("Forum_Metadata_First", 
+                    () => shapeHelper.Forum_Metadata_First(ContentPart: firstPost)),
                 ContentShape("Forum_Metadata_Latest", 
                     () => {
                         var post = _postService.GetLatestPost(part, VersionOptions.Published);

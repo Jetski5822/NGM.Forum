@@ -1,6 +1,6 @@
 ﻿using System;
-using Contrib.ImportExport.Services;
 using NGM.Forum.Extensions;
+using NGM.Forum.Services;
 using Orchard.ContentManagement.MetaData;
 using Orchard.Data.Migration;
 
