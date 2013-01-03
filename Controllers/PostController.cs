@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using NGM.Forum.Extensions;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
@@ -47,30 +48,27 @@ namespace NGM.Forum.Controllers {
             return View((object)model);
         }
 
-        //public ActionResult CreateWithQuote(int contentId) {
-        //    if (!_orchardServices.Authorizer.Authorize(Permissions.CreatePost, T("Not allowed to create post")))
-        //        return new HttpUnauthorizedResult();
+        public ActionResult CreateWithQuote(int contentId) {
+            if (!_orchardServices.Authorizer.Authorize(Permissions.CreatePost, T("Not allowed to create post")))
+                return new HttpUnauthorizedResult();
 
-        //    var contentItem = _orchardServices.ContentManager.Get(contentId, VersionOptions.Latest);
-        //    if (contentItem.As<PostPart>() == null) {
-        //        if (contentItem.As<ThreadPart>() == null)
-        //            return HttpNotFound();
+            var contentItem = _orchardServices.ContentManager.Get(contentId, VersionOptions.Latest);
+            if (contentItem.As<PostPart>() == null) {
+                if (contentItem.As<ThreadPart>() == null)
+                    return HttpNotFound();
 
-        //        if (IsNotAllowedToReplyToPost())
-        //            return new HttpUnauthorizedResult();
-        //    }
+                if (IsNotAllowedToReplyToPost())
+                    return new HttpUnauthorizedResult();
+            }
 
-        //    var part = _orchardServices.ContentManager.New<PostPart>(Constants.Parts.Post);
+            var part = _orchardServices.ContentManager.New<PostPart>(Constants.Parts.Post);
+            
+            part.Text = string.Format("<blockquote>{0}</blockquote>{1}", contentItem.As<PostPart>().Text, Environment.NewLine);
+            
+            dynamic model = _orchardServices.ContentManager.BuildEditor(part);
 
-        //    part.Text =
-        //        string.Format("<blockquote><div class='quote-header'>Quote: {0}<div class='quote-logo'></div></div><div class='quote-content'>{1}</div></blockquote><br />",
-        //        contentItem.As<ICommonPart>().Owner.UserName,
-        //        contentItem.As<PostPart>().Text);
-
-        //    dynamic model = _orchardServices.ContentManager.BuildEditor(part);
-
-        //    return View("Create", (object)model);
-        //}
+            return View("Create", (object)model);
+        }
 
         [HttpPost, ActionName("Create")]
         public ActionResult CreatePOST(int contentId) {

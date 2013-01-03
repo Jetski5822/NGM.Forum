@@ -1,0 +1,9 @@
+﻿@using NGM.Forum.Models
+@using Orchard.ContentManagement
+@using Orchard.ContentManagement.Aspects
+@{
+    ContentItem contentItem = (ContentItem) Model.ContentItem;
+    var postPart = contentItem.As<PostPart>();
+    var commonPart = contentItem.As<ICommonPart>();
+}
+<blockquote>@postPart.Text -@commonPart.Owner.UserName</blockquote> @Environment.NewLine

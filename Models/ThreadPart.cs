@@ -16,7 +16,6 @@ namespace NGM.Forum.Models {
             get { return this.As<ITitleAspect>().Title; }
         }
 
-        [CascadeAllDeleteOrphan]
         public ForumPart ForumPart {
             get { return this.As<ICommonPart>().Container.As<ForumPart>(); }
             set { this.As<ICommonPart>().Container = value; }

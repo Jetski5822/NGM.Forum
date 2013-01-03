@@ -64,6 +64,10 @@ namespace NGM.Forum.Extensions {
             return PostCreateByContent(urlHelper, postPart);
         }
 
+        public static string PostReplyWithQuote(this UrlHelper urlHelper, PostPart postPart) {
+            return urlHelper.Action("CreateWithQuote", "Post", new { contentId = postPart.Id, area = Constants.LocalArea });
+        }
+
         public static string PostView(this UrlHelper urlHelper, PostPart postPart) {
             return string.Format("{0}#{1}", ThreadView(urlHelper, postPart.ThreadPart), postPart.Id);
         }

@@ -20,7 +20,6 @@ namespace NGM.Forum.Models {
             set { this.Record.Format = value; }
         }
 
-        [CascadeAllDeleteOrphan]
         public ThreadPart ThreadPart {
             get { return this.As<ICommonPart>().Container.As<ThreadPart>(); }
             set { this.As<ICommonPart>().Container = value; }
