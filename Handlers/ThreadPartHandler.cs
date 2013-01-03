@@ -42,7 +42,7 @@ namespace NGM.Forum.Handlers {
             OnVersioning<ThreadPart>((context, part, newVersionPart) => LazyLoadHandlers(newVersionPart));
             OnVersioned<ThreadPart>((context, part, newVersionPart) => UpdateForumPartCounters(newVersionPart));
             OnRemoved<ThreadPart>((context, part) => UpdateForumPartCounters(part));
-
+            
             OnRemoved<ForumPart>((context, b) => 
                 _threadService
                     .Get(context.ContentItem.As<ForumPart>())
@@ -54,6 +54,7 @@ namespace NGM.Forum.Handlers {
 
         private void SetModelProperties(BuildShapeContext context, ThreadPart threadPart) {
             context.Shape.Forum = threadPart.ForumPart;
+            context.Shape.StickyClass = threadPart.IsSticky ? "Sticky" : string.Empty;
         }
 
         private void UpdateForumPartCounters(ThreadPart threadPart) {

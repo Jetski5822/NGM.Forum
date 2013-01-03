@@ -5,11 +5,7 @@
     }
     
     var contentTypeClassName = ((string)Model.ContentItem.ContentType).HtmlClassify();
-
-    var stickyClass = string.Empty;
-    if (Model.ContentItem.Get(typeof (NGM.Forum.Models.ThreadPart)).IsSticky) {
-        stickyClass = "sticky".HtmlClassify();
-    }
+    var stickyClass = ((string)Model.StickyClass).HtmlClassify();
 }
 <article class="content-item @contentTypeClassName @stickyClass">
     <header>
