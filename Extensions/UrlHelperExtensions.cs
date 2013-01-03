@@ -51,7 +51,7 @@ namespace NGM.Forum.Extensions {
         
 
         public static string ThreadCreate(this UrlHelper urlHelper, ForumPart forumPart) {
-            return urlHelper.Action("Create", "Thread", new { forumId = forumPart.Id, area = Constants.LocalArea });
+            return urlHelper.Action("Create", "Thread", new { forumId = forumPart.Id, area = Constants.LocalArea, returnUrl = urlHelper.RequestContext.HttpContext.Request.ToUrlString() });
         }
 
         public static string ThreadView(this UrlHelper urlHelper, ThreadPart threadPart) {
@@ -65,7 +65,7 @@ namespace NGM.Forum.Extensions {
         }
 
         public static string PostReplyWithQuote(this UrlHelper urlHelper, PostPart postPart) {
-            return urlHelper.Action("CreateWithQuote", "Post", new { contentId = postPart.Id, area = Constants.LocalArea });
+            return urlHelper.Action("CreateWithQuote", "Post", new { contentId = postPart.Id, area = Constants.LocalArea, returnUrl = urlHelper.RequestContext.HttpContext.Request.ToUrlString()});
         }
 
         public static string PostView(this UrlHelper urlHelper, PostPart postPart) {
@@ -73,7 +73,7 @@ namespace NGM.Forum.Extensions {
         }
 
         private static string PostCreateByContent(this UrlHelper urlHelper, IContent content) {
-            return urlHelper.Action("Create", "Post", new { contentId = content.Id, area = Constants.LocalArea });
+            return urlHelper.Action("Create", "Post", new { contentId = content.Id, area = Constants.LocalArea, returnUrl = urlHelper.RequestContext.HttpContext.Request.ToUrlString() });
         }
         
 
