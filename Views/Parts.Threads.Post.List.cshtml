@@ -1,11 +1,15 @@
-﻿@{
+﻿@using NGM.Forum.Models
+@using Orchard.ContentManagement
+@{
     Style.Require("Threads");
     IEnumerable<object> posts = Model.ContentItems;
     Model.ContentItems.Classes.Add("content-items");
     Model.ContentItems.Classes.Add("thread-posts");
+
+    bool noReplies = posts.Count() == 1 && (((ContentItem) ((dynamic) posts.First()).ContentItem).As<PostPart>().IsParentThread());
 }
 @Display(Model.ContentItems)
-@if (posts.Count() == 1) {
+@if (noReplies) {
     <p class="nocontentitems">@T("There are no replies to this post.")</p>
 } else { 
   @Display(Model.Pager)
