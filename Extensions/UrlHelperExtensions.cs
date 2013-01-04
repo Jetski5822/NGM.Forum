@@ -66,6 +66,10 @@ namespace NGM.Forum.Extensions {
             return urlHelper.Action("Item", "Thread", new { forumId = threadPart.ForumPart.Id, threadId = threadPart.Id, page = pager.Page, area = Constants.LocalArea });
         }
 
+        public static string ThreadDelete(this UrlHelper urlHelper, ThreadPart threadPart) {
+            return urlHelper.Action("Delete", "Post", new { contentId = threadPart.Id, area = Constants.LocalArea, returnUrl = urlHelper.RequestContext.HttpContext.Request.ToUrlString() });
+        }
+
         /* Post */
 
         public static string PostReply(this UrlHelper urlHelper, PostPart postPart) {

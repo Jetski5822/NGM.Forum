@@ -4,7 +4,10 @@
 @{
     var postPart = (PostPart)Model.ContentPart;
 }
-  
+
+@if (Authorizer.Authorize(Permissions.DeletePost, postPart.ContentItem) && postPart.IsParentThread()) {
+    <a href="@Url.ThreadDelete(postPart.ThreadPart)" class="remove">@T("Delete")</a>
+}
 @if (!postPart.ThreadPart.IsClosed) {
     <a href="@Url.PostReply(postPart)">@T("Reply to this Thread")</a>
 }
