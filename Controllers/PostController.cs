@@ -113,6 +113,41 @@ namespace NGM.Forum.Controllers {
             return Redirect(Url.ThreadView(post.ThreadPart));
         }
 
+        public ActionResult Delete(int contentId) {
+            var contentItem = _orchardServices.ContentManager.Get(contentId);
+
+            var thread = contentItem.As<ThreadPart>();
+
+            if (thread != null) {
+                if (!_orchardServices.Authorizer.Authorize(Permissions.DeletePost, contentItem, T("Not allowed to delete thread")))
+                    return new HttpUnauthorizedResult();
+
+                _orchardServices.ContentManager.Remove(contentItem);
+                _orchardServices.Notifier.Information(T("Thread has been deleted."));
+                return Redirect(Url.ForumView(thread.ForumPart));
+            }
+
+            var post = contentItem.As<PostPart>();
+
+            if (post != null) {
+                if (!_orchardServices.Authorizer.Authorize(Permissions.DeletePost, contentItem, T("Not allowed to delete post")))
+                    return new HttpUnauthorizedResult();
+
+                if (post.IsParentThread()) {
+                    _orchardServices.ContentManager.Remove(post.ThreadPart.ContentItem);
+                    _orchardServices.Notifier.Information(T("Thread has been deleted."));
+                    return Redirect(Url.ForumView(post.ThreadPart.ForumPart));
+                }
+                else {
+                    _orchardServices.ContentManager.Remove(contentItem);
+                    _orchardServices.Notifier.Information(T("Post has been deleted."));
+                    return Redirect(Url.ThreadView(post.ThreadPart));
+                }
+            }
+
+            return Redirect(Url.Forums());
+        }
+
         bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties) {
             return TryUpdateModel(model, prefix, includeProperties, excludeProperties);
         }

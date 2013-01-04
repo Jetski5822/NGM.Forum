@@ -49,8 +49,6 @@ namespace NGM.Forum.Security {
                 return Permissions.StickyOwnThread;
             if (permission.Name == Permissions.CloseThread.Name)
                 return Permissions.CloseOwnThread;
-            //if (permission.Name == Permissions.MarkPostAsAnswer.Name)
-            //    return Permissions.MarkPostInOwnThreadAsAnswer;
             return null;
         }
     }

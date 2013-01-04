@@ -89,7 +89,7 @@ namespace NGM.Forum {
                 },
                 new PermissionStereotype {
                     Name = "Authenticated",
-                    Permissions = new[] {ViewForum, ViewPost},
+                    Permissions = new[] {ViewForum, ViewPost, CreatePost, ReplyPost},
                 },
             };
         }

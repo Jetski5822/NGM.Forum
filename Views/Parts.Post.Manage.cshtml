@@ -1,8 +1,12 @@
-﻿@using NGM.Forum.Extensions
+﻿@using NGM.Forum
+@using NGM.Forum.Extensions
 @using NGM.Forum.Models
 @{
     var postPart = (PostPart)Model.ContentPart;
 }
-  
+
+@if (Authorizer.Authorize(Permissions.DeletePost, postPart.ContentItem)) {
+    <a href="@Url.PostDelete(postPart)" class="remove">@T("Delete")</a>
+}  
 <a href="@Url.PostReply(postPart)" class="create">@T("Reply")</a>
 <a href="@Url.PostReplyWithQuote(postPart)" class="create quote">@T("Reply with Quote")</a>

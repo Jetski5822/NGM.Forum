@@ -1,13 +1,16 @@
 using System.Web.Mvc;
 using NGM.Forum.Models;
 using Orchard.ContentManagement;
-using Orchard.ContentManagement.Aspects;
-using Orchard.Settings;
 using Orchard.UI.Navigation;
 using Orchard.Utility.Extensions;
 
 namespace NGM.Forum.Extensions {
     public static class UrlHelperExtensions {
+
+        // Default Route
+        public static string Forums(this UrlHelper urlHelper) {
+            return urlHelper.Action("List", "Forum", new { area = Constants.LocalArea });
+        }
 
         /* Forum */
 
@@ -82,6 +85,10 @@ namespace NGM.Forum.Extensions {
                 return string.Format("{0}#{1}", ThreadView(urlHelper, postPart.ThreadPart, pager), postPart.Id);
             else
                 return PostView(urlHelper, postPart);
+        }
+
+        public static string PostDelete(this UrlHelper urlHelper, PostPart postPart) {
+            return urlHelper.Action("Delete", "Post", new { contentId = postPart.Id, area = Constants.LocalArea, returnUrl = urlHelper.RequestContext.HttpContext.Request.ToUrlString() });
         }
 
         private static string PostCreateByContent(this UrlHelper urlHelper, IContent content) {
