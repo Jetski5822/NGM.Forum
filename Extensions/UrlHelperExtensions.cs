@@ -3,6 +3,7 @@ using NGM.Forum.Models;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
 using Orchard.Settings;
+using Orchard.UI.Navigation;
 using Orchard.Utility.Extensions;
 
 namespace NGM.Forum.Extensions {
@@ -58,6 +59,10 @@ namespace NGM.Forum.Extensions {
             return urlHelper.Action("Item", "Thread", new { forumId = threadPart.ForumPart.Id, threadId = threadPart.Id, area = Constants.LocalArea });
         }
 
+        public static string ThreadView(this UrlHelper urlHelper, ThreadPart threadPart, Pager pager) {
+            return urlHelper.Action("Item", "Thread", new { forumId = threadPart.ForumPart.Id, threadId = threadPart.Id, page = pager.Page, area = Constants.LocalArea });
+        }
+
         /* Post */
 
         public static string PostReply(this UrlHelper urlHelper, PostPart postPart) {
@@ -70,6 +75,13 @@ namespace NGM.Forum.Extensions {
 
         public static string PostView(this UrlHelper urlHelper, PostPart postPart) {
             return string.Format("{0}#{1}", ThreadView(urlHelper, postPart.ThreadPart), postPart.Id);
+        }
+
+        public static string PostView(this UrlHelper urlHelper, PostPart postPart, Pager pager) {
+            if (pager.Page >= 2)
+                return string.Format("{0}#{1}", ThreadView(urlHelper, postPart.ThreadPart, pager), postPart.Id);
+            else
+                return PostView(urlHelper, postPart);
         }
 
         private static string PostCreateByContent(this UrlHelper urlHelper, IContent content) {

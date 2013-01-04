@@ -1,19 +1,25 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
+using Orchard;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Drivers;
+using Orchard.UI.Navigation;
 
 namespace NGM.Forum.Drivers {
     [UsedImplicitly]
     public class ThreadPartDriver : ContentPartDriver<ThreadPart> {
         private readonly IPostService _postService;
+        private readonly IOrchardServices _orchardServices;
 
         public ThreadPartDriver(
-            IPostService postService) {
+            IPostService postService,
+            IOrchardServices orchardServices) {
             _postService = postService;
+            _orchardServices = orchardServices;
         }
 
         protected override string Prefix {
@@ -44,11 +50,14 @@ namespace NGM.Forum.Drivers {
                     () => shapeHelper.Parts_Thread_Manage(ContentPart: firstPost)),
                 ContentShape("Forum_Metadata_First", 
                     () => shapeHelper.Forum_Metadata_First(ContentPart: firstPost)),
-                ContentShape("Forum_Metadata_Latest", 
-                    () => {
-                        var post = _postService.GetLatestPost(part, VersionOptions.Published);
-                        return shapeHelper.Forum_Metadata_Latest(ContentPart: post);
-                    })});
+                ContentShape("Forum_Metadata_Latest", () => {
+                                     var post = _postService.GetLatestPost(part, VersionOptions.Published);
+
+                                     var currentSiteSettings = _orchardServices.WorkContext.CurrentSite;
+                                     Pager pager = new Pager(currentSiteSettings, null, null);
+                                     pager.Page = (int)Math.Ceiling((decimal)_postService.Get(part).Count() / (decimal)pager.PageSize);
+                                     return shapeHelper.Forum_Metadata_Latest(ContentPart: post, Pager: pager);
+                                 })});
 
             return Combined(results.ToArray());
         }
