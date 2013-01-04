@@ -5,7 +5,7 @@
     int contentId = Model.ContentId;
 }
 
-<div class="reply">
+<div id="quick-reply">
     <h3>@T("Quick Reply")</h3>
 
 @using (Html.BeginFormAntiForgeryPost(Url.Action("Create", "Post", new { contentId = contentId }))) {
