@@ -114,7 +114,7 @@ namespace NGM.Forum.Controllers {
 
             _orchardServices.Notifier.Information(T("Your {0} has been created.", post.TypeDefinition.DisplayName));
 
-            var pager = new ThreadPager(_orchardServices.WorkContext.CurrentSite, _postService.CountPosts(post.ThreadPart));
+            var pager = new ThreadPager(_orchardServices.WorkContext.CurrentSite, post.ThreadPart.PostCount);
             return Redirect(Url.PostView(post, pager));
         }
 
@@ -147,7 +147,7 @@ namespace NGM.Forum.Controllers {
                     _orchardServices.ContentManager.Remove(contentItem);
                     _orchardServices.Notifier.Information(T("Post has been deleted."));
 
-                    var pager = new ThreadPager(_orchardServices.WorkContext.CurrentSite, _postService.CountPosts(post.ThreadPart));
+                    var pager = new ThreadPager(_orchardServices.WorkContext.CurrentSite, post.ThreadPart.PostCount);
                     return Redirect(Url.ThreadView(post.ThreadPart, pager));
                 }
             }
@@ -162,10 +162,6 @@ namespace NGM.Forum.Controllers {
         void IUpdateModel.AddModelError(string key, LocalizedString errorMessage) {
             ModelState.AddModelError(key, errorMessage.ToString());
         }
-
-        //private bool IsNotAllowedToCreatePost() {
-        //    return !_orchardServices.Authorizer.Authorize(Permissions.CreatePost, T("Not allowed to create post"));
-        //}
 
         private bool IsNotAllowedToReplyToPost() {
             return !_orchardServices.Authorizer.Authorize(Permissions.ReplyPost, T("Not allowed to reply to a post"));

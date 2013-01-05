@@ -73,7 +73,7 @@ namespace NGM.Forum.Controllers {
             list.AddRange(threads);
             forum.Content.Add(Shape.Parts_Forums_Thread_List(ContentPart: forumPart, ContentItems: list), "5");
 
-            var totalItemCount = forumPart.PostCount;
+            var totalItemCount = forumPart.ThreadCount;
             forum.Content.Add(Shape.Pager(pager).TotalItemCount(totalItemCount), "Content:after");
 
             return new ShapeResult(this, forum);
