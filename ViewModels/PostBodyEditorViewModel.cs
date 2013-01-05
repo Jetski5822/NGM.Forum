@@ -6,7 +6,7 @@ namespace NGM.Forum.ViewModels {
 
         public string Text {
             get { return PostPart.Record.Text; }
-            set { PostPart.Record.Text = value; }
+            set { PostPart.Record.Text = string.IsNullOrWhiteSpace(value) ? value : value.TrimEnd(); }
         }
 
         public string Format {
