@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
+using NGM.Forum.ViewModels;
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Drivers;
@@ -53,9 +54,7 @@ namespace NGM.Forum.Drivers {
                 ContentShape("Forum_Metadata_Latest", () => {
                                      var post = _postService.GetLatestPost(part, VersionOptions.Published);
 
-                                     var currentSiteSettings = _orchardServices.WorkContext.CurrentSite;
-                                     Pager pager = new Pager(currentSiteSettings, null, null);
-                                     pager.Page = (int)Math.Ceiling((decimal)_postService.Get(part).Count() / (decimal)pager.PageSize);
+                                     var pager = new ThreadPager(_orchardServices.WorkContext.CurrentSite, _postService.CountPosts(post.ThreadPart));
                                      return shapeHelper.Forum_Metadata_Latest(ContentPart: post, Pager: pager);
                                  })});
 

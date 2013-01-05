@@ -110,6 +110,7 @@
     <Compile Include="Permissions.cs" />
     <Compile Include="Services\PostService.cs" />
     <Compile Include="Services\ThreadService.cs" />
+    <Compile Include="ViewModels\ThreadPager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Admin\Images\approved.gif" />

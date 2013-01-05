@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using NGM.Forum.Extensions;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
+using NGM.Forum.ViewModels;
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.Localization;
 using Orchard.Logging;
 using Orchard.Themes;
+using Orchard.UI.Navigation;
 using Orchard.UI.Notify;
 
 namespace NGM.Forum.Controllers {
@@ -107,10 +110,12 @@ namespace NGM.Forum.Controllers {
             }
 
             _orchardServices.ContentManager.Publish(post.ContentItem);
+            _orchardServices.ContentManager.Flush();
 
             _orchardServices.Notifier.Information(T("Your {0} has been created.", post.TypeDefinition.DisplayName));
 
-            return Redirect(Url.ThreadView(post.ThreadPart));
+            var pager = new ThreadPager(_orchardServices.WorkContext.CurrentSite, _postService.CountPosts(post.ThreadPart));
+            return Redirect(Url.PostView(post, pager));
         }
 
         public ActionResult Delete(int contentId) {
@@ -141,7 +146,9 @@ namespace NGM.Forum.Controllers {
                 else {
                     _orchardServices.ContentManager.Remove(contentItem);
                     _orchardServices.Notifier.Information(T("Post has been deleted."));
-                    return Redirect(Url.ThreadView(post.ThreadPart));
+
+                    var pager = new ThreadPager(_orchardServices.WorkContext.CurrentSite, _postService.CountPosts(post.ThreadPart));
+                    return Redirect(Url.ThreadView(post.ThreadPart, pager));
                 }
             }
 

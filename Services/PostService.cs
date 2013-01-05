@@ -16,6 +16,7 @@ namespace NGM.Forum.Services {
         PostPart GetFirstPost(ThreadPart threadPart, VersionOptions versionOptions);
         PostPart GetLatestPost(ForumPart forumPart, VersionOptions versionOptions);
         PostPart GetLatestPost(ThreadPart threadPart, VersionOptions versionOptions);
+        int CountPosts(ThreadPart threadPart);
     }
 
     public class PostService : IPostService {
@@ -79,6 +80,10 @@ namespace NGM.Forum.Services {
             return GetQuery(threadPart, versionOptions)
                         .Slice(skip, count)
                         .ToList();
+        }
+
+        public int CountPosts(ThreadPart threadPart) {
+            return GetQuery(threadPart, VersionOptions.Published).Count();
         }
 
         private IContentQuery<PostPart, CommonPartRecord> GetQuery(ThreadPart threadPart, VersionOptions versionOptions) {
