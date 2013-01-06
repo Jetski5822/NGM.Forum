@@ -14,6 +14,11 @@
     <Place Parts_Threads_Post_Body_Summary="-"
            Parts_Threads_Post_Body="Content:5"/>
   </Match>
+
+  <Match DisplayType="Summary">
+    <Place Parts_Threads_Post_Body_Summary="Content:5"/>
+  </Match>
+
   <Match DisplayType="SummaryAdmin">
     <Place Parts_Threads_Post_Body_Summary="Content:before.1"/>
   </Match>
@@ -57,13 +62,15 @@
              Parts_Threads_Thread_Metadata_SummaryAdmin="Meta:1.3"/>
     </Match>
   </Match>
+  
   <Match ContentType="Post">
     <Match DisplayType="Detail">
       <Place Parts_Post_Manage="Actions:1"/>
     </Match>
+
     <Match DisplayType="SummaryAdmin">
       <Place Parts_Thread_Post_Metadata_SummaryAdmin="Meta:1.2"/>
     </Match>
-    
   </Match>
+  
 </Placement>

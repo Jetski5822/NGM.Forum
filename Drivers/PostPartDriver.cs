@@ -14,26 +14,27 @@ using Orchard.Services;
 namespace NGM.Forum.Drivers {
     [UsedImplicitly]
     public class PostPartDriver : ContentPartDriver<PostPart> {
+        private readonly IOrchardServices _orchardServices;
         private readonly IEnumerable<IHtmlFilter> _htmlFilters;
         private readonly RequestContext _requestContext;
 
         private const string TemplateName = "Parts.Threads.Post.Body";
 
-        public PostPartDriver(IOrchardServices services, 
+        public PostPartDriver(IOrchardServices orchardServices, 
             IEnumerable<IHtmlFilter> htmlFilters, 
             RequestContext requestContext) {
+            _orchardServices = orchardServices;
             _htmlFilters = htmlFilters;
-            Services = services;
             _requestContext = requestContext;
         }
-
-        public IOrchardServices Services { get; set; }
 
         protected override string Prefix {
             get { return "PostPart"; }
         }
 
         protected override DriverResult Display(PostPart part, string displayType, dynamic shapeHelper) {
+            var pager = new ThreadPager(_orchardServices.WorkContext.CurrentSite, part.ThreadPart.PostCount);
+
             return Combined(
                 ContentShape("Parts_Threads_Post_Body",
                              () => {
@@ -43,7 +44,7 @@ namespace NGM.Forum.Drivers {
                 ContentShape("Parts_Threads_Post_Body_Summary",
                              () => {
                                  var bodyText = _htmlFilters.Aggregate(part.Text, (text, filter) => filter.ProcessContent(text, GetFlavor(part)));
-                                 return shapeHelper.Parts_Threads_Post_Body_Summary(Html: new HtmlString(bodyText));
+                                 return shapeHelper.Parts_Threads_Post_Body_Summary(Html: new HtmlString(bodyText), Pager: pager);
                              }),
                 ContentShape("Parts_Post_Manage", () => 
                     shapeHelper.Parts_Post_Manage(ContentPart: part)),
