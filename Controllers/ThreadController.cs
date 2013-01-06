@@ -8,6 +8,7 @@ using Orchard.ContentManagement;
 using Orchard.DisplayManagement;
 using Orchard.Localization;
 using Orchard.Mvc;
+using Orchard.Security;
 using Orchard.Settings;
 using Orchard.Themes;
 using Orchard.UI.Navigation;
@@ -22,18 +23,21 @@ namespace NGM.Forum.Controllers {
         private readonly IThreadService _threadService;
         private readonly IPostService _postService;
         private readonly ISiteService _siteService;
+        private readonly IAuthorizationService _authorizationService;
 
         public ThreadController(IOrchardServices orchardServices,
             IForumService forumService,
             IThreadService threadService,
             IPostService postService,
             ISiteService siteService,
-            IShapeFactory shapeFactory) {
+            IShapeFactory shapeFactory,
+            IAuthorizationService authorizationService) {
             _orchardServices = orchardServices;
             _forumService = forumService;
             _threadService = threadService;
             _postService = postService;
             _siteService = siteService;
+            _authorizationService = authorizationService;
 
             T = NullLocalizer.Instance;
             Shape = shapeFactory;
@@ -128,7 +132,7 @@ namespace NGM.Forum.Controllers {
             thread.Content.Add(Shape.Parts_Threads_Post_List(ContentItems: list, Pager: pagerObject), "5");
 
             /* Get Edit Post*/
-            if (!threadPart.IsClosed && IsAllowedToCreatePost()) {
+            if (!threadPart.IsClosed && IsAllowedToCreatePost(threadPart)) {
                 var part = _orchardServices.ContentManager.New<PostPart>(Constants.Parts.Post);
 
                 dynamic model = _orchardServices.ContentManager.BuildEditor(part);
@@ -141,22 +145,22 @@ namespace NGM.Forum.Controllers {
             return new ShapeResult(this, thread);
         }
 
-        private bool IsAllowedToCreatePost() {
-            if (IsNotAllowedToCreatePost())
+        private bool IsAllowedToCreatePost(ThreadPart threadPart) {
+            if (IsNotAllowedToCreatePost(threadPart))
                 return false;
 
-            if (IsNotAllowedToReplyToPost())
+            if (IsNotAllowedToReplyToPost(threadPart))
                 return false;
 
             return true;
         }
 
-        private bool IsNotAllowedToCreatePost() {
-            return !_orchardServices.Authorizer.Authorize(Permissions.CreatePost, T("Not allowed to create post"));
+        private bool IsNotAllowedToCreatePost(ThreadPart threadPart) {
+            return !_authorizationService.TryCheckAccess(Permissions.CreatePost, _orchardServices.WorkContext.CurrentUser, threadPart);
         }
 
-        private bool IsNotAllowedToReplyToPost() {
-            return !_orchardServices.Authorizer.Authorize(Permissions.ReplyPost, T("Not allowed to reply to a post"));
+        private bool IsNotAllowedToReplyToPost(ThreadPart threadPart) {
+            return !_authorizationService.TryCheckAccess(Permissions.ReplyPost, _orchardServices.WorkContext.CurrentUser, threadPart);
         }
 
         bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties) {
