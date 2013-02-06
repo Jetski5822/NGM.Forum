@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Routing;
@@ -38,12 +39,12 @@ namespace NGM.Forum.Drivers {
             return Combined(
                 ContentShape("Parts_Threads_Post_Body",
                              () => {
-                                 var bodyText = _htmlFilters.Aggregate(part.Text, (text, filter) => filter.ProcessContent(text, GetFlavor(part)));
+                                 var bodyText = _htmlFilters.Where(x => x.GetType().Name.Equals(GetFlavor(part) + "filter", StringComparison.OrdinalIgnoreCase)).Aggregate(part.Text, (text, filter) => filter.ProcessContent(text));
                                  return shapeHelper.Parts_Threads_Post_Body(Html: new HtmlString(bodyText));
                              }),
                 ContentShape("Parts_Threads_Post_Body_Summary",
                              () => {
-                                 var bodyText = _htmlFilters.Aggregate(part.Text, (text, filter) => filter.ProcessContent(text, GetFlavor(part)));
+                                 var bodyText = _htmlFilters.Where(x => x.GetType().Name.Equals(GetFlavor(part) + "filter", StringComparison.OrdinalIgnoreCase)).Aggregate(part.Text, (text, filter) => filter.ProcessContent(text));
                                  return shapeHelper.Parts_Threads_Post_Body_Summary(Html: new HtmlString(bodyText), Pager: pager);
                              }),
                 ContentShape("Parts_Post_Manage", () => 
