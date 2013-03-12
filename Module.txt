@@ -2,7 +2,7 @@
 AntiForgery: enabled
 Author: Nicholas Mayne
 Website: http://orchardforums.codeplex.com/
-Version: 0.7.5
+Version: 1.0.0
 OrchardVersion: 1.6.0
 Description: Introduces a forum module allowing users to create forums, threads and posts. Requires the Voting module to be installed.
 Features:
@@ -11,3 +11,8 @@ Features:
         Category: Content
         Description: Introduces a forum module allowing users to create forums, threads and posts.
         Dependencies: Contrib.Taxonomies
+	NGM.Forum.Popularty.StackOverflow
+	    Name: Stack Overflow Popularity Algorithm for Threads
+        Category: Algorithms
+        Description: Introduces the stack overflow algorithm to calculate popularity of a Thread compared to other threads.
+        Dependencies: NGM.Forum, Contrib.Voting, NGM.ContentViewCounter

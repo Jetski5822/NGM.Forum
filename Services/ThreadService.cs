@@ -6,6 +6,7 @@ using Orchard;
 using Orchard.Autoroute.Models;
 using Orchard.ContentManagement;
 using Orchard.Core.Common.Models;
+using Orchard.Security;
 
 namespace NGM.Forum.Services {
     public interface IThreadService : IDependency {
@@ -16,6 +17,9 @@ namespace NGM.Forum.Services {
         IEnumerable<ThreadPart> Get(ForumPart forumPart, int skip, int count);
         IEnumerable<ThreadPart> Get(ForumPart forumPart, int skip, int count, VersionOptions versionOptions);
         int ThreadCount(ForumPart forumPart, VersionOptions versionOptions);
+
+        // TODO: moved
+        IEnumerable<ThreadPart> Get(ForumPart forumPart, IUser user);
     }
 
     public class ThreadService : IThreadService {
@@ -38,6 +42,15 @@ namespace NGM.Forum.Services {
 
         public ContentItem Get(int id, VersionOptions versionOptions) {
             return _contentManager.Get(id, versionOptions);
+        }
+
+        public IEnumerable<ThreadPart> Get(ForumPart forumPart, IUser user) {
+            return GetForumQuery(forumPart, VersionOptions.Published)
+                .Join<CommonPartRecord>()
+                .Where(o => o.OwnerId == user.Id)
+                .OrderByDescending(cr => cr.CreatedUtc)
+                .ForPart<ThreadPart>()
+                .List();
         }
 
         public IEnumerable<ThreadPart> Get(ForumPart forumPart) {

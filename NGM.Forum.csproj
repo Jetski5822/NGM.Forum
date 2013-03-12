@@ -157,7 +157,6 @@
     <Content Include="Content\Images\VoteDown.jpg" />
     <Content Include="Content\Images\wrench-16x16.gif" />
     <Content Include="Module.txt" />
-    <Content Include="Services\Popularity\Module_Value.txt" />
     <Content Include="Styles\thread.css" />
     <Content Include="Styles\forum.css" />
     <Content Include="Styles\menu.forum-admin.css" />
