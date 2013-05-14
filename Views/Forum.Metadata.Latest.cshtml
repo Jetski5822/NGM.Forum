@@ -6,7 +6,7 @@
 @{
     var contentItem = (ContentItem)Model.ContentPart.ContentItem;
     var commonPart = contentItem.As<CommonPart>();
-    var postPart = (PostPart)Model.FirstPostContentPart;
+    var postPart = (PostPart)Model.ContentPart;
 
     var pager = (Pager) Model.Pager;
 }
