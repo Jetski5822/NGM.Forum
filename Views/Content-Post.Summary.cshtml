@@ -11,12 +11,14 @@
     <header>
         @Display(Model.Header)
         @if (Model.Meta != null) {
-        <div class="metadata">
-            @Display(Model.Meta)
-        </div>
+            <div class="metadata">
+                @Display(Model.Meta)
+            </div>
         }
     </header>
-    @Display(Model.Content)
+    <div class="post-content">
+        @Display(Model.Content)
+    </div>
     @if(Model.Footer != null) {
     <footer>
         @Display(Model.Footer)

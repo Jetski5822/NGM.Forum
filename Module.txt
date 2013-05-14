@@ -10,7 +10,7 @@ Features:
         Name: Forums
         Category: Content
         Description: Introduces a forum module allowing users to create forums, threads and posts.
-        Dependencies: Contrib.Taxonomies
+        Dependencies: Orchard.Taxonomies
 	NGM.Forum.Popularty.StackOverflow
 	    Name: Stack Overflow Popularity Algorithm for Threads
         Category: Algorithms

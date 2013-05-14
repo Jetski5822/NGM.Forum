@@ -3,7 +3,6 @@ using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
 using Orchard.ContentManagement.Records;
 using Orchard.Core.Common.Utilities;
-using Orchard.Data.Conventions;
 using Orchard.Security;
 
 namespace NGM.Forum.Models {

@@ -2,11 +2,12 @@
 @using NGM.Forum.Extensions
 @using NGM.Forum.Models
 @{
-    var postPart = (PostPart)Model.ContentPart;
+    var threadPart = (ThreadPart)Model.ContentPart;
+    var postPart = (PostPart)Model.FirstPostContentPart;    
 }
 
 @if (Authorizer.Authorize(Permissions.DeletePost, postPart.ContentItem) && postPart.IsParentThread()) {
-    <a href="@Url.ThreadDelete(postPart.ThreadPart)" class="remove">@T("Delete")</a>
+    <a href="@Url.ThreadDelete(threadPart)" class="remove">@T("Delete")</a>
 }
 @if (!postPart.ThreadPart.IsClosed) {
     <a href="@Url.PostReply(postPart)">@T("Reply to this Thread")</a>

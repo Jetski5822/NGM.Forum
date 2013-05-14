@@ -64,9 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdminMenu.cs" />
-    <Compile Include="Services\Sorting\ISortCriterion.cs" />
-    <Compile Include="Services\Sorting\SortCriterionProvider.cs" />
-    <Compile Include="Services\Sorting\SortingParameters.cs" />
+    <Compile Include="Services\Sorting\FilterParameters.cs" />
     <Compile Include="Controllers\ThreadAdminController.cs" />
     <Compile Include="DefaultTaxonomyUpdater.cs" />
     <Compile Include="Extensions\ContainerExtensions.cs" />
@@ -206,10 +204,6 @@
       <Project>{9916839C-39FC-4CEB-A5AF-89CA7E87119F}</Project>
       <Name>Orchard.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Contrib.Taxonomies\Contrib.Taxonomies.csproj">
-      <Project>{e649ea64-d213-461b-87f7-d67035801443}</Project>
-      <Name>Contrib.Taxonomies</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Contrib.Voting\Contrib.Voting.csproj">
       <Project>{4DA5F35F-E62C-4B49-B5A8-379503257B3A}</Project>
       <Name>Contrib.Voting</Name>
@@ -217,6 +211,10 @@
     <ProjectReference Include="..\Orchard.Autoroute\Orchard.Autoroute.csproj">
       <Project>{66FCCD76-2761-47E3-8D11-B45D0001DDAA}</Project>
       <Name>Orchard.Autoroute</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Orchard.Taxonomies\Orchard.Taxonomies.csproj">
+      <Project>{e649ea64-d213-461b-87f7-d67035801443}</Project>
+      <Name>Orchard.Taxonomies</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -354,6 +352,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Content-Forum.Detail.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Content-Post.Summary.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

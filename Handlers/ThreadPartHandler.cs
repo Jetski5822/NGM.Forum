@@ -65,8 +65,6 @@ namespace NGM.Forum.Handlers {
                 ForumPart forumPart = threadPart.ForumPart ??
                                       _forumService.Get(commonPart.Record.Container.Id, VersionOptions.Published).As<ForumPart>();
 
-                forumPart.ContentItem.ContentManager.Flush();
-
                 forumPart.ThreadCount = _threadService.Get(forumPart, VersionOptions.Published).Count();
                 forumPart.PostCount = _threadService
                     .Get(forumPart, VersionOptions.Published)

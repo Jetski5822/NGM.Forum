@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Web.Mvc;
 using NGM.Forum.Extensions;
 using NGM.Forum.Models;
@@ -10,7 +9,6 @@ using Orchard.ContentManagement;
 using Orchard.Localization;
 using Orchard.Logging;
 using Orchard.Themes;
-using Orchard.UI.Navigation;
 using Orchard.UI.Notify;
 
 namespace NGM.Forum.Controllers {
@@ -110,7 +108,6 @@ namespace NGM.Forum.Controllers {
             }
 
             _orchardServices.ContentManager.Publish(post.ContentItem);
-            _orchardServices.ContentManager.Flush();
 
             _orchardServices.Notifier.Information(T("Your {0} has been created.", post.TypeDefinition.DisplayName));
 

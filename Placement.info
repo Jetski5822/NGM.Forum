@@ -7,8 +7,8 @@
 
   <Place Parts_Threads_Post_Body_Edit="Content:2"/>
 
-  <Place Fields_Contrib_TaxonomyField_Edit-Categories="Content:before.6" />
-  <!--<Place Fields_Contrib_TaxonomyField_Edit-Tags="Content:1" />-->
+  <Place Fields_TaxonomyField_Edit-Categories="Content:before.6" />
+  <!--<Place Fields_TaxonomyField_Edit-Tags="Content:1" />-->
   
   <Match DisplayType="Detail">
     <Place Parts_Threads_Post_Body_Summary="-"

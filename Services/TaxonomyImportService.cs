@@ -1,5 +1,5 @@
-﻿using Contrib.Taxonomies.Models;
-using Contrib.Taxonomies.Services;
+﻿using Orchard.Taxonomies.Models;
+using Orchard.Taxonomies.Services;
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;

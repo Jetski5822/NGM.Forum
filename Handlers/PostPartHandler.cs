@@ -6,20 +6,24 @@ using Orchard.ContentManagement.Handlers;
 using Orchard.Core.Common.Models;
 using Orchard.Data;
 using Orchard.Localization;
+using Orchard.Security;
 
 namespace NGM.Forum.Handlers {
     public class PostPartHandler : ContentHandler {
         private readonly IPostService _postService;
         private readonly IThreadService _threadService;
         private readonly IForumService _forumService;
+        private readonly IAuthenticationService _authenticationService;
 
         public PostPartHandler(IRepository<PostPartRecord> repository, 
             IPostService postService, 
             IThreadService threadService, 
-            IForumService forumService) {
+            IForumService forumService,
+            IAuthenticationService authenticationService) {
             _postService = postService;
             _threadService = threadService;
             _forumService = forumService;
+            _authenticationService = authenticationService;
 
             T = NullLocalizer.Instance;
 
@@ -67,7 +71,6 @@ namespace NGM.Forum.Handlers {
                 ThreadPart threadPart = postPart.ThreadPart ??
                                         _threadService.Get(commonPart.Record.Container.Id, VersionOptions.Published).As<ThreadPart>();
 
-                threadPart.ContentItem.ContentManager.Flush();
                 threadPart.PostCount = _postService.Get(threadPart, VersionOptions.Published).Count();
 
                 UpdateForumPartCounters(threadPart);
@@ -81,8 +84,6 @@ namespace NGM.Forum.Handlers {
 
                 ForumPart forumPart = threadPart.ForumPart ??
                                       _forumService.Get(commonPart.Record.Container.Id, VersionOptions.Published).As<ForumPart>();
-
-                forumPart.ContentItem.ContentManager.Flush();
 
                 forumPart.ThreadCount = _threadService.Get(forumPart, VersionOptions.Published).Count();
                 forumPart.PostCount = _threadService

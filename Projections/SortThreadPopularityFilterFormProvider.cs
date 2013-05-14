@@ -1,8 +1,8 @@
 ﻿//using System;
 //using System.Collections.Generic;
 //using System.Web.Mvc;
-//using Contrib.Taxonomies.Helpers;
-//using Contrib.Taxonomies.Services;
+//using Orchard.Taxonomies.Helpers;
+//using Orchard.Taxonomies.Services;
 //using NGM.Forum.Services.Popularity;
 //using Orchard.DisplayManagement;
 //using Orchard.Events;

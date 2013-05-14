@@ -12,12 +12,12 @@ namespace NGM.Forum.Models {
 
         public string Text {
             get { return Record.Text; }
-            set { this.Record.Text = value; }
+            set { Record.Text = value; }
         }
 
         public string Format {
             get { return Record.Format; }
-            set { this.Record.Format = value; }
+            set { Record.Format = value; }
         }
 
         public ThreadPart ThreadPart {

@@ -53,7 +53,7 @@ namespace NGM.Forum.Controllers {
             return View((object)viewModel);
         }
 
-        public ActionResult Item(int forumId, PagerParameters pagerParameters, SortingParameters sortingParameters) {
+        public ActionResult Item(int forumId, PagerParameters pagerParameters) {
             if (!_orchardServices.Authorizer.Authorize(Permissions.ViewForum, T("Not allowed to view forum")))
                 return new HttpUnauthorizedResult();
 

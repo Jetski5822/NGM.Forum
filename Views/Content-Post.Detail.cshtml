@@ -7,7 +7,7 @@
     var contentTypeClassName = ((string)Model.ContentItem.ContentType).HtmlClassify();
     var contentItemId = Model.ContentItem.Id;
 }
-<article id="@contentItemId" class="content-item @contentTypeClassName">
+<article id="@contentItemId" class="content-item @contentTypeClassName" data-contentitem-id="@Model.ContentItem.Id">
     <header>
         @Display(Model.Header)
         @if (Model.Meta != null) {
@@ -16,7 +16,9 @@
             </div>
         }
     </header>
-    @Display(Model.Content)
+    <div class="post-content">
+        @Display(Model.Content)
+    </div>
     <footer>
         @Display(Model.Footer)
         @if (Model.Actions != null) {

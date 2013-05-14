@@ -1,5 +1,5 @@
 ﻿using System;
-using Contrib.Taxonomies.Services;
+using Orchard.Taxonomies.Services;
 using JetBrains.Annotations;
 using NGM.Forum.Extensions;
 using NGM.Forum.Services;

@@ -1,8 +1,8 @@
 ﻿//using System;
 //using System.Collections.Generic;
 //using System.Linq;
-//using Contrib.Taxonomies.Models;
-//using Contrib.Taxonomies.Services;
+//using Orchard.Taxonomies.Models;
+//using Orchard.Taxonomies.Services;
 //using Orchard.ContentManagement;
 //using Orchard.Events;
 //using Orchard.Localization;

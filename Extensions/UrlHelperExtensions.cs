@@ -52,7 +52,10 @@ namespace NGM.Forum.Extensions {
         public static string ThreadOpenForAdmin(this UrlHelper urlHelper, ThreadPart threadPart) {
             return urlHelper.Action("Open", "ThreadAdmin", new { threadId = threadPart.Id, area = Constants.LocalArea, returnUrl = urlHelper.RequestContext.HttpContext.Request.ToUrlString() });
         }
-        
+
+        public static string ThreadCreate(this UrlHelper urlHelper, int forumId) {
+            return urlHelper.Action("Create", "Thread", new { forumId = forumId, area = Constants.LocalArea, returnUrl = urlHelper.RequestContext.HttpContext.Request.ToUrlString() });
+        }
 
         public static string ThreadCreate(this UrlHelper urlHelper, ForumPart forumPart) {
             return urlHelper.Action("Create", "Thread", new { forumId = forumPart.Id, area = Constants.LocalArea, returnUrl = urlHelper.RequestContext.HttpContext.Request.ToUrlString() });

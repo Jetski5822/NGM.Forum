@@ -1,4 +1,5 @@
 @using System.Web.Mvc.Html
+@using NGM.Forum.Extensions
 @using Orchard.Mvc.Html
 @{
   Script.Require("jQuery");
@@ -7,8 +8,7 @@
 }
 
 <h2>@Layout.Title</h2>
-
-@using (Html.BeginFormAntiForgeryPost()) {
+@using (Html.BeginFormAntiForgeryPost(Url.ThreadCreate(int.Parse(Request.QueryString["forumId"])), FormMethod.Post, new { @id = "thread-create" })) {
     @Html.ValidationSummary()
     
     @Display(Model.Thread)

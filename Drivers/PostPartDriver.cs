@@ -56,16 +56,16 @@ namespace NGM.Forum.Drivers {
 
         protected override DriverResult Editor(PostPart part, dynamic shapeHelper) {
             var model = BuildEditorViewModel(part, _requestContext);
-            return ContentShape("Parts_Threads_Post_Body_Edit",
-                                () => shapeHelper.EditorTemplate(TemplateName: TemplateName, Model: model, Prefix: Prefix));
+            return Combined(ContentShape("Parts_Threads_Post_Body_Edit",
+                                () => shapeHelper.EditorTemplate(TemplateName: TemplateName, Model: model, Prefix: Prefix)));
         }
 
         protected override DriverResult Editor(PostPart part, IUpdateModel updater, dynamic shapeHelper) {
             var model = BuildEditorViewModel(part, _requestContext);
             updater.TryUpdateModel(model, Prefix, null, null);
 
-            return ContentShape("Parts_Threads_Post_Body_Edit",
-                                () => shapeHelper.EditorTemplate(TemplateName: TemplateName, Model: model, Prefix: Prefix));
+            return Combined(ContentShape("Parts_Threads_Post_Body_Edit",
+                                () => shapeHelper.EditorTemplate(TemplateName: TemplateName, Model: model, Prefix: Prefix)));
         }
 
         private static PostBodyEditorViewModel BuildEditorViewModel(PostPart part, RequestContext requestContext) {

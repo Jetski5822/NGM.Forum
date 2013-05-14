@@ -70,8 +70,8 @@ namespace NGM.Forum.Services {
                     .Where(cpr => cpr.Container == threadPart.ContentItem.Record)
                     .Join<PostPartRecord>()
                     .OrderBy(p => p.RepliedOn)
-                        .Slice(skip, count)
-                        .ToList();
+                    .Slice(skip, count)
+                    .ToList();
 
                 return pp;
             }
@@ -87,6 +87,5 @@ namespace NGM.Forum.Services {
                 .Where(cpr => cpr.Container == threadPart.ContentItem.Record)
                 .OrderBy(c => c.CreatedUtc);
         }
-
     }
 }

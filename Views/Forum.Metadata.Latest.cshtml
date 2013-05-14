@@ -6,11 +6,11 @@
 @{
     var contentItem = (ContentItem)Model.ContentPart.ContentItem;
     var commonPart = contentItem.As<CommonPart>();
-    var postPart = contentItem.As<PostPart>();
+    var postPart = (PostPart)Model.FirstPostContentPart;
 
     var pager = (Pager) Model.Pager;
 }
-<div class="latestPost">
+<div class="latestPost post-metadata">
     <span class="author">@T("Latest post by {0},", commonPart.Owner.UserName)</span>
     <span class="published"><a href="@Url.PostView(postPart, pager)">@Display.PublishedState(createdDateTimeUtc: commonPart.CreatedUtc, publisheddateTimeUtc: commonPart.PublishedUtc)</a></span>
 </div>

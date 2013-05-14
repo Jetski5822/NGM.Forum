@@ -44,13 +44,13 @@ namespace NGM.Forum.Drivers {
 
             results.AddRange(new [] { 
                 ContentShape("Parts_Threads_Thread_ThreadReplyCount",
-                    () => shapeHelper.Parts_Threads_Thread_ThreadReplyCount(ReplyCount: part.ReplyCount)),
+                    () => shapeHelper.Parts_Threads_Thread_ThreadReplyCount(ContentPart: part, ReplyCount: part.ReplyCount)),
                 ContentShape("Parts_Thread_Manage", 
-                    () => shapeHelper.Parts_Thread_Manage(ContentPart: firstPost)),
+                    () => shapeHelper.Parts_Thread_Manage(ContentPart: part, FirstPostContentPart: firstPost)),
                 ContentShape("Forum_Metadata_First", 
-                    () => shapeHelper.Forum_Metadata_First(ContentPart: firstPost)),
+                    () => shapeHelper.Forum_Metadata_First(ContentPart: part, FirstPostContentPart: firstPost)),
                 ContentShape("Forum_Metadata_Latest", () => {
-                                     var post = _postService.GetLatestPost(part, VersionOptions.Published);
+                    var post = _postService.GetLatestPost(part, VersionOptions.Published);
 
                                      var pager = new ThreadPager(_orchardServices.WorkContext.CurrentSite, part.PostCount);
                                      return shapeHelper.Forum_Metadata_Latest(ContentPart: post, Pager: pager);
@@ -65,8 +65,7 @@ namespace NGM.Forum.Drivers {
         }
 
         protected override DriverResult Editor(ThreadPart part, IUpdateModel updater, dynamic shapeHelper) {
-            if (updater.TryUpdateModel(part, Prefix, null, null)) {
-            }
+            updater.TryUpdateModel(part, Prefix, null, null);
 
             return Editor(part, shapeHelper);
         }
