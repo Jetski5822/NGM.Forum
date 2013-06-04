@@ -1,7 +1,6 @@
 ﻿@using NGM.Forum.Models
 @using NGM.Forum.Extensions
 @{
-    Style.Require("Forums");
     IEnumerable<object> threads = Model.ContentItems;
     ForumPart contentPart = Model.ContentPart;
     Model.ContentItems.Classes.Add("content-items");

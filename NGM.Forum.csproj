@@ -155,8 +155,6 @@
     <Content Include="Content\Images\VoteDown.jpg" />
     <Content Include="Content\Images\wrench-16x16.gif" />
     <Content Include="Module.txt" />
-    <Content Include="Styles\thread.css" />
-    <Content Include="Styles\forum.css" />
     <Content Include="Styles\menu.forum-admin.css" />
     <Content Include="Styles\ngm-forum-admin.css" />
   </ItemGroup>
