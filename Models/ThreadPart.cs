@@ -8,8 +8,12 @@ using Orchard.Security;
 namespace NGM.Forum.Models {
     public class ThreadPart : ContentPart<ThreadPartRecord>, IThreadPart {
         private readonly LazyField<IUser> _closedBy = new LazyField<IUser>();
+        private readonly LazyField<PostPart> _firstPost = new LazyField<PostPart>();
+        private readonly LazyField<PostPart> _latestPost = new LazyField<PostPart>();
 
         public LazyField<IUser> ClosedByField { get { return _closedBy; } }
+        public LazyField<PostPart> FirstPostField { get { return _firstPost; } }
+        public LazyField<PostPart> LatestPostField { get { return _firstPost; } }
 
         public string Title {
             get { return this.As<ITitleAspect>().Title; }
@@ -38,6 +42,16 @@ namespace NGM.Forum.Models {
         public IUser ClosedBy {
             get { return _closedBy.Value; }
             set { _closedBy.Value = value; }
+        }
+
+        public PostPart FirstPost {
+            get { return _firstPost.Value; }
+            set { _firstPost.Value = value; }
+        }
+
+        public PostPart LatestPost {
+            get { return _latestPost.Value; }
+            set { _latestPost.Value = value; }
         }
 
         public string ClosedDescription {

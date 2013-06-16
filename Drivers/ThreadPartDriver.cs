@@ -26,7 +26,7 @@ namespace NGM.Forum.Drivers {
         }
 
         protected override DriverResult Display(ThreadPart part, string displayType, dynamic shapeHelper) {
-            List<DriverResult> results = new List<DriverResult>();
+            var results = new List<DriverResult>();
 
             if (displayType.Equals("SummaryAdmin", StringComparison.OrdinalIgnoreCase)) {
                 results.Add(ContentShape("Parts_Threads_Thread_SummaryAdmin",
@@ -40,32 +40,18 @@ namespace NGM.Forum.Drivers {
                         () => shapeHelper.Parts_Threads_Thread_Closed()));
             }
 
-            
-
             results.AddRange(new [] { 
                 ContentShape("Parts_Threads_Thread_ThreadReplyCount",
                     () => shapeHelper.Parts_Threads_Thread_ThreadReplyCount(ReplyCount: part.ReplyCount)),
-                ContentShape("Parts_Thread_Manage", () =>
-                    {
-                        var firstPost = _postService.GetFirstPost(part, VersionOptions.Published);
-                        return shapeHelper.Parts_Thread_Manage(Post: firstPost);
-                    }),
-                ContentShape("Forum_Metadata_First", () => 
-                    {
-                        var firstPost = _postService.GetFirstPost(part, VersionOptions.Published);
-                        return shapeHelper.Forum_Metadata_First(Post: firstPost);
-                    }),
-                ContentShape("Forum_Metadata_Latest", () =>
-                    {
-                        var post = _postService.GetLatestPost(part, VersionOptions.Published);
-
+                ContentShape("Parts_Thread_Manage", () => shapeHelper.Parts_Thread_Manage(Post: part.FirstPost)),
+                ContentShape("Forum_Metadata_First", () => shapeHelper.Forum_Metadata_First(Post: part.FirstPost)),
+                ContentShape("Forum_Metadata_Latest", () => {
+                        var post = part.LatestPost;
                         var pager = new ThreadPager(_orchardServices.WorkContext.CurrentSite, part.PostCount);
                         return shapeHelper.Forum_Metadata_Latest(Post: post, Pager: pager);
                     }),
-                ContentShape("Parts_Thread_Posts_Users", () =>
-                    {
+                ContentShape("Parts_Thread_Posts_Users", () => {
                         var users = _postService.GetUsersPosted(part);
-
                         return shapeHelper.Parts_Thread_Posts_Users(Users: users);
                     })
             });

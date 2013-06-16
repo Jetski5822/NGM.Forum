@@ -34,7 +34,7 @@ namespace NGM.Forum.Handlers {
             OnGetEditorShape<ThreadPart>(SetModelProperties);
             OnUpdateEditorShape<ThreadPart>(SetModelProperties);
 
-            OnActivated<ThreadPart>(PropertySetHandlers);
+            OnActivated<ThreadPart>(PropertyHandlers);
             OnLoading<ThreadPart>((context, part) => LazyLoadHandlers(part));
             OnCreated<ThreadPart>((context, part) => UpdateForumPartCounters(part));
             OnPublished<ThreadPart>((context, part) => UpdateForumPartCounters(part));
@@ -48,8 +48,6 @@ namespace NGM.Forum.Handlers {
                     .Get(context.ContentItem.As<ForumPart>())
                     .ToList()
                     .ForEach(thread => context.ContentManager.Remove(thread.ContentItem)));
-
-
         }
 
         private void SetModelProperties(BuildShapeContext context, ThreadPart threadPart) {
@@ -59,11 +57,9 @@ namespace NGM.Forum.Handlers {
 
         private void UpdateForumPartCounters(ThreadPart threadPart) {
             var commonPart = threadPart.As<CommonPart>();
-            if (commonPart != null &&
-                commonPart.Record.Container != null) {
+            if (commonPart != null && commonPart.Record.Container != null) {
 
-                ForumPart forumPart = threadPart.ForumPart ??
-                                      _forumService.Get(commonPart.Record.Container.Id, VersionOptions.Published);
+                var forumPart = threadPart.ForumPart ?? _forumService.Get(commonPart.Record.Container.Id, VersionOptions.Published);
 
                 forumPart.ThreadCount = _threadService.Count(forumPart, VersionOptions.Published);
                 forumPart.PostCount = _threadService
@@ -74,12 +70,12 @@ namespace NGM.Forum.Handlers {
         }
 
         protected void LazyLoadHandlers(ThreadPart part) {
-            // add handlers that will load content for id's just-in-time
+            // Add handlers that will load content for id's just-in-time
             part.ClosedByField.Loader(() => _contentManager.Get<IUser>(part.Record.ClosedById));
         }
 
-        protected static void PropertySetHandlers(ActivatedContentContext context, ThreadPart part) {
-            // add handlers that will update records when part properties are set
+        protected void PropertyHandlers(ActivatedContentContext context, ThreadPart part) {
+            // Add handlers that will update records when part properties are set
 
             part.ClosedByField.Setter(user => {
                 part.Record.ClosedById = user == null
@@ -91,6 +87,10 @@ namespace NGM.Forum.Handlers {
             // Force call to setter if we had already set a value
             if (part.ClosedByField.Value != null)
                 part.ClosedByField.Value = part.ClosedByField.Value;
+
+            // Setup FirstPost & LatestPost fields
+            part.FirstPostField.Loader(() => _postService.GetFirstPost(part, VersionOptions.Published));
+            part.LatestPostField.Loader(() => _postService.GetLatestPost(part, VersionOptions.Published));
         }
 
         protected override void GetItemMetadata(GetContentItemMetadataContext context) {
