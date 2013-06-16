@@ -6,26 +6,20 @@ using Orchard.ContentManagement.Handlers;
 using Orchard.Core.Common.Models;
 using Orchard.Data;
 using Orchard.Localization;
-using Orchard.Security;
 
 namespace NGM.Forum.Handlers {
     public class PostPartHandler : ContentHandler {
         private readonly IPostService _postService;
         private readonly IThreadService _threadService;
         private readonly IForumService _forumService;
-        private readonly IAuthenticationService _authenticationService;
 
         public PostPartHandler(IRepository<PostPartRecord> repository, 
             IPostService postService, 
             IThreadService threadService, 
-            IForumService forumService,
-            IAuthenticationService authenticationService) {
+            IForumService forumService) {
             _postService = postService;
             _threadService = threadService;
             _forumService = forumService;
-            _authenticationService = authenticationService;
-
-            T = NullLocalizer.Instance;
 
             Filters.Add(StorageFilter.For(repository));
 
@@ -50,8 +44,6 @@ namespace NGM.Forum.Handlers {
                                                     .Add("format", postPart.Record.Format).Store());
         }
 
-        public Localizer T { get; set; }
-
         private void SetModelProperties(BuildShapeContext context, PostPart postPart) {
             context.Shape.Thread = postPart.ThreadPart;
         }
@@ -69,7 +61,7 @@ namespace NGM.Forum.Handlers {
                 commonPart.Record.Container != null) {
 
                 ThreadPart threadPart = postPart.ThreadPart ??
-                                        _threadService.Get(commonPart.Record.Container.Id, VersionOptions.Published).As<ThreadPart>();
+                                        _threadService.Get(commonPart.Record.Container.Id, VersionOptions.Published);
 
                 threadPart.PostCount = _postService.Count(threadPart, VersionOptions.Published);
 
@@ -83,13 +75,13 @@ namespace NGM.Forum.Handlers {
                 commonPart.Record.Container != null) {
 
                 ForumPart forumPart = threadPart.ForumPart ??
-                                      _forumService.Get(commonPart.Record.Container.Id, VersionOptions.Published).As<ForumPart>();
+                                      _forumService.Get(commonPart.Record.Container.Id, VersionOptions.Published);
 
-                forumPart.ThreadCount = _threadService.Get(forumPart, VersionOptions.Published).Count();
+                forumPart.ThreadCount = _threadService.Count(forumPart, VersionOptions.Published);
                 forumPart.PostCount = _threadService
                     .Get(forumPart, VersionOptions.Published)
-                    .Sum(publishedThreadPart => _postService
-                        .Count(publishedThreadPart, VersionOptions.Published));
+                    .Sum(publishedThreadPart => 
+                        publishedThreadPart.PostCount);
             }
         }
     }
