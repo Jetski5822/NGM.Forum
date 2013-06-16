@@ -20,6 +20,7 @@ namespace NGM.Forum {
                     .Column<int>("ThreadCount")
                     .Column<int>("PostCount")
                     .Column<bool>("ThreadedPosts")
+                    .Column<int>("Weight")
                 );
 
             SchemaBuilder.CreateTable("ThreadPartRecord",
@@ -103,7 +104,13 @@ namespace NGM.Forum {
                     .WithSetting("OwnerEditorSettings.ShowOwnerEditor", "false"))
             );
 
-            return 1;
+            return 2;
+        }
+
+        public int UpdateFrom1() {
+            SchemaBuilder.AlterTable("ForumPartRecord", command => command.AddColumn<int>("Weight"));
+
+            return 2;
         }
     }
 }

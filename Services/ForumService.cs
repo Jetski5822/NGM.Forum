@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
 using NGM.Forum.Models;
 using Orchard;
 using Orchard.Autoroute.Models;
@@ -13,11 +12,9 @@ namespace NGM.Forum.Services {
         ForumPart Get(int id, VersionOptions versionOptions);
         IEnumerable<ForumPart> Get();
         IEnumerable<ForumPart> Get(VersionOptions versionOptions);
-        ForumPart Get(string path);
         void Delete(ForumPart forum);
     }
 
-    [UsedImplicitly]
     public class ForumService : IForumService {
         private readonly IContentManager _contentManager;
 
@@ -25,33 +22,24 @@ namespace NGM.Forum.Services {
             _contentManager = contentManager;
         }
 
-        public ForumPart Get(string path) {
-            return _contentManager
-                .Query<ForumPart, ForumPartRecord>()
-                .WithQueryHints(new QueryHints().ExpandRecords<AutoroutePartRecord, TitlePartRecord, CommonPartRecord>())
-                .Join<AutoroutePartRecord>()
-                .Where(o => o.DisplayAlias == path)
-                .List()
-                .FirstOrDefault();
-        }
-
         public IEnumerable<ForumPart> Get() {
             return Get(VersionOptions.Published);
         }
 
         public IEnumerable<ForumPart> Get(VersionOptions versionOptions) {
-            // To avoid a join the order is done after.
             return _contentManager.Query<ForumPart, ForumPartRecord>(versionOptions)
                 .WithQueryHints(new QueryHints().ExpandRecords<AutoroutePartRecord, TitlePartRecord, CommonPartRecord>())
+                .OrderBy(o => o.Weight)
                 .List()
-                .OrderBy(o => o.Title);
+                .ToList();
         }
 
         public ForumPart Get(int id, VersionOptions versionOptions) {
-            return _contentManager
-                .Query<ForumPart, ForumPartRecord>()
+            return _contentManager.Query<ForumPart, ForumPartRecord>(versionOptions)
                 .WithQueryHints(new QueryHints().ExpandRecords<AutoroutePartRecord, TitlePartRecord, CommonPartRecord>())
-                .Where(x => x.Id == id).List().FirstOrDefault();
+                .Where(x => x.Id == id)
+                .List()
+                .SingleOrDefault();
         }
 
         public void Delete(ForumPart forum) {

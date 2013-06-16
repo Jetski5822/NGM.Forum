@@ -2,16 +2,14 @@
 using System.Linq;
 using NGM.Forum.Models;
 using Orchard;
-using Orchard.Autoroute.Models;
 using Orchard.ContentManagement;
-using Orchard.ContentManagement.Aspects;
 using Orchard.Core.Common.Models;
 using Orchard.Data;
 using Orchard.Security;
 
 namespace NGM.Forum.Services {
     public interface IPostService : IDependency {
-        ContentItem Get(int id, VersionOptions versionOptions);
+        PostPart Get(int id, VersionOptions versionOptions);
         IEnumerable<PostPart> Get(ThreadPart threadPart);
         IEnumerable<PostPart> Get(ThreadPart threadPart, VersionOptions versionOptions);
         IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count);
@@ -41,8 +39,12 @@ namespace NGM.Forum.Services {
                 .List();
         }
 
-        public ContentItem Get(int id, VersionOptions versionOptions) {
-            return _contentManager.Get(id, versionOptions);
+        public PostPart Get(int id, VersionOptions versionOptions) {
+            return _contentManager.Query<PostPart, PostPartRecord>(versionOptions)
+                .WithQueryHints(new QueryHints().ExpandRecords<CommonPartRecord>())
+                .Where(x => x.Id == id)
+                .List()
+                .SingleOrDefault();
         }
 
         public PostPart GetFirstPost(ThreadPart threadPart, VersionOptions versionOptions) {

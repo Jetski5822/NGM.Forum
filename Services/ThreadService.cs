@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using NGM.Forum.Extensions;
 using NGM.Forum.Models;
 using Orchard;
 using Orchard.Autoroute.Models;
@@ -11,13 +10,12 @@ using Orchard.Security;
 
 namespace NGM.Forum.Services {
     public interface IThreadService : IDependency {
-        ThreadPart Get(ForumPart forumPart, string slug, VersionOptions versionOptions);
         ThreadPart Get(int id, VersionOptions versionOptions);
         IEnumerable<ThreadPart> Get(ForumPart forumPart);
         IEnumerable<ThreadPart> Get(ForumPart forumPart, VersionOptions versionOptions);
         IEnumerable<ThreadPart> Get(ForumPart forumPart, int skip, int count);
         IEnumerable<ThreadPart> Get(ForumPart forumPart, int skip, int count, VersionOptions versionOptions);
-        int ThreadCount(ForumPart forumPart, VersionOptions versionOptions);
+        int Count(ForumPart forumPart, VersionOptions versionOptions);
     }
 
     public class ThreadService : IThreadService {
@@ -27,22 +25,11 @@ namespace NGM.Forum.Services {
             _contentManager = contentManager;
         }
 
-        public ThreadPart Get(ForumPart forumPart, string slug, VersionOptions versionOptions) {
-            return _contentManager
-                .Query<ThreadPart, ThreadPartRecord>()
-                .Join<AutoroutePartRecord>()
-                .Where(r => r.DisplayAlias.EndsWith(slug))
-                .Join<CommonPartRecord>()
-                .Where(cr => cr.Container == forumPart.Record.ContentItemRecord)
-                .List()
-                .FirstOrDefault();
-        }
-
         public ThreadPart Get(int id, VersionOptions versionOptions) {
             return _contentManager
-                .Query<ThreadPart, ThreadPartRecord>()
+                .Query<ThreadPart, ThreadPartRecord>(versionOptions)
                 .WithQueryHints(new QueryHints().ExpandRecords<AutoroutePartRecord, TitlePartRecord, CommonPartRecord>())
-                .Where(x => x.Id == id).List().FirstOrDefault();
+                .Where(x => x.Id == id).List().SingleOrDefault();
         }
 
         public IEnumerable<ThreadPart> Get(ForumPart forumPart) {
@@ -50,10 +37,11 @@ namespace NGM.Forum.Services {
         }
 
         public IEnumerable<ThreadPart> Get(ForumPart forumPart, VersionOptions versionOptions) {
-            return GetThreadQuery(forumPart, versionOptions)
-                .OrderByDescending(cr => cr.CreatedUtc)
+            return GetParentQuery(forumPart, versionOptions)
+                .OrderByDescending(cr => cr.PublishedUtc)
                 .ForPart<ThreadPart>()
-                .List();
+                .List()
+                .ToList();
         }
 
         public IEnumerable<ThreadPart> Get(ForumPart forumPart, int skip, int count) {
@@ -62,32 +50,31 @@ namespace NGM.Forum.Services {
 
         // The order by on this record needs to be revisited.
         public IEnumerable<ThreadPart> Get(ForumPart forumPart, int skip, int count, VersionOptions versionOptions) {
-            return GetThreadQuery(forumPart, versionOptions)
+            return GetParentQuery(forumPart, versionOptions)
                 .Join<ThreadPartRecord>()
                 .OrderByDescending(t => t.IsSticky)
                 .Join<CommonPartRecord>()
-                .OrderByDescending(cr => cr.CreatedUtc)
+                .OrderByDescending(cr => cr.PublishedUtc)
                 .ForPart<ThreadPart>()
                 .Slice(skip, count);
         }
 
         public IEnumerable<ThreadPart> Get(ForumPart forumPart, IUser user) {
-            return GetThreadQuery(forumPart, VersionOptions.Published)
-                .Join<CommonPartRecord>()
+            return GetParentQuery(forumPart, VersionOptions.Published)
                 .Where(o => o.OwnerId == user.Id)
-                .OrderByDescending(cr => cr.CreatedUtc)
+                .OrderByDescending(cr => cr.PublishedUtc)
                 .ForPart<ThreadPart>()
-                .List();
+                .List()
+                .ToList();
         }
 
-        public int ThreadCount(ForumPart forumPart, VersionOptions versionOptions) {
-            return GetThreadQuery(forumPart, versionOptions).Count();
+        public int Count(ForumPart forumPart, VersionOptions versionOptions) {
+            return GetParentQuery(forumPart, versionOptions).Count();
         }
 
-        private IContentQuery<ContentItem, CommonPartRecord> GetThreadQuery(ContentPart<ForumPartRecord> forum, VersionOptions versionOptions) {
-            return _contentManager.Query(versionOptions, Constants.Parts.Thread)
-                .Join<CommonPartRecord>().Where(cr => cr.Container == forum.Record.ContentItemRecord)
-                .WithQueryHintsFor(Constants.Parts.Thread);
+        private IContentQuery<CommonPart, CommonPartRecord> GetParentQuery(IContent parentPart, VersionOptions versionOptions) {
+            return _contentManager.Query<CommonPart, CommonPartRecord>(versionOptions)
+                                  .Where(cpr => cpr.Container == parentPart.ContentItem.Record);
         }
     }
 }

@@ -307,9 +307,6 @@
     <Content Include="Views\Parts.Common.Metadata-Post.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\EditorTemplates\Parts.User.Forums.Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\DefinitionTemplates\PostTypePartSettings.cshtml" />
   </ItemGroup>
   <ItemGroup>

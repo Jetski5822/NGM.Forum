@@ -1,9 +1,0 @@
-﻿@model NGM.Forum.Models.UserForumPart
-<fieldset>
-    <legend>@T("Forums")</legend>
-    <div>
-        @Html.EditorFor(m => m.RequiresModeration)
-        <label class="forcheckbox" for="@Html.FieldIdFor( m => m.RequiresModeration)">@T("Requires moderation.")</label>
-        <span class="hint">@T("Users posts must be approved before they are shown.")</span>
-    </div>
-</fieldset>

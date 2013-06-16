@@ -177,7 +177,7 @@ namespace NGM.Forum.Controllers {
             list.AddRange(threadsShapes);
             forum.Content.Add(Shape.Parts_Forums_Thread_ListAdmin(ContentItems: list), "5");
 
-            var totalItemCount = _threadService.ThreadCount(forumPart, VersionOptions.Latest);
+            var totalItemCount = _threadService.Count(forumPart, VersionOptions.Latest);
             forum.Content.Add(Shape.Pager(pager).TotalItemCount(totalItemCount), "Content:after");
 
             // Casting to avoid invalid (under medium trust) reflection over the protected View method and force a static invocation.
