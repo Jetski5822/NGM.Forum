@@ -2,27 +2,20 @@ using System.Web.Routing;
 using JetBrains.Annotations;
 using NGM.Forum.Extensions;
 using NGM.Forum.Models;
-using NGM.Forum.Routing;
 using Orchard.ContentManagement;
-using Orchard.ContentManagement.Aspects;
 using Orchard.ContentManagement.Handlers;
 using Orchard.Data;
 
 namespace NGM.Forum.Handlers {
     [UsedImplicitly]
     public class ForumPartHandler : ContentHandler {
-        private readonly IForumPathConstraint _forumPathConstraint;
 
-        public ForumPartHandler(IRepository<ForumPartRecord> repository, IForumPathConstraint forumPathConstraint) {
-            _forumPathConstraint = forumPathConstraint;
+        public ForumPartHandler(IRepository<ForumPartRecord> repository) {
             Filters.Add(StorageFilter.For(repository));
 
             OnGetDisplayShape<ForumPart>((context, forum) => {
                 context.Shape.PostCount = forum.PostCount;
             });
-
-            OnPublished<ForumPart>((context, forum) => _forumPathConstraint.AddPath(forum.As<IAliasAspect>().Path));
-            OnUnpublished<ForumPart>((context, forum) => _forumPathConstraint.RemovePath(forum.As<IAliasAspect>().Path));
         }
 
         protected override void GetItemMetadata(GetContentItemMetadataContext context) {

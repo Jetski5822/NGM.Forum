@@ -1,0 +1,14 @@
+﻿@using Orchard.Security
+@{
+    var users = (IEnumerable<IUser>) Model.Users;
+}
+
+<div class="usersinthread">
+    <h2>@T("Users in thread")</h2>
+
+    <ul>
+    @foreach (var user in users) {
+        <li>@user.UserName</li>
+    }
+    </ul>
+</div>

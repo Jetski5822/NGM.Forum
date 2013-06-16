@@ -69,8 +69,7 @@ namespace NGM.Forum.Handlers {
                 forumPart.PostCount = _threadService
                     .Get(forumPart, VersionOptions.Published)
                     .Sum(publishedThreadPart => _postService
-                        .Get(publishedThreadPart, VersionOptions.Published)
-                        .Count());
+                        .Count(publishedThreadPart, VersionOptions.Published));
             }
         }
 

@@ -50,7 +50,7 @@ namespace NGM.Forum.Controllers {
         public ActionResult List(int forumId) {
             var list = _orchardServices.New.List();
 
-            var forum = _forumService.Get(forumId, VersionOptions.Latest).As<ForumPart>();
+            var forum = _forumService.Get(forumId, VersionOptions.Latest);
 
             list.AddRange(_threadService.Get(forum)
                               .Select(b => _orchardServices.ContentManager.BuildDisplay(b, "SummaryAdmin")));
@@ -63,12 +63,12 @@ namespace NGM.Forum.Controllers {
 
         public ActionResult Item(int threadId, PagerParameters pagerParameters) {
             var pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
-            var threadPart = _threadService.Get(threadId, VersionOptions.Latest).As<ThreadPart>();
+            var threadPart = _threadService.Get(threadId, VersionOptions.Latest);
 
             if (threadPart == null)
                 return HttpNotFound();
 
-            var posts = _postService.Get(threadPart, threadPart.ForumPart.ThreadedPosts, pager.GetStartIndex(), pager.PageSize, VersionOptions.Latest)
+            var posts = _postService.Get(threadPart, pager.GetStartIndex(), pager.PageSize, VersionOptions.Latest)
                 .Select(bp => _orchardServices.ContentManager.BuildDisplay(bp, "SummaryAdmin"));
 
             dynamic thread = _orchardServices.ContentManager.BuildDisplay(threadPart, "DetailAdmin");
@@ -105,12 +105,12 @@ namespace NGM.Forum.Controllers {
             if (!_orchardServices.Authorizer.Authorize(Permissions.MoveThread, T("Not allowed to move thread")))
                 return new HttpUnauthorizedResult();
 
-            var threadPart = _threadService.Get(threadId, VersionOptions.Latest).As<ThreadPart>();
+            var threadPart = _threadService.Get(threadId, VersionOptions.Latest);
 
             if (threadPart == null)
                 return HttpNotFound(T("Could not find thread").ToString());
 
-            var forumPart = _forumService.Get(viewModel.ForumId, VersionOptions.Latest).As<ForumPart>();
+            var forumPart = _forumService.Get(viewModel.ForumId, VersionOptions.Latest);
 
             if (forumPart == null)
                 return HttpNotFound(T("Could not find forum").ToString());

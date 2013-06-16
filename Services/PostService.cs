@@ -2,90 +2,94 @@
 using System.Linq;
 using NGM.Forum.Models;
 using Orchard;
+using Orchard.Autoroute.Models;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
 using Orchard.Core.Common.Models;
+using Orchard.Data;
+using Orchard.Security;
 
 namespace NGM.Forum.Services {
     public interface IPostService : IDependency {
         ContentItem Get(int id, VersionOptions versionOptions);
         IEnumerable<PostPart> Get(ThreadPart threadPart);
         IEnumerable<PostPart> Get(ThreadPart threadPart, VersionOptions versionOptions);
-        IEnumerable<PostPart> Get(ThreadPart threadPart, bool isthreaded, int skip, int count);
-        IEnumerable<PostPart> Get(ThreadPart threadPart, bool isthreaded, int skip, int count, VersionOptions versionOptions);
+        IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count);
+        IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count, VersionOptions versionOptions);
         PostPart GetFirstPost(ThreadPart threadPart, VersionOptions versionOptions);
-        PostPart GetLatestPost(ForumPart forumPart, VersionOptions versionOptions);
         PostPart GetLatestPost(ThreadPart threadPart, VersionOptions versionOptions);
+        IEnumerable<IUser> GetUsersPosted(ThreadPart part);
+        int Count(ThreadPart threadPart, VersionOptions versionOptions);
     }
 
     public class PostService : IPostService {
         private readonly IContentManager _contentManager;
+        private readonly IRepository<CommonPartRecord> _commonRepository;
 
-        public PostService(IContentManager contentManager) {
+        public PostService(IContentManager contentManager, IRepository<CommonPartRecord> commonRepository) {
             _contentManager = contentManager;
+            _commonRepository = commonRepository;
         }
 
         public IEnumerable<PostPart> Get(ThreadPart threadPart) {
             return Get(threadPart, VersionOptions.Published);
         }
 
+        public IEnumerable<PostPart> Get(ThreadPart threadPart, VersionOptions versionOptions) {
+            return GetParentQuery(threadPart, versionOptions)
+                .ForPart<PostPart>()
+                .List();
+        }
+
         public ContentItem Get(int id, VersionOptions versionOptions) {
             return _contentManager.Get(id, versionOptions);
         }
 
-        public PostPart GetLatestPost(ForumPart forumPart, VersionOptions versionOptions) {
-            var threadParts = _contentManager
-                .Query<ThreadPart, ThreadPartRecord>(versionOptions)
-                .Join<CommonPartRecord>().Where(cpr => cpr.Container == forumPart.ContentItem.Record)
-                .List();
-
-            return threadParts
-                .Select(o => GetLatestPost(o, versionOptions))
-                .OrderBy(o => o.As<ICommonPart>().PublishedUtc)
-                .LastOrDefault();
-        }
-
         public PostPart GetFirstPost(ThreadPart threadPart, VersionOptions versionOptions) {
-            return GetQuery(threadPart, versionOptions).List().FirstOrDefault(o => o.IsParentThread());
+            return GetParentQuery(threadPart, versionOptions)
+                .OrderBy(o => o.PublishedUtc)
+                .ForPart<PostPart>()
+                .Slice(1)
+                .FirstOrDefault();
         }
 
         public PostPart GetLatestPost(ThreadPart threadPart, VersionOptions versionOptions) {
-            return GetQuery(threadPart, versionOptions).List().LastOrDefault();
+            return GetParentQuery(threadPart, versionOptions)
+                .OrderByDescending(o => o.PublishedUtc)
+                .ForPart<PostPart>()
+                .Slice(1)
+                .FirstOrDefault();
         }
 
-        public IEnumerable<PostPart> Get(ThreadPart threadPart, VersionOptions versionOptions) {
-            return (Get(threadPart, false, 0, 0, versionOptions));
+        public IEnumerable<IUser> GetUsersPosted(ThreadPart part) {
+            var users = _commonRepository.Table.Where(o => o.Container.Id == part.Id)
+                             .Select(o => o.OwnerId)
+                             .Distinct();
+
+            return _contentManager
+                .GetMany<IUser>(users, VersionOptions.Published, new QueryHints())
+                .ToList();
         }
 
-        public IEnumerable<PostPart> Get(ThreadPart threadPart, bool isthreaded, int skip, int count) {
-            return Get(threadPart, isthreaded, skip, count, VersionOptions.Published);
+        public int Count(ThreadPart threadPart, VersionOptions versionOptions) {
+            return GetParentQuery(threadPart, versionOptions).Count();
         }
 
-        public IEnumerable<PostPart> Get(ThreadPart threadPart, bool isthreaded, int skip, int count, VersionOptions versionOptions) {
-            if (isthreaded) {
-                var query = _contentManager.Query<PostPart, PostPartRecord>(versionOptions);
-                // Order by the Replied on, then by the published date... That should be good enough
-                var pp = query
-                    .Join<CommonPartRecord>()//.OrderBy(c => c.PublishedUtc)
-                    .Where(cpr => cpr.Container == threadPart.ContentItem.Record)
-                    .Join<PostPartRecord>()
-                    .OrderBy(p => p.RepliedOn)
-                    .Slice(skip, count)
-                    .ToList();
-
-                return pp;
-            }
-
-            return GetQuery(threadPart, versionOptions)
-                        .Slice(skip, count)
-                        .ToList();
+        public IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count) {
+            return Get(threadPart, skip, count, VersionOptions.Published);
         }
 
-        private IContentQuery<PostPart, CommonPartRecord> GetQuery(ThreadPart threadPart, VersionOptions versionOptions) {
-            return _contentManager.Query<PostPart, PostPartRecord>(versionOptions)
-                .Join<CommonPartRecord>()
-                .Where(cpr => cpr.Container == threadPart.ContentItem.Record)
-                .OrderBy(c => c.CreatedUtc);
+        public IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count, VersionOptions versionOptions) {
+            return GetParentQuery(threadPart, versionOptions)
+                .OrderBy(o => o.CreatedUtc)
+                .ForPart<PostPart>()
+                .Slice(skip, count)
+                .ToList();
+        }
+
+        private IContentQuery<CommonPart, CommonPartRecord> GetParentQuery(IContent parentPart, VersionOptions versionOptions) {
+            return _contentManager.Query<CommonPart, CommonPartRecord>(versionOptions)
+                                  .Where(cpr => cpr.Container == parentPart.ContentItem.Record);
         }
     }
 }

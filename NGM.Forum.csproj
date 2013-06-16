@@ -70,9 +70,6 @@
     <Compile Include="Extensions\ContainerExtensions.cs" />
     <Compile Include="Projections\SortThreadPopularityFilterProvider.cs" />
     <Compile Include="Projections\SortThreadPopularityFilterFormProvider.cs" />
-    <Compile Include="Routing\ForumPathConstraint.cs" />
-    <Compile Include="Routing\ForumPathConstraintUpdator.cs" />
-    <Compile Include="Routing\IForumPathConstraint.cs" />
     <Compile Include="Services\Popularity\DefaultPopularityService.cs" />
     <Compile Include="Services\Popularity\IPopularityService.cs" />
     <Compile Include="Services\Popularity\StackOverflowPopularityService.cs" />
@@ -353,6 +350,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Content-Post.Summary.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Thread.Posts.Users.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -71,7 +71,7 @@ namespace NGM.Forum.Handlers {
                 ThreadPart threadPart = postPart.ThreadPart ??
                                         _threadService.Get(commonPart.Record.Container.Id, VersionOptions.Published).As<ThreadPart>();
 
-                threadPart.PostCount = _postService.Get(threadPart, VersionOptions.Published).Count();
+                threadPart.PostCount = _postService.Count(threadPart, VersionOptions.Published);
 
                 UpdateForumPartCounters(threadPart);
             }
@@ -89,8 +89,7 @@ namespace NGM.Forum.Handlers {
                 forumPart.PostCount = _threadService
                     .Get(forumPart, VersionOptions.Published)
                     .Sum(publishedThreadPart => _postService
-                        .Get(publishedThreadPart, VersionOptions.Published)
-                        .Count());
+                        .Count(publishedThreadPart, VersionOptions.Published));
             }
         }
     }

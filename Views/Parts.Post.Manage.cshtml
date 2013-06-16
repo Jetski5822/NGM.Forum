@@ -7,6 +7,8 @@
 
 @if (Authorizer.Authorize(Permissions.DeletePost, postPart.ContentItem) && !postPart.IsParentThread()) {
     <a href="@Url.PostDelete(postPart)" class="remove">@T("Delete")</a>
-}  
-<a href="@Url.PostReply(postPart)" class="create">@T("Reply")</a>
-<a href="@Url.PostReplyWithQuote(postPart)" class="create quote">@T("Reply with Quote")</a>
+}
+@if (Authorizer.Authorize(Permissions.ReplyPost, postPart.ContentItem)) {
+    <a href="@Url.PostReply(postPart)" class="create">@T("Reply")</a>
+    <a href="@Url.PostReplyWithQuote(postPart)" class="create quote">@T("Reply with Quote")</a>
+}

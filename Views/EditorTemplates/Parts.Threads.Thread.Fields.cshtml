@@ -3,7 +3,8 @@
 
 @if (AuthorizedFor(Permissions.StickyThread)) {
     <div>
-        @Html.EditorFor(m => m.IsSticky)
+        <input type="checkbox" value="true" class="check-box" id="@Html.FieldIdFor(m => m.IsSticky)" name="@Html.FieldNameFor(m => m.IsSticky)" @(Model.IsSticky ? "checked=\"checked\"" : "")/>
+        <input name="@Html.FieldNameFor(m => m.IsSticky)" type="hidden" value="false">
         <label class="forcheckbox" for="@Html.FieldIdFor(m => m.IsSticky)">@T("Is Sticky")</label>
         <span class="hint">@T("Threads that are important but rarely receive posts are stickyed. A sticky thread will always appear in front of normal threads.")</span>
     </div>

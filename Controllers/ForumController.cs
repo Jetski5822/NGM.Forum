@@ -57,7 +57,7 @@ namespace NGM.Forum.Controllers {
             if (!_orchardServices.Authorizer.Authorize(Permissions.ViewForum, T("Not allowed to view forum")))
                 return new HttpUnauthorizedResult();
 
-            var forumPart = _forumService.Get(forumId, VersionOptions.Published).As<ForumPart>();
+            var forumPart = _forumService.Get(forumId, VersionOptions.Published);
             if (forumPart == null)
                 return HttpNotFound();
 

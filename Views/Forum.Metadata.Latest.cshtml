@@ -4,7 +4,7 @@
 @using Orchard.Core.Common.Models
 @using Orchard.UI.Navigation
 @{
-    var contentItem = (ContentItem)Model.ContentPart.ContentItem;
+    var contentItem = (ContentItem)Model.Post.ContentItem;
     var commonPart = contentItem.As<CommonPart>();
     var postPart = (PostPart)Model.ContentPart;
 

@@ -6,12 +6,13 @@ using Orchard;
 using Orchard.Autoroute.Models;
 using Orchard.ContentManagement;
 using Orchard.Core.Common.Models;
+using Orchard.Core.Title.Models;
 using Orchard.Security;
 
 namespace NGM.Forum.Services {
     public interface IThreadService : IDependency {
         ThreadPart Get(ForumPart forumPart, string slug, VersionOptions versionOptions);
-        ContentItem Get(int id, VersionOptions versionOptions);
+        ThreadPart Get(int id, VersionOptions versionOptions);
         IEnumerable<ThreadPart> Get(ForumPart forumPart);
         IEnumerable<ThreadPart> Get(ForumPart forumPart, VersionOptions versionOptions);
         IEnumerable<ThreadPart> Get(ForumPart forumPart, int skip, int count);
@@ -37,8 +38,11 @@ namespace NGM.Forum.Services {
                 .FirstOrDefault();
         }
 
-        public ContentItem Get(int id, VersionOptions versionOptions) {
-            return _contentManager.Get(id, versionOptions);
+        public ThreadPart Get(int id, VersionOptions versionOptions) {
+            return _contentManager
+                .Query<ThreadPart, ThreadPartRecord>()
+                .WithQueryHints(new QueryHints().ExpandRecords<AutoroutePartRecord, TitlePartRecord, CommonPartRecord>())
+                .Where(x => x.Id == id).List().FirstOrDefault();
         }
 
         public IEnumerable<ThreadPart> Get(ForumPart forumPart) {

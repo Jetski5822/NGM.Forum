@@ -32,29 +32,43 @@ namespace NGM.Forum.Drivers {
                 results.Add(ContentShape("Parts_Threads_Thread_SummaryAdmin",
                     () => shapeHelper.Parts_Threads_Thread_SummaryAdmin()));
                 results.Add(ContentShape("Parts_Threads_Thread_Metadata_SummaryAdmin", 
-                    () => shapeHelper.Parts_Threads_Thread_Metadata_SummaryAdmin(ContentPart: part)));
+                    () => shapeHelper.Parts_Threads_Thread_Metadata_SummaryAdmin()));
             }
 
             if (part.IsClosed) {
                 results.Add(ContentShape("Parts_Threads_Thread_Closed",
-                        () => shapeHelper.Parts_Threads_Thread_Closed(ContentPart: part)));
+                        () => shapeHelper.Parts_Threads_Thread_Closed()));
             }
 
-            var firstPost = _postService.GetFirstPost(part, VersionOptions.Published);
+            
 
             results.AddRange(new [] { 
                 ContentShape("Parts_Threads_Thread_ThreadReplyCount",
-                    () => shapeHelper.Parts_Threads_Thread_ThreadReplyCount(ContentPart: part, ReplyCount: part.ReplyCount)),
-                ContentShape("Parts_Thread_Manage", 
-                    () => shapeHelper.Parts_Thread_Manage(ContentPart: part, FirstPostContentPart: firstPost)),
-                ContentShape("Forum_Metadata_First", 
-                    () => shapeHelper.Forum_Metadata_First(ContentPart: part, FirstPostContentPart: firstPost)),
-                ContentShape("Forum_Metadata_Latest", () => {
-                    var post = _postService.GetLatestPost(part, VersionOptions.Published);
+                    () => shapeHelper.Parts_Threads_Thread_ThreadReplyCount(ReplyCount: part.ReplyCount)),
+                ContentShape("Parts_Thread_Manage", () =>
+                    {
+                        var firstPost = _postService.GetFirstPost(part, VersionOptions.Published);
+                        return shapeHelper.Parts_Thread_Manage(Post: firstPost);
+                    }),
+                ContentShape("Forum_Metadata_First", () => 
+                    {
+                        var firstPost = _postService.GetFirstPost(part, VersionOptions.Published);
+                        return shapeHelper.Forum_Metadata_First(Post: firstPost);
+                    }),
+                ContentShape("Forum_Metadata_Latest", () =>
+                    {
+                        var post = _postService.GetLatestPost(part, VersionOptions.Published);
 
-                                     var pager = new ThreadPager(_orchardServices.WorkContext.CurrentSite, part.PostCount);
-                                     return shapeHelper.Forum_Metadata_Latest(ContentPart: post, Pager: pager);
-                                 })});
+                        var pager = new ThreadPager(_orchardServices.WorkContext.CurrentSite, part.PostCount);
+                        return shapeHelper.Forum_Metadata_Latest(Post: post, Pager: pager);
+                    }),
+                ContentShape("Parts_Thread_Posts_Users", () =>
+                    {
+                        var users = _postService.GetUsersPosted(part);
+
+                        return shapeHelper.Parts_Thread_Posts_Users(Users: users);
+                    })
+            });
 
             return Combined(results.ToArray());
         }

@@ -1,6 +1,6 @@
 ﻿@using NGM.Forum.Models
 @{
-    var postPart = (PostPart)Model.FirstPostContentPart;
+    var postPart = (PostPart)Model.Post;
 
     var body = new HtmlString(Html.Excerpt(postPart.Text, 200).ToString().Replace(Environment.NewLine, "</p>" + Environment.NewLine + "<p>"));
 }

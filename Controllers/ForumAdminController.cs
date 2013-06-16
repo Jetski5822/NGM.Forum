@@ -110,11 +110,11 @@ namespace NGM.Forum.Controllers {
         public ActionResult EditPOST(int forumId) {
             var forum = _forumService.Get(forumId, VersionOptions.DraftRequired);
 
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, forum, T("Couldn't edit forum")))
-                return new HttpUnauthorizedResult();
-
             if (forum == null)
                 return HttpNotFound();
+
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, forum, T("Couldn't edit forum")))
+                return new HttpUnauthorizedResult();
 
             dynamic model = _orchardServices.ContentManager.UpdateEditor(forum, this);
             if (!ModelState.IsValid) {
@@ -123,7 +123,7 @@ namespace NGM.Forum.Controllers {
                 return View((object)model);
             }
 
-            _contentManager.Publish(forum);
+            _contentManager.Publish(forum.ContentItem);
             _orchardServices.Notifier.Information(T("Forum information updated"));
 
             return Redirect(Url.ForumsForAdmin());
