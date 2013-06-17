@@ -50,7 +50,7 @@ namespace NGM.Forum.Controllers {
             if (!_orchardServices.Authorizer.Authorize(Permissions.CreatePost, T("Not allowed to create thread")))
                 return new HttpUnauthorizedResult();
 
-            var forum = _forumService.Get(forumId, VersionOptions.Latest).As<ForumPart>();
+            var forum = _forumService.Get(forumId, VersionOptions.Latest);
             if (forum == null)
                 return HttpNotFound();
 
@@ -76,7 +76,7 @@ namespace NGM.Forum.Controllers {
             if (!_orchardServices.Authorizer.Authorize(Permissions.CreatePost, T("Not allowed to create thread")))
                 return new HttpUnauthorizedResult();
 
-            var forum = _forumService.Get(forumId, VersionOptions.Latest).As<ForumPart>();
+            var forum = _forumService.Get(forumId, VersionOptions.Latest);
             if (forum == null)
                 return HttpNotFound();
 
