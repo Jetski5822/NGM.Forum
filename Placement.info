@@ -1,76 +1,75 @@
 ﻿<Placement>
-  <!-- edit "shapes" -->
-  <Place Parts_Forums_Forum_Fields="Content:2"/>
-  <Place Parts_Threads_Thread_Fields="Content:2"/>
-  
-  <Place Forum_DeleteButton="Sidebar:25" />
+    <!-- edit "shapes" -->
+    <Place Parts_Forums_Forum_Fields="Content:2"/>
+    <Place Parts_Threads_Thread_Fields="Content:2"/>
 
-  <Place Parts_Threads_Post_Body_Edit="Content:2"/>
+    <Place Forum_DeleteButton="Sidebar:25" />
 
-  <Place Fields_TaxonomyField_Edit-Categories="Content:before.6" />
-  <!--<Place Fields_TaxonomyField_Edit-Tags="Content:1" />-->
-  
-  <Match DisplayType="Detail">
-    <Place Parts_Threads_Post_Body_Summary="-"
-           Parts_Threads_Post_Body="Content:5"/>
-  </Match>
+    <Place Parts_Threads_Post_Body_Edit="Content:2"/>
 
-  <Match DisplayType="Summary">
-    <Place Parts_Threads_Post_Body_Summary="Content:5"/>
-  </Match>
+    <Place Fields_TaxonomyField_Edit-Categories="Content:before.6" />
+    <!--<Place Fields_TaxonomyField_Edit-Tags="Content:1" />-->
 
-  <Match DisplayType="SummaryAdmin">
-    <Place Parts_Threads_Post_Body_Summary="Content:before.1"/>
-  </Match>
-
-  <Match ContentType="Forum">
     <Match DisplayType="Detail">
-      <Place Parts_Common_Metadata="-"
-             Parts_Forums_Thread_List="Content"
-             Parts_Forums_Forum_Description="Meta:1"
-             Parts_Forum_Manage="Actions:1"/>
+        <Place Parts_Threads_Post_Body_Summary="-"
+               Parts_Threads_Post_Body="Content:5"/>
+    </Match>
+
+    <Match DisplayType="Summary">
+        <Place Parts_Threads_Post_Body_Summary="Content:5"/>
+    </Match>
+
+    <Match DisplayType="SummaryAdmin">
+        <Place Parts_Forums_Forum_SummaryAdmin="Actions:10"
+               Parts_Forums_Forum_Description="Content:before"
+               Parts_Threads_Post_Body_Summary="Content:before.1"/>
     </Match>
     <Match DisplayType="DetailAdmin">
-      <Place Parts_Forums_Thread_List_Admin="Content:5"
-             Parts_Forums_Forum_Manage="Actions"
-             Parts_Forums_Forum_Description="Actions:after"/>
+        <Place Parts_Forums_Thread_List_Admin="Content:5"
+               Parts_Forums_Forum_Manage="Actions"
+               Parts_Forums_Forum_Description="Actions:after"/>
     </Match>
-    <Match DisplayType="Summary">
-      <Place Parts_Forums_Forum_Description="Content:before"
-             Parts_Forums_Forum_ForumReplyCount="Meta:3"
-             Parts_Forums_Forum_ForumThreadCount="Meta:4"/>
-    </Match>
-    <Match DisplayType="SummaryAdmin">
-      <Place Parts_Forums_Forum_SummaryAdmin="Actions:10"
-             Parts_Forums_Forum_Description="Content:before"/>
-    </Match>
-  </Match>
-  
-  <Match ContentType="Thread">
-    <Match DisplayType="Detail">
-      <Place Parts_Common_Metadata="-"
-             Parts_Thread_Manage="Actions:1"
-             Parts_Threads_Thread_Closed="Meta:1"/>
-    </Match>
-    <Match DisplayType="Summary">
-      <Place Parts_Threads_Thread_ThreadReplyCount="Meta:3"
-             Forum_Metadata_First="Content:after"
-             Forum_Metadata_Latest="Content:after"/>
-    </Match>
-    <Match DisplayType="SummaryAdmin">
-      <Place Parts_Threads_Thread_SummaryAdmin="Actions:10"
-             Parts_Threads_Thread_Metadata_SummaryAdmin="Meta:1.3"/>
-    </Match>
-  </Match>
-  
-  <Match ContentType="Post">
-    <Match DisplayType="Detail">
-      <Place Parts_Post_Manage="Actions:1"/>
+    
+    <Match ContentType="Forum">
+        <Match DisplayType="Detail">
+            <Place Parts_Common_Metadata="-"
+                   Parts_Forums_Thread_List="Content"
+                   Parts_Forums_Forum_Description="Meta:1"
+                   Parts_Forum_Manage="Actions:1"/>
+        </Match>
+
+        <Match DisplayType="Summary">
+            <Place Parts_Forums_Forum_Description="Content:before"
+                   Parts_Forums_Forum_ForumReplyCount="Meta:3"
+                   Parts_Forums_Forum_ForumThreadCount="Meta:4"/>
+        </Match>
     </Match>
 
-    <Match DisplayType="SummaryAdmin">
-      <Place Parts_Thread_Post_Metadata_SummaryAdmin="Meta:1.2"/>
+    <Match ContentType="Thread">
+        <Match DisplayType="Detail">
+            <Place Parts_Common_Metadata="-"
+                   Parts_Thread_Manage="Actions:1"
+                   Parts_Threads_Thread_Closed="Meta:1"/>
+        </Match>
+        <Match DisplayType="Summary">
+            <Place Parts_Threads_Thread_ThreadReplyCount="Meta:3"
+                   Forum_Metadata_First="Content:after"
+                   Forum_Metadata_Latest="Content:after"/>
+        </Match>
+        <Match DisplayType="SummaryAdmin">
+            <Place Parts_Threads_Thread_SummaryAdmin="Actions:10"
+                   Parts_Threads_Thread_Metadata_SummaryAdmin="Meta:1.3"/>
+        </Match>
     </Match>
-  </Match>
-  
+
+    <Match ContentType="Post">
+        <Match DisplayType="Detail">
+            <Place Parts_Post_Manage="Actions:1"/>
+        </Match>
+
+        <Match DisplayType="SummaryAdmin">
+            <Place Parts_Thread_Post_Metadata_SummaryAdmin="Meta:1.2"/>
+        </Match>
+    </Match>
+
 </Placement>

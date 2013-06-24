@@ -1,0 +1,6 @@
+@using NGM.Forum.Extensions
+@{ Layout.Title = T("Create New Forum").ToString(); }
+
+@foreach (var type in Model.ForumTypes) {
+    <p>@Html.ActionLink((string)type.DisplayName, "Create", new { Area = Constants.LocalArea, Type = (string)type.Name})</p>
+}

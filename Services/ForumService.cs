@@ -4,6 +4,7 @@ using NGM.Forum.Models;
 using Orchard;
 using Orchard.Autoroute.Models;
 using Orchard.ContentManagement;
+using Orchard.ContentManagement.MetaData.Models;
 using Orchard.Core.Common.Models;
 using Orchard.Core.Title.Models;
 
@@ -13,6 +14,7 @@ namespace NGM.Forum.Services {
         IEnumerable<ForumPart> Get();
         IEnumerable<ForumPart> Get(VersionOptions versionOptions);
         void Delete(ForumPart forum);
+        IEnumerable<ContentTypeDefinition> GetForumTypes();
     }
 
     public class ForumService : IForumService {
@@ -44,6 +46,10 @@ namespace NGM.Forum.Services {
 
         public void Delete(ForumPart forum) {
             _contentManager.Remove(forum.ContentItem);
+        }
+
+        public IEnumerable<ContentTypeDefinition> GetForumTypes() {
+            return _contentManager.GetContentTypeDefinitions().Where(x => x.Parts.Any(p => p.PartDefinition.Name == typeof(ForumPart).Name)).Select(x => x);
         }
     }
 }

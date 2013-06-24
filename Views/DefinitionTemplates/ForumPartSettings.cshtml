@@ -4,4 +4,9 @@
         @Html.EditorFor(m => m.DefaultThreadedPosts)
         <label class="forcheckbox" for="@Html.FieldIdFor( m => m.DefaultThreadedPosts)">@T("Use threaded posts by default")</label>
     </div>
+    <div>
+        @Html.LabelFor(m => m.PostType)
+        @Html.EditorFor(m => m.PostType)
+        <span class="hint">@T("The Content Type to use when creating posts. This type must have PostPart attached.")</span>
+    </div>
 </fieldset>

@@ -15,11 +15,12 @@ namespace NGM.Forum {
             return new[] {
                              new RouteDescriptor {
                                                      Route = new Route(
-                                                         "Admin/Forums/Create",
+                                                         "Admin/Forums/Create/{type}",
                                                          new RouteValueDictionary {
                                                                                       {"area", Constants.LocalArea},
                                                                                       {"controller", "ForumAdmin"},
-                                                                                      {"action", "Create"}
+                                                                                      {"action", "Create"},
+                                                                                      {"type", UrlParameter.Optional}
                                                                                   },
                                                          new RouteValueDictionary(),
                                                          new RouteValueDictionary {
