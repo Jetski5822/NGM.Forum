@@ -13,7 +13,7 @@ namespace NGM.Forum.Models {
 
         public LazyField<IUser> ClosedByField { get { return _closedBy; } }
         public LazyField<PostPart> FirstPostField { get { return _firstPost; } }
-        public LazyField<PostPart> LatestPostField { get { return _firstPost; } }
+        public LazyField<PostPart> LatestPostField { get { return _latestPost; } }
 
         public string Title {
             get { return this.As<ITitleAspect>().Title; }
