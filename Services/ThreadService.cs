@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using NGM.Forum.Models;
 using Orchard;
 using Orchard.Autoroute.Models;
@@ -50,13 +52,40 @@ namespace NGM.Forum.Services {
 
         // The order by on this record needs to be revisited.
         public IEnumerable<ThreadPart> Get(ForumPart forumPart, int skip, int count, VersionOptions versionOptions) {
-            return GetParentQuery(forumPart, versionOptions)
-                .Join<ThreadPartRecord>()
-                .OrderByDescending(t => t.IsSticky)
-                .Join<CommonPartRecord>()
-                .OrderByDescending(cr => cr.PublishedUtc)
-                .ForPart<ThreadPart>()
-                .Slice(skip, count);
+            // Initial Order by Sticky Part of query and make sure its for this forum.
+            var query = _contentManager
+                .HqlQuery<ThreadPart>()
+                .ForType("Thread")
+                .ForVersion(versionOptions)
+                .OrderBy(o => o.ContentPartRecord<ThreadPartRecord>(), x => x.Desc("IsSticky"));
+
+            var queryManager =
+                typeof (DefaultHqlQuery<ThreadPart>).GetField("_query", BindingFlags.Instance | BindingFlags.NonPublic)
+                                                    .GetValue(query);
+
+            var fiJoins = typeof (DefaultHqlQuery).GetField("_joins", BindingFlags.Instance | BindingFlags.NonPublic);
+            var joins = fiJoins.GetValue(queryManager) as List<Tuple<IAlias, Join>>;
+
+            joins.Add(new Tuple<IAlias, Join>(new Alias("Orchard.Core.Common.Models"),
+                                              new Join("CommonPartRecord", "cprt", ",")));
+            joins.Add(new Tuple<IAlias, Join>(new Alias("Orchard.Core.Common.Models"),
+                                              new Join("CommonPartRecord", "cprp", ",")));
+
+
+            query = query
+                .Where(alias => alias.Named("cprt").Property("Container", "tContainer"),
+                       factory => factory.Eq("Id", forumPart.ContentItem.Record.Id))
+                .Where(alias => alias.Named("cprt"), factory => factory.EqProperty("Id", "threadPartRecord.Id"))
+                .Where(alias => alias.Named("cprp").Property("Container", "postContainer"),
+                       factory => factory.EqProperty("Id", "cprt.Id"))
+                .OrderBy(o => o.Named("cprp"), x => x.Desc("PublishedUtc"));
+
+            return query
+                .List()
+                .Distinct()
+                .Skip(skip)
+                .Take(count)
+                .ToList();
         }
 
         public IEnumerable<ThreadPart> Get(ForumPart forumPart, IUser user) {
