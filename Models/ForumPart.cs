@@ -1,4 +1,7 @@
-﻿using Orchard.ContentManagement;
+﻿using System;
+using NGM.Forum.Extensions;
+using NGM.Forum.Settings;
+using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
 using Orchard.ContentManagement.Records;
 using Orchard.Data.Conventions;
@@ -36,6 +39,13 @@ namespace NGM.Forum.Models {
 
         public int ReplyCount {
             get { return PostCount >= ThreadCount ? PostCount - ThreadCount : 0; }
+        }
+
+        public string PostType {
+            get {
+                var type = Settings.GetModel<ForumPartSettings>().PostType;
+                return !String.IsNullOrWhiteSpace(type) ? type : Constants.Parts.Post;
+            }
         }
     }
 

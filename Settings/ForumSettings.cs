@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using NGM.Forum.Extensions;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.MetaData;
 using Orchard.ContentManagement.MetaData.Builders;
@@ -24,7 +25,7 @@ namespace NGM.Forum.Settings {
             var settings = definition.Settings.GetModel<ForumPartSettings>();
 
             if (string.IsNullOrWhiteSpace(settings.PostType)) {
-                settings.PostType = "Post";
+                settings.PostType = Constants.Parts.Post;
             }
 
             yield return DefinitionTemplate(settings);

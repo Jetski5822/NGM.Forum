@@ -56,11 +56,12 @@ namespace NGM.Forum.Controllers {
 
             var thread = _orchardServices.ContentManager.New<ThreadPart>(Constants.Parts.Thread);
             thread.ForumPart = forum;
-            var post = _orchardServices.ContentManager.New<PostPart>(Constants.Parts.Post);
+
+            var post = _orchardServices.ContentManager.New<PostPart>(forum.PostType);
             post.ThreadPart = thread;
             
-            dynamic threadModel = _orchardServices.ContentManager.BuildEditor(thread);
-            dynamic postModel = _orchardServices.ContentManager.BuildEditor(post);
+            var threadModel = _orchardServices.ContentManager.BuildEditor(thread);
+            var postModel = _orchardServices.ContentManager.BuildEditor(post);
 
             DynamicZoneExtensions.RemoveItemFrom(threadModel.Sidebar, "Content_SaveButton");
 
@@ -83,7 +84,7 @@ namespace NGM.Forum.Controllers {
             var thread = _orchardServices.ContentManager.Create<ThreadPart>(Constants.Parts.Thread, VersionOptions.Draft, o => { o.ForumPart = forum; });
             var threadModel = _orchardServices.ContentManager.UpdateEditor(thread, this);
 
-            var post = _orchardServices.ContentManager.Create<PostPart>(Constants.Parts.Post, VersionOptions.Draft, o => { o.ThreadPart = thread; });
+            var post = _orchardServices.ContentManager.Create<PostPart>(forum.PostType, VersionOptions.Draft, o => { o.ThreadPart = thread; });
             var postModel = _orchardServices.ContentManager.UpdateEditor(post, this);
             post.ThreadPart = thread;
 
@@ -133,7 +134,7 @@ namespace NGM.Forum.Controllers {
 
             /* Get Edit Post*/
             if (!threadPart.IsClosed && IsAllowedToCreatePost(threadPart)) {
-                var part = _orchardServices.ContentManager.New<PostPart>(Constants.Parts.Post);
+                var part = _orchardServices.ContentManager.New<PostPart>(forumPart.PostType);
 
                 dynamic model = _orchardServices.ContentManager.BuildEditor(part);
 
