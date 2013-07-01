@@ -64,16 +64,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdminMenu.cs" />
-    <Compile Include="Services\Sorting\FilterParameters.cs" />
     <Compile Include="Controllers\ThreadAdminController.cs" />
-    <Compile Include="DefaultTaxonomyUpdater.cs" />
     <Compile Include="Extensions\ContainerExtensions.cs" />
-    <Compile Include="Projections\SortThreadPopularityFilterProvider.cs" />
-    <Compile Include="Projections\SortThreadPopularityFilterFormProvider.cs" />
-    <Compile Include="Services\Popularity\DefaultPopularityService.cs" />
-    <Compile Include="Services\Popularity\IPopularityService.cs" />
-    <Compile Include="Services\Popularity\StackOverflowPopularityService.cs" />
-    <Compile Include="Services\TaxonomyImportService.cs" />
     <Compile Include="Settings\ForumSettings.cs" />
     <Compile Include="Settings\PostSettings.cs" />
     <Compile Include="Shapes.cs" />
@@ -199,17 +191,9 @@
       <Project>{9916839C-39FC-4CEB-A5AF-89CA7E87119F}</Project>
       <Name>Orchard.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Contrib.Voting\Contrib.Voting.csproj">
-      <Project>{4DA5F35F-E62C-4B49-B5A8-379503257B3A}</Project>
-      <Name>Contrib.Voting</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Orchard.Autoroute\Orchard.Autoroute.csproj">
       <Project>{66FCCD76-2761-47E3-8D11-B45D0001DDAA}</Project>
       <Name>Orchard.Autoroute</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Orchard.Taxonomies\Orchard.Taxonomies.csproj">
-      <Project>{e649ea64-d213-461b-87f7-d67035801443}</Project>
-      <Name>Orchard.Taxonomies</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

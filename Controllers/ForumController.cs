@@ -1,8 +1,6 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
-using NGM.Forum.Models;
 using NGM.Forum.Services;
-using NGM.Forum.Services.Sorting;
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.DisplayManagement;

@@ -101,55 +101,5 @@ namespace NGM.Forum.Extensions {
         private static string PostCreateByContent(this UrlHelper urlHelper, IContent content) {
             return urlHelper.Action("Create", "Post", new { contentId = content.Id, area = Constants.LocalArea, returnUrl = urlHelper.RequestContext.HttpContext.Request.ToUrlString() });
         }
-        
-
-        //public static string ViewLatestPost(this UrlHelper urlHelper, PostPart postPart) {
-        //    var siteSettings = urlHelper.Resolve<ISiteService>().GetSiteSettings();
-
-        //    var result = postPart.ThreadPart.PostCount % siteSettings.PageSize;
-
-        //    var numberOfPages = 0;
-        //    if (result == 0) {
-        //        numberOfPages = postPart.ThreadPart.PostCount / siteSettings.PageSize;
-        //    }
-        //    else {
-        //        numberOfPages = postPart.ThreadPart.PostCount / siteSettings.PageSize + 1;
-        //    }
-
-        //    if (numberOfPages == 0)
-        //        return ViewPost(urlHelper, postPart);
-
-        //    return string.Format("{0}?page={1}#{2}", ViewThread(urlHelper, postPart.ThreadPart), numberOfPages, postPart.Id);
-        //}
-
-        
-
-
-
-
-
-
-        //public static string ViewForums(this UrlHelper urlHelper) {
-        //    return urlHelper.Action("List", "Forum", new { area = Constants.LocalArea });
-        //}
-
-
-
-
-
-
-
-
-
-        //public static string ReplyPostWithQuote(this UrlHelper urlHelper, IContent content) {
-        //    return urlHelper.Action("CreateWithQuote", "Post", new { contentId = content.Id, area = Constants.LocalArea });
-        //}
-
-
-
-        //public static string ReplyThread(this UrlHelper urlHelper, ThreadPart threadPart) {
-        //    return ReplyContent(urlHelper, threadPart);
-        //}
- 
     }
 }

@@ -1,17 +1,9 @@
 ﻿using System;
-using NGM.Forum.Extensions;
-using NGM.Forum.Services;
 using Orchard.ContentManagement.MetaData;
 using Orchard.Data.Migration;
 
 namespace NGM.Forum {
     public class Migrations : DataMigrationImpl {
-        private readonly ITaxonomyImportService _taxonomyImportService;
-
-        public Migrations(ITaxonomyImportService taxonomyImportService) {
-            _taxonomyImportService = taxonomyImportService;
-        }
-
         public int Create() {
             SchemaBuilder.CreateTable("ForumPartRecord",
                 table => table
@@ -41,38 +33,9 @@ namespace NGM.Forum {
                     .Column<string>("Format")
                 );
 
-            var categoryTaxonomyPart = _taxonomyImportService.CreateTaxonomy(Constants.Taxonomies.Categories);
-            var tagsTaxonomyPart = _taxonomyImportService.CreateTaxonomy(Constants.Taxonomies.Tags);
+            ContentDefinitionManager.AlterPartDefinition("ForumPart", builder => { });
 
-            ContentDefinitionManager.AlterPartDefinition("ForumPart", builder => builder
-                .WithField(Constants.Taxonomies.Categories, cfg => cfg
-                    .OfType("TaxonomyField")
-                    .WithSetting("TaxonomyFieldSettings.AllowCustomTerms", "false")
-                    .WithSetting("TaxonomyFieldSettings.SingleChoice", "true")
-                    .WithSetting("TaxonomyFieldSettings.Required", "true")
-                    .WithSetting("TaxonomyFieldSettings.Taxonomy", categoryTaxonomyPart.Name))
-                .WithField(Constants.Taxonomies.Tags, cfg => cfg
-                    .OfType("TaxonomyField")
-                    .WithSetting("TaxonomyFieldSettings.AllowCustomTerms", "true")
-                    .WithSetting("TaxonomyFieldSettings.Autocomplete", "true")
-                    .WithSetting("TaxonomyFieldSettings.Required", "false")
-                    .WithSetting("TaxonomyFieldSettings.Taxonomy", tagsTaxonomyPart.Name))
-            );
-
-            ContentDefinitionManager.AlterPartDefinition("ThreadPart", builder => builder
-                .WithField(Constants.Taxonomies.Categories, cfg => cfg
-                    .OfType("TaxonomyField")
-                    .WithSetting("TaxonomyFieldSettings.AllowCustomTerms", "false")
-                    .WithSetting("TaxonomyFieldSettings.SingleChoice", "true")
-                    .WithSetting("TaxonomyFieldSettings.Required", "true")
-                    .WithSetting("TaxonomyFieldSettings.Taxonomy", categoryTaxonomyPart.Name))
-                .WithField(Constants.Taxonomies.Tags, cfg => cfg
-                    .OfType("TaxonomyField")
-                    .WithSetting("TaxonomyFieldSettings.AllowCustomTerms", "true")
-                    .WithSetting("TaxonomyFieldSettings.Autocomplete", "true")
-                    .WithSetting("TaxonomyFieldSettings.Required", "false")
-                    .WithSetting("TaxonomyFieldSettings.Taxonomy", tagsTaxonomyPart.Name))
-            );
+            ContentDefinitionManager.AlterPartDefinition("ThreadPart", builder => { });
 
             ContentDefinitionManager.AlterTypeDefinition("Forum", cfg => cfg
                 .WithPart("ForumPart")
