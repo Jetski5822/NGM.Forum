@@ -1,9 +1,0 @@
-
-Forum Page:
-[nmayne is creating a thread |Alert when posted|]
-
-Thread Page:
-[nmayne is creating a replying |Alert when replied|]
-
-
-When a Thread or Post is created it is automagically shown on the screen.
