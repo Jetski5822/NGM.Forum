@@ -47,11 +47,16 @@ namespace NGM.Forum.Controllers {
                 return new HttpUnauthorizedResult();
 
             if (string.IsNullOrWhiteSpace(type)) {
-                var forumTypes = _forumService.GetForumTypes().ToList();
+                var forumTypes = _forumService.GetForumTypes();
                 if (forumTypes.Count > 1)
-                    return RedirectToAction("SelectType");
+                    return Redirect(Url.ForumSelectTypeForAdmin());
 
-                type = forumTypes.First().Name;
+                if (forumTypes.Count == 0) {
+                    _orchardServices.Notifier.Warning(T("you have no forum types available. Add one to create a forum."));
+                    return Redirect(Url.DashboardForAdmin());
+                }
+
+                type = forumTypes.Single().Name;
             }
 
             var forum = _orchardServices.ContentManager.New<ForumPart>(type);
@@ -66,7 +71,7 @@ namespace NGM.Forum.Controllers {
             if (!CanCreateForums())
                 return new HttpUnauthorizedResult();
 
-            var forumTypes = _forumService.GetForumTypes().ToList();
+            var forumTypes = _forumService.GetForumTypes();
             var model = Shape.ViewModel(ForumTypes: forumTypes);
             return View(model);
         }
@@ -180,7 +185,7 @@ namespace NGM.Forum.Controllers {
         public ActionResult Item(int forumId, PagerParameters pagerParameters) {
             Pager pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
 
-            ForumPart forumPart = _forumService.Get(forumId, VersionOptions.Latest).As<ForumPart>();
+            ForumPart forumPart = _forumService.Get(forumId, VersionOptions.Latest);
 
             if (forumPart == null)
                 return HttpNotFound();

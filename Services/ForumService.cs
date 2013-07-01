@@ -14,7 +14,7 @@ namespace NGM.Forum.Services {
         IEnumerable<ForumPart> Get();
         IEnumerable<ForumPart> Get(VersionOptions versionOptions);
         void Delete(ForumPart forum);
-        IEnumerable<ContentTypeDefinition> GetForumTypes();
+        IList<ContentTypeDefinition> GetForumTypes();
     }
 
     public class ForumService : IForumService {
@@ -48,8 +48,13 @@ namespace NGM.Forum.Services {
             _contentManager.Remove(forum.ContentItem);
         }
 
-        public IEnumerable<ContentTypeDefinition> GetForumTypes() {
-            return _contentManager.GetContentTypeDefinitions().Where(x => x.Parts.Any(p => p.PartDefinition.Name == typeof(ForumPart).Name)).Select(x => x);
+        public IList<ContentTypeDefinition> GetForumTypes() {
+            return _contentManager
+                .GetContentTypeDefinitions()
+                .Where(x => 
+                    x.Parts.Any(p => p.PartDefinition.Name == typeof(ForumPart).Name))
+                .Select(x => x)
+                .ToList();
         }
     }
 }

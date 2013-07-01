@@ -84,7 +84,7 @@ namespace NGM.Forum.Controllers {
             if (!_orchardServices.Authorizer.Authorize(Permissions.MoveThread, T("Not allowed to move thread")))
                 return new HttpUnauthorizedResult();
 
-            var threadPart = _threadService.Get(threadId, VersionOptions.Latest).As<ThreadPart>();
+            var threadPart = _threadService.Get(threadId, VersionOptions.Latest);
 
             if (threadPart == null)
                 return HttpNotFound(T("could not find thread").ToString());
@@ -122,8 +122,6 @@ namespace NGM.Forum.Controllers {
             
             _orchardServices.ContentManager.Publish(threadPart.ContentItem);
 
-            //_forumPathConstraint.AddPath(threadPart.As<IAliasAspect>().Path);
-
             _orchardServices.Notifier.Information(T("{0} has been moved from {1} to {2}.", threadPart.TypeDefinition.DisplayName, currentForumName, newForumName));
 
             return this.RedirectLocal(returnUrl, "~/");
@@ -133,7 +131,7 @@ namespace NGM.Forum.Controllers {
             if (!_orchardServices.Authorizer.Authorize(Permissions.CloseThread, T("Not allowed to close thread")))
                 return new HttpUnauthorizedResult();
 
-            var threadPart = _threadService.Get(threadId, VersionOptions.Latest).As<ThreadPart>();
+            var threadPart = _threadService.Get(threadId, VersionOptions.Latest);
 
             if (threadPart == null)
                 return HttpNotFound(T("could not find thread").ToString());
@@ -150,7 +148,7 @@ namespace NGM.Forum.Controllers {
             if (!_orchardServices.Authorizer.Authorize(Permissions.MoveThread, T("Not allowed to close thread")))
                 return new HttpUnauthorizedResult();
 
-            var threadPart = _threadService.Get(threadId, VersionOptions.Latest).As<ThreadPart>();
+            var threadPart = _threadService.Get(threadId, VersionOptions.Latest);
 
             if (threadPart == null)
                 return HttpNotFound(T("Could not find thread").ToString());
@@ -170,7 +168,7 @@ namespace NGM.Forum.Controllers {
             if (!_orchardServices.Authorizer.Authorize(Permissions.CloseThread, T("Not allowed to open thread")))
                 return new HttpUnauthorizedResult();
 
-            var threadPart = _threadService.Get(threadId, VersionOptions.Latest).As<ThreadPart>();
+            var threadPart = _threadService.Get(threadId, VersionOptions.Latest);
 
             if (threadPart == null)
                 return HttpNotFound(T("could not find thread").ToString());

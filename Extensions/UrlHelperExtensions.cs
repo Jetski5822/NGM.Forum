@@ -26,10 +26,13 @@ namespace NGM.Forum.Extensions {
             return urlHelper.Action("Create", "ForumAdmin", new { area = Constants.LocalArea });
         }
 
+        public static string ForumSelectTypeForAdmin(this UrlHelper urlHelper) {
+            return urlHelper.Action("SelectType", "ForumAdmin", new { area = Constants.LocalArea });
+        }
+
         public static string ForumEdit(this UrlHelper urlHelper, ForumPart forumPart) {
             return urlHelper.Action("Edit", "ForumAdmin", new { forumId = forumPart.Id, area = Constants.LocalArea });
         }
-
 
         public static string ForumView(this UrlHelper urlHelper, ForumPart forumPart) {
             return urlHelper.Action("Item", "Forum", new { forumId = forumPart.Id, area = Constants.LocalArea });
@@ -100,6 +103,11 @@ namespace NGM.Forum.Extensions {
 
         private static string PostCreateByContent(this UrlHelper urlHelper, IContent content) {
             return urlHelper.Action("Create", "Post", new { contentId = content.Id, area = Constants.LocalArea, returnUrl = urlHelper.RequestContext.HttpContext.Request.ToUrlString() });
+        }
+
+        /* External */
+        public static string DashboardForAdmin(this UrlHelper urlHelper) {
+            return urlHelper.Action("index", "admin", new {area = "Dashboard"});
         }
     }
 }
