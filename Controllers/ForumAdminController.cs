@@ -42,27 +42,44 @@ namespace NGM.Forum.Controllers {
         dynamic Shape { get; set; }
         public Localizer T { get; set; }
 
-        public ActionResult Create() {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Not allowed to create forums")))
+        public ActionResult Create(string type) {
+            if (!CanCreateForums())
                 return new HttpUnauthorizedResult();
 
-            var forum = _orchardServices.ContentManager.New<ForumPart>(Constants.Parts.Forum);
+            if (string.IsNullOrWhiteSpace(type)) {
+                var forumTypes = _forumService.GetForumTypes().ToList();
+                if (forumTypes.Count > 1)
+                    return RedirectToAction("SelectType");
+
+                type = forumTypes.First().Name;
+            }
+
+            var forum = _orchardServices.ContentManager.New<ForumPart>(type);
             if (forum == null)
                 return HttpNotFound();
 
-            dynamic model = _orchardServices.ContentManager.BuildEditor(forum);
+            var model = _orchardServices.ContentManager.BuildEditor(forum);
             return View((object)model);
         }
 
-        [HttpPost, ActionName("Create")]
-        public ActionResult CreatePOST() {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Not allowed to create forums")))
+        public ActionResult SelectType() {
+            if (!CanCreateForums())
                 return new HttpUnauthorizedResult();
 
-            var forum = _orchardServices.ContentManager.New<ForumPart>(Constants.Parts.Forum);
+            var forumTypes = _forumService.GetForumTypes().ToList();
+            var model = Shape.ViewModel(ForumTypes: forumTypes);
+            return View(model);
+        }
+
+        [HttpPost, ActionName("Create")]
+        public ActionResult CreatePOST(string type) {
+            if (!CanCreateForums())
+                return new HttpUnauthorizedResult();
+
+            var forum = _orchardServices.ContentManager.New<ForumPart>(type);
 
             _orchardServices.ContentManager.Create(forum, VersionOptions.Draft);
-            dynamic model = _orchardServices.ContentManager.UpdateEditor(forum, this);
+            var model = _orchardServices.ContentManager.UpdateEditor(forum, this);
 
             if (!ModelState.IsValid) {
                 _orchardServices.TransactionManager.Cancel();
@@ -182,6 +199,10 @@ namespace NGM.Forum.Controllers {
 
             // Casting to avoid invalid (under medium trust) reflection over the protected View method and force a static invocation.
             return View((object)forum);
+        }
+
+        private bool CanCreateForums() {
+            return _orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Not allowed to create forums"));
         }
 
         bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties) {

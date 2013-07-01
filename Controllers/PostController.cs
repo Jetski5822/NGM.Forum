@@ -34,6 +34,7 @@ namespace NGM.Forum.Controllers {
                 return new HttpUnauthorizedResult();
 
             var contentItem = _orchardServices.ContentManager.Get(contentId, VersionOptions.Latest);
+
             if (contentItem.As<PostPart>() == null) {
                 if (contentItem.As<ThreadPart>() == null)
                     return HttpNotFound();
@@ -42,9 +43,9 @@ namespace NGM.Forum.Controllers {
                     return new HttpUnauthorizedResult();
             }
 
-            var part = _orchardServices.ContentManager.New<PostPart>(Constants.Parts.Post);
-
-            dynamic model = _orchardServices.ContentManager.BuildEditor(part);
+            var forumPart = GetForum(contentItem);
+            var part = _orchardServices.ContentManager.New<PostPart>(forumPart.PostType);
+            var model = _orchardServices.ContentManager.BuildEditor(part);
 
             return View((object)model);
         }
@@ -62,11 +63,12 @@ namespace NGM.Forum.Controllers {
                     return new HttpUnauthorizedResult();
             }
 
-            var part = _orchardServices.ContentManager.New<PostPart>(Constants.Parts.Post);
-            
+            var forumPart = GetForum(contentItem);
+            var part = _orchardServices.ContentManager.New<PostPart>(forumPart.PostType);
+
             part.Text = string.Format("<blockquote>{0}</blockquote>{1}", contentItem.As<PostPart>().Text, Environment.NewLine);
-            
-            dynamic model = _orchardServices.ContentManager.BuildEditor(part);
+
+            var model = _orchardServices.ContentManager.BuildEditor(part);
 
             return View("Create", (object)model);
         }
@@ -85,7 +87,8 @@ namespace NGM.Forum.Controllers {
                     return new HttpUnauthorizedResult();
             }
 
-            var post = _orchardServices.ContentManager.Create<PostPart>(Constants.Parts.Post, VersionOptions.Draft);
+            var forumPart = GetForum(contentItem);
+            var post = _orchardServices.ContentManager.Create<PostPart>(forumPart.PostType, VersionOptions.Draft);
             var model = _orchardServices.ContentManager.UpdateEditor(post, this);
 
             if (contentItem.As<PostPart>() == null) {
@@ -162,6 +165,16 @@ namespace NGM.Forum.Controllers {
 
         private bool IsNotAllowedToReplyToPost() {
             return !_orchardServices.Authorizer.Authorize(Permissions.ReplyPost, T("Not allowed to reply to a post"));
+        }
+
+        private static ForumPart GetForum(IContent content) {
+            var postPart = content.As<PostPart>();
+            var threadPart = content.As<ThreadPart>();
+
+            if (postPart == null) {
+                return threadPart == null ? null : threadPart.ForumPart;
+            }
+            return postPart.ThreadPart.ForumPart;
         }
     }
 }
