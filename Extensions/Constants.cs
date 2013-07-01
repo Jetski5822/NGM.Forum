@@ -13,10 +13,5 @@
             public const string Thread = "Thread";
             public const string Post = "Post";
         }
-
-        public static class Taxonomies {
-            public const string Categories = "Categories";
-            public const string Tags = "Tags";
-        }
     }
 }

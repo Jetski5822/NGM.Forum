@@ -10,9 +10,3 @@ Features:
         Name: Forums
         Category: Content
         Description: Introduces a forum module allowing users to create forums, threads and posts.
-        Dependencies: Orchard.Taxonomies
-	NGM.Forum.Popularty.StackOverflow
-	    Name: Stack Overflow Popularity Algorithm for Threads
-        Category: Algorithms
-        Description: Introduces the stack overflow algorithm to calculate popularity of a Thread compared to other threads.
-        Dependencies: NGM.Forum, Contrib.Voting, NGM.ContentViewCounter
