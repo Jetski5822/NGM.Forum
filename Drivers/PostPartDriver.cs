@@ -10,6 +10,7 @@ using NGM.Forum.ViewModels;
 using Orchard;
 using Orchard.ContentManagement.Drivers;
 using Orchard.ContentManagement;
+using Orchard.ContentManagement.Handlers;
 using Orchard.Services;
 
 namespace NGM.Forum.Drivers {
@@ -80,6 +81,33 @@ namespace NGM.Forum.Drivers {
             return (typePartSettings != null && !string.IsNullOrWhiteSpace(typePartSettings.Flavor))
                        ? typePartSettings.Flavor
                        : part.PartDefinition.Settings.GetModel<PostPartSettings>().FlavorDefault;
+        }
+
+        protected override void Importing(PostPart part, ImportContentContext context) {
+            var format = context.Attribute(part.PartDefinition.Name, "Format");
+            if (format != null) {
+                part.Format = format;
+            }
+
+            var repliedOn = context.Attribute(part.PartDefinition.Name, "RepliedOn");
+            if (repliedOn != null) {
+                part.RepliedOn = Convert.ToInt32(repliedOn);
+            }
+
+            var text = context.Attribute(part.PartDefinition.Name, "Text");
+            if (text != null) {
+                part.Text = text;
+            }
+        }
+
+        protected override void Exporting(PostPart part, ExportContentContext context) {
+            context.Element(part.PartDefinition.Name).SetAttributeValue("Format", part.Format);
+
+            if (part.RepliedOn != null) {
+                context.Element(part.PartDefinition.Name).SetAttributeValue("RepliedOn", part.RepliedOn);
+            }
+
+            context.Element(part.PartDefinition.Name).SetAttributeValue("Text", part.Text);
         }
     }
 }

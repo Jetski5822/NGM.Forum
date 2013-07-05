@@ -80,6 +80,16 @@ namespace NGM.Forum.Services {
                        factory => factory.EqProperty("Id", "cprt.Id"))
                 .OrderBy(o => o.Named("cprp"), x => x.Desc("PublishedUtc"));
 
+            /*
+             Select tpr.* from NGM_Forum_ThreadPartRecord tpr
+inner join Common_CommonPartRecord cprt on cprt.Container_id = 21 -- Correct threads on Forum
+										and tpr.Id = cprt.Id
+inner join Common_CommonPartRecord cprp on cprp.Container_id = cprt.Id
+inner join NGM_Forum_PostPartRecord ppr on ppr.Id = cprp.Id
+order by tpr.IsSticky desc, cprp.ModifiedUtc desc
+
+             */
+
             return query
                 .List()
                 .Distinct()

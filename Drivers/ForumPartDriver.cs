@@ -5,6 +5,7 @@ using NGM.Forum.Models;
 using NGM.Forum.Settings;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Drivers;
+using Orchard.ContentManagement.Handlers;
 
 namespace NGM.Forum.Drivers {
     [UsedImplicitly]
@@ -59,6 +60,41 @@ namespace NGM.Forum.Drivers {
         protected override DriverResult Editor(ForumPart forumPart, IUpdateModel updater, dynamic shapeHelper) {
             updater.TryUpdateModel(forumPart, Prefix, null, null);
             return Editor(forumPart, shapeHelper);
+        }
+
+        protected override void Importing(ForumPart part, ImportContentContext context) {
+            var description = context.Attribute(part.PartDefinition.Name, "Description");
+            if (description != null) {
+                part.Description = description;
+            }
+
+            var threadCount = context.Attribute(part.PartDefinition.Name, "ThreadCount");
+            if (threadCount != null) {
+                part.ThreadCount = Convert.ToInt32(threadCount);
+            }
+
+            var postCount = context.Attribute(part.PartDefinition.Name, "PostCount");
+            if (postCount != null) {
+                part.PostCount = Convert.ToInt32(postCount);
+            }
+
+            var threadedPosts = context.Attribute(part.PartDefinition.Name, "ThreadedPosts");
+            if (threadedPosts != null) {
+                part.ThreadedPosts = Convert.ToBoolean(threadedPosts);
+            }
+
+            var weight = context.Attribute(part.PartDefinition.Name, "Weight");
+            if (weight != null) {
+                part.Weight = Convert.ToInt32(weight);
+            }
+        }
+
+        protected override void Exporting(ForumPart part, ExportContentContext context) {
+            context.Element(part.PartDefinition.Name).SetAttributeValue("Description", part.Description);
+            context.Element(part.PartDefinition.Name).SetAttributeValue("ThreadCount", part.ThreadCount);
+            context.Element(part.PartDefinition.Name).SetAttributeValue("PostCount", part.PostCount);
+            context.Element(part.PartDefinition.Name).SetAttributeValue("ThreadedPosts", part.ThreadedPosts);
+            context.Element(part.PartDefinition.Name).SetAttributeValue("Weight", part.Weight);
         }
     }
 }

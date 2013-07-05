@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml;
 using JetBrains.Annotations;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
@@ -7,18 +8,26 @@ using NGM.Forum.ViewModels;
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Drivers;
+using Orchard.ContentManagement.Handlers;
+using Orchard.Security;
 
 namespace NGM.Forum.Drivers {
     [UsedImplicitly]
     public class ThreadPartDriver : ContentPartDriver<ThreadPart> {
         private readonly IPostService _postService;
         private readonly IOrchardServices _orchardServices;
+        private readonly IContentManager _contentManager;
+        private readonly IMembershipService _membershipService;
 
         public ThreadPartDriver(
             IPostService postService,
-            IOrchardServices orchardServices) {
+            IOrchardServices orchardServices,
+            IContentManager contentManager,
+            IMembershipService membershipService) {
             _postService = postService;
             _orchardServices = orchardServices;
+            _contentManager = contentManager;
+            _membershipService = membershipService;
         }
 
         protected override string Prefix {
@@ -68,6 +77,51 @@ namespace NGM.Forum.Drivers {
             updater.TryUpdateModel(part, Prefix, null, null);
 
             return Editor(part, shapeHelper);
+        }
+
+        protected override void Importing(ThreadPart part, ImportContentContext context) {
+            var postCount = context.Attribute(part.PartDefinition.Name, "PostCount");
+            if (postCount != null) {
+                part.PostCount = Convert.ToInt32(postCount);
+            }
+
+            var isSticky = context.Attribute(part.PartDefinition.Name, "IsSticky");
+            if (isSticky != null) {
+                part.IsSticky = Convert.ToBoolean(isSticky);
+            }
+
+            var closedOnUtc = context.Attribute(part.PartDefinition.Name, "ClosedOnUtc");
+            if (closedOnUtc != null) {
+                part.ClosedOnUtc = XmlConvert.ToDateTime(closedOnUtc, XmlDateTimeSerializationMode.Utc);
+            }
+
+            var closedBy = context.Attribute(part.PartDefinition.Name, "ClosedBy");
+            if (closedBy != null) {
+                var contentIdentity = new ContentIdentity(closedBy);
+                part.ClosedBy = _membershipService.GetUser(contentIdentity.Get("User.UserName"));
+            }
+
+            var closedDescription = context.Attribute(part.PartDefinition.Name, "ClosedDescription");
+            if (closedDescription != null) {
+                part.ClosedDescription = closedDescription;
+            }
+        }
+
+        protected override void Exporting(ThreadPart part, ExportContentContext context) {
+            context.Element(part.PartDefinition.Name).SetAttributeValue("PostCount", part.PostCount);
+            context.Element(part.PartDefinition.Name).SetAttributeValue("IsSticky", part.IsSticky);
+
+            if (part.ClosedOnUtc != null) {
+                context.Element(part.PartDefinition.Name)
+                    .SetAttributeValue("ClosedOnUtc", XmlConvert.ToString(part.ClosedOnUtc.Value, XmlDateTimeSerializationMode.Utc));
+
+                if (part.ClosedBy != null) {
+                    var closedByIdentity = _contentManager.GetItemMetadata(part.ClosedBy).Identity;
+                    context.Element(part.PartDefinition.Name).SetAttributeValue("ClosedBy", closedByIdentity.ToString());
+                }
+
+                context.Element(part.PartDefinition.Name).SetAttributeValue("ClosedDescription", part.ClosedDescription);
+            }
         }
     }
 }
