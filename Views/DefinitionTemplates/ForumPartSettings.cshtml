@@ -9,4 +9,9 @@
         @Html.EditorFor(m => m.PostType)
         <span class="hint">@T("The Content Type to use when creating posts. This type must have PostPart attached.")</span>
     </div>
+    <div>
+        @Html.LabelFor(m => m.ThreadType)
+        @Html.EditorFor(m => m.ThreadType)
+        <span class="hint">@T("The Content Type to use when creating threads. This type must have ThreadPart attached.")</span>
+    </div>
 </fieldset>

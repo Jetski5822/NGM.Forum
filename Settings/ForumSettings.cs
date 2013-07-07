@@ -11,6 +11,7 @@ using Orchard.Localization;
 namespace NGM.Forum.Settings {
     public class ForumPartSettings {
         public bool DefaultThreadedPosts { get; set; }
+        public string ThreadType { get; set; }
         public string PostType { get; set; }
     }
 
@@ -28,6 +29,10 @@ namespace NGM.Forum.Settings {
                 settings.PostType = Constants.Parts.Post;
             }
 
+            if (string.IsNullOrWhiteSpace(settings.ThreadType)) {
+                settings.ThreadType = Constants.Parts.Thread;
+            }
+
             yield return DefinitionTemplate(settings);
         }
 
@@ -40,6 +45,7 @@ namespace NGM.Forum.Settings {
             if (updateModel.TryUpdateModel(settings, "ForumPartSettings", null, null)) {
                 builder.WithSetting("ForumPartSettings.DefaultThreadedPosts", settings.DefaultThreadedPosts.ToString(CultureInfo.InvariantCulture));
                 builder.WithSetting("ForumPartSettings.PostType", settings.PostType);
+                builder.WithSetting("ForumPartSettings.ThreadType", settings.ThreadType);
             }
 
             yield return DefinitionTemplate(settings);
