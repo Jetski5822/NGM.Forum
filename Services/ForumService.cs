@@ -49,10 +49,12 @@ namespace NGM.Forum.Services {
         }
 
         public IList<ContentTypeDefinition> GetForumTypes() {
+            var name = typeof (ForumPart).Name;
+
             return _contentManager
                 .GetContentTypeDefinitions()
                 .Where(x => 
-                    x.Parts.Any(p => p.PartDefinition.Name == typeof(ForumPart).Name))
+                    x.Parts.Any(p => p.PartDefinition.Name == name))
                 .Select(x => x)
                 .ToList();
         }

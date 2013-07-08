@@ -30,7 +30,7 @@ namespace NGM.Forum.Services {
             return _contentManager
                 .Query<ThreadPart, ThreadPartRecord>(versionOptions)
                 .WithQueryHints(new QueryHints().ExpandRecords<AutoroutePartRecord, TitlePartRecord, CommonPartRecord>())
-                .Where(x => x.Id == id).List().SingleOrDefault();
+                .Where(x => x.Id == id).Slice(1).SingleOrDefault();
         }
 
         public IEnumerable<ThreadPart> Get(ForumPart forumPart) {
