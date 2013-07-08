@@ -2,24 +2,28 @@ using System.Linq;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
 using Orchard.ContentManagement;
+using Orchard.ContentManagement.Aspects;
 using Orchard.ContentManagement.Handlers;
 using Orchard.Core.Common.Models;
 using Orchard.Data;
-using Orchard.Localization;
+using Orchard.Services;
 
 namespace NGM.Forum.Handlers {
     public class PostPartHandler : ContentHandler {
         private readonly IPostService _postService;
         private readonly IThreadService _threadService;
         private readonly IForumService _forumService;
+        private readonly IClock _clock;
 
         public PostPartHandler(IRepository<PostPartRecord> repository, 
             IPostService postService, 
             IThreadService threadService, 
-            IForumService forumService) {
+            IForumService forumService,
+            IClock clock) {
             _postService = postService;
             _threadService = threadService;
             _forumService = forumService;
+            _clock = clock;
 
             Filters.Add(StorageFilter.For(repository));
 
@@ -28,7 +32,10 @@ namespace NGM.Forum.Handlers {
             OnUpdateEditorShape<PostPart>(SetModelProperties);
 
             OnCreated<PostPart>((context, part) => UpdatePostCount(part));
-            OnPublished<PostPart>((context, part) => UpdatePostCount(part));
+            OnPublished<PostPart>((context, part) => { 
+                UpdatePostCount(part);
+                UpdateThreadVersioningDates(part);
+            });
             OnUnpublished<PostPart>((context, part) => UpdatePostCount(part));
             OnVersioned<PostPart>((context, part, newVersionPart) => UpdatePostCount(newVersionPart));
             OnRemoved<PostPart>((context, part) => UpdatePostCount(part));
@@ -42,6 +49,12 @@ namespace NGM.Forum.Handlers {
             OnIndexing<PostPart>((context, postPart) => context.DocumentIndex
                                                     .Add("body", postPart.Record.Text).RemoveTags().Analyze()
                                                     .Add("format", postPart.Record.Format).Store());
+        }
+
+        private void UpdateThreadVersioningDates(PostPart postPart) {
+            var utcNow = _clock.UtcNow;
+            postPart.ThreadPart.As<ICommonPart>().ModifiedUtc = utcNow;
+            postPart.ThreadPart.As<ICommonPart>().VersionModifiedUtc = utcNow;
         }
 
         private void SetModelProperties(BuildShapeContext context, PostPart postPart) {

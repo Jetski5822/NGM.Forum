@@ -18,7 +18,8 @@ namespace NGM.Forum.Controllers {
         private readonly IPostService _postService;
         private readonly IOrchardServices _orchardServices;
 
-        public PostController(IOrchardServices orchardServices, IPostService postService) {
+        public PostController(IOrchardServices orchardServices, 
+            IPostService postService) {
             _postService = postService;
             _orchardServices = orchardServices;
 
