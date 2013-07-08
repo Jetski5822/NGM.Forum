@@ -14,8 +14,8 @@ namespace NGM.Forum.Services {
         IEnumerable<PostPart> Get(ThreadPart threadPart, VersionOptions versionOptions);
         IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count);
         IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count, VersionOptions versionOptions);
-        PostPart GetFirstPost(ThreadPart threadPart, VersionOptions versionOptions);
-        PostPart GetLatestPost(ThreadPart threadPart, VersionOptions versionOptions);
+        PostPart GetPositional(ThreadPart threadPart, VersionOptions versionOptions,
+                               ThreadPostPositional positional);
         IEnumerable<IUser> GetUsersPosted(ThreadPart part);
         int Count(ThreadPart threadPart, VersionOptions versionOptions);
         void Delete(ThreadPart threadPart);
@@ -48,20 +48,20 @@ namespace NGM.Forum.Services {
                 .SingleOrDefault();
         }
 
-        public PostPart GetFirstPost(ThreadPart threadPart, VersionOptions versionOptions) {
-            return GetParentQuery(threadPart, versionOptions)
-                .OrderBy(o => o.PublishedUtc)
-                .ForPart<PostPart>()
-                .Slice(1)
-                .FirstOrDefault();
-        }
+        public PostPart GetPositional(ThreadPart threadPart, VersionOptions versionOptions,
+                                      ThreadPostPositional positional) {
+            var query = GetParentQuery(threadPart, versionOptions);
 
-        public PostPart GetLatestPost(ThreadPart threadPart, VersionOptions versionOptions) {
-            return GetParentQuery(threadPart, versionOptions)
-                .OrderByDescending(o => o.PublishedUtc)
+            if (positional == ThreadPostPositional.First)
+                query = query.OrderBy(o => o.PublishedUtc);
+
+            if (positional == ThreadPostPositional.Latest)
+                query = query.OrderByDescending(o => o.PublishedUtc);
+
+            return query
                 .ForPart<PostPart>()
                 .Slice(1)
-                .FirstOrDefault();
+                .SingleOrDefault();
         }
 
         public IEnumerable<IUser> GetUsersPosted(ThreadPart part) {
@@ -100,5 +100,10 @@ namespace NGM.Forum.Services {
             return _contentManager.Query<CommonPart, CommonPartRecord>(versionOptions)
                                   .Where(cpr => cpr.Container == parentPart.ContentItem.Record);
         }
+    }
+
+    public enum ThreadPostPositional {
+        First,
+        Latest
     }
 }

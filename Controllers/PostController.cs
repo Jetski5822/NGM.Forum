@@ -94,7 +94,7 @@ namespace NGM.Forum.Controllers {
 
             if (contentItem.As<PostPart>() == null) {
                 // Perform a check
-                if (_postService.GetFirstPost(contentItem.As<ThreadPart>(), VersionOptions.Published) != null) {
+                if (_postService.GetPositional(contentItem.As<ThreadPart>(), VersionOptions.Published, ThreadPostPositional.First) != null) {
                     _orchardServices.Notifier.Error(T("You cannot attach two parent posts to a thread."));
                     return Redirect(Url.ThreadView(contentItem.As<ThreadPart>()));
                 }
