@@ -6,11 +6,11 @@
     var postPart = (PostPart)Model.Post;    
 }
 
-@if (Authorizer.Authorize(Permissions.DeletePost, postPart.ContentItem) && postPart.IsParentThread()) {
+@if (Authorizer.Authorize(Orchard.Core.Contents.Permissions.DeleteContent, postPart.ContentItem) && postPart.IsParentThread()) {
     <a href="@Url.ThreadDelete(threadPart)" class="remove">@T("Delete")</a>
 }
 
-@if (Authorizer.Authorize(Permissions.ReplyPost, postPart.ContentItem)) {
+@if (Authorizer.Authorize(Orchard.Core.Contents.Permissions.PublishContent, postPart.ContentItem)) {
     if (!postPart.ThreadPart.IsClosed) {
         <a href="@Url.PostReply(postPart)">@T("Reply to this Thread")</a>
     }

@@ -31,14 +31,14 @@ namespace NGM.Forum.Handlers {
             OnGetEditorShape<PostPart>(SetModelProperties);
             OnUpdateEditorShape<PostPart>(SetModelProperties);
 
-            OnCreated<PostPart>((context, part) => UpdatePostCount(part));
+            OnCreated<PostPart>((context, part) => UpdateCounters(part));
             OnPublished<PostPart>((context, part) => { 
-                UpdatePostCount(part);
+                UpdateCounters(part);
                 UpdateThreadVersioningDates(part);
             });
-            OnUnpublished<PostPart>((context, part) => UpdatePostCount(part));
-            OnVersioned<PostPart>((context, part, newVersionPart) => UpdatePostCount(newVersionPart));
-            OnRemoved<PostPart>((context, part) => UpdatePostCount(part));
+            OnUnpublished<PostPart>((context, part) => UpdateCounters(part));
+            OnVersioned<PostPart>((context, part, newVersionPart) => UpdateCounters(newVersionPart));
+            OnRemoved<PostPart>((context, part) => UpdateCounters(part));
 
             OnRemoved<ThreadPart>((context, b) =>
                 _postService.Delete(context.ContentItem.As<ThreadPart>()));
@@ -58,7 +58,7 @@ namespace NGM.Forum.Handlers {
             context.Shape.Thread = postPart.ThreadPart;
         }
         
-        private void UpdatePostCount(PostPart postPart) {
+        private void UpdateCounters(PostPart postPart) {
             if (postPart.IsParentThread())
                 return;
 

@@ -15,17 +15,17 @@ namespace NGM.Forum.Drivers {
     [UsedImplicitly]
     public class ThreadPartDriver : ContentPartDriver<ThreadPart> {
         private readonly IPostService _postService;
-        private readonly IOrchardServices _orchardServices;
+        private readonly IWorkContextAccessor _workContextAccessor;
         private readonly IContentManager _contentManager;
         private readonly IMembershipService _membershipService;
 
         public ThreadPartDriver(
             IPostService postService,
-            IOrchardServices orchardServices,
+            IWorkContextAccessor workContextAccessor,
             IContentManager contentManager,
             IMembershipService membershipService) {
             _postService = postService;
-            _orchardServices = orchardServices;
+            _workContextAccessor = workContextAccessor;
             _contentManager = contentManager;
             _membershipService = membershipService;
         }
@@ -56,7 +56,7 @@ namespace NGM.Forum.Drivers {
                 ContentShape("Forum_Metadata_First", () => shapeHelper.Forum_Metadata_First(Post: part.FirstPost)),
                 ContentShape("Forum_Metadata_Latest", () => {
                         var post = part.LatestPost;
-                        var pager = new ThreadPager(_orchardServices.WorkContext.CurrentSite, part.PostCount);
+                        var pager = new ThreadPager(_workContextAccessor.GetContext().CurrentSite, part.PostCount);
                         return shapeHelper.Forum_Metadata_Latest(Post: post, Pager: pager);
                     }),
                 ContentShape("Parts_Thread_Posts_Users", () => {

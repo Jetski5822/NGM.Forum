@@ -52,12 +52,12 @@ namespace NGM.Forum.Controllers {
         }
 
         public ActionResult Item(int forumId, PagerParameters pagerParameters) {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ViewForum, T("Not allowed to view forum")))
-                return new HttpUnauthorizedResult();
-
             var forumPart = _forumService.Get(forumId, VersionOptions.Published);
             if (forumPart == null)
                 return HttpNotFound();
+
+            if (!_orchardServices.Authorizer.Authorize(Orchard.Core.Contents.Permissions.ViewContent, forumPart, T("Not allowed to view forum")))
+                return new HttpUnauthorizedResult();
 
             Pager pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
             

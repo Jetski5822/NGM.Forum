@@ -10,6 +10,7 @@ using Orchard.Security;
 
 namespace NGM.Forum.Services {
     public interface IThreadService : IDependency {
+        ThreadPart Get(int forumId, int threadId, VersionOptions versionOptions);
         ThreadPart Get(int id, VersionOptions versionOptions);
         IEnumerable<ThreadPart> Get(ForumPart forumPart);
         IEnumerable<ThreadPart> Get(ForumPart forumPart, VersionOptions versionOptions);
@@ -24,6 +25,17 @@ namespace NGM.Forum.Services {
 
         public ThreadService(IContentManager contentManager) {
             _contentManager = contentManager;
+        }
+
+        public ThreadPart Get(int forumId, int threadId, VersionOptions versionOptions) {
+            return _contentManager.Query<CommonPart, CommonPartRecord>(versionOptions)
+                      .Where(cpr => cpr.Container.Id == forumId)
+                      .Join<ThreadPartRecord>()
+                      .Where(o => o.Id == threadId)
+                      .WithQueryHints(new QueryHints().ExpandRecords<AutoroutePartRecord, TitlePartRecord, CommonPartRecord>())
+                      .ForPart<ThreadPart>()
+                      .Slice(1)
+                      .SingleOrDefault();
         }
 
         public ThreadPart Get(int id, VersionOptions versionOptions) {

@@ -14,6 +14,8 @@ namespace NGM.Forum.Services {
         IEnumerable<PostPart> Get(ThreadPart threadPart, VersionOptions versionOptions);
         IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count);
         IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count, VersionOptions versionOptions);
+        PostPart GetPositional(ThreadPart threadPart,
+                               ThreadPostPositional positional);
         PostPart GetPositional(ThreadPart threadPart, VersionOptions versionOptions,
                                ThreadPostPositional positional);
         IEnumerable<IUser> GetUsersPosted(ThreadPart part);
@@ -46,6 +48,11 @@ namespace NGM.Forum.Services {
                 .Where(x => x.Id == id)
                 .List()
                 .SingleOrDefault();
+        }
+
+        public PostPart GetPositional(ThreadPart threadPart, 
+            ThreadPostPositional positional) {
+            return GetPositional(threadPart, VersionOptions.Published, positional);
         }
 
         public PostPart GetPositional(ThreadPart threadPart, VersionOptions versionOptions,

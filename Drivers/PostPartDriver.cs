@@ -16,16 +16,16 @@ using Orchard.Services;
 namespace NGM.Forum.Drivers {
     [UsedImplicitly]
     public class PostPartDriver : ContentPartDriver<PostPart> {
-        private readonly IOrchardServices _orchardServices;
+        private readonly IWorkContextAccessor _workContextAccessor;
         private readonly IEnumerable<IHtmlFilter> _htmlFilters;
         private readonly RequestContext _requestContext;
 
         private const string TemplateName = "Parts.Threads.Post.Body";
 
-        public PostPartDriver(IOrchardServices orchardServices, 
+        public PostPartDriver(IWorkContextAccessor workContextAccessor, 
             IEnumerable<IHtmlFilter> htmlFilters, 
             RequestContext requestContext) {
-            _orchardServices = orchardServices;
+            _workContextAccessor = workContextAccessor;
             _htmlFilters = htmlFilters;
             _requestContext = requestContext;
         }
@@ -35,8 +35,6 @@ namespace NGM.Forum.Drivers {
         }
 
         protected override DriverResult Display(PostPart part, string displayType, dynamic shapeHelper) {
-            var pager = new ThreadPager(_orchardServices.WorkContext.CurrentSite, part.ThreadPart.PostCount);
-
             return Combined(
                 ContentShape("Parts_Threads_Post_Body",
                              () => {
@@ -45,6 +43,7 @@ namespace NGM.Forum.Drivers {
                              }),
                 ContentShape("Parts_Threads_Post_Body_Summary",
                              () => {
+                                 var pager = new ThreadPager(_workContextAccessor.GetContext().CurrentSite, part.ThreadPart.PostCount);
                                  var bodyText = _htmlFilters.Where(x => x.GetType().Name.Equals(GetFlavor(part) + "filter", StringComparison.OrdinalIgnoreCase)).Aggregate(part.Text, (text, filter) => filter.ProcessContent(text));
                                  return shapeHelper.Parts_Threads_Post_Body_Summary(Html: new HtmlString(bodyText), Pager: pager);
                              }),

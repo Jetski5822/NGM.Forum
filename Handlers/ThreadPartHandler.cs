@@ -87,8 +87,8 @@ namespace NGM.Forum.Handlers {
                 part.ClosedByField.Value = part.ClosedByField.Value;
 
             // Setup FirstPost & LatestPost fields
-            part.FirstPostField.Loader(() => _postService.GetPositional(part, VersionOptions.Published, ThreadPostPositional.First));
-            part.LatestPostField.Loader(() => _postService.GetPositional(part, VersionOptions.Published, ThreadPostPositional.Latest));
+            part.FirstPostField.Loader(() => _postService.GetPositional(part, ThreadPostPositional.First));
+            part.LatestPostField.Loader(() => _postService.GetPositional(part, ThreadPostPositional.Latest));
         }
 
         protected override void GetItemMetadata(GetContentItemMetadataContext context) {

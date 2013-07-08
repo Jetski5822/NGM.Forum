@@ -47,17 +47,17 @@ namespace NGM.Forum.Controllers {
         public Localizer T { get; set; }
 
         public ActionResult Create(int forumId) {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.CreatePost, T("Not allowed to create thread")))
-                return new HttpUnauthorizedResult();
-
-            var forum = _forumService.Get(forumId, VersionOptions.Latest);
-            if (forum == null)
+            var forumPart = _forumService.Get(forumId, VersionOptions.Latest);
+            if (forumPart == null)
                 return HttpNotFound();
 
-            var thread = _orchardServices.ContentManager.New<ThreadPart>(forum.ThreadType);
-            thread.ForumPart = forum;
+            if (!_orchardServices.Authorizer.Authorize(Orchard.Core.Contents.Permissions.PublishContent, forumPart, T("Not allowed to create thread")))
+                return new HttpUnauthorizedResult();
 
-            var post = _orchardServices.ContentManager.New<PostPart>(forum.PostType);
+            var thread = _orchardServices.ContentManager.New<ThreadPart>(forumPart.ThreadType);
+            thread.ForumPart = forumPart;
+
+            var post = _orchardServices.ContentManager.New<PostPart>(forumPart.PostType);
             post.ThreadPart = thread;
             
             var threadModel = _orchardServices.ContentManager.BuildEditor(thread);
@@ -74,17 +74,17 @@ namespace NGM.Forum.Controllers {
 
         [HttpPost, ActionName("Create")]
         public ActionResult CreatePOST(int forumId) {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.CreatePost, T("Not allowed to create thread")))
-                return new HttpUnauthorizedResult();
-
-            var forum = _forumService.Get(forumId, VersionOptions.Latest);
-            if (forum == null)
+            var forumPart = _forumService.Get(forumId, VersionOptions.Latest);
+            if (forumPart == null)
                 return HttpNotFound();
 
-            var thread = _orchardServices.ContentManager.Create<ThreadPart>(forum.ThreadType, VersionOptions.Draft, o => { o.ForumPart = forum; });
+            if (!_orchardServices.Authorizer.Authorize(Orchard.Core.Contents.Permissions.PublishContent, forumPart, T("Not allowed to create thread")))
+                return new HttpUnauthorizedResult();
+
+            var thread = _orchardServices.ContentManager.Create<ThreadPart>(forumPart.ThreadType, VersionOptions.Draft, o => { o.ForumPart = forumPart; });
             var threadModel = _orchardServices.ContentManager.UpdateEditor(thread, this);
 
-            var post = _orchardServices.ContentManager.Create<PostPart>(forum.PostType, VersionOptions.Draft, o => { o.ThreadPart = thread; });
+            var post = _orchardServices.ContentManager.Create<PostPart>(forumPart.PostType, VersionOptions.Draft, o => { o.ThreadPart = thread; });
             var postModel = _orchardServices.ContentManager.UpdateEditor(post, this);
             post.ThreadPart = thread;
 
@@ -109,16 +109,12 @@ namespace NGM.Forum.Controllers {
 
 
         public ActionResult Item(int forumId, int threadId, PagerParameters pagerParameters) {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ViewPost, T("Not allowed to view thread")))
-                return new HttpUnauthorizedResult();
-
-            var forumPart = _forumService.Get(forumId, VersionOptions.Published);
-            if (forumPart == null)
-                return HttpNotFound();
-
-            var threadPart = _threadService.Get(threadId, VersionOptions.Published);
+            var threadPart = _threadService.Get(forumId, threadId, VersionOptions.Published);
             if (threadPart == null)
                 return HttpNotFound();
+
+            if (!_orchardServices.Authorizer.Authorize(Orchard.Core.Contents.Permissions.ViewContent, threadPart, T("Not allowed to view thread")))
+                return new HttpUnauthorizedResult();
 
             var pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
             var posts = _postService.Get(threadPart, pager.GetStartIndex(), pager.PageSize, VersionOptions.Published)
@@ -134,11 +130,11 @@ namespace NGM.Forum.Controllers {
 
             /* Get Edit Post*/
             if (!threadPart.IsClosed && IsAllowedToCreatePost(threadPart)) {
-                var part = _orchardServices.ContentManager.New<PostPart>(forumPart.PostType);
+                var part = _orchardServices.ContentManager.New<PostPart>(threadPart.ForumPart.PostType);
 
                 dynamic model = _orchardServices.ContentManager.BuildEditor(part);
 
-                var firstPostId =  _postService.GetPositional(threadPart, VersionOptions.Published, ThreadPostPositional.First).Id;
+                var firstPostId =  _postService.GetPositional(threadPart, ThreadPostPositional.First).Id;
 
                 thread.Content.Add(Shape.Parts_Thread_Post_Create(ContentEditor: model, ContentId: firstPostId), "10");
             }
@@ -150,18 +146,11 @@ namespace NGM.Forum.Controllers {
             if (IsNotAllowedToCreatePost(threadPart))
                 return false;
 
-            if (IsNotAllowedToReplyToPost(threadPart))
-                return false;
-
             return true;
         }
 
         private bool IsNotAllowedToCreatePost(ThreadPart threadPart) {
-            return !_authorizationService.TryCheckAccess(Permissions.CreatePost, _orchardServices.WorkContext.CurrentUser, threadPart);
-        }
-
-        private bool IsNotAllowedToReplyToPost(ThreadPart threadPart) {
-            return !_authorizationService.TryCheckAccess(Permissions.ReplyPost, _orchardServices.WorkContext.CurrentUser, threadPart);
+            return !_authorizationService.TryCheckAccess(Orchard.Core.Contents.Permissions.PublishContent, _orchardServices.WorkContext.CurrentUser, threadPart);
         }
 
         bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties) {

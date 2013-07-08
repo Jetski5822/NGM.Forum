@@ -48,11 +48,17 @@ namespace NGM.Forum.Controllers {
         public Localizer T { get; set; }
 
         public ActionResult List(int forumId) {
+            var forumPart = _forumService.Get(forumId, VersionOptions.Latest);
+
+            if (forumPart == null)
+                return HttpNotFound();
+
+            if (!_orchardServices.Authorizer.Authorize(Orchard.Core.Contents.Permissions.ViewContent, forumPart, T("Not allowed to view forum")))
+                return new HttpUnauthorizedResult();
+
             var list = _orchardServices.New.List();
 
-            var forum = _forumService.Get(forumId, VersionOptions.Latest);
-
-            list.AddRange(_threadService.Get(forum)
+            list.AddRange(_threadService.Get(forumPart)
                               .Select(b => _orchardServices.ContentManager.BuildDisplay(b, "SummaryAdmin")));
 
             dynamic viewModel = _orchardServices.New.ViewModel()
@@ -67,6 +73,9 @@ namespace NGM.Forum.Controllers {
 
             if (threadPart == null)
                 return HttpNotFound();
+
+            if (!_orchardServices.Authorizer.Authorize(Orchard.Core.Contents.Permissions.ViewContent, threadPart, T("Not allowed to view thread")))
+                return new HttpUnauthorizedResult();
 
             var posts = _postService.Get(threadPart, pager.GetStartIndex(), pager.PageSize, VersionOptions.Latest)
                 .Select(bp => _orchardServices.ContentManager.BuildDisplay(bp, "SummaryAdmin"));

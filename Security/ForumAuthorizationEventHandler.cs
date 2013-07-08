@@ -39,10 +39,6 @@ namespace NGM.Forum.Security {
         private static Permission GetOwnerVariation(Permission permission) {
             if (permission.Name == Permissions.ManageForums.Name)
                 return Permissions.ManageOwnForums;
-            if (permission.Name == Permissions.DeletePost.Name)
-                return Permissions.DeleteOwnPost;
-            if (permission.Name == Permissions.EditPost.Name)
-                return Permissions.EditOwnPost;
             if (permission.Name == Permissions.MoveThread.Name)
                 return Permissions.MoveOwnThread;
             if (permission.Name == Permissions.StickyThread.Name)
