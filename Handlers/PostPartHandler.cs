@@ -41,10 +41,7 @@ namespace NGM.Forum.Handlers {
             OnRemoved<PostPart>((context, part) => UpdatePostCount(part));
 
             OnRemoved<ThreadPart>((context, b) =>
-                _postService
-                    .Get(context.ContentItem.As<ThreadPart>())
-                    .ToList()
-                    .ForEach(post => context.ContentManager.Remove(post.ContentItem)));
+                _postService.Delete(context.ContentItem.As<ThreadPart>()));
 
             OnIndexing<PostPart>((context, postPart) => context.DocumentIndex
                                                     .Add("body", postPart.Record.Text).RemoveTags().Analyze()

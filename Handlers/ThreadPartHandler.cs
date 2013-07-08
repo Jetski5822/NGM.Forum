@@ -43,11 +43,8 @@ namespace NGM.Forum.Handlers {
             OnVersioned<ThreadPart>((context, part, newVersionPart) => UpdateForumPartCounters(newVersionPart));
             OnRemoved<ThreadPart>((context, part) => UpdateForumPartCounters(part));
             
-            OnRemoved<ForumPart>((context, b) => 
-                _threadService
-                    .Get(context.ContentItem.As<ForumPart>())
-                    .ToList()
-                    .ForEach(thread => context.ContentManager.Remove(thread.ContentItem)));
+            OnRemoved<ForumPart>((context, b) =>
+                _threadService.Delete(context.ContentItem.As<ForumPart>()));
         }
 
         private void SetModelProperties(BuildShapeContext context, ThreadPart threadPart) {
@@ -61,6 +58,7 @@ namespace NGM.Forum.Handlers {
 
                 var forumPart = threadPart.ForumPart ?? _forumService.Get(commonPart.Record.Container.Id, VersionOptions.Published);
 
+                // TODO: Refactor this to do the count in the DB and not make 3 DB calls.
                 forumPart.ThreadCount = _threadService.Count(forumPart, VersionOptions.Published);
                 forumPart.PostCount = _threadService
                     .Get(forumPart, VersionOptions.Published)

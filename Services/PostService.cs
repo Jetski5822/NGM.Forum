@@ -18,6 +18,7 @@ namespace NGM.Forum.Services {
         PostPart GetLatestPost(ThreadPart threadPart, VersionOptions versionOptions);
         IEnumerable<IUser> GetUsersPosted(ThreadPart part);
         int Count(ThreadPart threadPart, VersionOptions versionOptions);
+        void Delete(ThreadPart threadPart);
     }
 
     public class PostService : IPostService {
@@ -75,6 +76,12 @@ namespace NGM.Forum.Services {
 
         public int Count(ThreadPart threadPart, VersionOptions versionOptions) {
             return GetParentQuery(threadPart, versionOptions).Count();
+        }
+
+        public void Delete(ThreadPart threadPart) {
+            Get(threadPart, VersionOptions.AllVersions)
+                .ToList()
+                .ForEach(post => _contentManager.Remove(post.ContentItem));
         }
 
         public IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count) {

@@ -16,6 +16,7 @@ namespace NGM.Forum.Services {
         IEnumerable<ThreadPart> Get(ForumPart forumPart, int skip, int count);
         IEnumerable<ThreadPart> Get(ForumPart forumPart, int skip, int count, VersionOptions versionOptions);
         int Count(ForumPart forumPart, VersionOptions versionOptions);
+        void Delete(ForumPart forumPart);
     }
 
     public class ThreadService : IThreadService {
@@ -69,6 +70,12 @@ namespace NGM.Forum.Services {
 
         public int Count(ForumPart forumPart, VersionOptions versionOptions) {
             return GetParentQuery(forumPart, versionOptions).Count();
+        }
+
+        public void Delete(ForumPart forumPart) {
+            Get(forumPart)
+                .ToList()
+                .ForEach(thread => _contentManager.Remove(thread.ContentItem));
         }
 
         private IContentQuery<CommonPart, CommonPartRecord> GetParentQuery(IContent parentPart, VersionOptions versionOptions) {
