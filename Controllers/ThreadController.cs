@@ -51,11 +51,11 @@ namespace NGM.Forum.Controllers {
             if (forumPart == null)
                 return HttpNotFound();
 
-            if (!_orchardServices.Authorizer.Authorize(Orchard.Core.Contents.Permissions.PublishContent, forumPart, T("Not allowed to create thread")))
-                return new HttpUnauthorizedResult();
-
             var thread = _orchardServices.ContentManager.New<ThreadPart>(forumPart.ThreadType);
             thread.ForumPart = forumPart;
+
+            if (!_orchardServices.Authorizer.Authorize(Orchard.Core.Contents.Permissions.PublishContent, thread, T("Not allowed to create thread")))
+                return new HttpUnauthorizedResult();
 
             var post = _orchardServices.ContentManager.New<PostPart>(forumPart.PostType);
             post.ThreadPart = thread;
@@ -78,10 +78,11 @@ namespace NGM.Forum.Controllers {
             if (forumPart == null)
                 return HttpNotFound();
 
-            if (!_orchardServices.Authorizer.Authorize(Orchard.Core.Contents.Permissions.PublishContent, forumPart, T("Not allowed to create thread")))
+            var thread = _orchardServices.ContentManager.Create<ThreadPart>(forumPart.ThreadType, VersionOptions.Draft, o => { o.ForumPart = forumPart; });
+
+            if (!_orchardServices.Authorizer.Authorize(Orchard.Core.Contents.Permissions.PublishContent, thread, T("Not allowed to create thread")))
                 return new HttpUnauthorizedResult();
 
-            var thread = _orchardServices.ContentManager.Create<ThreadPart>(forumPart.ThreadType, VersionOptions.Draft, o => { o.ForumPart = forumPart; });
             var threadModel = _orchardServices.ContentManager.UpdateEditor(thread, this);
 
             var post = _orchardServices.ContentManager.Create<PostPart>(forumPart.PostType, VersionOptions.Draft, o => { o.ThreadPart = thread; });
@@ -143,10 +144,7 @@ namespace NGM.Forum.Controllers {
         }
 
         private bool IsAllowedToCreatePost(ThreadPart threadPart) {
-            if (IsNotAllowedToCreatePost(threadPart))
-                return false;
-
-            return true;
+            return !IsNotAllowedToCreatePost(threadPart);
         }
 
         private bool IsNotAllowedToCreatePost(ThreadPart threadPart) {
