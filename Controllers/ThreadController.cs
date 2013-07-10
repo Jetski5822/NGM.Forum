@@ -24,6 +24,7 @@ namespace NGM.Forum.Controllers {
         private readonly IPostService _postService;
         private readonly ISiteService _siteService;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IAuthenticationService _authenticationService;
 
         public ThreadController(IOrchardServices orchardServices,
             IForumService forumService,
@@ -31,13 +32,15 @@ namespace NGM.Forum.Controllers {
             IPostService postService,
             ISiteService siteService,
             IShapeFactory shapeFactory,
-            IAuthorizationService authorizationService) {
+            IAuthorizationService authorizationService,
+            IAuthenticationService authenticationService) {
             _orchardServices = orchardServices;
             _forumService = forumService;
             _threadService = threadService;
             _postService = postService;
             _siteService = siteService;
             _authorizationService = authorizationService;
+            _authenticationService = authenticationService;
 
             T = NullLocalizer.Instance;
             Shape = shapeFactory;
@@ -144,11 +147,7 @@ namespace NGM.Forum.Controllers {
         }
 
         private bool IsAllowedToCreatePost(ThreadPart threadPart) {
-            return !IsNotAllowedToCreatePost(threadPart);
-        }
-
-        private bool IsNotAllowedToCreatePost(ThreadPart threadPart) {
-            return !_authorizationService.TryCheckAccess(Orchard.Core.Contents.Permissions.PublishContent, _orchardServices.WorkContext.CurrentUser, threadPart);
+            return _authorizationService.TryCheckAccess(Orchard.Core.Contents.Permissions.PublishContent, _authenticationService.GetAuthenticatedUser(), threadPart);
         }
 
         bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties) {
