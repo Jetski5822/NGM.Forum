@@ -19,15 +19,18 @@ namespace NGM.Forum.Drivers {
         private readonly IWorkContextAccessor _workContextAccessor;
         private readonly IEnumerable<IHtmlFilter> _htmlFilters;
         private readonly RequestContext _requestContext;
+        private readonly IContentManager _contentManager;
 
         private const string TemplateName = "Parts.Threads.Post.Body";
 
         public PostPartDriver(IWorkContextAccessor workContextAccessor, 
             IEnumerable<IHtmlFilter> htmlFilters, 
-            RequestContext requestContext) {
+            RequestContext requestContext,
+            IContentManager contentManager) {
             _workContextAccessor = workContextAccessor;
             _htmlFilters = htmlFilters;
             _requestContext = requestContext;
+            _contentManager = contentManager;
         }
 
         protected override string Prefix {
@@ -47,8 +50,11 @@ namespace NGM.Forum.Drivers {
                                  var bodyText = _htmlFilters.Aggregate(part.Text, (text, filter) => filter.ProcessContent(text, GetFlavor(part)));
                                  return shapeHelper.Parts_Threads_Post_Body_Summary(Html: new HtmlString(bodyText), Pager: pager);
                              }),
-                ContentShape("Parts_Post_Manage", () => 
-                    shapeHelper.Parts_Post_Manage(ContentPart: part)),
+                ContentShape("Parts_Post_Manage", () => {
+                    var newPost = _contentManager.New<PostPart>(part.ContentItem.ContentType);
+                    newPost.ThreadPart = part.ThreadPart;
+                    return shapeHelper.Parts_Post_Manage(ContentPart: part, NewPost: newPost);
+                }),
                 ContentShape("Parts_Thread_Post_Metadata_SummaryAdmin", () =>
                     shapeHelper.Parts_Thread_Post_Metadata_SummaryAdmin(ContentPart: part))
                 );

@@ -52,7 +52,11 @@ namespace NGM.Forum.Drivers {
             results.AddRange(new [] { 
                 ContentShape("Parts_Threads_Thread_ThreadReplyCount",
                     () => shapeHelper.Parts_Threads_Thread_ThreadReplyCount(ReplyCount: part.ReplyCount)),
-                ContentShape("Parts_Thread_Manage", () => shapeHelper.Parts_Thread_Manage(Post: part.FirstPost)),
+                ContentShape("Parts_Thread_Manage", () => {
+                    var newPost = _contentManager.New<PostPart>(part.FirstPost.ContentItem.ContentType);
+                    newPost.ThreadPart = part;
+                    return shapeHelper.Parts_Thread_Manage(FirstPost: part.FirstPost, NewPost: newPost);
+                }),
                 ContentShape("Forum_Metadata_First", () => shapeHelper.Forum_Metadata_First(Post: part.FirstPost)),
                 ContentShape("Forum_Metadata_Latest", () => {
                         var post = part.LatestPost;

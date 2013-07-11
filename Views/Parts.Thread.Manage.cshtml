@@ -3,15 +3,16 @@
 @using NGM.Forum.Models
 @{
     var threadPart = (ThreadPart)Model.ContentPart;
-    var postPart = (PostPart)Model.Post;    
+    var firstPostPart = (PostPart)Model.FirstPost;
+    var newPostPart = (PostPart)Model.NewPost;    
 }
 
-@if (Authorizer.Authorize(Orchard.Core.Contents.Permissions.DeleteContent, postPart.ContentItem) && postPart.IsParentThread()) {
+@if (Authorizer.Authorize(Orchard.Core.Contents.Permissions.DeleteContent, threadPart) && Authorizer.Authorize(Orchard.Core.Contents.Permissions.DeleteContent, firstPostPart) && firstPostPart.IsParentThread()) {
     <a href="@Url.ThreadDelete(threadPart)" class="remove">@T("Delete")</a>
 }
 
-@if (Authorizer.Authorize(Orchard.Core.Contents.Permissions.PublishContent, postPart.ContentItem)) {
-    if (!postPart.ThreadPart.IsClosed) {
-        <a href="@Url.PostReply(postPart)">@T("Reply to this Thread")</a>
+@if (Authorizer.Authorize(Orchard.Core.Contents.Permissions.PublishContent, newPostPart)) {
+    if (!firstPostPart.ThreadPart.IsClosed) {
+        <a href="@Url.PostReply(firstPostPart)">@T("Reply to this Thread")</a>
     }
 }

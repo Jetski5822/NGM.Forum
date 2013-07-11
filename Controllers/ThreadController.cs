@@ -89,6 +89,10 @@ namespace NGM.Forum.Controllers {
             var threadModel = _orchardServices.ContentManager.UpdateEditor(thread, this);
 
             var post = _orchardServices.ContentManager.Create<PostPart>(forumPart.PostType, VersionOptions.Draft, o => { o.ThreadPart = thread; });
+            
+            if (!_orchardServices.Authorizer.Authorize(Orchard.Core.Contents.Permissions.PublishContent, post, T("Not allowed to create post")))
+                return new HttpUnauthorizedResult();
+
             var postModel = _orchardServices.ContentManager.UpdateEditor(post, this);
             post.ThreadPart = thread;
 
@@ -132,10 +136,10 @@ namespace NGM.Forum.Controllers {
             list.AddRange(posts);
             thread.Content.Add(Shape.Parts_Threads_Post_List(ContentItems: list, Pager: pagerObject), "5");
 
-            /* Get Edit Post*/
-            if (!threadPart.IsClosed && IsAllowedToCreatePost(threadPart)) {
-                var part = _orchardServices.ContentManager.New<PostPart>(threadPart.ForumPart.PostType);
+            var part = _orchardServices.ContentManager.New<PostPart>(threadPart.ForumPart.PostType);
 
+            /* Get Edit Post*/
+            if (!threadPart.IsClosed && IsAllowedToCreatePost(part)) {
                 dynamic model = _orchardServices.ContentManager.BuildEditor(part);
 
                 var firstPostId =  _postService.GetPositional(threadPart, ThreadPostPositional.First).Id;
@@ -146,8 +150,8 @@ namespace NGM.Forum.Controllers {
             return new ShapeResult(this, thread);
         }
 
-        private bool IsAllowedToCreatePost(ThreadPart threadPart) {
-            return _authorizationService.TryCheckAccess(Orchard.Core.Contents.Permissions.PublishContent, _authenticationService.GetAuthenticatedUser(), threadPart);
+        private bool IsAllowedToCreatePost(PostPart postPart) {
+            return _authorizationService.TryCheckAccess(Orchard.Core.Contents.Permissions.PublishContent, _authenticationService.GetAuthenticatedUser(), postPart);
         }
 
         bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties) {

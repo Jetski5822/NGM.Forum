@@ -3,12 +3,13 @@
 @using NGM.Forum.Models
 @{
     var postPart = (PostPart)Model.ContentPart;
+    var newPostPart = (PostPart)Model.NewPost;
 }
 
 @if (Authorizer.Authorize(Orchard.Core.Contents.Permissions.DeleteContent, postPart.ContentItem) && !postPart.IsParentThread()) {
     <a href="@Url.PostDelete(postPart)" class="remove">@T("Delete")</a>
 }
-@if (Authorizer.Authorize(Orchard.Core.Contents.Permissions.PublishContent, postPart.ContentItem)) {
+@if (Authorizer.Authorize(Orchard.Core.Contents.Permissions.PublishContent, newPostPart)) {
     <a href="@Url.PostReply(postPart)" class="create">@T("Reply")</a>
     <a href="@Url.PostReplyWithQuote(postPart)" class="create quote">@T("Reply with Quote")</a>
 }

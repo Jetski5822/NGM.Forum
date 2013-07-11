@@ -33,9 +33,6 @@ namespace NGM.Forum.Controllers {
         public ActionResult Create(int contentId) {
             var contentItem = _orchardServices.ContentManager.Get(contentId, VersionOptions.Latest);
 
-            if (!_orchardServices.Authorizer.Authorize(Orchard.Core.Contents.Permissions.PublishContent, contentItem, T("Not allowed to create post")))
-                return new HttpUnauthorizedResult();
-
             if (contentItem.As<PostPart>() == null) {
                 if (contentItem.As<ThreadPart>() == null)
                     return HttpNotFound();
@@ -43,6 +40,11 @@ namespace NGM.Forum.Controllers {
 
             var forumPart = GetForum(contentItem);
             var part = _orchardServices.ContentManager.New<PostPart>(forumPart.PostType);
+            part.ThreadPart = GetThreadPart(contentItem);
+
+            if (!_orchardServices.Authorizer.Authorize(Orchard.Core.Contents.Permissions.PublishContent, part, T("Not allowed to create post")))
+                return new HttpUnauthorizedResult();
+
             var model = _orchardServices.ContentManager.BuildEditor(part);
 
             return View((object)model);
@@ -50,9 +52,6 @@ namespace NGM.Forum.Controllers {
 
         public ActionResult CreateWithQuote(int contentId) {
             var contentItem = _orchardServices.ContentManager.Get(contentId, VersionOptions.Latest);
-
-            if (!_orchardServices.Authorizer.Authorize(Orchard.Core.Contents.Permissions.PublishContent, contentItem, T("Not allowed to create post")))
-                return new HttpUnauthorizedResult();
             
             if (contentItem.As<PostPart>() == null) {
                 if (contentItem.As<ThreadPart>() == null)
@@ -61,6 +60,10 @@ namespace NGM.Forum.Controllers {
 
             var forumPart = GetForum(contentItem);
             var part = _orchardServices.ContentManager.New<PostPart>(forumPart.PostType);
+            part.ThreadPart = GetThreadPart(contentItem);
+
+            if (!_orchardServices.Authorizer.Authorize(Orchard.Core.Contents.Permissions.PublishContent, part, T("Not allowed to create post")))
+                return new HttpUnauthorizedResult();
 
             part.Text = string.Format("<blockquote>{0}</blockquote>{1}", contentItem.As<PostPart>().Text, Environment.NewLine);
 
@@ -72,9 +75,6 @@ namespace NGM.Forum.Controllers {
         [HttpPost, ActionName("Create")]
         public ActionResult CreatePOST(int contentId) {
             var contentItem = _orchardServices.ContentManager.Get(contentId, VersionOptions.Latest);
-
-            if (!_orchardServices.Authorizer.Authorize(Orchard.Core.Contents.Permissions.PublishContent, contentItem, T("Not allowed to create post")))
-                return new HttpUnauthorizedResult();
             
             if (contentItem.As<PostPart>() == null) {
                 if (contentItem.As<ThreadPart>() == null)
@@ -82,23 +82,26 @@ namespace NGM.Forum.Controllers {
             }
 
             var forumPart = GetForum(contentItem);
-            var post = _orchardServices.ContentManager.Create<PostPart>(forumPart.PostType, VersionOptions.Draft);
-            var model = _orchardServices.ContentManager.UpdateEditor(post, this);
+            var post = _orchardServices.ContentManager.New<PostPart>(forumPart.PostType);
+            var threadPart = GetThreadPart(contentItem);
+            post.ThreadPart = threadPart;
 
             if (contentItem.As<PostPart>() == null) {
                 // Perform a check
-                var internalThreadPart = contentItem.As<ThreadPart>();
-                if (_postService.GetPositional(internalThreadPart, ThreadPostPositional.First) != null) {
+                if (_postService.GetPositional(threadPart, ThreadPostPositional.First) != null) {
                     _orchardServices.Notifier.Error(T("You cannot attach two parent posts to a thread."));
-                    return Redirect(Url.ThreadView(internalThreadPart));
+                    return Redirect(Url.ThreadView(threadPart));
                 }
-
-                post.ThreadPart = internalThreadPart;
             }
             else {
-                post.ThreadPart = contentItem.As<PostPart>().ThreadPart;
                 post.RepliedOn = contentItem.As<PostPart>().Id;
             }
+
+            if (!_orchardServices.Authorizer.Authorize(Orchard.Core.Contents.Permissions.PublishContent, post, T("Not allowed to create post")))
+                return new HttpUnauthorizedResult();
+
+            _orchardServices.ContentManager.Create(post.ContentItem);
+            var model = _orchardServices.ContentManager.UpdateEditor(post, this);
 
             if (!ModelState.IsValid) {
                 _orchardServices.TransactionManager.Cancel();
@@ -166,6 +169,10 @@ namespace NGM.Forum.Controllers {
                 return threadPart == null ? null : threadPart.ForumPart;
             }
             return postPart.ThreadPart.ForumPart;
+        }
+
+        private static ThreadPart GetThreadPart(IContent content) {
+            return content.Has<ThreadPart>() ? content.As<ThreadPart>() : content.As<PostPart>().ThreadPart;
         }
     }
 }
