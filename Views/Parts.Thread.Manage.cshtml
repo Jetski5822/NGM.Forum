@@ -7,7 +7,9 @@
     var newPostPart = (PostPart)Model.NewPost;    
 }
 
-@if (Authorizer.Authorize(Orchard.Core.Contents.Permissions.DeleteContent, threadPart) && Authorizer.Authorize(Orchard.Core.Contents.Permissions.DeleteContent, firstPostPart) && firstPostPart.IsParentThread()) {
+@if (Authorizer.Authorize(Orchard.Core.Contents.Permissions.DeleteContent, threadPart) 
+    && Authorizer.Authorize(Orchard.Core.Contents.Permissions.DeleteContent, firstPostPart) 
+    && firstPostPart.IsParentThread()) {
     <a href="@Url.ThreadDelete(threadPart)" class="remove">@T("Delete")</a>
 }
 

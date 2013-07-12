@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using NGM.Forum.Extensions;
+using NGM.Forum.Helpers;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
 using NGM.Forum.ViewModels;
@@ -38,9 +39,9 @@ namespace NGM.Forum.Controllers {
                     return HttpNotFound();
             }
 
-            var forumPart = GetForum(contentItem);
+            var forumPart = HierarchyHelpers.GetForum(contentItem);
             var part = _orchardServices.ContentManager.New<PostPart>(forumPart.PostType);
-            part.ThreadPart = GetThreadPart(contentItem);
+            part.ThreadPart = HierarchyHelpers.GetThreadPart(contentItem);
 
             if (!_orchardServices.Authorizer.Authorize(Orchard.Core.Contents.Permissions.PublishContent, part, T("Not allowed to create post")))
                 return new HttpUnauthorizedResult();
@@ -58,9 +59,9 @@ namespace NGM.Forum.Controllers {
                     return HttpNotFound();
             }
 
-            var forumPart = GetForum(contentItem);
+            var forumPart = HierarchyHelpers.GetForum(contentItem);
             var part = _orchardServices.ContentManager.New<PostPart>(forumPart.PostType);
-            part.ThreadPart = GetThreadPart(contentItem);
+            part.ThreadPart = HierarchyHelpers.GetThreadPart(contentItem);
 
             if (!_orchardServices.Authorizer.Authorize(Orchard.Core.Contents.Permissions.PublishContent, part, T("Not allowed to create post")))
                 return new HttpUnauthorizedResult();
@@ -81,9 +82,9 @@ namespace NGM.Forum.Controllers {
                     return HttpNotFound();
             }
 
-            var forumPart = GetForum(contentItem);
+            var forumPart = HierarchyHelpers.GetForum(contentItem);
             var post = _orchardServices.ContentManager.New<PostPart>(forumPart.PostType);
-            var threadPart = GetThreadPart(contentItem);
+            var threadPart = HierarchyHelpers.GetThreadPart(contentItem);
             post.ThreadPart = threadPart;
 
             if (contentItem.As<PostPart>() == null) {
@@ -159,20 +160,6 @@ namespace NGM.Forum.Controllers {
 
         void IUpdateModel.AddModelError(string key, LocalizedString errorMessage) {
             ModelState.AddModelError(key, errorMessage.ToString());
-        }
-
-        private static ForumPart GetForum(IContent content) {
-            var postPart = content.As<PostPart>();
-            var threadPart = content.As<ThreadPart>();
-
-            if (postPart == null) {
-                return threadPart == null ? null : threadPart.ForumPart;
-            }
-            return postPart.ThreadPart.ForumPart;
-        }
-
-        private static ThreadPart GetThreadPart(IContent content) {
-            return content.Has<ThreadPart>() ? content.As<ThreadPart>() : content.As<PostPart>().ThreadPart;
         }
     }
 }

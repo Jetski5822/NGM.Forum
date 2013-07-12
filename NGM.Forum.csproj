@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="AdminMenu.cs" />
     <Compile Include="Controllers\ThreadAdminController.cs" />
+    <Compile Include="Helpers\HierarchyHelpers.cs" />
     <Compile Include="Settings\ForumSettings.cs" />
     <Compile Include="Settings\PostSettings.cs" />
     <Compile Include="Shapes.cs" />
