@@ -48,17 +48,17 @@ namespace NGM.Forum.Controllers {
         public Localizer T { get; set; }
 
         public ActionResult List(int forumId) {
-            var forumPart = _forumService.Get(forumId, VersionOptions.Latest);
+            var forum = _forumService.Get(forumId, VersionOptions.Latest);
 
-            if (forumPart == null)
+            if (forum == null)
                 return HttpNotFound();
 
-            if (!_orchardServices.Authorizer.Authorize(Orchard.Core.Contents.Permissions.ViewContent, forumPart, T("Not allowed to view forum")))
+            if (!_orchardServices.Authorizer.Authorize(Orchard.Core.Contents.Permissions.ViewContent, forum, T("Not allowed to view forum")))
                 return new HttpUnauthorizedResult();
 
             var list = _orchardServices.New.List();
 
-            list.AddRange(_threadService.Get(forumPart)
+            list.AddRange(_threadService.Get(forum)
                               .Select(b => _orchardServices.ContentManager.BuildDisplay(b, "SummaryAdmin")));
 
             dynamic viewModel = _orchardServices.New.ViewModel()
@@ -90,13 +90,13 @@ namespace NGM.Forum.Controllers {
         }
 
         public ActionResult Move(int threadId) {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.MoveThread, T("Not allowed to move thread")))
-                return new HttpUnauthorizedResult();
-
             var threadPart = _threadService.Get(threadId, VersionOptions.Latest);
 
             if (threadPart == null)
-                return HttpNotFound(T("could not find thread").ToString());
+                return HttpNotFound(T("could not find thread").Text);
+
+            if (!_orchardServices.Authorizer.Authorize(Permissions.MoveThread, threadPart, T("Not allowed to move thread")))
+                return new HttpUnauthorizedResult();
 
             var forums = _forumService.Get();
             //What if I have 1 forum?
@@ -111,18 +111,18 @@ namespace NGM.Forum.Controllers {
 
         [HttpPost]
         public ActionResult Move(int threadId, string returnUrl, ThreadMoveAdminViewModel viewModel) {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.MoveThread, T("Not allowed to move thread")))
-                return new HttpUnauthorizedResult();
-
             var threadPart = _threadService.Get(threadId, VersionOptions.Latest);
 
             if (threadPart == null)
-                return HttpNotFound(T("Could not find thread").ToString());
+                return HttpNotFound(T("Could not find thread").Text);
+
+            if (!_orchardServices.Authorizer.Authorize(Permissions.MoveThread, threadPart, T("Not allowed to move thread")))
+                return new HttpUnauthorizedResult();
 
             var forumPart = _forumService.Get(viewModel.ForumId, VersionOptions.Latest);
 
             if (forumPart == null)
-                return HttpNotFound(T("Could not find forum").ToString());
+                return HttpNotFound(T("Could not find forum").Text);
 
             var currentForumName = threadPart.ForumPart.As<ITitleAspect>().Title;
             var newForumName = forumPart.As<ITitleAspect>().Title;
@@ -137,13 +137,13 @@ namespace NGM.Forum.Controllers {
         }
 
         public ActionResult Close(int threadId) {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.CloseThread, T("Not allowed to close thread")))
-                return new HttpUnauthorizedResult();
-
             var threadPart = _threadService.Get(threadId, VersionOptions.Latest);
 
             if (threadPart == null)
-                return HttpNotFound(T("could not find thread").ToString());
+                return HttpNotFound(T("could not find thread").Text);
+
+            if (!_orchardServices.Authorizer.Authorize(Permissions.CloseThread, threadPart, T("Not allowed to close thread")))
+                return new HttpUnauthorizedResult();
 
             var viewModel = new ThreadCloseAdminViewModel {
                 ThreadId = threadPart.Id,
@@ -154,13 +154,13 @@ namespace NGM.Forum.Controllers {
 
         [HttpPost]
         public ActionResult Close(int threadId, string returnUrl, ThreadCloseAdminViewModel viewModel) {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.MoveThread, T("Not allowed to close thread")))
-                return new HttpUnauthorizedResult();
-
             var threadPart = _threadService.Get(threadId, VersionOptions.Latest);
 
             if (threadPart == null)
-                return HttpNotFound(T("Could not find thread").ToString());
+                return HttpNotFound(T("Could not find thread").Text);
+
+            if (!_orchardServices.Authorizer.Authorize(Permissions.CloseThread, threadPart, T("Not allowed to close thread")))
+                return new HttpUnauthorizedResult();
 
             threadPart.ClosedBy = _orchardServices.WorkContext.CurrentUser;
             threadPart.ClosedOnUtc = _clock.UtcNow;
@@ -174,13 +174,13 @@ namespace NGM.Forum.Controllers {
         }
 
         public ActionResult Open(int threadId, string returnUrl) {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.CloseThread, T("Not allowed to open thread")))
-                return new HttpUnauthorizedResult();
-
             var threadPart = _threadService.Get(threadId, VersionOptions.Latest);
 
             if (threadPart == null)
-                return HttpNotFound(T("could not find thread").ToString());
+                return HttpNotFound(T("could not find thread").Text);
+
+            if (!_orchardServices.Authorizer.Authorize(Permissions.CloseThread, threadPart, T("Not allowed to open thread")))
+                return new HttpUnauthorizedResult();
 
             threadPart.ClosedBy = null;
             threadPart.ClosedDescription = null;

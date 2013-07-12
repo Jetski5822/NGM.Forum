@@ -43,7 +43,7 @@ namespace NGM.Forum.Controllers {
         public Localizer T { get; set; }
 
         public ActionResult Create(string type) {
-            if (!CanCreateForums())
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Not allowed to create forums")))
                 return new HttpUnauthorizedResult();
 
             if (string.IsNullOrWhiteSpace(type)) {
@@ -52,7 +52,7 @@ namespace NGM.Forum.Controllers {
                     return Redirect(Url.ForumSelectTypeForAdmin());
 
                 if (forumTypes.Count == 0) {
-                    _orchardServices.Notifier.Warning(T("you have no forum types available. Add one to create a forum."));
+                    _orchardServices.Notifier.Warning(T("You have no forum types available. Add one to create a forum."));
                     return Redirect(Url.DashboardForAdmin());
                 }
 
@@ -68,7 +68,7 @@ namespace NGM.Forum.Controllers {
         }
 
         public ActionResult SelectType() {
-            if (!CanCreateForums())
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Not allowed to create forums")))
                 return new HttpUnauthorizedResult();
 
             var forumTypes = _forumService.GetForumTypes();
@@ -78,7 +78,7 @@ namespace NGM.Forum.Controllers {
 
         [HttpPost, ActionName("Create")]
         public ActionResult CreatePOST(string type) {
-            if (!CanCreateForums())
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Not allowed to create forums")))
                 return new HttpUnauthorizedResult();
 
             var forum = _orchardServices.ContentManager.New<ForumPart>(type);
@@ -97,35 +97,18 @@ namespace NGM.Forum.Controllers {
         }
 
         public ActionResult Edit(int forumId) {
-            var blog = _forumService.Get(forumId, VersionOptions.Latest);
+            var forum = _forumService.Get(forumId, VersionOptions.Latest);
 
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, blog, T("Not allowed to edit forum")))
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, forum, T("Not allowed to edit forum")))
                 return new HttpUnauthorizedResult();
 
-            if (blog == null)
+            if (forum == null)
                 return HttpNotFound();
 
-            dynamic model = _orchardServices.ContentManager.BuildEditor(blog);
+            dynamic model = _orchardServices.ContentManager.BuildEditor(forum);
             // Casting to avoid invalid (under medium trust) reflection over the protected View method and force a static invocation.
             return View((object)model);
         }
-
-        [HttpPost, ActionName("Edit")]
-        [FormValueRequired("submit.Delete")]
-        public ActionResult EditDeletePOST(int forumId) {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Couldn't delete forum")))
-                return new HttpUnauthorizedResult();
-
-            var forum = _forumService.Get(forumId, VersionOptions.DraftRequired);
-            if (forum == null)
-                return HttpNotFound();
-            _forumService.Delete(forum);
-
-            _orchardServices.Notifier.Information(T("Forum deleted"));
-
-            return Redirect(Url.ForumsForAdmin());
-        }
-
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("submit.Save")]
@@ -135,7 +118,7 @@ namespace NGM.Forum.Controllers {
             if (forum == null)
                 return HttpNotFound();
 
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, forum, T("Couldn't edit forum")))
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, forum, T("Not allowed to edit forum")))
                 return new HttpUnauthorizedResult();
 
             dynamic model = _orchardServices.ContentManager.UpdateEditor(forum, this);
@@ -151,15 +134,21 @@ namespace NGM.Forum.Controllers {
             return Redirect(Url.ForumsForAdmin());
         }
 
+        [HttpPost, ActionName("Edit")]
+        [FormValueRequired("submit.Delete")]
+        public ActionResult EditDeletePOST(int forumId) {
+            return Remove(forumId);
+        }
+
         [HttpPost]
         public ActionResult Remove(int forumId) {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Couldn't delete forum")))
-                return new HttpUnauthorizedResult();
-
             var forum = _forumService.Get(forumId, VersionOptions.Latest);
 
             if (forum == null)
                 return HttpNotFound();
+
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, forum, T("Not allowed to edit forum")))
+                return new HttpUnauthorizedResult();
 
             _forumService.Delete(forum);
 
@@ -185,29 +174,28 @@ namespace NGM.Forum.Controllers {
         public ActionResult Item(int forumId, PagerParameters pagerParameters) {
             Pager pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
 
-            ForumPart forumPart = _forumService.Get(forumId, VersionOptions.Latest);
+            ForumPart forum = _forumService.Get(forumId, VersionOptions.Latest);
 
-            if (forumPart == null)
+            if (forum == null)
                 return HttpNotFound();
 
-            var threads = _threadService.Get(forumPart, pager.GetStartIndex(), pager.PageSize, VersionOptions.Latest).ToArray();
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, forum, T("Not allowed to view forum")))
+                return new HttpUnauthorizedResult();
+
+            var threads = _threadService.Get(forum, pager.GetStartIndex(), pager.PageSize, VersionOptions.Latest).ToArray();
             var threadsShapes = threads.Select(bp => _contentManager.BuildDisplay(bp, "SummaryAdmin")).ToArray();
 
-            dynamic forum = _orchardServices.ContentManager.BuildDisplay(forumPart, "DetailAdmin");
+            dynamic forumShape = _orchardServices.ContentManager.BuildDisplay(forum, "DetailAdmin");
 
             var list = Shape.List();
             list.AddRange(threadsShapes);
-            forum.Content.Add(Shape.Parts_Forums_Thread_ListAdmin(ContentItems: list), "5");
+            forumShape.Content.Add(Shape.Parts_Forums_Thread_ListAdmin(ContentItems: list), "5");
 
-            var totalItemCount = _threadService.Count(forumPart, VersionOptions.Latest);
-            forum.Content.Add(Shape.Pager(pager).TotalItemCount(totalItemCount), "Content:after");
+            var totalItemCount = _threadService.Count(forum, VersionOptions.Latest);
+            forumShape.Content.Add(Shape.Pager(pager).TotalItemCount(totalItemCount), "Content:after");
 
             // Casting to avoid invalid (under medium trust) reflection over the protected View method and force a static invocation.
-            return View((object)forum);
-        }
-
-        private bool CanCreateForums() {
-            return _orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Not allowed to create forums"));
+            return View((object)forumShape);
         }
 
         bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties) {
