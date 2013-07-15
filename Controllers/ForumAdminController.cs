@@ -81,6 +81,19 @@ namespace NGM.Forum.Controllers {
             if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Not allowed to create forums")))
                 return new HttpUnauthorizedResult();
 
+            if (string.IsNullOrWhiteSpace(type)) {
+                var forumTypes = _forumService.GetForumTypes();
+                if (forumTypes.Count > 1)
+                    return Redirect(Url.ForumSelectTypeForAdmin());
+
+                if (forumTypes.Count == 0) {
+                    _orchardServices.Notifier.Warning(T("You have no forum types available. Add one to create a forum."));
+                    return Redirect(Url.DashboardForAdmin());
+                }
+
+                type = forumTypes.Single().Name;
+            }
+
             var forum = _orchardServices.ContentManager.New<ForumPart>(type);
 
             _orchardServices.ContentManager.Create(forum, VersionOptions.Draft);
@@ -99,11 +112,11 @@ namespace NGM.Forum.Controllers {
         public ActionResult Edit(int forumId) {
             var forum = _forumService.Get(forumId, VersionOptions.Latest);
 
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, forum, T("Not allowed to edit forum")))
-                return new HttpUnauthorizedResult();
-
             if (forum == null)
                 return HttpNotFound();
+
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, forum, T("Not allowed to edit forum")))
+                return new HttpUnauthorizedResult();
 
             dynamic model = _orchardServices.ContentManager.BuildEditor(forum);
             // Casting to avoid invalid (under medium trust) reflection over the protected View method and force a static invocation.
