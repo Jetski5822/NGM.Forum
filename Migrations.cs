@@ -1,9 +1,17 @@
 ﻿using System;
 using Orchard.ContentManagement.MetaData;
+using Orchard.Core.Contents.Extensions;
 using Orchard.Data.Migration;
+using Orchard.Localization;
 
 namespace NGM.Forum {
     public class Migrations : DataMigrationImpl {
+        public Migrations() {
+            T = NullLocalizer.Instance;
+        }
+
+        public Localizer T { get; set; }
+
         public int Create() {
             SchemaBuilder.CreateTable("ForumPartRecord",
                 table => table
@@ -33,9 +41,17 @@ namespace NGM.Forum {
                     .Column<string>("Format")
                 );
 
-            ContentDefinitionManager.AlterPartDefinition("ForumPart", builder => { });
+            ContentDefinitionManager.AlterPartDefinition("ForumPart", builder => builder
+                .Attachable()
+                .WithDescription(T("Create your own Forum Type with a hieracrchy of different threads/posts").Text));
 
-            ContentDefinitionManager.AlterPartDefinition("ThreadPart", builder => { });
+            ContentDefinitionManager.AlterPartDefinition("ThreadPart", builder => builder
+                .Attachable()
+                .WithDescription(T("Create your own Thread Type, useful when wanting different types of threads for different forums").Text));
+
+            ContentDefinitionManager.AlterPartDefinition("PostPart", builder => builder
+                .Attachable()
+                .WithDescription(T("Create your own Post Type, useful when wanting different types of posts for different forums").Text));
 
             ContentDefinitionManager.AlterTypeDefinition("Forum", cfg => cfg
                 .WithPart("ForumPart")
@@ -67,13 +83,30 @@ namespace NGM.Forum {
                     .WithSetting("OwnerEditorSettings.ShowOwnerEditor", "false"))
             );
 
-            return 2;
+            return 3;
         }
 
         public int UpdateFrom1() {
             SchemaBuilder.AlterTable("ForumPartRecord", command => command.AddColumn<int>("Weight"));
 
             return 2;
+        }
+
+        public int UpdateFrom2() {
+            ContentDefinitionManager.AlterPartDefinition("ForumPart", builder => builder
+                .Attachable()
+                .WithDescription(T("Create your own Forum Type with a hieracrchy of different threads/posts").Text));
+
+            ContentDefinitionManager.AlterPartDefinition("ThreadPart", builder => builder
+                .Attachable()
+                .WithDescription(T("Create your own Thread Type, useful when wanting different types of threads for different forums").Text));
+
+            ContentDefinitionManager.AlterPartDefinition("PostPart", builder => builder
+                .Attachable()
+                .WithDescription(T("Create your own Post Type, useful when wanting different types of posts for different forums").Text));
+
+
+            return 3;
         }
     }
 }
