@@ -97,13 +97,17 @@ namespace NGM.Forum.Handlers {
             if (thread == null)
                 return;
 
-            context.Metadata.DisplayRouteValues = new RouteValueDictionary {
-                {"Area", Constants.LocalArea},
-                {"Controller", "Thread"},
-                {"Action", "Item"},
-                {"forumId", thread.ForumPart.ContentItem.Id},
-                {"threadId", context.ContentItem.Id}
-            };
+            if (thread.ForumPart != null) {
+                context.Metadata.DisplayRouteValues = new RouteValueDictionary
+                    {
+                        {"Area", Constants.LocalArea},
+                        {"Controller", "Thread"},
+                        {"Action", "Item"},
+                        {"forumId", thread.ForumPart.ContentItem.Id},
+                        {"threadId", context.ContentItem.Id}
+                    };
+            }
+
             context.Metadata.AdminRouteValues = new RouteValueDictionary {
                 {"Area", Constants.LocalArea},
                 {"Controller", "ThreadAdmin"},
