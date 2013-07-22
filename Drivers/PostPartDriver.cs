@@ -96,7 +96,7 @@ namespace NGM.Forum.Drivers {
 
             var repliedOn = context.Attribute(part.PartDefinition.Name, "RepliedOn");
             if (repliedOn != null) {
-                part.RepliedOn = Convert.ToInt32(repliedOn);
+                part.RepliedOn = context.GetItemFromSession(repliedOn).Id;
             }
 
             var text = context.Attribute(part.PartDefinition.Name, "Text");
@@ -109,7 +109,8 @@ namespace NGM.Forum.Drivers {
             context.Element(part.PartDefinition.Name).SetAttributeValue("Format", part.Format);
 
             if (part.RepliedOn != null) {
-                context.Element(part.PartDefinition.Name).SetAttributeValue("RepliedOn", part.RepliedOn);
+                var repliedOnIdentity = _contentManager.GetItemMetadata(_contentManager.Get(part.RepliedOn.Value)).Identity;
+                context.Element(part.PartDefinition.Name).SetAttributeValue("RepliedOn", repliedOnIdentity.ToString());
             }
 
             context.Element(part.PartDefinition.Name).SetAttributeValue("Text", part.Text);

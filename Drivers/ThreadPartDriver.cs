@@ -97,17 +97,17 @@ namespace NGM.Forum.Drivers {
             var closedOnUtc = context.Attribute(part.PartDefinition.Name, "ClosedOnUtc");
             if (closedOnUtc != null) {
                 part.ClosedOnUtc = XmlConvert.ToDateTime(closedOnUtc, XmlDateTimeSerializationMode.Utc);
-            }
 
-            var closedBy = context.Attribute(part.PartDefinition.Name, "ClosedBy");
-            if (closedBy != null) {
-                var contentIdentity = new ContentIdentity(closedBy);
-                part.ClosedBy = _membershipService.GetUser(contentIdentity.Get("User.UserName"));
-            }
+                var closedBy = context.Attribute(part.PartDefinition.Name, "ClosedBy");
+                if (closedBy != null) {
+                    var contentIdentity = new ContentIdentity(closedBy);
+                    part.ClosedBy = _membershipService.GetUser(contentIdentity.Get("User.UserName"));
+                }
 
-            var closedDescription = context.Attribute(part.PartDefinition.Name, "ClosedDescription");
-            if (closedDescription != null) {
-                part.ClosedDescription = closedDescription;
+                var closedDescription = context.Attribute(part.PartDefinition.Name, "ClosedDescription");
+                if (closedDescription != null) {
+                    part.ClosedDescription = closedDescription;
+                }
             }
         }
 
