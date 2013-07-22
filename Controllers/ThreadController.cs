@@ -134,7 +134,7 @@ namespace NGM.Forum.Controllers {
 
             var list = Shape.List();
             list.AddRange(posts);
-            thread.Content.Add(Shape.Parts_Threads_Post_List(ContentItems: list, Pager: pagerObject), "5");
+            thread.Content.Add(Shape.Parts_Threads_Post_List(ContentPart: threadPart, ContentItems: list, Pager: pagerObject), "5");
 
             var part = _orchardServices.ContentManager.New<PostPart>(threadPart.ForumPart.PostType);
 

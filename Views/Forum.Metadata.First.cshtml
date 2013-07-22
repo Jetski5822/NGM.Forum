@@ -1,9 +1,18 @@
 ﻿@using NGM.Forum.Models
+@using Orchard.Utility.Extensions
 @{
     var postPart = (PostPart)Model.Post;
 
     var body = new HtmlString(Html.Excerpt(postPart.Text, 200).ToString().Replace(Environment.NewLine, "</p>" + Environment.NewLine + "<p>"));
+
+    Model.Classes.Add("firstPost");
+
+    var contentTypeClassName = ((string)postPart.ContentItem.ContentType + "-content").HtmlClassify();
+    Model.Classes.Add(contentTypeClassName);
+    
+    var tag = Tag(Model, "div");
 }
-<div class="firstPost post-content">
-    @body
-</div>
+
+@tag.StartElement
+@body
+@tag.EndElement

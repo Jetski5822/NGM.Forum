@@ -1,10 +1,13 @@
 ﻿@using NGM.Forum.Models
 @using Orchard.ContentManagement
+@using Orchard.Utility.Extensions
 @{
     IEnumerable<object> posts = Model.ContentItems;
+    ThreadPart contentPart = Model.ContentPart;
     Model.ContentItems.Classes.Add("content-items");
-    Model.ContentItems.Classes.Add("thread-posts");
-
+    var contentTypeClassName = ((string)contentPart.ContentItem.ContentType + "-posts").HtmlClassify();
+    Model.ContentItems.Classes.Add(contentTypeClassName);
+    
     bool noReplies = posts.Count() == 1 && (((ContentItem) ((dynamic) posts.First()).ContentItem).As<PostPart>().IsParentThread());
 }
 @Display(Model.ContentItems)

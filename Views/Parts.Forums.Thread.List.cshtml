@@ -1,10 +1,12 @@
 ﻿@using NGM.Forum.Models
 @using NGM.Forum.Extensions
+@using Orchard.Utility.Extensions
 @{
     IEnumerable<object> threads = Model.ContentItems;
     ForumPart contentPart = Model.ContentPart;
     Model.ContentItems.Classes.Add("content-items");
-    Model.ContentItems.Classes.Add("forum-threads");
+    var contentTypeClassName = ((string)contentPart.ContentItem.ContentType + "-threads").HtmlClassify();
+    Model.ContentItems.Classes.Add(contentTypeClassName);
 }
 @Display(Model.ContentItems)
 @if (threads == null || threads.Count() < 1) {

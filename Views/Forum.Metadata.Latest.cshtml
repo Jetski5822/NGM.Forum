@@ -3,13 +3,21 @@
 @using Orchard.ContentManagement
 @using Orchard.Core.Common.Models
 @using Orchard.UI.Navigation
+@using Orchard.Utility.Extensions
 @{
     var postPart = (PostPart)Model.Post;
     var commonPart = postPart.As<CommonPart>();
 
     var pager = (Pager) Model.Pager;
+
+    Model.Classes.Add("latestPost");
+
+    var contentTypeClassName = ((string)postPart.ContentItem.ContentType + "-metadata").HtmlClassify();
+    Model.Classes.Add(contentTypeClassName);
+
+    var tag = Tag(Model, "div");
 }
-<div class="latestPost post-metadata">
+@tag.StartElement
     <span class="author">@T("Latest post by {0},", commonPart.Owner.UserName)</span>
     <span class="published"><a href="@Url.PostView(postPart, pager)">@Display.PublishedState(createdDateTimeUtc: commonPart.CreatedUtc, publisheddateTimeUtc: commonPart.PublishedUtc)</a></span>
-</div>
+@tag.EndElement
