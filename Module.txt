@@ -3,7 +3,7 @@ AntiForgery: enabled
 Author: Nicholas Mayne
 Website: http://orchardforums.codeplex.com/
 Version: 1.0.0
-OrchardVersion: 1.6.0
+OrchardVersion: 1.7.0
 Description: Introduces a forum module allowing users to create forums, threads and posts. Requires the Voting module to be installed.
 Features:
     NGM.Forum:
