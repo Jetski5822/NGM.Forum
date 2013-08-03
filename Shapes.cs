@@ -29,8 +29,9 @@ namespace NGM.Forum {
 
                 var displayType = !String.IsNullOrWhiteSpace(displaying.ShapeMetadata.DisplayType) ? displaying.ShapeMetadata.DisplayType : "Detail";
                 var alternates = new[] {
-                    String.Format("Content__Forum"),
-                    String.Format("Content_{0}__Forum", displayType)
+                    string.Format("Content__{0}", content.ContentType),
+                    string.Format("Content__{0}_{1}", content.ContentType, displayType),
+
                 };
 
                 foreach (var alternate in alternates.Where(alternate => !displaying.ShapeMetadata.Alternates.Contains(alternate))) {

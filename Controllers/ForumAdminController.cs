@@ -8,6 +8,7 @@ using Orchard.ContentManagement;
 using Orchard.Core.Contents.Controllers;
 using Orchard.DisplayManagement;
 using Orchard.Localization;
+using Orchard.Mvc;
 using Orchard.Settings;
 using Orchard.UI.Admin;
 using Orchard.UI.Navigation;
