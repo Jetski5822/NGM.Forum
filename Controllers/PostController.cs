@@ -3,7 +3,6 @@ using System.Web.Mvc;
 using NGM.Forum.Extensions;
 using NGM.Forum.Helpers;
 using NGM.Forum.Models;
-using NGM.Forum.Services;
 using NGM.Forum.ViewModels;
 using Orchard;
 using Orchard.ContentManagement;
@@ -16,12 +15,9 @@ namespace NGM.Forum.Controllers {
     [Themed]
     [ValidateInput(false)]
     public class PostController : Controller, IUpdateModel {
-        private readonly IPostService _postService;
         private readonly IOrchardServices _orchardServices;
 
-        public PostController(IOrchardServices orchardServices, 
-            IPostService postService) {
-            _postService = postService;
+        public PostController(IOrchardServices orchardServices) {
             _orchardServices = orchardServices;
 
             Logger = NullLogger.Instance;
@@ -34,10 +30,11 @@ namespace NGM.Forum.Controllers {
         public ActionResult Create(int contentId) {
             var contentItem = _orchardServices.ContentManager.Get(contentId, VersionOptions.Latest);
 
-            if (contentItem.As<PostPart>() == null) {
-                if (contentItem.As<ThreadPart>() == null)
-                    return HttpNotFound();
-            }
+            bool isPost = contentItem.Has<PostPart>();
+            bool isThread = contentItem.Has<ThreadPart>();
+
+            if (!isPost && !isThread)
+                return HttpNotFound();
 
             var forumPart = HierarchyHelpers.GetForum(contentItem);
             var part = _orchardServices.ContentManager.New<PostPart>(forumPart.PostType);
@@ -53,11 +50,12 @@ namespace NGM.Forum.Controllers {
 
         public ActionResult CreateWithQuote(int contentId) {
             var contentItem = _orchardServices.ContentManager.Get(contentId, VersionOptions.Latest);
-            
-            if (contentItem.As<PostPart>() == null) {
-                if (contentItem.As<ThreadPart>() == null)
-                    return HttpNotFound();
-            }
+
+            bool isPost = contentItem.Has<PostPart>();
+            bool isThread = contentItem.Has<ThreadPart>();
+
+            if (!isPost && !isThread)
+                return HttpNotFound();
 
             var forumPart = HierarchyHelpers.GetForum(contentItem);
             var part = _orchardServices.ContentManager.New<PostPart>(forumPart.PostType);
@@ -76,23 +74,21 @@ namespace NGM.Forum.Controllers {
         [HttpPost, ActionName("Create")]
         public ActionResult CreatePOST(int contentId) {
             var contentItem = _orchardServices.ContentManager.Get(contentId, VersionOptions.Latest);
-            
-            if (contentItem.As<PostPart>() == null) {
-                if (contentItem.As<ThreadPart>() == null)
-                    return HttpNotFound();
-            }
+
+            bool isPost = contentItem.Has<PostPart>();
+            bool isThread = contentItem.Has<ThreadPart>();
+
+            if (!isPost && !isThread)
+                return HttpNotFound();
 
             var forumPart = HierarchyHelpers.GetForum(contentItem);
             var post = _orchardServices.ContentManager.New<PostPart>(forumPart.PostType);
             var threadPart = HierarchyHelpers.GetThreadPart(contentItem);
             post.ThreadPart = threadPart;
 
-            if (contentItem.As<PostPart>() == null) {
-                // Perform a check
-                if (_postService.GetPositional(threadPart, ThreadPostPositional.First) != null) {
-                    _orchardServices.Notifier.Error(T("You cannot attach two parent posts to a thread."));
-                    return Redirect(Url.ThreadView(threadPart));
-                }
+            if (isThread) {
+                // Attach to parent post and NOT to the thread
+                post.RepliedOn = contentItem.As<ThreadPart>().FirstPost.Id;
             }
             else {
                 post.RepliedOn = contentItem.As<PostPart>().Id;

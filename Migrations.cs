@@ -2,16 +2,9 @@
 using Orchard.ContentManagement.MetaData;
 using Orchard.Core.Contents.Extensions;
 using Orchard.Data.Migration;
-using Orchard.Localization;
 
 namespace NGM.Forum {
     public class Migrations : DataMigrationImpl {
-        public Migrations() {
-            T = NullLocalizer.Instance;
-        }
-
-        public Localizer T { get; set; }
-
         public int Create() {
             SchemaBuilder.CreateTable("ForumPartRecord",
                 table => table
@@ -43,15 +36,15 @@ namespace NGM.Forum {
 
             ContentDefinitionManager.AlterPartDefinition("ForumPart", builder => builder
                 .Attachable()
-                .WithDescription(T("Create your own Forum Type with a hieracrchy of different threads/posts").Text));
+                .WithDescription("Create your own Forum Type with a hierarchy of different threads/posts"));
 
             ContentDefinitionManager.AlterPartDefinition("ThreadPart", builder => builder
                 .Attachable()
-                .WithDescription(T("Create your own Thread Type, useful when wanting different types of threads for different forums").Text));
+                .WithDescription("Create your own Thread Type, useful when wanting different types of threads for different forums"));
 
             ContentDefinitionManager.AlterPartDefinition("PostPart", builder => builder
                 .Attachable()
-                .WithDescription(T("Create your own Post Type, useful when wanting different types of posts for different forums").Text));
+                .WithDescription("Create your own Post Type, useful when wanting different types of posts for different forums"));
 
             ContentDefinitionManager.AlterTypeDefinition("Forum", cfg => cfg
                 .WithPart("ForumPart")
@@ -95,15 +88,15 @@ namespace NGM.Forum {
         public int UpdateFrom2() {
             ContentDefinitionManager.AlterPartDefinition("ForumPart", builder => builder
                 .Attachable()
-                .WithDescription(T("Create your own Forum Type with a hieracrchy of different threads/posts").Text));
+                .WithDescription("Create your own Forum Type with a hierarchy of different threads/posts"));
 
             ContentDefinitionManager.AlterPartDefinition("ThreadPart", builder => builder
                 .Attachable()
-                .WithDescription(T("Create your own Thread Type, useful when wanting different types of threads for different forums").Text));
+                .WithDescription("Create your own Thread Type, useful when wanting different types of threads for different forums"));
 
             ContentDefinitionManager.AlterPartDefinition("PostPart", builder => builder
                 .Attachable()
-                .WithDescription(T("Create your own Post Type, useful when wanting different types of posts for different forums").Text));
+                .WithDescription("Create your own Post Type, useful when wanting different types of posts for different forums"));
 
 
             return 3;
