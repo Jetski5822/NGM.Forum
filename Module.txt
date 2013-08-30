@@ -2,7 +2,7 @@
 AntiForgery: enabled
 Author: Nicholas Mayne
 Website: https://github.com/Jetski5822/NGM.Forum
-Version: 1.0.0
+Version: 1.0.1
 OrchardVersion: 1.7.0
 Description: The Orchard Forums module introduces the ability to create a highly extensible set of Forums.
 Features:

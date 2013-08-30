@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Reflection;
 using System.Web.Mvc;
 using NGM.Forum.Models;
 using NGM.Forum.Extensions;
@@ -125,7 +126,7 @@ namespace NGM.Forum.Controllers {
         }
 
         [HttpPost, ActionName("Edit")]
-        [FormValueRequired("submit.Save")]
+        [InternalFormValueRequired("submit.Save")]
         public ActionResult EditPOST(int forumId) {
             var forum = _forumService.Get(forumId, VersionOptions.DraftRequired);
 
@@ -149,7 +150,7 @@ namespace NGM.Forum.Controllers {
         }
 
         [HttpPost, ActionName("Edit")]
-        [FormValueRequired("submit.Delete")]
+        [InternalFormValueRequired("submit.Delete")]
         public ActionResult EditDeletePOST(int forumId) {
             return Remove(forumId);
         }
@@ -218,6 +219,22 @@ namespace NGM.Forum.Controllers {
 
         void IUpdateModel.AddModelError(string key, LocalizedString errorMessage) {
             ModelState.AddModelError(key, errorMessage.ToString());
+        }
+    }
+
+    public class InternalFormValueRequiredAttribute : ActionMethodSelectorAttribute
+    {
+        private readonly string _submitButtonName;
+
+        public InternalFormValueRequiredAttribute(string submitButtonName)
+        {
+            _submitButtonName = submitButtonName;
+        }
+
+        public override bool IsValidForRequest(ControllerContext controllerContext, MethodInfo methodInfo)
+        {
+            var value = controllerContext.HttpContext.Request.Form[_submitButtonName];
+            return !string.IsNullOrEmpty(value);
         }
     }
 }
