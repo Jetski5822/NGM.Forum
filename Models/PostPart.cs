@@ -6,18 +6,18 @@ using Orchard.Data.Conventions;
 namespace NGM.Forum.Models {
     public class PostPart : ContentPart<PostPartRecord> {
         public int? RepliedOn {
-            get { return Record.RepliedOn; }
-            set { Record.RepliedOn = value; }
+            get { return Retrieve(x => x.RepliedOn); }
+            set { Store(x => x.RepliedOn, value); }
         }
 
         public string Text {
-            get { return Record.Text; }
-            set { Record.Text = value; }
+            get { return Retrieve(x => x.Text); }
+            set { Store(x => x.Text, value); }
         }
 
         public string Format {
-            get { return Record.Format; }
-            set { Record.Format = value; }
+            get { return Retrieve(x => x.Format); }
+            set { Store(x => x.Format, value); }
         }
 
         public ThreadPart ThreadPart {

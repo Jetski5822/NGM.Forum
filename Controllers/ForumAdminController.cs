@@ -6,10 +6,8 @@ using NGM.Forum.Extensions;
 using NGM.Forum.Services;
 using Orchard;
 using Orchard.ContentManagement;
-using Orchard.Core.Contents.Controllers;
 using Orchard.DisplayManagement;
 using Orchard.Localization;
-using Orchard.Mvc;
 using Orchard.Settings;
 using Orchard.UI.Admin;
 using Orchard.UI.Navigation;
@@ -61,11 +59,11 @@ namespace NGM.Forum.Controllers {
                 type = forumTypes.Single().Name;
             }
 
-            var forum = _orchardServices.ContentManager.New<ForumPart>(type);
+            var forum = _contentManager.New<ForumPart>(type);
             if (forum == null)
                 return HttpNotFound();
 
-            var model = _orchardServices.ContentManager.BuildEditor(forum);
+            var model = _contentManager.BuildEditor(forum);
             return View((object)model);
         }
 
@@ -96,17 +94,17 @@ namespace NGM.Forum.Controllers {
                 type = forumTypes.Single().Name;
             }
 
-            var forum = _orchardServices.ContentManager.New<ForumPart>(type);
+            var forum = _contentManager.New<ForumPart>(type);
 
-            _orchardServices.ContentManager.Create(forum, VersionOptions.Draft);
-            var model = _orchardServices.ContentManager.UpdateEditor(forum, this);
+            _contentManager.Create(forum, VersionOptions.Draft);
+            var model = _contentManager.UpdateEditor(forum, this);
 
             if (!ModelState.IsValid) {
                 _orchardServices.TransactionManager.Cancel();
                 return View((object)model);
             }
 
-            _orchardServices.ContentManager.Publish(forum.ContentItem);
+            _contentManager.Publish(forum.ContentItem);
 
             return Redirect(Url.ForumForAdmin(forum));
         }
@@ -120,7 +118,7 @@ namespace NGM.Forum.Controllers {
             if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, forum, T("Not allowed to edit forum")))
                 return new HttpUnauthorizedResult();
 
-            dynamic model = _orchardServices.ContentManager.BuildEditor(forum);
+            dynamic model = _contentManager.BuildEditor(forum);
             // Casting to avoid invalid (under medium trust) reflection over the protected View method and force a static invocation.
             return View((object)model);
         }
@@ -136,7 +134,7 @@ namespace NGM.Forum.Controllers {
             if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, forum, T("Not allowed to edit forum")))
                 return new HttpUnauthorizedResult();
 
-            dynamic model = _orchardServices.ContentManager.UpdateEditor(forum, this);
+            dynamic model = _contentManager.UpdateEditor(forum, this);
             if (!ModelState.IsValid) {
                 _orchardServices.TransactionManager.Cancel();
                 // Casting to avoid invalid (under medium trust) reflection over the protected View method and force a static invocation.
@@ -175,7 +173,7 @@ namespace NGM.Forum.Controllers {
             var list = _orchardServices.New.List();
             list.AddRange(_forumService.Get(VersionOptions.Latest)
                               .Select(b => {
-                                  var forum = _orchardServices.ContentManager.BuildDisplay(b, "SummaryAdmin");
+                                  var forum = _contentManager.BuildDisplay(b, "SummaryAdmin");
                                   forum.TotalPostCount = _threadService.Get(b, VersionOptions.Latest).Count();
                                   return forum;
                               }));
@@ -200,7 +198,7 @@ namespace NGM.Forum.Controllers {
             var threads = _threadService.Get(forum, pager.GetStartIndex(), pager.PageSize, VersionOptions.Latest).ToArray();
             var threadsShapes = threads.Select(bp => _contentManager.BuildDisplay(bp, "SummaryAdmin")).ToArray();
 
-            dynamic forumShape = _orchardServices.ContentManager.BuildDisplay(forum, "DetailAdmin");
+            dynamic forumShape = _contentManager.BuildDisplay(forum, "DetailAdmin");
 
             var list = Shape.List();
             list.AddRange(threadsShapes);
