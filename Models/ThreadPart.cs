@@ -25,18 +25,18 @@ namespace NGM.Forum.Models {
         }
 
         public int PostCount {
-            get { return Record.PostCount; }
-            set { Record.PostCount = value; }
+            get { return Retrieve(x => x.PostCount); }
+            set { Store(x => x.PostCount, value); }
         }
 
         public bool IsSticky {
-            get { return Record.IsSticky; }
-            set { Record.IsSticky = value; }
+            get { return Retrieve(x => x.IsSticky); }
+            set { Store(x => x.IsSticky, value); }
         }
 
         public DateTime? ClosedOnUtc {
-            get { return Record.ClosedOnUtc; }
-            set { Record.ClosedOnUtc = value; }
+            get { return Retrieve(x => x.ClosedOnUtc); }
+            set { Store(x => x.ClosedOnUtc, value); }
         }
 
         public IUser ClosedBy {
@@ -55,8 +55,8 @@ namespace NGM.Forum.Models {
         }
 
         public string ClosedDescription {
-            get { return Record.ClosedDescription; }
-            set { Record.ClosedDescription = value; }
+            get { return Retrieve(x => x.ClosedDescription); }
+            set { Store(x => x.ClosedDescription, value); }
         }
 
         public int ReplyCount {

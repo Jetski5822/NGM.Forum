@@ -13,28 +13,28 @@ namespace NGM.Forum.Models {
         }
 
         public string Description {
-            get { return Record.Description; }
-            set { Record.Description = value; }
+            get { return Retrieve(x => x.Description); }
+            set { Store(x => x.Description, value); }
         }
 
         public int ThreadCount {
-            get { return Record.ThreadCount; }
-            set { Record.ThreadCount = value; }
+            get { return Retrieve(x => x.ThreadCount); }
+            set { Store(x => x.ThreadCount, value); }
         }
 
         public int PostCount {
-            get { return Record.PostCount; }
-            set { Record.PostCount = value; }
+            get { return Retrieve(x => x.PostCount); }
+            set { Store(x => x.PostCount, value); }
         }
 
         public bool ThreadedPosts {
-            get { return Record.ThreadedPosts; }
-            set { Record.ThreadedPosts = value; }
+            get { return Retrieve(x => x.ThreadedPosts); }
+            set { Store(x => x.ThreadedPosts, value); }
         }
 
         public int Weight {
-            get { return Record.Weight; }
-            set { Record.Weight = value; }
+            get { return Retrieve(x => x.Weight); }
+            set { Store(x => x.Weight, value); }
         }
 
         public int ReplyCount {
