@@ -16,7 +16,7 @@ Advancing the forum functionality to include
   - antispam integration
   - datetime displays localized to the browser's time or the user's selected time zone
   - subscriptions to forum topics 
-    - including customizable template for subscription notifictions emails (are translatable)
+    - including customizable template for subscription notification emails (which are translatable to user's preferred language)
   - discussion list ( topics participated in )
   - management of the forums on the front-end instead of the dashboard (so users that are moderators do not need dashboard access)
 
