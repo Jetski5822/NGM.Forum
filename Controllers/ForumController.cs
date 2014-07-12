@@ -10,6 +10,8 @@ using Orchard.Mvc;
 using Orchard.Settings;
 using Orchard.Themes;
 using Orchard.UI.Navigation;
+using NGM.Forum.Models;
+using Orchard.Core.Common.Models;
 
 namespace NGM.Forum.Controllers {
     [Themed]
@@ -19,16 +21,21 @@ namespace NGM.Forum.Controllers {
         private readonly IForumService _forumService;
         private readonly IThreadService _threadService;
         private readonly ISiteService _siteService;
+        private readonly IThreadLastReadService _threadLastReadService;
 
         public ForumController(IOrchardServices orchardServices, 
             IForumService forumService,
             IThreadService threadService,
             ISiteService siteService,
-            IShapeFactory shapeFactory) {
+            IShapeFactory shapeFactory,
+            IThreadLastReadService threadLastReadService
+            
+         ) {
             _orchardServices = orchardServices;
             _forumService = forumService;
             _threadService = threadService;
             _siteService = siteService;
+            _threadLastReadService = threadLastReadService;
 
             Shape = shapeFactory;
             Logger = NullLogger.Instance;
@@ -39,6 +46,7 @@ namespace NGM.Forum.Controllers {
         protected ILogger Logger { get; set; }
         public Localizer T { get; set; }
 
+        /*
         public ActionResult List() {
             var forums = _forumService.Get().Select(fbc => _orchardServices.ContentManager.BuildDisplay(fbc, "Summary"));
 
@@ -50,8 +58,16 @@ namespace NGM.Forum.Controllers {
 
             return View((object)viewModel);
         }
+         * */
 
-        public ActionResult Item(int forumId, PagerParameters pagerParameters) {
+        /// <summary>
+        /// Gets a list of threads found in the specified forum
+        /// </summary>
+        /// <param name="forumId"></param>
+        /// <param name="pagerParameters"></param>
+        /// <returns></returns>
+        public ActionResult Item( int forumId, PagerParameters pagerParameters)
+        {
             var forumPart = _forumService.Get(forumId, VersionOptions.Published);
             if (forumPart == null)
                 return HttpNotFound();
@@ -61,9 +77,26 @@ namespace NGM.Forum.Controllers {
 
             Pager pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
             
-            var threads = _threadService
-                .Get(forumPart, pager.GetStartIndex(), pager.PageSize, VersionOptions.Published)
-                .Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Summary"));
+            var threadList = _threadService.Get(forumPart, pager.GetStartIndex(), pager.PageSize, VersionOptions.Published);
+
+            int? userId = null;
+            if (_orchardServices.WorkContext.CurrentUser != null)
+            {
+                userId = _orchardServices.WorkContext.CurrentUser.Id;
+            }
+            
+            //get the read state of each thread part to be displayed
+            if (userId != null)
+            {
+                var threadIds = threadList.Select(t => t.Id);
+                var threadReadRecords = _threadLastReadService.GetThreadsReadRecords(userId.Value, threadList.Select(t => t.Id).ToList()).ToDictionary( e=> e.Id );
+                foreach (var threadPart in threadList)
+                {
+                    threadPart.ReadState = _threadLastReadService.GetReadState(userId.Value, threadPart);
+                }
+            }
+
+            var threads = threadList.Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Summary"));
 
             dynamic forum = _orchardServices.ContentManager.BuildDisplay(forumPart);
 

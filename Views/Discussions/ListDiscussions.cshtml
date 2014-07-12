@@ -1,0 +1,32 @@
+@using NGM.Forum.Models
+@using NGM.Forum.Extensions
+@using Orchard.Utility.Extensions
+
+@{
+    Style.Require("Forum").AtHead();
+    Script.Require("UtcToLocal");
+}
+@{
+    IEnumerable<object> threads = Model.ContentItems;
+    ForumPart contentPart = Model.ContentPart;
+    Model.ContentItems.Classes.Add("content-items");
+    //var contentTypeClassName = ((string)contentPart.ContentItem.ContentType + "-threads").HtmlClassify();
+    String contentTypeClassName = "subscription-threads";
+    Model.ContentItems.Classes.Add(contentTypeClassName);
+}
+
+@Display( Model.ForumMenu)
+<div class='menu-clear'></div>
+<h2>@T("Discussions ")</h2>
+<h3>@T("Discussions started by you or that you have participated in:")</h3>
+
+
+@Display(Model.ContentItems)
+
+@if (threads == null || threads.Count() < 1) {
+    <p class="nocontentitems">@T("You have not started nor participated in any discussions.")</p>
+} else { 
+
+}
+
+

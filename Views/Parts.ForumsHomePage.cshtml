@@ -1,0 +1,12 @@
+﻿@using Orchard.ContentManagement;
+@model dynamic
+@{
+   var contentItem = Model.ContentItem;
+   //Model.ContentItems.Classes.Add("content-items");
+   //Model.ContentItems.Classes.Add("forum-root");
+}
+
+@foreach (var category in Model.Categories)
+{
+    @Display(category)
+}

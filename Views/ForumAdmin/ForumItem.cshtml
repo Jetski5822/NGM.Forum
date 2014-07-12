@@ -1,0 +1,18 @@
+@using NGM.Forum.Extensions;
+@using Orchard.Core.Contents.ViewModels;
+@using Orchard.Utility.Extensions;
+@{
+
+    Html.AddTitleParts(T("Manage Forum").ToString());    //TODO: this title is not showing.. hacked it manually below 
+    var forumPart = (NGM.Forum.Models.ForumPart)Model.ForumPart;
+    var categoryTitle = forumPart.ForumCategoryPart.Title;
+}
+    <h1>@T("Manage Forum")</h1>
+    <h3>Listing threads in the forum @Html.ItemDisplayLink( forumPart.ContentItem ) in the category 
+        <a href="@Url.CategoryForAdmin(forumPart.ForumCategoryPart)" title="@categoryTitle">@categoryTitle</a>
+    </h3>
+
+
+
+    @* Model is a Shape, calling Display() so that it is rendered using the most specific template for its Shape type *@
+    @Display(Model.ThreadList)

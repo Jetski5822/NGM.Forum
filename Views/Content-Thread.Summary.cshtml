@@ -1,36 +1,55 @@
 ﻿@using Orchard.Utility.Extensions;
+
+@{
+    Style.Require("Forum").AtHead();
+
+}
+
 @{
     if (Model.Title != null) {
         Layout.Title = Model.Title;
     }
 
     Model.Classes.Add("content-item");
-    Model.Attributes.Add("id", Model.ContentItem.Id.ToString());
-    Model.Attributes.Add("data-contentitem-id", Model.ContentItem.Id.ToString());
-
+    
     var contentTypeClassName = ((string)Model.ContentItem.ContentType).HtmlClassify();
     Model.Classes.Add(contentTypeClassName);
 
     var stickyClass = ((string)Model.StickyClass).HtmlClassify();
-    if (!string.IsNullOrWhiteSpace(stickyClass)) {
-        Model.Classes.Add(stickyClass);    
+    if (!string.IsNullOrWhiteSpace(stickyClass))
+    {
+        Model.Classes.Add(stickyClass);
     }
-
+    
+    if (Model.ContentItem.ThreadPart.FirstPost.IsInappropriate == true)
+    {
+        Model.Classes.Add("inappropriate-thread");
+    }    
+    
     var tag = Tag(Model, "article");
 }
-
 @tag.StartElement
     <header>
         @Display(Model.Header)
+
+        @if (Model.Description != null) {
+            <div class="thread-description">
+                @Display(Model.Description)
+            </div>
+        }
+        @if (Model.LastPost != null) {
+            <div class="thread-last-post-by">
+                @Display(Model.LastPost)
+            </div>
+        }
+
         @if (Model.Meta != null) {
             <div class="metadata">
                 @Display(Model.Meta)
             </div>
         }
     </header>
-    <div class="post-content">
-        @Display(Model.Content)
-    </div>
+    @Display(Model.Content)
     @if(Model.Footer != null) {
         <footer>
             @Display(Model.Footer)

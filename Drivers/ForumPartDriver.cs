@@ -6,21 +6,61 @@ using NGM.Forum.Settings;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Drivers;
 using Orchard.ContentManagement.Handlers;
+using NGM.Forum.Services;
+using Orchard.Core.Common.Models;
+using Orchard;
 
 namespace NGM.Forum.Drivers {
     [UsedImplicitly]
     public class ForumPartDriver : ContentPartDriver<ForumPart> {
+
+        protected readonly IForumCategoryService _forumCategoryService;
+        protected readonly IOrchardServices _orchardServices;
+        protected readonly IUserTimeZoneService _userTimeZoneService;
+        protected readonly IWorkContextAccessor _workContextAccessor;
+
+
         protected override string Prefix {
             get { return "ForumPart"; }
+        }
+        
+        public ForumPartDriver(
+            IForumCategoryService forumCategoryService,
+            IOrchardServices orchardServices,
+            IUserTimeZoneService userTimeZoneService,
+            IWorkContextAccessor workContextAccessor
+        ){
+            _forumCategoryService = forumCategoryService;
+            _userTimeZoneService = userTimeZoneService;
+            _workContextAccessor = workContextAccessor;
+            _orchardServices = orchardServices;
         }
 
         protected override DriverResult Display(ForumPart part, string displayType, dynamic shapeHelper) {
             List<DriverResult> results = new List<DriverResult>();
 
+            int? userId = null;
+            if (_orchardServices.WorkContext.CurrentUser != null)
+            {
+                userId = _orchardServices.WorkContext.CurrentUser.Id;
+            }
+
+            _workContextAccessor.GetContext().CurrentTimeZone = _userTimeZoneService.GetUserTimeZoneInfo(userId);
+
             if (displayType.Equals("SummaryAdmin", StringComparison.OrdinalIgnoreCase)) {
                 results.Add(ContentShape("Parts_Forums_Forum_SummaryAdmin", () => shapeHelper.Parts_Forums_Forum_SummaryAdmin()));
             }
-
+            if (displayType.Equals("Detail"))
+            {
+                //TODO: is this optimal or high overhead?
+                var rootPart = part.ForumCategoryPart.ForumsHomePagePart;
+                var categoryPart = part.ForumCategoryPart;
+                results.Add(ContentShape("Parts_BreadCrumb",
+                    () => shapeHelper.Parts_BreadCrumb(ForumsHomePagePart: rootPart, ForumCategoryPart: categoryPart, ForumPart:null, ThreadPart: null)
+                ));
+                results.Add(ContentShape("Parts_ForumMenu", () => shapeHelper.Parts_ForumMenu()));
+            }
+            
             results.AddRange(new [] { 
                 ContentShape("Parts_Forums_Forum_Manage",
                     () => shapeHelper.Parts_Forums_Forum_Manage()),
@@ -58,7 +98,11 @@ namespace NGM.Forum.Drivers {
         }
 
         protected override DriverResult Editor(ForumPart forumPart, IUpdateModel updater, dynamic shapeHelper) {
-            updater.TryUpdateModel(forumPart, Prefix, null, null);
+            if( updater.TryUpdateModel(forumPart, Prefix, null, null)) {
+                var parentCategory = _forumCategoryService.GetParentCategory(forumPart);
+                forumPart.As<CommonPart>().Container = parentCategory.ContentItem;
+            }
+
             return Editor(forumPart, shapeHelper);
         }
 

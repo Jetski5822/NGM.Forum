@@ -1,0 +1,17 @@
+﻿@using NGM.Forum.Models;
+
+@if ( Model.ReadState == ThreadPart.ReadStateEnum.Unread ) {
+    <div class="thread-readstate unread"></div>
+}
+else if (Model.ReadState == ThreadPart.ReadStateEnum.ReadNoNewPosts)
+{
+    <div class="thread-readstate read"></div>
+}
+else if (Model.ReadState == ThreadPart.ReadStateEnum.NewPosts)
+{
+    <div class="thread-readstate newposts"></div>
+}
+else
+{
+    <div class="thread-readstate">Error: Unknown Read State Found</div>
+}

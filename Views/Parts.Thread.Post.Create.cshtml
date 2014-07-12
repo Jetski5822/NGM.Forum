@@ -1,16 +1,46 @@
 ﻿@using System.Web.Mvc.Html
 @using Orchard.Mvc.Html
+@{
+    
+    Script.Require("jQueryEffects_Slide").AtHead();
+}
 
-<div id="quick-reply">
-    <h3>@T("Quick Reply")</h3>
-    
-    
+@*only shown if javascript enabled *@
+<div class="quick-reply" style="display:none;">
+    <div id="btn-add-quick-reply" class="btn btn-add-reply">@T("Add a Reply")</div>
 
     @using (Html.BeginFormAntiForgeryPost(Url.Action("Create", "Post"))) {
         @Html.ValidationSummary()
 
-        @Display(Model.ContentEditor)
-
+        <div id="content-editor">
+            @Display(Model.ContentEditor)
+            <ul class="post-body-editor-buttons">
+                <li><button type="submit">Submit</button></li>
+                <li><button id="btn-cancel" type="button">Cancel</button></li>
+            </ul>
+        </div>
         <input type="hidden" id="contentid" name="contentid" value="@Model.ContentId"/>
     }
 </div>
+
+@using (Script.Foot())
+{
+    <script type="text/javascript">
+        //<![CDATA[
+        $(document).ready(function () {
+            $(".quick-reply").show(); @*show if javascript enabled*@
+            $("#btn-add-quick-reply").click(function () {
+                $('#content-editor').slideDown('fast');
+            });
+            $('#content-editor').hide();
+
+            $("#btn-cancel").click(function () {
+                $('#content-editor').slideUp('fast');
+            });
+
+        });
+    //]]>
+
+    </script>
+
+}

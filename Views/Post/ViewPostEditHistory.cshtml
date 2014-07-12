@@ -1,0 +1,27 @@
+@using System.Web.Mvc.Html
+@using Orchard.Mvc.Html
+
+@model NGM.Forum.ViewModels.ViewPostEditHistoryViewModel
+
+@{
+    Style.Include("ngm-forum-common-admin").AtHead();
+    Script.Require("UtcToLocal");
+}
+
+<h2>Post Edit History</h2>
+
+@foreach( var edit in Model.EditHistory ) {
+    <div class="post-edit-history-entry">
+        <p class="post-edit-text"> @Html.Raw( edit.Text )</p>
+        @if ( WorkContext.CurrentTimeZone == TimeZoneInfo.Utc){
+            <p class="post-edit-date">Edited Date: <span class="utc-date-time">@edit.EditDate.Value.ToString("yyyy-MM-ddTHH:mm:ss Z")</span></p>
+            
+        } else {
+            <p class="post-edit-date">Edited Date: @edit.EditDate</p>
+        }
+        <p class="post-edit-user">Edited By: @edit.EditedBy</p>
+    </div>
+}
+
+    
+<a href="@Model.ReturnUrl"><< @T("Return")</a>

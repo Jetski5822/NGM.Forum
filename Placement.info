@@ -1,21 +1,52 @@
-﻿<Placement>
+<Placement>
   <!-- edit "shapes" -->
   <Place Parts_Forums_Forum_Fields="Content:2"/>
   <Place Parts_Threads_Thread_Fields="Content:2"/>
-  
+  <Place Parts_ForumCategoryPart_Edit="Content:2"/>
+  <Place Parts_ForumCategoryPart_SummaryAdmin="Content:2"/>
+  <Place Parts_Forums_SiteSettings="Content:10"/>
+  <Place Parts_ForumCategory="Content:2" />
   <Place Forum_DeleteButton="Sidebar:25" />
-
   <Place Parts_Threads_Post_Body_Edit="Content:2"/>
+  <Place Parts_ForumsHomePage_Menu_SummaryAdmin="Actions:10"/>
+  <!-- NOT USED?? -->
+  <Place Parts_ForumCategoryPart="Content:before"/>
+<Place ForumPartSettings="Content:0"/>
+  <Place Parts_ContentPermissions_Edit="-" />
+  <Match ContentType="ForumCategory">
+    <Match DisplayType="Detail">
+      <Place
+        Parts_Common_Metadata="-"
+        Parts_Title="Header:1"
+        Parts_ForumCategory="Content:1"
+        />
+    </Match>
+      <Match DisplayType="SummaryAdmin">
+      <Place
+        Parts_ForumCategory_Menu_SummaryAdmin="Actions:4"
+        Parts_ForumCategoryPart_SummaryAdmin="Content:1"
+        />
+    </Match>
+  </Match>>
+  
+  <Match ContentType="ForumsHomePage">
+    <Match DisplayType="Detail">
+      <Place
+        Parts_ForumMenu="Header:1"
+        Parts_Title="Header:2"
+        Parts_Common_Metadata="-"
+        Parts_Common_Body="Header:3"
+        Parts_ForumsHomePage="Content:1"/>
+    </Match>
+  </Match>
   
   <Match DisplayType="Detail">
     <Place Parts_Threads_Post_Body_Summary="-"
            Parts_Threads_Post_Body="Content:5"/>
   </Match>
-
   <Match DisplayType="Summary">
     <Place Parts_Threads_Post_Body_Summary="Content:5"/>
   </Match>
-
   <Match DisplayType="SummaryAdmin">
         <Place Parts_Forums_Forum_SummaryAdmin="Actions:10"
                Parts_Forums_Forum_Description="Content:before"
@@ -26,12 +57,22 @@
                Parts_Forums_Forum_Manage="Actions"
                Parts_Forums_Forum_Description="Actions:after"/>
     </Match>
+  
+  <Match ContentType="ForumsHomePage">
+    <Match DisplayType="Detail">
+      <Place Parts_Forum_Search="Header:1" />
+    </Match>
+  </Match>
 
   <Match ContentType="Forum">
     <Match DisplayType="Detail">
-      <Place Parts_Common_Metadata="-"
+      <Place Parts_Forum_Search="Header:1"
+             Parts_ForumMenu="Header:1"
+             Parts_BreadCrumb="Header:2"             
+             Parts_Common_Metadata="-"
              Parts_Forums_Thread_List="Content"
-             Parts_Forums_Forum_Description="Meta:1"
+             Parts_Title="ForumText:1"
+             Parts_Forums_Forum_Description="ForumText:2"
              Parts_Forum_Manage="Actions:1"/>
     </Match>
     <Match DisplayType="DetailAdmin">
@@ -39,27 +80,48 @@
              Parts_Forums_Forum_Manage="Actions"
              Parts_Forums_Forum_Description="Actions:after"/>
     </Match>
-    <Match DisplayType="Summary">
-      <Place Parts_Forums_Forum_Description="Content:before"
-             Parts_Forums_Forum_ForumReplyCount="Meta:3"
-             Parts_Forums_Forum_ForumThreadCount="Meta:4"/>
-    </Match>
     <Match DisplayType="SummaryAdmin">
       <Place Parts_Forums_Forum_SummaryAdmin="Actions:10"
              Parts_Forums_Forum_Description="Content:before"/>
+    </Match>
+    <Match DisplayType="Summary">
+      <Place Parts_Forums_Forum_Description="Description:1"
+             Parts_Forums_Forum_ForumReplyCount="Meta:3"
+             Parts_Forums_Forum_ForumThreadCount="Meta:4"
+             Parts_Common_Metadata_Summary="Meta:5"/>
     </Match>
   </Match>
   
   <Match ContentType="Thread">
     <Match DisplayType="Detail">
-      <Place Parts_Common_Metadata="-"
-             Parts_Thread_Manage="Actions:1"
-             Parts_Threads_Thread_Closed="Meta:1"/>
+      <Place Parts_Forum_Search="Header:1"
+             Parts_ForumMenu="Header:1"
+             Parts_BreadCrumb="Header:2"
+             Parts_Threads_Subscription="Header:6"             
+             Parts_Threads_Thread_Closed="Meta:1"             
+             Parts_Thread_Manage="Actions:1"             
+             Parts_Thread_SubscribeButton="Actions:2"             
+             Parts_Common_Metadata="-"
+             Parts_Title="Header:3"
+
+      />
+    </Match>
+    <Match DisplayType="Subscription">
+      <Place Parts_Title_Summary="Header:5"
+             Forum_Metadata_First="Description:1"             
+             Forum_Metadata_Latest="Meta:1"
+             Parts_Threads_Thread_ThreadReplyCount="Meta:0"
+             Parts_Commmon_Metadata_Summary="Meta:3"
+             Parts_Threads_Subscription="Meta:4"
+    />
     </Match>
     <Match DisplayType="Summary">
-      <Place Parts_Threads_Thread_ThreadReplyCount="Meta:3"
-             Forum_Metadata_First="Content:after"
-             Forum_Metadata_Latest="Content:after"/>
+      <Place Parts_Threads_Thread_ReadState="Header:before"
+             Forum_Metadata_First="Description:1"             
+             Forum_Metadata_Latest="Meta:1"
+             Parts_Threads_Thread_ThreadReplyCount="Meta:0"
+             Parts_Commmon_Metadata_Summary="Meta:3"
+      />
     </Match>
     <Match DisplayType="SummaryAdmin">
       <Place Parts_Threads_Thread_SummaryAdmin="Actions:10"
@@ -68,13 +130,25 @@
   </Match>
   
   <Match ContentType="Post">
+    
     <Match DisplayType="Detail">
-      <Place Parts_Post_Manage="Actions:1"/>
+      <Place
+            Parts_UserPhotosSmallImagePart ="User:1"
+            Parts_Post_Manage="Actions:1"
+            Parts_Thread_Post_LastEdited="Footer:before"
+            Parts_Thread_Post_ViewEditHistory="Footer:before"
+            Parts_Thread_Post_ReportPost="Footer:1"/>
     </Match>
-
+    <Match DisplayType="Editor">
+      <Place
+        Post_Body_Editor="Content:1" />
+    </Match>
     <Match DisplayType="SummaryAdmin">
       <Place Parts_Thread_Post_Metadata_SummaryAdmin="Meta:1.2"/>
     </Match>
+  
   </Match>
   
+
+    <Place Parts_ForumSearchPart="Content:before"/>
 </Placement>

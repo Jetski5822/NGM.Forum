@@ -47,6 +47,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -64,13 +76,63 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdminMenu.cs" />
+    <Compile Include="Controllers\ForumSearchController.cs" />
+    <Compile Include="Controllers\SubscriptionEmailTemplateAdminController.cs" />
+    <Compile Include="Drivers\ForumsSettingsPartDriver.cs" />
+    <Compile Include="Extensions\HTMLHelperExtensions.cs" />
+    <Compile Include="Handlers\ForumsSettingsPartHandler.cs" />
+    <Compile Include="Models\ForumSearchPart.cs" />
+    <Compile Include="Models\SubscriptionEmailTemplateTranslation.cs" />
+    <Compile Include="Models\SubscriptionEmailTemplateRecord.cs" />
+    <Compile Include="Models\ForumsSettingsPartRecord.cs" />
+    <Compile Include="Models\PostEditHistoryRecord.cs" />
+    <Compile Include="Services\CurrentContentAccessor.cs" />
+    <Compile Include="Services\ForumSearchService.cs" />
+    <Compile Include="Services\UserPreferredCultureService.cs" />
+    <Compile Include="Services\IUserPreferredCultureService.cs" />
+    <Compile Include="Services\SubscriptionEmailTemplateService.cs" />
+    <Compile Include="Services\CountersService.cs" />
+    <Compile Include="Services\IUserTimeZoneService.cs" />
+    <Compile Include="Services\PostEditHistoryService.cs" />
+    <Compile Include="Services\UserTimeZoneService.cs" />
+    <Compile Include="ViewModels\MarkInappropriateViewModel.cs" />
+    <Compile Include="ViewModels\PostEditHistoryEntry.cs" />
+    <Compile Include="ViewModels\RemoveInappropriateFlagViewModel.cs" />
+    <Compile Include="Controllers\ReportPostAdminController.cs" />
+    <Compile Include="Controllers\ReportPostController.cs" />
+    <Compile Include="Controllers\ForumsHomePageController.cs" />
+    <Compile Include="Controllers\DiscussionsController.cs" />
+    <Compile Include="Controllers\SubscriptionController.cs" />
     <Compile Include="Controllers\ThreadAdminController.cs" />
+    <Compile Include="Drivers\ForumsHomePagePartDriver.cs" />
+    <Compile Include="Handlers\ForumsHomePagePartHandler.cs" />
     <Compile Include="Helpers\HierarchyHelpers.cs" />
+    <Compile Include="HTMLSanitizer\HTMLSanitizer.cs" />
+    <Compile Include="Models\ReportedPostRecord.cs" />
+    <Compile Include="Models\ForumsHomePagePart.cs" />
+    <Compile Include="Models\ThreadLastReadRecord.cs" />
+    <Compile Include="Models\ThreadSubscriptionRecord.cs" />
+    <Compile Include="Services\ReportPostService.cs" />
+    <Compile Include="Services\ForumRootService.cs" />
+    <Compile Include="Services\ForumCategoryService.cs" />
+    <Compile Include="Services\ThreadLastReadService.cs" />
+    <Compile Include="Services\SubscriptionService.cs" />
     <Compile Include="Settings\ForumSettings.cs" />
     <Compile Include="Settings\PostSettings.cs" />
     <Compile Include="Shapes.cs" />
+    <Compile Include="Tokens\PostTokens.cs" />
+    <Compile Include="ViewModels\ResolvePostReportViewModel.cs" />
+    <Compile Include="ViewModels\ForumEntryInfo.cs" />
+    <Compile Include="ViewModels\ForumCategoryViewModel.cs" />
+    <Compile Include="ViewModels\ForumEntry.cs" />
     <Compile Include="ViewModels\PostBodyEditorViewModel.cs" />
+    <Compile Include="ViewModels\ReportAbuseConfirmationViewModel.cs" />
+    <Compile Include="ViewModels\ReportedPostEntry.cs" />
+    <Compile Include="ViewModels\ReportPostSearchViewModel.cs" />
+    <Compile Include="ViewModels\ReportPostRecordViewModel.cs" />
+    <Compile Include="ViewModels\ForumsSearchViewModel.cs" />
     <Compile Include="ViewModels\ThreadCloseAdminViewModel.cs" />
+    <Compile Include="ViewModels\ThreadCreateViewModel.cs" />
     <Compile Include="ViewModels\ThreadMoveAdminViewModel.cs" />
     <Compile Include="Extensions\DynamicZoneExtensions.cs" />
     <Compile Include="Controllers\ForumAdminController.cs" />
@@ -97,7 +159,14 @@
     <Compile Include="Permissions.cs" />
     <Compile Include="Services\PostService.cs" />
     <Compile Include="Services\ThreadService.cs" />
+    <Compile Include="Handlers\ForumCategoryPartHandler.cs" />
+    <Compile Include="Drivers\ForumCategoryPartDriver.cs" />
+    <Compile Include="Models\ForumCategoryPart.cs" />
+    <Compile Include="Models\ForumCategoryPartRecord.cs" />
     <Compile Include="ViewModels\ThreadPager.cs" />
+    <Compile Include="Handlers\ForumSearchPartHandler.cs" />
+    <Compile Include="Drivers\ForumSearchPartDriver.cs" />
+    <Compile Include="ViewModels\ViewEditHistoryViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Admin\Images\approved.gif" />
@@ -144,14 +213,96 @@
     <Content Include="Content\Images\VoteDown.jpg" />
     <Content Include="Content\Images\wrench-16x16.gif" />
     <Content Include="Module.txt" />
+    <Content Include="Scripts\momentjs\moment-with-langs.js" />
+    <Content Include="Scripts\momentjs\moment-with-langs.min.js" />
+    <Content Include="Scripts\momentjs\moment.min.js" />
+    <Content Include="Scripts\tinymce\changelog.txt" />
+    <Content Include="Scripts\tinymce\js\tinymce\jquery.tinymce.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\license.txt" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\advlist\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\anchor\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\autolink\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\autoresize\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\autosave\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\bbcode\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\charmap\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\code\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\contextmenu\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\directionality\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\emoticons\img\smiley-cool.gif" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\emoticons\img\smiley-cry.gif" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\emoticons\img\smiley-embarassed.gif" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\emoticons\img\smiley-foot-in-mouth.gif" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\emoticons\img\smiley-frown.gif" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\emoticons\img\smiley-innocent.gif" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\emoticons\img\smiley-kiss.gif" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\emoticons\img\smiley-laughing.gif" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\emoticons\img\smiley-money-mouth.gif" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\emoticons\img\smiley-sealed.gif" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\emoticons\img\smiley-smile.gif" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\emoticons\img\smiley-surprised.gif" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\emoticons\img\smiley-tongue-out.gif" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\emoticons\img\smiley-undecided.gif" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\emoticons\img\smiley-wink.gif" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\emoticons\img\smiley-yell.gif" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\emoticons\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\example\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\example_dependency\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\fullpage\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\fullscreen\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\hr\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\image\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\importcss\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\insertdatetime\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\layer\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\legacyoutput\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\link\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\lists\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\media\moxieplayer.swf" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\media\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\nonbreaking\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\noneditable\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\pagebreak\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\paste\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\preview\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\print\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\save\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\searchreplace\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\spellchecker\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\tabfocus\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\table\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\template\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\textcolor\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\visualblocks\css\visualblocks.css" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\visualblocks\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\visualchars\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\plugins\wordcount\plugin.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\skins\lightgray\content.inline.min.css" />
+    <Content Include="Scripts\tinymce\js\tinymce\skins\lightgray\content.min.css" />
+    <Content Include="Scripts\tinymce\js\tinymce\skins\lightgray\fonts\tinymce-small.svg" />
+    <Content Include="Scripts\tinymce\js\tinymce\skins\lightgray\fonts\tinymce.svg" />
+    <Content Include="Scripts\tinymce\js\tinymce\skins\lightgray\img\anchor.gif" />
+    <Content Include="Scripts\tinymce\js\tinymce\skins\lightgray\img\loader.gif" />
+    <Content Include="Scripts\tinymce\js\tinymce\skins\lightgray\img\object.gif" />
+    <Content Include="Scripts\tinymce\js\tinymce\skins\lightgray\img\trans.gif" />
+    <Content Include="Scripts\tinymce\js\tinymce\skins\lightgray\skin.ie7.min.css" />
+    <Content Include="Scripts\tinymce\js\tinymce\skins\lightgray\skin.min.css" />
+    <Content Include="Scripts\tinymce\js\tinymce\themes\modern\theme.min.js" />
+    <Content Include="Scripts\tinymce\js\tinymce\tinymce.min.js" />
+    <Content Include="Scripts\tinymce\LICENSE.TXT" />
+    <Content Include="Scripts\UtcToLocal.js" />
+    <Content Include="Styles\img\sticky.gif" />
+    <Content Include="Styles\ngm-forum-common-admin.css" />
+    <Content Include="Styles\ngm-forum.css" />
     <Content Include="Styles\menu.forum-admin.css" />
     <Content Include="Styles\ngm-forum-admin.css" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Styles\PagedList.Mvc.4.5.0.0\Content\Content\PagedList.css" />
     <Content Include="Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\ForumAdmin\Create.cshtml" />
+    <Content Include="Views\ForumAdmin\CreateForum.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Placement.info">
@@ -162,7 +313,7 @@
     <Content Include="Views\Thread\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Forum\List.cshtml" />
+    <Content Include="Views\Forum\List_this_can_be_Deleted.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Parts.Forums.Thread.ListAdmin.cshtml" />
@@ -171,7 +322,7 @@
     <Content Include="Views\Parts.Forums.Thread.List.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\ForumAdmin\List.cshtml" />
+    <Content Include="Views\ForumAdmin\ListForums.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Post\Create.cshtml" />
@@ -191,9 +342,33 @@
       <Project>{9916839C-39FC-4CEB-A5AF-89CA7E87119F}</Project>
       <Name>Orchard.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Orchard.Alias\Orchard.Alias.csproj">
+      <Project>{475b6c45-b27c-438b-8966-908b9d6d1077}</Project>
+      <Name>Orchard.Alias</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Orchard.Autoroute\Orchard.Autoroute.csproj">
       <Project>{66FCCD76-2761-47E3-8D11-B45D0001DDAA}</Project>
       <Name>Orchard.Autoroute</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Orchard.Email\Orchard.Email.csproj">
+      <Project>{05660f47-d649-48bd-9ded-df4e01e7cff9}</Project>
+      <Name>Orchard.Email</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Orchard.Indexing\Orchard.Indexing.csproj">
+      <Project>{ea2b9121-ef54-40a6-a53e-6593c86ee696}</Project>
+      <Name>Orchard.Indexing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Orchard.Search\Orchard.Search.csproj">
+      <Project>{4be4eb01-ac56-4048-924e-2ca77f509aba}</Project>
+      <Name>Orchard.Search</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Orchard.Tokens\Orchard.Tokens.csproj">
+      <Project>{6f759635-13d7-4e94-bcc9-80445d63f117}</Project>
+      <Name>Orchard.Tokens</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Orchard.Users\Orchard.Users.csproj">
+      <Project>{79aed36e-abd0-4747-93d3-8722b042454b}</Project>
+      <Name>Orchard.Users</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -207,7 +382,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\ForumAdmin\Edit.cshtml" />
+    <Content Include="Views\ForumAdmin\EditForum.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\ThreadAdmin\Item.cshtml" />
@@ -264,7 +439,7 @@
     <Content Include="Views\Parts.Thread.Manage.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\ForumAdmin\Item.cshtml" />
+    <Content Include="Views\ForumAdmin\ForumItem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Content-Forum.DetailAdmin.cshtml" />
@@ -337,6 +512,194 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\ForumAdmin\SelectType.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Content-Forum.Summary.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Title.Summary-Thread.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Title.Summary-Forum.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Threads.Subscription.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Subscription\ViewSubscriptions.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Thread.Subscribe.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Thread.SubscribeButton.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Content-Thread.Subscription.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Title.Subscription-Thread.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Thread.Subscription.List.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Common.Metadata.Summary.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Threads.Thread.ReadState.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NotesAndDocs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Discussions\ListDiscussions.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Post\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Thread.Post.LastEdited.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ForumAdmin\ListForumCategories.cshtml" />
+    <Content Include="Views\EditorTemplates\Parts.ForumCategoryPart.Edit.cshtml" />
+    <Content Include="Views\Parts.ForumCategory.cshtml" />
+    <Content Include="Views\Parts.ForumCategory.RelatedForums.SummaryAdmin.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ForumAdmin\CreateForumCategory.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ForumAdmin\EditForumsHomePage.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.ForumsHomePage.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Content-ForumsHomePage.Detail.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\EditorTemplates\Parts.ForumsHomePage.Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Content-ForumCategory.Detail.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ForumAdmin\ListForumsHomePages.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ForumAdmin\CreateForumsHomePage.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ForumAdmin\EditForumCategory.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ForumAdmin\ForumCategoryItem.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ForumAdmin\ForumsHomePageItem.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.ForumsHomePage.Menu.SummaryAdmin.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.ForumCategory.Menu.SummaryAdmin.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts_BreadCrumb.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.ForumMenu.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Thread.Post.ReportPost.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ReportPost\ReportInappropriatePost.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Styles\PagedList.Mvc.4.5.0.0\PagedList.Mvc.4.5.0.0.nupkg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ReportPostAdmin\ListPostReports.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ReportPostAdmin\ReportAbuse.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\tinymce\js\tinymce\langs\readme.md" />
+    <Content Include="Scripts\tinymce\js\tinymce\skins\lightgray\fonts\readme.md" />
+    <Content Include="Scripts\tinymce\js\tinymce\skins\lightgray\fonts\tinymce-small.eot" />
+    <Content Include="Scripts\tinymce\js\tinymce\skins\lightgray\fonts\tinymce-small.ttf" />
+    <Content Include="Scripts\tinymce\js\tinymce\skins\lightgray\fonts\tinymce-small.woff" />
+    <Content Include="Scripts\tinymce\js\tinymce\skins\lightgray\fonts\tinymce.eot" />
+    <Content Include="Scripts\tinymce\js\tinymce\skins\lightgray\fonts\tinymce.ttf" />
+    <Content Include="Scripts\tinymce\js\tinymce\skins\lightgray\fonts\tinymce.woff" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ReportPostAdmin\ResolveReport.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ReportPostAdmin\RemoveInappropriate.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ReportPostAdmin\MarkInappropriate.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Thread.ReportPost.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Thread.Post.ViewEditHistory.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Post\ViewPostEditHistory.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Content.Edit-Thread.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Thread\Create_FrontEndEdit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\EditorTemplates\Parts.Forums.SiteSettings.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Thread\Move.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Thread\Close.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\SubscriptionEmailTemplateAdmin\EditSubscriptionEmailTemplate.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Content-SubscriptionNoticeEmailTemplate.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Post.Body.Editor-html.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts\ForumSearchPart.cshtml" />
+    <Content Include="Views\EditorTemplates\Parts\ForumSearchPart.cshtml" />
+    <Content Include="Views\ReportPost\InappropriatePostReportedSuccessfully.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts_ForumSearchPart.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Forum.Search.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ForumSearch\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Parts.Threads.Post.Body.Editor.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

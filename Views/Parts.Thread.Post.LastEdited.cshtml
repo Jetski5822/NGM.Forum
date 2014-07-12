@@ -1,0 +1,18 @@
+﻿@using Html.Helpers;
+
+@if (Model.LastEdited!=null) {
+    var lastEdited = (DateTime)Model.LastEdited;
+    // a hack-around to be able to identify UTC datetimes since the orchard output date has no timezone indicator (like a Z for UTC)
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+    <p>@T("Last edited on: ") 
+        @if (WorkContext.CurrentTimeZone == TimeZoneInfo.Utc)
+        {
+            <span class="utc-date-time">@lastEdited.ToString("yyyy-MM-ddTHH:mm:ss Z")</span>            
+        }
+        else
+        {
+            @Display.DateTime(DateTimeUtc:lastEdited)
+        }
+
+    </p>
+}

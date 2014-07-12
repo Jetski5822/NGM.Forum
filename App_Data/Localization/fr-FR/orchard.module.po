@@ -214,7 +214,7 @@ msgstr "Actions :"
 #: ~/Modules/NGM.Forum/Views/ThreadAdmin/List.cshtml
 #| msgid "Choose action..."
 msgid "Choose action..."
-msgstr "Choix d'une action..."
+mgstr "Choix d'une action..."
 
 #: ~/Modules/NGM.Forum/Views/ThreadAdmin/List.cshtml
 #| msgid "Delete"
@@ -230,3 +230,33 @@ msgstr "Appliquer"
 #| msgid "There are no forums for you to see. Want to <a href="{0}">add one</a>?"
 msgid "There are no forums for you to see. Want to <a href="{0}">add one</a>?"
 msgstr "Il n'existe aucun forum à afficher. Souhaitez-vous <a href="{0}">en créer un</a> ?
+
+#: NGM.Forum.SubscriptionEmailTemplate
+#| msgid "A new post was made to a forum topic you subscribed to at [SiteName]"
+msgid "A new post was made to a forum topic you subscribed to at [SiteName]"
+msgstr "Un nouveau message a été posté sur une discussion à laquelle vous êtes abonné à [SiteName]"
+
+#: NGM.Forum.SubscriptionEmailTemplate
+#| msgid "You are receiving this email because you subscribed to receive new post notifications for the thread"
+msgid "You are receiving this email because you subscribed to receive new post notifications for the thread"
+msgstr "Vous avez reçu ce message car vous avez choisi de recevoir une notification à chaque nouveau message dans cette discussion."
+9
+#: NGM.Forum.SubscriptionEmailTemplate
+#| msgid "The content of the new post is as follows:"
+msgid "The content of the new post is as follows:"
+msgstr "Le contenu de ce nouveau message est le suivant:"
+
+#: NGM.Forum.SubscriptionEmailTemplate
+#| msgid "Click here to view or reply to this post on the site."
+msgid "Click here to view this post on the site or to reply."
+msgstr "Cliquez ici pour voir ou répondre à ce message sur le site"
+
+#: NGM.Forum.SubscriptionEmailTemplate
+#| msgid "To view this post on the site or to respond go to the link"
+msgid "To view this post on the site or to respond go to the link"
+msgstr "french tranlation of 'to view this post on the site or to respond go to the link"
+
+#: NGM.Forum.SubscriptionEmailTemplate
+#| msgid "[Sorry this post cannot be displayed in the email because the display type is incompatible with your email client.]"
+msgid "[Sorry this post cannot be displayed in the email because the display type is incompatible with your email client.]"
+msgstr "[Désolé, ce message ne peut être affiché dans l'email car son type d'affichage est incompatible.]"

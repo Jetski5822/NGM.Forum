@@ -1,0 +1,25 @@
+﻿@using Html.Helpers;
+@using NGM.Forum.Extensions
+@using NGM.Forum;
+@using NGM.Forum.Models;
+@{
+    
+    int postId = Model.ContentItem.Id;
+    PostPart postPart = Model.ContentItem.PostPart;
+}
+
+@* Only when the user is a moderator or administrator will there be inappropriate posts included in the list so don't need to check permissions at this level *@
+@if (postPart.IsInappropriate)
+{
+    <a class="report-post-link" href="@Url.PostMarkInappropriate(postPart )">@T("Unmark as Inappropriate")</a>
+} else {
+    
+    if (Authorizer.Authorize(Permissions.ManageForums, Model.ContentItem)) {
+        @*if the user is a mod or admin then allow them to report inappropriate links *@
+                    
+        <a class="report-post-link" href="@Url.PostMarkInappropriate(postPart)">@T("Mark as Inappropriate")</a>
+    } else {
+        @*if the user is not a mod or admin then allow them to report inappropriate links *@
+        <a class="report-post-link"  href="@Url.ForumReportPost( postId )">@T("Report as Inappropriate")</a>
+    }
+}

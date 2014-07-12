@@ -1,0 +1,217 @@
+@using PagedList.Mvc;
+@using NGM.Forum.Models;
+@using System;
+@using System.Globalization;
+@model NGM.Forum.ViewModels.ReportPostSearchViewModel
+
+@{
+    Script.Require("jQuery").AtHead();
+    Script.Require("jQueryUI").AtHead();
+    Script.Require("jQueryUI_DatePicker").AtHead();
+    Style.Require("jQueryUI_DatePicker").AtHead();
+    Style.Include("ngm-forum-common-admin").AtHead();
+}
+
+@{
+    var searchResults = Model.SearchResults;   
+}
+
+<h2>@T("Posts Reported as Inappropriate")</h2>
+
+@using (Html.BeginForm("ListPostReports", "ReportPostAdmin", FormMethod.Get))
+{
+    @Html.ValidationSummary(false)
+    <fieldset>
+        <h3>Filter Reports</h3>
+ <ul id="filter-bar">
+     <li>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.PostId)
+        </div>
+        <div class="editor-field" >
+            <input class="text-box single-line" id="PostId" name="PostId" type="number" style="width:75px">
+            @Html.ValidationMessageFor(model => model.PostId)
+        </div>
+    </li>
+     <li>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.StartDate)
+        </div>
+        <div class="editor-field">
+            <input class="text-box single-line" id="StartDate" name="StartDate" type="datetime"  style="width:80px">            
+            @Html.ValidationMessageFor(model => model.StartDate)
+        </div>
+    </li>
+     <li>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.EndDate)
+        </div>
+        <div class="editor-field">
+            <input class="text-box single-line" id="EndDate" name="EndDate" type="datetime" value="" style="width:80px">
+            @Html.ValidationMessageFor(model => model.EndDate)
+        </div>
+         </li>
+     <li>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ReportedByUserName, T("Reported By"))
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ReportedByUserName)
+            @Html.ValidationMessageFor(model => model.ReportedByUserName)
+        </div>
+         </li>
+     <li>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ReportedUserName, T("Posted By"))
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ReportedUserName)
+            @Html.ValidationMessageFor(model => model.ReportedUserName)
+        </div>
+         </li>
+     <li>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ReviewedByUserName, T("Reviewed By"))
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ReviewedByUserName)
+            @Html.ValidationMessageFor(model => model.ReviewedByUserName)
+        </div>
+
+         </li>
+     <li>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ShowUnresolvedOnly, T("Unresolved"))
+        </div>
+        <div class="editor-field">
+
+            @Html.EditorFor( model=> model.ShowUnresolvedOnly, Model.ShowUnresolvedOnly )
+            @Html.ValidationMessageFor(model => model.ShowUnresolvedOnly)
+        </div>
+         </li>
+        <li>
+            <input name="SearchButton" type="submit" value="Filter" style="margin:0" />
+        </li>
+
+        </ul>
+    </fieldset>
+}
+
+
+@if (searchResults != null && (searchResults.Count() > 0))
+{
+    <fieldset>
+        <div id="reports-table">
+        <table  class="items" summary="@T("This is a table of the forum posts reported as inappropriate")">
+            <colgroup>
+                <col id="Col1" style="width: 40px;"/>
+                <col id="Col2" style="width: 40px;"/>
+                <col id="Col3" style="width:100px" />
+                <col id="Col4" style="width:90px" />
+                <col id="Col5" style="width:90px" />
+                <col id="Col6" style="width:100px"/>
+                <col id="Col7" style="width:90px" />
+                <col id="Col8" style="width:73px" />
+                <col id="Col9"  />
+                <col id="Col10" style="width:50px"/>
+                <col id="Col11" style="width:26px"/>
+            </colgroup>
+            <thead>
+                <tr>                    
+                    <th scope="col">@T("View / Mark")</th>
+                    <th scope="col">@T("Post Id")</th>
+                    <th scope="col">@T("Reported Date")</th>                    
+                    <th scope="col">@T("Posted By")</th>                    
+                    <th scope="col">@T("Reported By")</th>                    
+                    <th scope="col">@T("Resolved Date")</th>
+                    <th scope="col">@T("Reviewed By")</th>                    
+                    <th scope="col">@T("Resolved")</th>
+                    <th scope="col">@T("Reason Reported")</th>
+                    <th scope="col">@T("Note")</th>
+                   <th scope="col"></th>
+                </tr>
+            </thead>
+
+     <tbody>
+
+        @foreach (NGM.Forum.ViewModels.ReportedPostEntry result in Model.SearchResults) {
+            int row = 0;
+            string rowClass = "odd";
+
+            String reportedDate = result.ReportedPostRecordViewModel.ReportedDate == null ? "" : result.ReportedPostRecordViewModel.ReportedDate.Value.ToString("MMM dd yyy", new CultureInfo(WorkContext.CurrentCulture));
+            String resolvedDate = result.ReportedPostRecordViewModel.ResolvedDate == null ? "" : result.ReportedPostRecordViewModel.ReportedDate.Value.ToString("MMM dd yyy", new CultureInfo(WorkContext.CurrentCulture)); ;
+            <tr @(row%2 == 0 ? "class='row-even'" : "class='row-odd'")>
+                <td>
+                    @if ( result.ReportedPostRecordViewModel.Post == null ) {
+                        @("Post Deleted") 
+                    } else {
+                        @Html.ItemDisplayLink( T("Post").ToString(), result.ReportedPostRecordViewModel.Post) <span class="post-option-divider">|</span>
+                        if (((PostPart)result.ReportedPostRecordViewModel.Post).ThreadPart == null)
+                        {
+                            @T("Thread Deleted")
+                        }
+                        else
+                        {
+                            @Html.ActionLink( T("In Thread").ToString(), "ViewPostInThread", "Thread", new { postId = result.ReportedPostRecordViewModel.PostId }, null)
+                        }
+                    }
+
+                   
+                </td>
+                <td>@result.ReportedPostRecordViewModel.PostId</td>
+                <td>@reportedDate</td>
+                <td>@result.ReportedPostRecordViewModel.PostByUserName</td>
+                <td>@result.ReportedPostRecordViewModel.ReportedByUserName </td>
+                <td>@reportedDate</td>
+                <td>@result.ReportedPostRecordViewModel.ResolvedByUserName</td>
+                <td>@Html.CheckBox("IsResolved", result.ReportedPostRecordViewModel.IsResolved)</td>
+                <td class="note">
+                    @result.ReportedPostRecordViewModel.ReasonReported
+                </td>
+                <td class="note2">
+                    @result.ReportedPostRecordViewModel.Note
+                </td>
+                <td>
+                    @{
+                        string linkText ="not set";
+                        if ( result.ReportedPostRecordViewModel.IsResolved)
+                       {
+                           linkText = T("Edit").ToString();                           
+                       }
+                       else
+                       {
+                           linkText = T("Resolve").ToString();
+                       }
+                    }
+                    @Html.ActionLink(linkText, "ResolveReport", "ReportPostAdmin", new { reportId = result.ReportedPostRecordViewModel.ReportId }, null)
+                </td>
+            </tr>
+
+        }
+    </tbody>
+
+        </table>
+            </div>
+        @Display(Model.Pager)
+    </fieldset>
+
+    <div id="resolve-dialog" style="display:none">
+        <textarea id="note"></textarea>
+    </div>
+}
+
+@using (Script.Foot())
+{
+<script type="text/javascript">
+
+//<![CDATA[
+    $(document).ready(function () {
+        $("#StartDate").datepicker({ changeYear: true, defaultDate: new Date() });
+        $("#EndDate").datepicker({ changeYear: true,  defaultDate: new Date() });
+
+});
+//]]>
+
+</script>
+
+}

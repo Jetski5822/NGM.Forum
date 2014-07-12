@@ -1,0 +1,13 @@
+﻿
+@using NGM.Forum.ViewModels
+
+
+@using(Html.BeginForm("Index", "ForumSearch", new { area = "NGM.Forum" }, FormMethod.Get, new { forumsHomeId = Model.ForumsHomeId, @class = "forum-search-form" })) { 
+    <fieldset>
+        @Html.TextBox("q")
+        @Html.Hidden("forumsHomeId", (string) Model.ForumsHomeId.ToString())
+        <button type="submit">@T("Search")</button>
+    </fieldset>
+}
+
+

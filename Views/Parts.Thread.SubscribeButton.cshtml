@@ -1,0 +1,14 @@
+﻿@using NGM.Forum.Models
+@using Orchard.ContentManagement
+@using Orchard.Utility.Extensions
+
+@if (Model.CanSubscribe)
+{
+    if ( Model.IsSubscribed ) {
+        @Html.ActionLink( T("Unsubscribe").ToString(), "DeleteSubscription", "Subscription",  new { @id = Model.ThreadId }, new {@class = "btn-subscribe"})
+        
+    } else {
+        @Html.ActionLink( T("Subscribe").ToString(), "AddSubscription", "Subscription",  new { @id = Model.ThreadId }, new {@class = "btn-subscribe"} )   
+    }
+    
+}

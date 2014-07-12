@@ -3,6 +3,7 @@ using Orchard.Settings;
 using Orchard.UI.Navigation;
 
 namespace NGM.Forum.ViewModels {
+    /*
     public class ThreadPager : Pager {
         public ThreadPager(ISite site, int itemCount) :
             this(site, (int) Math.Ceiling((decimal) itemCount/(decimal) site.PageSize), site.PageSize) {
@@ -16,4 +17,5 @@ namespace NGM.Forum.ViewModels {
             : base(site, page, pageSize) {
         }
     }
+     */
 }

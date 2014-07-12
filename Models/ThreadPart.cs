@@ -4,6 +4,7 @@ using Orchard.ContentManagement.Aspects;
 using Orchard.ContentManagement.Records;
 using Orchard.Core.Common.Utilities;
 using Orchard.Security;
+using Orchard.Core.Title.Models;
 
 namespace NGM.Forum.Models {
     public class ThreadPart : ContentPart<ThreadPartRecord>, IThreadPart {
@@ -15,10 +16,13 @@ namespace NGM.Forum.Models {
         public LazyField<PostPart> FirstPostField { get { return _firstPost; } }
         public LazyField<PostPart> LatestPostField { get { return _latestPost; } }
 
+        public  enum ReadStateEnum { NOT_SET, Unread, NewPosts, ReadNoNewPosts };
+
         public string Title {
             get { return this.As<ITitleAspect>().Title; }
-        }
 
+        }
+      
         public ForumPart ForumPart {
             get { return this.As<ICommonPart>().Container.As<ForumPart>(); }
             set { this.As<ICommonPart>().Container = value; }
@@ -60,12 +64,42 @@ namespace NGM.Forum.Models {
         }
 
         public int ReplyCount {
-            get { return PostCount >= 1 ? PostCount - 1 : 0; }
+            get
+            {
+                int count = 0;
+                //if the thread is marked as inappropriate, then it's first thread is already removed from the count
+                if (this.IsInappropriate == true)
+                {
+                    count = this.PostCount;
+                }
+                else
+                {
+                    count = PostCount >= 1 ? PostCount - 1 : 0;
+                }
+                return count;
+            }
         }
 
         public bool IsClosed {
-            get { return ClosedOnUtc != null; }
+            get { return ClosedOnUtc != null; }        
         }
+
+        public bool IsDeleted
+        {
+            get { return Record.IsDeleted; }
+            set { Record.IsDeleted = value; }
+        }
+
+        public bool IsInappropriate
+        {
+            get { return Record.IsInappropriate; }
+            set { Record.IsInappropriate = value; }
+        }
+
+        public ReadStateEnum ReadState { get; set; }
+
+        /*not db stored.  Used by the subscription system*/
+        public bool UserIsSubscribedByEmail { get;set;}
     }
 
     public interface IThreadPart : IContent {
@@ -81,5 +115,8 @@ namespace NGM.Forum.Models {
         public virtual DateTime? ClosedOnUtc { get; set; }
         public virtual int ClosedById { get; set; }
         public virtual string ClosedDescription { get; set; }
+
+        public virtual bool IsDeleted { get; set; }
+        public virtual bool IsInappropriate { get; set; }
     }
 }

@@ -1,0 +1,35 @@
+WORKING NOTES...
+** = done
+==============
+**align initial migration with original
+
+**-- add the XSS attack code for the display of everything html related ** done?
+
+**-- add notes to reporting abuse by the users *** done
+
+**-- sticky code / display for admin views ?? ** not needed ?
+
+**-- adjust vocabulary
+
+** -- rename the forum home
+
+**-- spam filter.. need to finish token
+
+** FORUM SEARCH  *done 'good enough for now' but could be better ...
+**-- search should setup the index and add it automagically 
+
+
+-- security
+   --either enable the module and add the parts
+   --or just add permissions for posting !?
+      --- model what an admin and moderator would need
+
+-- add better grouping for titlepart/description in content-.cshtml
+
+-- does deletion remove all children?
+
+-- remove other dashboard code?
+
+-- what to do with the editor views on the front end? 
+
+

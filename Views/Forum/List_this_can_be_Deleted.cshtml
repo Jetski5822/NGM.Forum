@@ -1,0 +1,17 @@
+@using Orchard.ContentManagement;
+@model dynamic
+@{
+    Model.ContentItems.Classes.Add("content-items");
+    Model.ContentItems.Classes.Add("forums");
+}
+<h2>@T("Spanish and English Learning Forums")</h2>
+<p>@T("Forums for discussions and questions related to Spanish and English learning and translations.")</p>
+
+@foreach (var category in Model.Categories)
+{
+    @Display( category )
+}
+@Display(Model.ContentItems)
+@if (Model.ContentItems.Items.Count < 1) {
+<p>@T("No forums found.")</p>
+}

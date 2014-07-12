@@ -1,0 +1,17 @@
+@model NGM.Forum.ViewModels.ThreadMoveAdminViewModel
+@using NGM.Forum.Extensions;
+
+@{ Layout.Title = T("Move Thread").ToString(); }
+
+@using (Html.BeginFormAntiForgeryPost(Url.Action("Move", "Thread", new { area = Constants.LocalArea, threadId = Model.ThreadId, returnUrl = Request.QueryString["ReturnUrl"] }))) {
+<fieldset>
+    <legend>@Layout.Title</legend>
+    <div>
+        @Html.LabelFor(m => m.ForumId, T("Select the forum the thread will be moved to:"))
+        @Html.DropDownListFor(m => m.ForumId, new SelectList(Model.AvailableForums, "Id", "Title"))
+    </div>
+
+</fieldset>
+  
+  <button type="submit">@T("Move")</button>
+}

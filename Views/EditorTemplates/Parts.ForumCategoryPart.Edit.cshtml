@@ -1,0 +1,60 @@
+@using Orchard.ContentManagement;
+@using Orchard;
+@using Orchard.Core.Title.Models;
+@using NGM.Forum.Models;
+
+@model NGM.Forum.ViewModels.ForumCategoryViewModel
+
+
+@{ 
+    Layout.Title = T("Forum Category").ToString();    
+}
+
+<fieldset>
+    <legend>@T("ForumCategoryPart settings")</legend>
+    
+        <div>
+            @Html.LabelFor(m => m.Description, @T("Description"))
+            @Html.EditorFor(m => m.Description)
+            @Html.ValidationMessageFor(m => m.Description, "*")
+        </div>
+        <div>
+            @Html.LabelFor(m => m.Weight, @T("Weight"))
+            @Html.EditorFor(m => m.Weight)
+            @Html.ValidationMessageFor(m => m.Weight, "*")
+        </div>
+
+<legend>@T("Forums in this category")</legend>
+
+<ul>
+
+@{
+ //var rewardIndex = 0;
+}
+
+@foreach (var forumEntry in Model.ForumEntries)
+{
+    <ol>@forumEntry.Title</ol>
+
+         /*
+    var title = forumEntry.Title;
+    var isChecked = forumEntry.IsChecked;
+    
+    <li><input type="hidden" value="@forumEntry.ForumPartRecord.Id" name="@Html.FieldNameFor(m => m.ForumEntries[rewardIndex].ForumPartRecord.Id)"/>
+        <label for="@Html.FieldNameFor(m => m.ForumEntries[rewardIndex].IsChecked)">
+            <input type="checkbox" value="true"
+                name="@Html.FieldNameFor(m => m.ForumEntries[rewardIndex].IsChecked)"
+                id="@Html.FieldNameFor(m => m.ForumEntries[rewardIndex].IsChecked)"@if (forumEntry.IsChecked) {<text>checked="checked"</text>}/>
+            @string.Format("{0}", title )
+        </label>
+        @{rewardIndex++;}
+    </li>
+    */
+    
+}
+</ul>
+</fieldset>
+
+
+
+

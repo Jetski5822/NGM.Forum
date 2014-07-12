@@ -1,4 +1,10 @@
 ﻿@using Orchard.Utility.Extensions;
+
+@{
+    Script.Require("UtcToLocal");
+    Style.Require("Forum").AtHead();   
+}
+
 @{
     if (Model.Title != null) {
         Layout.Title = Model.Title;
@@ -13,13 +19,24 @@
     var tag = Tag(Model, "article");
 }
 @tag.StartElement
+
     <header>
+
         @Display(Model.Header)
+        <div class="header-break"></div>
         @if (Model.Meta != null) {
             <div class="metadata">
                 @Display(Model.Meta)
             </div>
         }
+
+        @*make an area to wrap the title/description of the forum *@
+        @if (Model.ForumText != null){
+            <div class="forum-text">
+                @Display(Model.ForumText)
+            </div>
+        }
+
         @if (Model.Actions != null) {
             <div class="actions">
                 @Display(Model.Actions)

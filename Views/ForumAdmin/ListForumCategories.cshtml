@@ -1,0 +1,31 @@
+@using NGM.Forum.Extensions;
+@using Orchard.Core.Contents.ViewModels;
+@using Orchard.Utility.Extensions;
+
+@{ 
+    Layout.Title = T("Manage Forum Categories").ToString();
+    var forumsHomePagePart = (NGM.Forum.Models.ForumsHomePagePart)Model.ForumsHomePagePart;    
+}
+
+
+<h3>@T("Listing Categories in")  @Html.ItemDisplayLink( forumsHomePagePart.ContentItem )</h3>
+<p><i>@T("Forum categories group individual forums.")</i></p>
+@if (Model.ContentItems.Items.Count > 0) { 
+<div class="actions"><a class="add button primaryAction" href="@Url.CategoryCreateForAdmin(forumsHomePagePart)">@T("New Category")</a></div>
+    using(Html.BeginFormAntiForgeryPost(Url.Action("ListForumCategories", "Admin", new { area = "Contents", id = "" }))) {
+        <fieldset class="bulk-actions">
+            <label for="publishActions">@T("Actions:")</label>
+            <select id="publishActions" name="Options.BulkAction">
+                @Html.SelectOption(ContentsBulkAction.None, ContentsBulkAction.None, T("Choose action...").ToString())
+                @Html.SelectOption(ContentsBulkAction.None, ContentsBulkAction.Remove, T("Delete").ToString())
+            </select>
+            @Html.Hidden("returnUrl", ViewContext.RequestContext.HttpContext.Request.ToUrlString())
+            <button type="submit" name="submit.BulkEdit" value="yes">@T("Apply")</button>
+        </fieldset>
+        <fieldset class="contentItems bulk-items">
+            @Display(Model.ContentItems)
+        </fieldset>
+    }
+} else {
+<div class="info message">@T("There are no categories for you to see. Want to <a href=\"{0}\">add one</a>?", Url.CategoryCreateForAdmin(forumsHomePagePart))</div>
+}

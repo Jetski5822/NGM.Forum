@@ -1,4 +1,8 @@
-﻿@if (HasText(Model.Description)) {
+﻿@{
+    Style.Require("Forum");    
+}
+
+@if (HasText(Model.Description)) {
 <div class="content-description forum-description">
     <p>@Model.Description</p>
 </div>

@@ -1,0 +1,10 @@
+﻿@using NGM.Forum.Extensions;
+@using NGM.Forum.Models;
+@using Orchard.ContentManagement;
+@using Orchard.Utility.Extensions;
+@{
+    ContentItem contentItem = Model.ContentItem;
+    ForumsHomePagePart forumsHomePagePart = (ForumsHomePagePart)contentItem.Get(typeof(ForumsHomePagePart));
+}
+<a href="@Url.CategoriesForAdmin(forumsHomePagePart)" title="@T("Manage Categories")">@T("Manage Categories")</a>@T(" | ")
+<a href="@Url.CategoryCreateForAdmin(forumsHomePagePart)" title="@T("New Category")">@T("New Category")</a>@T(" | ")

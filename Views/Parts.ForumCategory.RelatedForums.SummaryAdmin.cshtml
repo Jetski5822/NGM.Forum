@@ -1,0 +1,28 @@
+@using NGM.Forum
+@using NGM.Forum.Extensions
+@using NGM.Forum.Models
+
+@model dynamic
+
+<p>ID: @Model.ForumCategoryPart.Id</p>
+<p>Category: @Model.ForumCategoryPart.Title</p>
+<p>Description: @Model.ForumCategoryPart.Description</p>    
+
+
+<h4>Associated Forums</h4>
+@if (Model.Forums.Count == 0)
+{
+     <p> -> @T("The category has no associated forums") </p>
+} else {
+    <ul>
+    @foreach( var forum in Model.Forums ) {
+        ForumPart forumPart = (ForumPart)forum;
+    
+        <li>@forumPart.Title</li>
+
+    }
+
+        </ul>
+}
+
+    <hr />

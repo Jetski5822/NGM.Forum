@@ -15,18 +15,20 @@ namespace NGM.Forum.Handlers {
     public class ThreadPartHandler : ContentHandler {
         private readonly IPostService _postService;
         private readonly IThreadService _threadService;
-        private readonly IForumService _forumService;
         private readonly IContentManager _contentManager;
+        private readonly ICountersService _countersService;
 
         public ThreadPartHandler(IRepository<ThreadPartRecord> repository, 
             IPostService postService,
             IThreadService threadService,
-            IForumService forumService,
-            IContentManager contentManager) {
+            IContentManager contentManager,
+            ICountersService countersService
+            
+            ) {
             _postService = postService;
             _threadService = threadService;
-            _forumService = forumService;
             _contentManager = contentManager;
+            _countersService = countersService;
 
             Filters.Add(StorageFilter.For(repository));
 
@@ -36,12 +38,12 @@ namespace NGM.Forum.Handlers {
 
             OnActivated<ThreadPart>(PropertyHandlers);
             OnLoading<ThreadPart>((context, part) => LazyLoadHandlers(part));
-            OnCreated<ThreadPart>((context, part) => UpdateForumPartCounters(part));
-            OnPublished<ThreadPart>((context, part) => UpdateForumPartCounters(part));
-            OnUnpublished<ThreadPart>((context, part) => UpdateForumPartCounters(part));
+            OnCreated<ThreadPart>((context, part) => _countersService.UpdateForumPartCounters(part));
+            OnPublished<ThreadPart>((context, part) => _countersService.UpdateForumPartCounters(part));
+            OnUnpublished<ThreadPart>((context, part) => _countersService.UpdateForumPartCounters(part));
             OnVersioning<ThreadPart>((context, part, newVersionPart) => LazyLoadHandlers(newVersionPart));
-            OnVersioned<ThreadPart>((context, part, newVersionPart) => UpdateForumPartCounters(newVersionPart));
-            OnRemoved<ThreadPart>((context, part) => UpdateForumPartCounters(part));
+            OnVersioned<ThreadPart>((context, part, newVersionPart) => _countersService.UpdateForumPartCounters(newVersionPart));
+            OnRemoved<ThreadPart>((context, part) => _countersService.UpdateForumPartCounters(part));
             
             OnRemoved<ForumPart>((context, b) =>
                 _threadService.Delete(context.ContentItem.As<ForumPart>()));
@@ -52,6 +54,7 @@ namespace NGM.Forum.Handlers {
             context.Shape.StickyClass = threadPart.IsSticky ? "Sticky" : string.Empty;
         }
 
+        /* refactored into its own service 
         private void UpdateForumPartCounters(ThreadPart threadPart) {
             var commonPart = threadPart.As<CommonPart>();
             if (commonPart != null && commonPart.Record.Container != null) {
@@ -66,7 +69,7 @@ namespace NGM.Forum.Handlers {
                         .Count(publishedThreadPart, VersionOptions.Published));
             }
         }
-
+        */
         protected void LazyLoadHandlers(ThreadPart part) {
             // Add handlers that will load content for id's just-in-time
             part.ClosedByField.Loader(() => _contentManager.Get<IUser>(part.Record.ClosedById));
@@ -87,8 +90,8 @@ namespace NGM.Forum.Handlers {
                 part.ClosedByField.Value = part.ClosedByField.Value;
 
             // Setup FirstPost & LatestPost fields
-            part.FirstPostField.Loader(() => _postService.GetPositional(part, ThreadPostPositional.First));
-            part.LatestPostField.Loader(() => _postService.GetPositional(part, ThreadPostPositional.Latest));
+            part.FirstPostField.Loader(() => _postService.GetPositional(part, true, ThreadPostPositional.First));
+            part.LatestPostField.Loader(() => _postService.GetPositional(part, false, ThreadPostPositional.Latest));
         }
 
         protected override void GetItemMetadata(GetContentItemMetadataContext context) {

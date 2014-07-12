@@ -1,9 +1,25 @@
 ﻿@using NGM.Forum.Models
 @{
     ThreadPart contentPart = Model.ContentPart;
+    DateTime? closedDate = contentPart.ClosedOnUtc;
+    string localizedDateString = "";
+    if ( closedDate.HasValue == true ) {
+        localizedDateString = closedDate.Value.ToString("yyyy-MM-ddTHH:mm:ss Z");
+    }
 }
 
 <fieldset class="thread-closed">
-    <h2>@T("Closed on {0} by {1}", contentPart.ClosedOnUtc, contentPart.ClosedBy.UserName)</h2>
+   
+    @if ( WorkContext.CurrentTimeZone == TimeZoneInfo.Utc){
+        <h2>
+            @T("Closed on {0} by {1}", "<span class='utc-date-time'>"+ localizedDateString + "</span>", contentPart.ClosedBy.UserName)
+        </h2>
+    } else {
+        <h2>@T("Closed on {0} by {1}", contentPart.ClosedOnUtc, contentPart.ClosedBy.UserName)</h2>        
+    }
     <p>@contentPart.ClosedDescription</p>
 </fieldset>
+
+
+
+

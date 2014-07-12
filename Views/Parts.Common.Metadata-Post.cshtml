@@ -1,2 +1,9 @@
-﻿<span class="author">@T("By {0}", Model.ContentPart.Owner.UserName)@T(",")</span>
-<span class="published">@Display.PublishedState(createdDateTimeUtc: Model.ContentPart.CreatedUtc, publisheddateTimeUtc: Model.ContentPart.PublishedUtc)</span>
+﻿@* a hack-around to be able to identify and parse UTC datetimes since the orchard output date has no timezone indicator (like a Z for UTC) *@
+
+<span class="author">@T("By {0}", Model.ContentPart.Owner.UserName)@T(",")</span>
+@if ( WorkContext.CurrentTimeZone == TimeZoneInfo.Utc){
+    DateTime date = @Model.ContentPart.CreatedUtc;
+    <span class="published utc-date-time">@date.ToString("yyyy-MM-ddTHH:mm:ss Z")</span>    
+} else {
+    <span class="published">@Display.PublishedState(createdDateTimeUtc: Model.ContentPart.CreatedUtc, publisheddateTimeUtc: Model.ContentPart.PublishedUtc) </span>    
+}

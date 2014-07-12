@@ -10,32 +10,94 @@ using Orchard.ContentManagement;
 using Orchard.ContentManagement.Drivers;
 using Orchard.ContentManagement.Handlers;
 using Orchard.Security;
+using Orchard.UI.Navigation;
+using Orchard.Autoroute.Models;
 
 namespace NGM.Forum.Drivers {
     [UsedImplicitly]
-    public class ThreadPartDriver : ContentPartDriver<ThreadPart> {
+    public class ThreadPartDriver : ContentPartDriver<ThreadPart>
+    {
         private readonly IPostService _postService;
         private readonly IWorkContextAccessor _workContextAccessor;
         private readonly IContentManager _contentManager;
         private readonly IMembershipService _membershipService;
+        private readonly IOrchardServices _orchardServices;
+        private readonly ISubscriptionService _subscriptionService;
+        private readonly IThreadLastReadService _threadLastReadService;
+        private readonly IUserTimeZoneService _userTimeZoneService;
 
         public ThreadPartDriver(
             IPostService postService,
             IWorkContextAccessor workContextAccessor,
             IContentManager contentManager,
-            IMembershipService membershipService) {
+            IMembershipService membershipService,
+            IOrchardServices orchardServices,
+            ISubscriptionService subscriptionService,
+            IThreadLastReadService threadLastReadService,
+            IUserTimeZoneService userTimeZoneService
+
+        ) {
             _postService = postService;
             _workContextAccessor = workContextAccessor;
             _contentManager = contentManager;
             _membershipService = membershipService;
+            _orchardServices = orchardServices;
+            _subscriptionService = subscriptionService;
+            _threadLastReadService = threadLastReadService;
+            _userTimeZoneService = userTimeZoneService;
         }
 
         protected override string Prefix {
             get { return "ThreadPart"; }
         }
 
-        protected override DriverResult Display(ThreadPart part, string displayType, dynamic shapeHelper) {
+
+        protected override DriverResult Display(ThreadPart part, string displayType, dynamic shapeHelper)
+        {
+
             var results = new List<DriverResult>();
+            int? userId = null;
+            if (_orchardServices.WorkContext.CurrentUser != null)
+            {
+                userId = _orchardServices.WorkContext.CurrentUser.Id;
+            }
+
+            _workContextAccessor.GetContext().CurrentTimeZone = _userTimeZoneService.GetUserTimeZoneInfo(userId);
+
+            //the read state may have already been looked up and set in a controller.. if not, set it
+            //TODO: is this really needed?  is there a path that will reach this?
+            if (userId != null && part.ReadState == ThreadPart.ReadStateEnum.NOT_SET)
+            {
+                part.ReadState = _threadLastReadService.GetReadState(userId.Value, part);
+            }
+
+            if (displayType.Equals("Detail"))
+            {
+                //subscription logic
+                bool isSubscribed = false;
+                bool canSubscribe = _orchardServices.Authorizer.Authorize(Permissions.CanPostToForums); ;
+                if (_orchardServices.WorkContext.CurrentUser != null)
+                {
+                    isSubscribed = _subscriptionService.IsSubscribed(userId.Value, part.Id);
+                }
+
+                //end subscribe logic
+                //is read logic
+                if (userId != null)
+                {
+                    _threadLastReadService.MarkThreadAsRead(userId.Value, part.Id);
+                }
+                results.Add(ContentShape( "Parts_Thread_SubscribeButton", ()=>shapeHelper.Parts_Thread_SubscribeButton(IsSubscribed: isSubscribed, CanSubscribe: canSubscribe, ThreadId: part.Id)));
+               //TODO: is this optimal or high overhead?
+                var forumsHomePagePart = part.ForumPart.ForumCategoryPart.ForumsHomePagePart;
+                var categoryPart = part.ForumPart.ForumCategoryPart;
+                var forumPart = part.ForumPart;
+               
+                results.Add(ContentShape("Parts_BreadCrumb",
+                    () => shapeHelper.Parts_BreadCrumb(ForumsHomePagePart: forumsHomePagePart, ForumCategoryPart: categoryPart, ForumPart: forumPart, ThreadPart: null)
+                ));
+                results.Add(ContentShape("Parts_ForumMenu", () => shapeHelper.Parts_ForumMenu()));
+            }
 
             if (displayType.Equals("SummaryAdmin", StringComparison.OrdinalIgnoreCase)) {
                 results.Add(ContentShape("Parts_Threads_Thread_SummaryAdmin",
@@ -44,12 +106,18 @@ namespace NGM.Forum.Drivers {
                     () => shapeHelper.Parts_Threads_Thread_Metadata_SummaryAdmin()));
             }
 
+            if (displayType.Equals("Subscription", StringComparison.OrdinalIgnoreCase))
+            {
+                results.Add(ContentShape("Parts_Threads_Subscription", () => shapeHelper.Parts_Threads_Subscription(ThreadPart:part)));
+            }
             if (part.IsClosed) {
                 results.Add(ContentShape("Parts_Threads_Thread_Closed",
                         () => shapeHelper.Parts_Threads_Thread_Closed()));
             }
 
             results.AddRange(new [] { 
+                ContentShape("Parts_Threads_Thread_ReadState",
+                    () => shapeHelper.Parts_Threads_Thread_ReadState(ReadState: part.ReadState)),
                 ContentShape("Parts_Threads_Thread_ThreadReplyCount",
                     () => shapeHelper.Parts_Threads_Thread_ThreadReplyCount(ReplyCount: part.ReplyCount)),
                 ContentShape("Parts_Thread_Manage", () => {
@@ -60,7 +128,9 @@ namespace NGM.Forum.Drivers {
                 ContentShape("Forum_Metadata_First", () => shapeHelper.Forum_Metadata_First(Post: part.FirstPost)),
                 ContentShape("Forum_Metadata_Latest", () => {
                         var post = part.LatestPost;
-                        var pager = new ThreadPager(_workContextAccessor.GetContext().CurrentSite, part.PostCount);
+                        var site = _workContextAccessor.GetContext().CurrentSite;
+                        var pager = new Pager(site, (int) Math.Ceiling((decimal) part.PostCount/(decimal) site.PageSize), site.PageSize);
+                        //var pager = new Pager(_workContextAccessor.GetContext().CurrentSite, part.PostCount);
                         return shapeHelper.Forum_Metadata_Latest(Post: post, Pager: pager);
                     }),
                 ContentShape("Parts_Thread_Posts_Users", () => {
@@ -72,18 +142,44 @@ namespace NGM.Forum.Drivers {
             return Combined(results.ToArray());
         }
 
-        protected override DriverResult Editor(ThreadPart part, dynamic shapeHelper) {
-            return ContentShape("Parts_Threads_Thread_Fields", () => 
-                shapeHelper.EditorTemplate(TemplateName: "Parts.Threads.Thread.Fields", Model: part, Prefix: Prefix));
+        /*
+         * 
+        // GET
+        protected override DriverResult Editor(CommentPart part, dynamic shapeHelper) {
+            if (UI.Admin.AdminFilter.IsApplied(_workContextAccessor.GetContext().HttpContext.Request.RequestContext)) {
+                return ContentShape("Parts_Comment_AdminEdit", 
+                    () => shapeHelper.EditorTemplate(TemplateName: "Parts.Comment.AdminEdit", Model: part, Prefix: Prefix));
+            }
+            else {
+                return ContentShape("Parts_Comment_Edit", 
+                    () => shapeHelper.EditorTemplate(TemplateName: "Parts.Comment", Model: part, Prefix: Prefix));
+	        }
+        }
+         */
+
+        protected override DriverResult Editor(ThreadPart part, dynamic shapeHelper)
+        {
+            if (Orchard.UI.Admin.AdminFilter.IsApplied(_workContextAccessor.GetContext().HttpContext.Request.RequestContext))
+            {
+                return ContentShape("Parts_Threads_Thread_Fields", () =>
+                    shapeHelper.EditorTemplate(TemplateName: "Parts.Threads.Thread.Fields", Model: part, Prefix: Prefix));
+            }
+            else
+            {
+                return ContentShape("Parts_Threads_FrontEndEdit", () =>
+                    shapeHelper.EditorTemplate(TemplateName: "Parts.Threads.CreateFrontEnd", Model: part, Prefix: Prefix));
+            }
         }
 
-        protected override DriverResult Editor(ThreadPart part, IUpdateModel updater, dynamic shapeHelper) {
+        protected override DriverResult Editor(ThreadPart part, IUpdateModel updater, dynamic shapeHelper)
+        {
             updater.TryUpdateModel(part, Prefix, null, null);
 
             return Editor(part, shapeHelper);
         }
 
-        protected override void Importing(ThreadPart part, ImportContentContext context) {
+        protected override void Importing(ThreadPart part, ImportContentContext context)
+        {
             var postCount = context.Attribute(part.PartDefinition.Name, "PostCount");
             if (postCount != null) {
                 part.PostCount = Convert.ToInt32(postCount);
@@ -111,7 +207,8 @@ namespace NGM.Forum.Drivers {
             }
         }
 
-        protected override void Exporting(ThreadPart part, ExportContentContext context) {
+        protected override void Exporting(ThreadPart part, ExportContentContext context)
+        {
             context.Element(part.PartDefinition.Name).SetAttributeValue("PostCount", part.PostCount);
             context.Element(part.PartDefinition.Name).SetAttributeValue("IsSticky", part.IsSticky);
 

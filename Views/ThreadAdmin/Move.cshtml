@@ -5,14 +5,14 @@
 
 @using (Html.BeginFormAntiForgeryPost(Url.Action("Move", "ThreadAdmin", new { area = Constants.LocalArea, threadId = Model.ThreadId, returnUrl = Request.QueryString["ReturnUrl"] }))) {
 <fieldset>
-  <legend>@T("Details")</legend>
+
     <div>
-        @Html.LabelFor(m => m.ForumId, T("Destination"))
+        @Html.LabelFor(m => m.ForumId, T("Destination Forum"))
         @Html.DropDownListFor(m => m.ForumId, new SelectList(Model.AvailableForums, "Id", "Title"))
-        <span class="hint">@T("This is the forum that the thread will be moved to.")</span>
+        <span class="hint">@T("Select the forum the thread will be moved to.")</span>
     </div>
 
 </fieldset>
   
-  <button type="submit">@T("Update")</button>
+  <button type="submit">@T("Move")</button>
 }

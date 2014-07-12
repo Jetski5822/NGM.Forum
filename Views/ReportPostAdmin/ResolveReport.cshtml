@@ -1,0 +1,48 @@
+@using NGM.Forum.Models
+@using NGM.Forum.Extensions
+@using Orchard.Utility.Extensions
+
+@model NGM.Forum.ViewModels.ResolvePostReportViewModel
+
+@{    
+    Style.Include("ngm-forum-common-admin").AtHead();
+}
+@using(Html.BeginFormAntiForgeryPost()) { 
+    
+    <fieldset>
+        <legend>@T("Edit Inappropriate Post Report")</legend>
+
+        @Html.ValidationSummary()
+
+        <div class="editor-label">
+             @Html.LabelFor( model => model.Report.Note, T("Note") ) 
+            <div class='label-info'>@T("Record why the report is inappropriate and any action taken to resolve the report such as deleting the post, banning the user, etc.")</div>
+        </div>
+        <div class="editor-field" >
+            @Html.TextAreaFor( model => model.Report.Note, new { @class= "wide" } )
+            @Html.ValidationMessageFor(model => model.Report.Note)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor( model => model.Report.IsResolved, T("Is Resolved"))            
+            <div class='label-info'>@T("Mark the post as resolved to remove it from the list of pending reports.")</div>
+        </div>
+        <div class="editor-field" >
+            @Html.CheckBoxFor( model=>model.Report.IsResolved)
+            @Html.ValidationMessageFor(model => model.Report.IsResolved)
+            
+        </div>
+        @Html.HiddenFor( model => model.Report.Id )
+        @Html.HiddenFor( model=>model.ReturnUrl )
+                
+    </fieldset>
+    
+<br />
+
+<input type="submit" value="Submit"/>
+
+<a style="display:inline-block" class='btn' href="@Model.ReturnUrl">@T("Cancel").ToString()</a>
+} 
+
+
+
+

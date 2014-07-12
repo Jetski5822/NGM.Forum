@@ -54,6 +54,12 @@ namespace NGM.Forum.Models {
                 return !String.IsNullOrWhiteSpace(type) ? type : Constants.Parts.Thread;
             }
         }
+
+        public ForumCategoryPart ForumCategoryPart
+        {
+            get { return this.As<ICommonPart>().Container.As<ForumCategoryPart>(); }
+            set { this.As<ICommonPart>().Container = value; }
+        }
     }
 
     public class ForumPartRecord : ContentPartRecord {

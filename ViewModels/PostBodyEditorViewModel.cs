@@ -15,5 +15,6 @@ namespace NGM.Forum.ViewModels {
         }
 
         public string EditorFlavor { get; set; }
+
     }
 }

@@ -2,11 +2,23 @@
 @using NGM.Forum.Extensions
 @using NGM.Forum.ViewModels
 @using Orchard.UI.Navigation
-@{ 
-    string bodyHtml = Model.Html.ToString();
-    var body = new HtmlString(Html.Excerpt(bodyHtml, 200).ToString().Replace(Environment.NewLine, "</p>" + Environment.NewLine + "<p>"));
+@using Orchard.ContentManagement
+@using Html.Helpers
+@using Orchard.Core.Title.Models;
 
+
+@{ 
+    Style.Require("forum").AtHead();
+    
+    string bodyHtml = Model.Html.ToString();
+    //var body = new HtmlString(Html.Excerpt(bodyHtml, 200).ToString().Replace(Environment.NewLine, "</p>" + Environment.NewLine + "<p>"));
+    String body = Html.Excerpt(bodyHtml, 200).ToString().Replace(Environment.NewLine, "</p>" + Environment.NewLine + "<p>");
     PostPart post = (PostPart) Model.ContentPart;
-    Pager pager = (ThreadPager) Model.Pager;
+    //Pager pager = (ThreadPager) Model.Pager;
+    Pager pager = (Pager)Model.Pager;
+    var title = post.ThreadPart.As<TitlePart>().Title;
 }
-<p>@body <a href="@Url.PostView(post, pager)">@T("more")</a></p>
+<div class="search-resut-thread-title">@title</div>
+
+<p>@Html.Raw( HtmlSanitizer.sanitizer(body).html ) <a href="@Url.PostView(post, pager)">@T("more")</a></p>
+

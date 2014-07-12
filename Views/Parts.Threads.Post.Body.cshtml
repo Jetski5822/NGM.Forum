@@ -1,6 +1,9 @@
-﻿@if (!string.IsNullOrEmpty(Model.Html.ToString())) {
-    var body = new HtmlString(Model.Html.ToString().Replace(Environment.NewLine, "</p>" + Environment.NewLine + "<p>"));
-    <p>@body</p>
+﻿@using Html.Helpers;
+
+@if (!string.IsNullOrEmpty(Model.Html.ToString())) {
+    //var body = new HtmlString(Model.Html.ToString().Replace(Environment.NewLine, "<p>" + Environment.NewLine + "</p>"));
+    //String body = Model.Html.ToString().Replace(Environment.NewLine, "<p>" + Environment.NewLine + "</p>");
+    <p>@Html.Raw( Model.Html.ToString())</p>
 }
 else {
     <p class="automated-response">@T("Automated Response: I decided to write nothing.")</p>

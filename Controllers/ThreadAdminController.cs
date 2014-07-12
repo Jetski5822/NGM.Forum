@@ -89,6 +89,10 @@ namespace NGM.Forum.Controllers {
             return View((object)thread);
         }
 
+        /*  MOVED THESE OUT OF THE DASHBOARD SO THAT A 'FORUM MODERATOR' CAN ADMIN THE FORUMS WITHOUT NEEDING ACCESS TO THE DASHBOARD
+         *  -> ALSO GIVES A BETTER USER EXPERIENCE SINCE IT CAN BE DONE WHILE REVEIWING THE ACTUAL FORUMS AS OPPOSED TO A MORE AWKWARD 
+         *     DASHBOARD VIEW.
+         * 
         public ActionResult Move(int threadId) {
             var threadPart = _threadService.Get(threadId, VersionOptions.Latest);
 
@@ -98,6 +102,9 @@ namespace NGM.Forum.Controllers {
             if (!_orchardServices.Authorizer.Authorize(Permissions.MoveThread, threadPart, T("Not allowed to move thread")))
                 return new HttpUnauthorizedResult();
 
+            //TODO: This will list all forums in the system. May want to filter them either by 'forums home' or at least show which group they belong too
+            //since there may be more than one 'forums home' in the system.  
+            //*in this case should also verify the user has permission to move the thread between forumshomes.
             var forums = _forumService.Get();
             //What if I have 1 forum?
 
@@ -190,6 +197,7 @@ namespace NGM.Forum.Controllers {
 
             return this.RedirectLocal(returnUrl, "~/");
         }
+        */
 
         bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties) {
             return TryUpdateModel(model, prefix, includeProperties, excludeProperties);

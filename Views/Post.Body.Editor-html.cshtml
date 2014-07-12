@@ -1,0 +1,31 @@
+﻿@using Orchard.Utility.Extensions;
+
+@{
+    Style.Include("ngm-forum.css");
+    Script.Require("jQuery").AtHead();
+    Script.Include("tinymce/js/tinymce/tinymce.min.js").AtHead();
+    string editorFlavor = Model.EditorFlavor;
+}
+
+
+
+@Html.TextArea("Text", (string)Model.Text, 25, 80,
+    new Dictionary<string,object> {
+    {"class", editorFlavor.HtmlClassify() + " tinymce"},
+    {"style", "width:100%"}
+})
+
+@using (Script.Foot())
+{
+    <script type="text/javascript">
+        //<![CDATA[
+        $(document).ready(function () {
+            tinymce.init({
+                selector: "textarea.html.tinymce"
+            });
+                
+        });
+        //]]>
+    </script>
+
+}

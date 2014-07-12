@@ -7,6 +7,7 @@ using Orchard.Core.Common.Models;
 using Orchard.Data;
 using Orchard.Security;
 
+
 namespace NGM.Forum.Services {
     public interface IPostService : IDependency {
         PostPart Get(int id, VersionOptions versionOptions);
@@ -14,10 +15,9 @@ namespace NGM.Forum.Services {
         IEnumerable<PostPart> Get(ThreadPart threadPart, VersionOptions versionOptions);
         IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count);
         IEnumerable<PostPart> Get(ThreadPart threadPart, int skip, int count, VersionOptions versionOptions);
-        PostPart GetPositional(ThreadPart threadPart,
-                               ThreadPostPositional positional);
-        PostPart GetPositional(ThreadPart threadPart, VersionOptions versionOptions,
-                               ThreadPostPositional positional);
+        
+        PostPart GetPositional(ThreadPart threadPart, bool includeInappropriate, ThreadPostPositional positional);
+        PostPart GetPositional(ThreadPart threadPart, bool includeInappropriate, VersionOptions versionOptions, ThreadPostPositional positional);
         IEnumerable<IUser> GetUsersPosted(ThreadPart part);
         int Count(ThreadPart threadPart, VersionOptions versionOptions);
         void Delete(ThreadPart threadPart);
@@ -50,12 +50,12 @@ namespace NGM.Forum.Services {
                 .SingleOrDefault();
         }
 
-        public PostPart GetPositional(ThreadPart threadPart, 
+        public PostPart GetPositional(ThreadPart threadPart, bool includeInappropriate,
             ThreadPostPositional positional) {
-            return GetPositional(threadPart, VersionOptions.Published, positional);
+            return GetPositional(threadPart, includeInappropriate, VersionOptions.Published, positional);
         }
 
-        public PostPart GetPositional(ThreadPart threadPart, VersionOptions versionOptions,
+        public PostPart GetPositional(ThreadPart threadPart, bool includeInappropriate, VersionOptions versionOptions,
                                       ThreadPostPositional positional) {
             var query = GetParentQuery(threadPart, versionOptions);
 
@@ -63,12 +63,23 @@ namespace NGM.Forum.Services {
                 query = query.OrderBy(o => o.PublishedUtc);
 
             if (positional == ThreadPostPositional.Latest)
-                query = query.OrderByDescending(o => o.PublishedUtc);
+                query = query.OrderByDescending(o => o.PublishedUtc );
 
-            return query
+            if (!includeInappropriate)
+            {
+                var postPart = query.Join<PostPartRecord>().Where(post => post.IsInappropriate == false);
+                return postPart
                 .ForPart<PostPart>()
                 .Slice(1)
                 .SingleOrDefault();
+            }
+            // else 
+
+            return query.ForPart<PostPart>()
+                .Slice(1)
+                .SingleOrDefault();
+
+
         }
 
         public IEnumerable<IUser> GetUsersPosted(ThreadPart part) {

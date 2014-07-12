@@ -17,8 +17,18 @@ namespace NGM.Forum {
             builder.Describe("Post_Body_Editor")
                 .OnDisplaying(displaying => {
                     string flavor = displaying.Shape.EditorFlavor;
-                    displaying.ShapeMetadata.Alternates.Add("Post_Body_Editor__" + flavor);
-                });
+                    displaying.ShapeMetadata.Alternates.Add("Post_Body_Editor__" + flavor);                    
+                } )
+
+                 .OnCreated(created =>
+                 {
+                     var layout = created.Shape;
+                     layout.Content = created.New.Zone();
+                     layout.Content.ZoneName = "NoWhere";
+                     layout.Content.Add(created.New.PlaceChildContent(Source: layout));
+
+                 });
+                ;
 
             // We support multiple forum types, but need to be able to skin forum admin shapes, so add alternates for any content type that has a ForumPart.
             builder.Describe("Content").OnDisplaying(displaying => {

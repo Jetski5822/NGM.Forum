@@ -11,11 +11,6 @@
     var contentTypeClassName = ((string)Model.ContentItem.ContentType).HtmlClassify();
     Model.Classes.Add(contentTypeClassName);
 
-    var stickyClass = ((string)Model.StickyClass).HtmlClassify();
-    if (!string.IsNullOrWhiteSpace(stickyClass)) {
-        Model.Classes.Add(stickyClass);    
-    }
-
     var tag = Tag(Model, "article");
 }
 

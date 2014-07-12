@@ -1,0 +1,13 @@
+@using NGM.Forum.Extensions;
+@{ 
+    Layout.Title = T("Forum Properties").ToString(); 
+    var forumCategoryPart = (NGM.Forum.Models.ForumCategoryPart) Model.ForumCategoryPart;    
+    var forumsHomePagePart = (NGM.Forum.Models.ForumsHomePagePart) Model.ForumsHomePagePart;    
+}
+
+@using (Html.BeginFormAntiForgeryPost()) {
+    @Html.ValidationSummary()
+    @Html.Hidden("forumCategoryId", forumCategoryPart.Id);
+    // Model is a Shape, calling Display() so that it is rendered using the most specific template for its Shape type
+    @Display(Model.Editor)
+}

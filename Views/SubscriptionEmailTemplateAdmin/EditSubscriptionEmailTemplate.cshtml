@@ -1,0 +1,54 @@
+﻿@using NGM.Forum.Models
+@using Orchard.ContentManagement
+@using Orchard.ContentManagement.Aspects
+
+@model NGM.Forum.Models.SubscriptionEmailTemplateRecord
+
+    <h2>@T("New Post Subscription Email Template")</h2>
+    <p>@T("The following is the email template which is used to notify then a new post is made to a subscribed thread.") </p>
+    <p>@T("There are both a plain text and html template.  When an email is sent both version are included and the email client decides which one to display.")</p>   
+
+    <h3>@T("Template Translation")</h3>
+    <p>@T("The email template is translatable by using .po files.  ")  
+        @T("If you change the default template and require translations you are responsible for providing your own translations if required.")
+        @T("The default email template is translated with the intention that the community will contribute further translations.")
+    </p>
+    <p>@T("The text email is translated line per line based on line breaks.  If the line includes a token, include the token (untranslated) in string the po file.")</p>
+    <p>@T("The html email translates text delimited as follows:  {\"Some text to translate\"}.  Place the delimited text in the .po file.  Tokens can be included in the delimited text but should not be translated.  For example {\"The link is [PostUrl]\"} translated in the po file should be {\"El enlance es [PostUrl]\"")}.
+
+        <h3>@T("Template Tokens")</h3>
+
+    <p>@T("The following tokens can be included in the email template.  When the email is sent, the token is replaced by the contents described below.") </p>
+    <ul>
+        <li>[ThreadTitle] - @T("the name of the thread the new post occured in")</li>
+        <li>[PostText] - @T("the text of the new post. *If the post is html, and the email format is plain text the tag will be replaced with a not saying the post cannot be displayed.")</li>
+        <li>[PostUrl] - @T("is replaced by the http:// url to the new post. Suitable for the plan text email.")</li>
+        <li>[SiteName] - @T("The site name as found in orchard settings.")</li>
+    </ul>
+
+           </p>
+
+<h3>@T("Email Template")</h3>
+@using(Html.BeginFormAntiForgeryPost()) { 
+
+    @Html.HiddenFor( m => m.Id )
+    <ul>
+        <li>
+            <label>@T("Email Title")</label>
+            <p class="hint">@T("The text to go into the title of the email. Note the title is plain text and will not work with html tags")</p>
+            @Html.TextBoxFor( m=>m.Title, T("Title"))        
+        </li>
+        <li>
+            <label>@T("Email Body - plain text version")</label>
+            <p class="hint">@T("The body of the email formatted as plain text.")</p>
+            @Html.TextAreaFor( m=>m.BodyPlainText, T("Email Body - plain text version"))
+        </li>
+        <li>
+            <label>@T("Email Body - HTML version")</label>
+            <p class="hint">@T("The body of the email formatted as html. Place html tags directly into the box.")</p>
+            @Html.TextAreaFor( m=>m.BodyHtml, T("Email Body - html version") )
+        </li>
+    </ul>
+
+    <input type="submit" value="@T("Submit")"/>
+}

@@ -15,6 +15,8 @@ namespace NGM.Forum.Services {
         IEnumerable<ForumPart> Get(VersionOptions versionOptions);
         void Delete(ForumPart forum);
         IList<ContentTypeDefinition> GetForumTypes();
+        IEnumerable<ForumPart> GetForumsForCategory(ForumCategoryPart forumCategoryPart, VersionOptions versionOptions);
+        IEnumerable<ForumPart> GetForumsForCategories(List<int> ids, VersionOptions versionOptions);
     }
 
     public class ForumService : IForumService {
@@ -44,6 +46,25 @@ namespace NGM.Forum.Services {
                 .SingleOrDefault();
         }
 
+        public IEnumerable<ForumPart> GetForumsForCategories(List<int> ids, VersionOptions versionOptions)
+        {
+            return _contentManager.Query<ForumPart, ForumPartRecord>(versionOptions)
+                .WithQueryHints(new QueryHints().ExpandRecords<AutoroutePartRecord, TitlePartRecord, CommonPartRecord>())
+                .OrderBy(fp => fp.Weight)
+                .Join<CommonPartRecord>()
+                .Where(cpr => ids.Contains( cpr.Container.Id ))
+                .List();
+        }
+
+        public  IEnumerable<ForumPart> GetForumsForCategory(ForumCategoryPart forumCategoryPart, VersionOptions versionOptions)
+        {
+            return _contentManager.Query<ForumPart, ForumPartRecord>(versionOptions)
+                .WithQueryHints(new QueryHints().ExpandRecords<AutoroutePartRecord, TitlePartRecord, CommonPartRecord>())
+                .OrderBy( fp=>fp.Weight)
+                .Join<CommonPartRecord>()
+                .Where( cpr=>cpr.Container.Id == forumCategoryPart.Id)
+                .List();
+        }
         public void Delete(ForumPart forum) {
             _contentManager.Remove(forum.ContentItem);
         }

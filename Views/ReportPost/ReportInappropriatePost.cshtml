@@ -1,0 +1,46 @@
+@using NGM.Forum.Models
+@using NGM.Forum.Extensions
+@using Orchard.Utility.Extensions
+
+@model NGM.Forum.ViewModels.ReportInappropriatePostConfirmationViewModel
+
+@{
+    
+    NGM.Forum.Services.ReportPostService.CreatePostResultEnum result = Model.ReportSubmittedResult;
+}
+
+
+    <fieldset>
+        <legend>@T("Report Post as Inappropriate.")</legend>
+
+    @if (result == NGM.Forum.Services.ReportPostService.CreatePostResultEnum.AlreadyReportedButPendingResolution)
+    {
+        <p>@T("This post has already been reported and is waiting to be be reviewed by a moderator.")</p>
+        
+    } else if ( result == NGM.Forum.Services.ReportPostService.CreatePostResultEnum.CannotBeReportedByCreator ) {
+    
+        @T("You cannot report your own posts as inappropriate. If you have mistakenly posted something inappropriate then edit the post.");
+    
+    } else if( result == NGM.Forum.Services.ReportPostService.CreatePostResultEnum.Accepted
+               || result == NGM.Forum.Services.ReportPostService.CreatePostResultEnum.AlreadyReportByUser
+             )
+    {    
+        using(Html.BeginFormAntiForgeryPost()) { 
+
+            if (result == NGM.Forum.Services.ReportPostService.CreatePostResultEnum.AlreadyReportByUser) {    
+                <p>@T("This post was previously reviewed but was found to be acceptable.  If you believe this to be an error on our part, please report it again and be very specific about why it is inappropriate.")</p>        
+            }
+            
+            @Html.HiddenFor( m=>m.PostId )
+            @Html.HiddenFor( m=>m.ReturnUrl )
+            <p>
+            <label>@T("Please enter why the post is inappropriate such as it being spam, offensive, etc")</label>
+
+            @Html.TextAreaFor( m=>m.ReasonReported, 10, 80, new { @class="reported-reason"} )
+            </p>
+
+            <button type="submit">@T("Report Post" )</button>
+        }
+    }
+
+</fieldset>

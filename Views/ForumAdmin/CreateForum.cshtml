@@ -1,0 +1,12 @@
+@{ 
+    Layout.Title = T("New Forum").ToString();
+    var forumCategoryPart = (NGM.Forum.Models.ForumCategoryPart)Model.ForumCategoryPart;
+}
+
+<p>Adding a new forum to the category @forumCategoryPart.Title</p>
+@using (Html.BeginFormAntiForgeryPost()) {
+    @Html.ValidationSummary()
+    @Html.Hidden("forumCategoryPartId", forumCategoryPart.Id.ToString());
+    // Model is a Shape, calling Display() so that it is rendered using the most specific template for its Shape type
+    @Display(Model.Editor)
+}

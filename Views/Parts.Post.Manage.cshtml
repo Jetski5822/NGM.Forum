@@ -4,12 +4,27 @@
 @{
     var postPart = (PostPart)Model.ContentPart;
     var newPostPart = (PostPart)Model.NewPost;
+    var commonPart = (Orchard.Core.Common.Models.CommonPart) Model.ContentPart.CommonPart;
+    bool isOwner = false;
+    if ( Model.UserId != null ) {
+        if ( commonPart.Owner.Id == Model.UserId ) {
+            isOwner = true;
+        }
+    }
 }
 
 @if (Authorizer.Authorize(Orchard.Core.Contents.Permissions.DeleteContent, postPart.ContentItem) && !postPart.IsParentThread()) {
-    <a href="@Url.PostDelete(postPart)" class="remove">@T("Delete")</a>
+    <a href="@Url.PostDelete(postPart)" class="delete btn-post-option admin">@T("Delete")</a>
 }
+
 @if (Authorizer.Authorize(Orchard.Core.Contents.Permissions.PublishContent, newPostPart)) {
-    <a href="@Url.PostReply(postPart)" class="create">@T("Reply")</a>
-    <a href="@Url.PostReplyWithQuote(postPart)" class="create quote">@T("Reply with Quote")</a>
+    <a href="@Url.PostReply(postPart)" class="create btn-post-option user">@T("Reply")</a>
+    <a href="@Url.PostReplyWithQuote(postPart)" class="create btn-post-option user">@T("Reply with Quote")</a>
+}
+
+@if ( isOwner ) {
+    if (Authorizer.Authorize(Orchard.Core.Contents.Permissions.EditOwnContent, newPostPart))
+    {    
+        <a href="@Url.PostEdit(postPart)" class="edit btn-post-option user">@T("Edit")</a> 
+    }
 }

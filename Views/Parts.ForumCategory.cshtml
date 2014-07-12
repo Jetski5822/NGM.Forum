@@ -1,0 +1,17 @@
+﻿@using NGM.Forum
+@using NGM.Forum.Extensions
+@using NGM.Forum.Models
+@model dynamic
+
+@{
+    
+       <div class="forum-category-description">@Model.Category.ForumCategoryPart.Description</div>    
+        
+       <div class="forum-category-forum-list">
+        @foreach( var forum in Model.Forums ){
+            @Display( forum )
+        }
+       </div>
+
+    
+}

@@ -1,0 +1,20 @@
+﻿@using NGM.Forum
+@using NGM.Forum.Extensions
+@using NGM.Forum.Models
+@{
+    var threadPart = (ThreadPart)Model.ContentPart;
+    var firstPostPart = (PostPart)Model.FirstPost;
+    var newPostPart = (PostPart)Model.NewPost;    
+}
+
+@if (Authorizer.Authorize(Orchard.Core.Contents.Permissions.DeleteContent, threadPart) 
+    && Authorizer.Authorize(Orchard.Core.Contents.Permissions.DeleteContent, firstPostPart) 
+    && firstPostPart.IsParentThread()) {
+    <a href="@Url.ThreadDelete(threadPart)" class="remove">@T("Delete")</a>
+}
+
+@if (Authorizer.Authorize(Orchard.Core.Contents.Permissions.PublishContent, newPostPart)) {
+    if (!firstPostPart.ThreadPart.IsClosed) {
+        <a href="@Url.PostReply(firstPostPart)">@T("Reply to Thread")</a>
+    }
+}

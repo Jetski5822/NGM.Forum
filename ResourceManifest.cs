@@ -7,6 +7,12 @@ namespace NGM.Forum {
             resourceManifest.DefineStyle("ForumsAdmin").SetUrl("ngm-forum-admin.css");
 
             resourceManifest.DefineStyle("ThreadsAdmin").SetUrl("ngm-thread-admin.css");
+
+            resourceManifest.DefineStyle("Forum").SetUrl("ngm-forum.css");
+
+            resourceManifest.DefineScript("MomentJs").SetUrl("momentjs/moment-with-langs.min.js", "momentjs/moment-with-langs.js");
+
+            resourceManifest.DefineScript("UTCToLocal").SetUrl("UTCtoLocal.js").SetDependencies("jQuery", "MomentJs");
         }
     }
 }

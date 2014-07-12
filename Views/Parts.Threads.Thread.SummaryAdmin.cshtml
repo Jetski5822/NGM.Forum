@@ -7,11 +7,11 @@
     ThreadPart thread = (ThreadPart)contentItem.Get(typeof(ThreadPart));
 }
 <a href="@Url.ThreadForAdmin(thread)" title="@T("List Posts")">@T("List Posts")</a>@T(" | ")
-<a href="@Url.ThreadMoveForAdmin(thread)" title="@T("Move")">@T("Move")</a>@T(" | ")
+<a href="@Url.ThreadMove(thread)" title="@T("Move")">@T("Move")</a>@T(" | ")
 
 @if (thread.IsClosed) {
-    <a href="@Url.ThreadOpenForAdmin(thread)" title="@T("Reopen")">@T("Reopen")</a>@T(" | ")
+    <a href="@Url.ThreadOpen(thread)" title="@T("Reopen")">@T("Reopen")</a>@T(" | ")
 }
 else {
-    <a href="@Url.ThreadCloseForAdmin(thread)" title="@T("Close")">@T("Close")</a>@T(" | ")
+    <a href="@Url.ThreadClose(thread)" title="@T("Close")">@T("Close")</a>@T(" | ")
 }

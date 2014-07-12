@@ -7,23 +7,31 @@ using Orchard.ContentManagement.Handlers;
 using Orchard.Core.Common.Models;
 using Orchard.Data;
 using Orchard.Services;
+using Orchard.Core.Title.Models;
+using NGM.Forum.Settings;
+using System.Web;
 
 namespace NGM.Forum.Handlers {
     public class PostPartHandler : ContentHandler {
         private readonly IPostService _postService;
-        private readonly IThreadService _threadService;
-        private readonly IForumService _forumService;
         private readonly IClock _clock;
+        private readonly IReportPostService _reportPostService;
+        private readonly ICountersService _countersService;
+        private readonly ISubscriptionService _subscriptionService;
 
         public PostPartHandler(IRepository<PostPartRecord> repository, 
             IPostService postService, 
-            IThreadService threadService, 
-            IForumService forumService,
-            IClock clock) {
+            IClock clock,
+            IReportPostService reportPostService,
+            ICountersService countersService,
+            ISubscriptionService subscriptionService
+
+            ) {
             _postService = postService;
-            _threadService = threadService;
-            _forumService = forumService;
             _clock = clock;
+            _reportPostService = reportPostService;
+            _countersService = countersService;
+            _subscriptionService = subscriptionService;
 
             Filters.Add(StorageFilter.For(repository));
 
@@ -31,21 +39,38 @@ namespace NGM.Forum.Handlers {
             OnGetEditorShape<PostPart>(SetModelProperties);
             OnUpdateEditorShape<PostPart>(SetModelProperties);
 
-            OnCreated<PostPart>((context, part) => UpdateCounters(part));
-            OnPublished<PostPart>((context, part) => { 
-                UpdateCounters(part);
+            OnCreated<PostPart>((context, part) => _countersService.UpdateCounters(part));
+            OnPublished<PostPart>((context, part) => {
+                _countersService.UpdateCounters(part);
                 UpdateThreadVersioningDates(part);
+                SendNewPostNotification(part);
             });
-            OnUnpublished<PostPart>((context, part) => UpdateCounters(part));
-            OnVersioned<PostPart>((context, part, newVersionPart) => UpdateCounters(newVersionPart));
-            OnRemoved<PostPart>((context, part) => UpdateCounters(part));
+            OnUnpublished<PostPart>((context, part) => _countersService.UpdateCounters(part));
+            OnVersioned<PostPart>((context, part, newVersionPart) => _countersService.UpdateCounters(newVersionPart));
+            OnRemoved<PostPart>((context, part) =>
+            {
+                _countersService.UpdateCounters(part); 
+
+                                                    //going to leave the history record for historic purposes
+                                                    // RemoveReports(part); 
+                                                    });
 
             OnRemoved<ThreadPart>((context, b) =>
                 _postService.Delete(context.ContentItem.As<ThreadPart>()));
 
-            OnIndexing<PostPart>((context, postPart) => context.DocumentIndex
+            OnIndexing<PostPart>((context, postPart) => context.DocumentIndex        
                                                     .Add("body", postPart.Record.Text).RemoveTags().Analyze()
-                                                    .Add("format", postPart.Record.Format).Store());
+                                                    .Add("format", postPart.Record.Format).Store()
+                                                    .Add("forumsHomeId", postPart.ThreadPart.ForumPart.ForumCategoryPart.ForumsHomePagePart.Id)
+                                                    );
+
+            OnIndexing<ThreadPart>((context, threadPart) => context.DocumentIndex.Add("Title", threadPart.As<TitlePart>().Title ));
+          
+        }
+
+        private void SendNewPostNotification(PostPart postPart)
+        {
+            _subscriptionService.SendEmailNotificationToSubscribers(postPart);
         }
 
         private void UpdateThreadVersioningDates(PostPart postPart) {
@@ -56,43 +81,31 @@ namespace NGM.Forum.Handlers {
 
         private void SetModelProperties(BuildShapeContext context, PostPart postPart) {
             context.Shape.Thread = postPart.ThreadPart;
-        }
-        
-        private void UpdateCounters(PostPart postPart) {
-            if (postPart.IsParentThread())
-                return;
-
-            UpdateThreadPartCounters(postPart);
-        }
-
-        private void UpdateThreadPartCounters(PostPart postPart) {
-            var commonPart = postPart.As<CommonPart>();
-            if (commonPart != null &&
-                commonPart.Record.Container != null) {
-
-                ThreadPart threadPart = postPart.ThreadPart ??
-                                        _threadService.Get(commonPart.Record.Container.Id, VersionOptions.Published);
-
-                threadPart.PostCount = _postService.Count(threadPart, VersionOptions.Published);
-
-                UpdateForumPartCounters(threadPart);
+            if (context.Shape.Metadata.DisplayType != null)
+            {
+                if (context.Shape.Metadata.DisplayType == "Editor")
+                {
+                    context.Shape.EditorFlavor = GetFlavor(postPart);
+                    context.Shape.ReturnUrl = HttpContext.Current.Request.UrlReferrer.AbsoluteUri;
+                }
             }
         }
-
-        private void UpdateForumPartCounters(ThreadPart threadPart) {
-            var commonPart = threadPart.As<CommonPart>();
-            if (commonPart != null &&
-                commonPart.Record.Container != null) {
-
-                ForumPart forumPart = threadPart.ForumPart ??
-                                      _forumService.Get(commonPart.Record.Container.Id, VersionOptions.Published);
-
-                forumPart.ThreadCount = _threadService.Count(forumPart, VersionOptions.Published);
-                forumPart.PostCount = _threadService
-                    .Get(forumPart, VersionOptions.Published)
-                    .Sum(publishedThreadPart => 
-                        publishedThreadPart.PostCount);
-            }
+        private static string GetFlavor(PostPart part)
+        {
+            var typePartSettings = part.Settings.GetModel<PostTypePartSettings>();
+            return (typePartSettings != null && !string.IsNullOrWhiteSpace(typePartSettings.Flavor))
+                       ? typePartSettings.Flavor
+                       : part.PartDefinition.Settings.GetModel<PostPartSettings>().FlavorDefault;
         }
+        private void RemoveReports(PostPart postPart)
+        {
+            //If a post is deleted from the system remove its related 'inappropriate reports'
+            //Once the post is gone from the system, the report can no longer be substantiated, so keeping it for historic purposes serves no purpose.
+            var reportIds = _reportPostService.Get().Where( report=>report.PostId == postPart.Id ).Select( r=>r.Id).ToList();
+            _reportPostService.DeleteReports(reportIds);
+
+        }
+
+
     }
 }

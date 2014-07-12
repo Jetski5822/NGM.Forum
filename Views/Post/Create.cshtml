@@ -10,4 +10,9 @@
     @Html.ValidationSummary()
     // Model is a Shape, calling Display() so that it is rendered using the most specific template for its Shape type
     @Display(Model)
+    
+<ul class="post-body-editor-buttons">
+    <li><button type="submit">Submit</button></li>
+    <li><a class="btn button btn-cancel" href="@Model.ReturnUrl">Cancel</a></li>
+</ul>
 }

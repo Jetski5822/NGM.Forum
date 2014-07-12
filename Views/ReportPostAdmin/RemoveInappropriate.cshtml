@@ -1,0 +1,50 @@
+@using NGM.Forum.Models
+@using NGM.Forum.Extensions
+@using Orchard.Utility.Extensions
+
+@model NGM.Forum.ViewModels.RemoveInappropriateFlagViewModel
+
+@{               
+    Style.Include("ngm-forum-common-admin").AtHead();
+}
+
+@using(Html.BeginFormAntiForgeryPost()) { 
+    
+    <fieldset>
+        <legend>@T("Remove Inappropriate Flag from Post")</legend>
+
+        @Html.ValidationSummary()
+
+        <div class="editor-label">
+            @Html.LabelFor( model => model.Report.Note, T("Note") )
+            <div class='label-info'>@T("Please review the previous notes and enter why the post is now deemed appropriate.")</div>
+        </div>
+        <div class="editor-field" >
+            @Html.TextAreaFor( model => model.Report.Note, new { @class= "wide" } )
+            @Html.ValidationMessageFor(model => model.Report.Note)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor( model => model.Report.IsResolved, T("Is Resolved"))            
+            <div class='label-info'>@T("Marking a report as resolved removes it from the list of posts reported as inappropriate.")</div>
+        </div>
+        <div class="editor-field" >
+            @Html.CheckBoxFor( model=> model.Report.IsResolved)
+            @Html.ValidationMessageFor(model => model.Report.IsResolved)
+            
+        </div>
+        @Html.HiddenFor( model => model.Report.Id )
+        @Html.HiddenFor(model=>model.Report.PostId )
+        @Html.HiddenFor( model=>model.ReturnUrl )
+                
+    </fieldset>
+    
+<br />
+
+<input type="submit" value="Remove Inappropriate flag from post."/>
+
+<a style="display:inline-block" class='btn' href="@Model.ReturnUrl">@T("Cancel").ToString()</a>
+} 
+
+
+
+

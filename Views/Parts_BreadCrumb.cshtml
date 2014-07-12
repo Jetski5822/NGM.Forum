@@ -1,0 +1,31 @@
+﻿@using NGM.Forum.Models;
+@using Orchard.Mvc.Html;
+
+@{
+    ForumsHomePagePart homePage = (ForumsHomePagePart)Model.ForumsHomePagePart;
+    ForumCategoryPart category = (ForumCategoryPart)Model.ForumCategoryPart;
+    ForumPart forum = (ForumPart)Model.ForumPart;
+    ThreadPart thread = (ThreadPart)Model.ThreadPart;    
+}
+
+@* https://support.google.com/webmasters/answer/185417?hl=en *@
+
+@{
+    var rootUrl = Url.ItemDisplayUrl(homePage.ContentItem);
+    var categoryUrl = rootUrl + "#" + category.Id;
+
+}
+<ul id="forum-breadcrumbs" class="list-inline">   
+    <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="@rootUrl">@homePage.Title</a> </li>
+    <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="@categoryUrl">@category.Title</a> </li>
+    
+    @if (forum != null){            
+        <li class="forum-breadcrumb" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">@Html.ItemDisplayLink( forum.Title, forum.ContentItem ) </li>
+    }
+
+    @if (thread != null){            
+        <li class="forum-breadcrumb" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">@Html.ItemDisplayLink( thread.Title, thread.ContentItem) </li>
+    }
+</ul>
+
+

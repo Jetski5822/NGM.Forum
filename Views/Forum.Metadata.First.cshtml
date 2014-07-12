@@ -2,9 +2,9 @@
 @using Orchard.Utility.Extensions
 @{
     var postPart = (PostPart)Model.Post;
-
-    var body = new HtmlString(Html.Excerpt(postPart.Text, 200).ToString().Replace(Environment.NewLine, "</p>" + Environment.NewLine + "<p>"));
-
+    //this was creating <p></p> induced line breaks in the preview... and reduce the preview line length so it stays on one line
+    //var body = new HtmlString(Html.Excerpt(postPart.Text, 200).ToString().Replace(Environment.NewLine, "</p>" + Environment.NewLine + "<p>"));
+    var body = new HtmlString(Html.Excerpt(postPart.Text, 160).ToString());
     Model.Classes.Add("firstPost");
 
     var contentTypeClassName = ((string)postPart.ContentItem.ContentType + "-content").HtmlClassify();

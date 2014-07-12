@@ -4,6 +4,7 @@
 @using Orchard.Core.Common.Models
 @using Orchard.UI.Navigation
 @using Orchard.Utility.Extensions
+
 @{
     var postPart = (PostPart)Model.Post;
     var commonPart = postPart.As<CommonPart>();
@@ -11,13 +12,29 @@
     var pager = (Pager) Model.Pager;
 
     Model.Classes.Add("latestPost");
-
-    var contentTypeClassName = ((string)postPart.ContentItem.ContentType + "-metadata").HtmlClassify();
-    Model.Classes.Add(contentTypeClassName);
+    if ( postPart != null )  {
+        var contentTypeClassName = ((string)postPart.ContentItem.ContentType + "-metadata").HtmlClassify();
+        Model.Classes.Add(contentTypeClassName);
+    }
 
     var tag = Tag(Model, "div");
 }
+
 @tag.StartElement
-    <span class="author">@T("Latest post by {0},", commonPart.Owner.UserName)</span>
-    <span class="published"><a href="@Url.PostView(postPart, pager)">@Display.PublishedState(createdDateTimeUtc: commonPart.CreatedUtc, publisheddateTimeUtc: commonPart.PublishedUtc)</a></span>
+<span class ="lastest-post">
+
+    @if ( postPart != null ) {
+        <a href="@Url.PostView(postPart, pager)">
+        @T("Latest post by {0} ", commonPart.Owner.UserName)
+        @if ( WorkContext.CurrentTimeZone == TimeZoneInfo.Utc){
+            DateTime date = @commonPart.CreatedUtc.Value;
+            <span class="published utc-date-time">@date.ToString("yyyy-MM-ddTHH:mm:ss Z")</span>    
+        } else {
+            <span class="published">@Display.PublishedState(createdDateTimeUtc:commonPart.CreatedUtc, publisheddateTimeUtc:  commonPart.PublishedUtc) </span>    
+        }
+        </a>
+    } else {
+        @* do nothing... this part should perhaps be removed in the driver if there is no latest post however it may be wanted as a placeholder in the html *@  
+    }
+</span>
 @tag.EndElement
