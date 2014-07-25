@@ -1,6 +1,6 @@
 ﻿
 @using NGM.Forum.ViewModels
-
+@model dynamic
 
 @using(Html.BeginForm("Index", "ForumSearch", new { area = "NGM.Forum" }, FormMethod.Get, new { forumsHomeId = Model.ForumsHomeId, @class = "forum-search-form" })) { 
     <fieldset>

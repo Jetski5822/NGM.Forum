@@ -9,6 +9,7 @@ using Orchard.ContentManagement.Handlers;
 using Orchard.Core.Common.Models;
 using Orchard.Data;
 using Orchard.Security;
+using System;
 
 namespace NGM.Forum.Handlers {
     [UsedImplicitly]
@@ -38,8 +39,20 @@ namespace NGM.Forum.Handlers {
 
             OnActivated<ThreadPart>(PropertyHandlers);
             OnLoading<ThreadPart>((context, part) => LazyLoadHandlers(part));
-            OnCreated<ThreadPart>((context, part) => _countersService.UpdateForumPartCounters(part));
-            OnPublished<ThreadPart>((context, part) => _countersService.UpdateForumPartCounters(part));
+
+            OnCreated<ThreadPart>((context, part) => { 
+                _countersService.UpdateForumPartCounters(part);
+                //bit expensive but doesn't happen frequently
+                part.ForumsHomepageId = part.ForumPart.ForumCategoryPart.ForumsHomePagePart.Id;   
+            });
+
+            OnPublished<ThreadPart>((context, part) => {
+                _countersService.UpdateForumPartCounters(part);
+                part.LastestValidPostDate = DateTime.UtcNow;
+                //bit expensive but doesn't happen frequently
+                part.ForumsHomepageId = part.ForumPart.ForumCategoryPart.ForumsHomePagePart.Id;              
+            });
+
             OnUnpublished<ThreadPart>((context, part) => _countersService.UpdateForumPartCounters(part));
             OnVersioning<ThreadPart>((context, part, newVersionPart) => LazyLoadHandlers(newVersionPart));
             OnVersioned<ThreadPart>((context, part, newVersionPart) => _countersService.UpdateForumPartCounters(newVersionPart));

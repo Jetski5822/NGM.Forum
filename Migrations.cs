@@ -119,7 +119,7 @@ namespace NGM.Forum {
 
         public int UpdateFrom1()
         {
-            SchemaBuilder.AlterTable("ForumPartRecord", command => command.AddColumn<int>("Weight"));
+            //SchemaBuilder.AlterTable("ForumPartRecord", command => command.AddColumn<int>("Weight"));
 
             return 2;
         }
@@ -262,13 +262,17 @@ namespace NGM.Forum {
                 );
             SchemaBuilder.AlterTable("ThreadPartRecord",
                 table => table
-                 .AddColumn<bool>("IsDeleted", column => column.WithDefault(false))
+                 .AddColumn<bool>("IsDeleted", column => column.WithDefault(false))                 
                 );
             return 8;
         }
         public int UpdateFrom8()
         {
-           
+            SchemaBuilder.AlterTable("ThreadPartRecord",
+                table => table
+                 .AddColumn<int>("ForumsHomepageId")
+             );           
+
             SchemaBuilder.CreateTable("PostEditHistoryRecord",
                table => table
                    .Column<int>("Id", c => c.PrimaryKey().Identity())
@@ -382,10 +386,6 @@ namespace NGM.Forum {
 
         public int UpdateFrom16()
         {
-            SchemaBuilder.AlterTable("PostPartRecord",
-                 table => table
-                     .AddColumn<string>("IP", column => column.WithLength(46))
-                 );
 
             return 17;
         }
@@ -450,7 +450,27 @@ namespace NGM.Forum {
             return 19;
          }
 
-           
+        public int UpdateFrom19()
+        {
+            SchemaBuilder.AlterTable("ThreadPartRecord",
+                 table => table
+                     .AddColumn<DateTime>("LatestValidPostDate")
+            );
 
+            return 20;
+        }
+
+        public int UpdateFrom20()
+        {
+            SchemaBuilder.CreateTable("ForumsHomePageLastReadRecord",
+                 table => table
+                   .Column<int>("Id", c => c.PrimaryKey().Identity())
+                   .Column<int>("ForumsHomePageId")
+                   .Column<DateTime>("LastReadDate")
+                   .Column<int>("UserId")
+            );
+
+            return 21;
+        }
     }
 }

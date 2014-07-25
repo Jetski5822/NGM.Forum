@@ -17,7 +17,7 @@ namespace NGM.Forum.Services {
         IEnumerable<ThreadPart> Get(ForumPart forumPart, int skip, int count);
         IEnumerable<ThreadPart> Get(ForumPart forumPart, int skip, int count, VersionOptions versionOptions);
         int Count(ForumPart forumPart, VersionOptions versionOptions);
-        void Delete(ForumPart forumPart);
+        void Delete(ForumPart forumPart);        
     }
 
     public class ThreadService : IThreadService {

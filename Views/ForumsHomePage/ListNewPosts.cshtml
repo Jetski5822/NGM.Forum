@@ -1,0 +1,25 @@
+﻿@using NGM.Forum.Models;
+
+@model dynamic
+
+@{
+    Script.Require("UtcToLocal");
+    Style.Require("Forum").AtHead();    
+}
+@Display(Model.ForumMenu )
+@Display(Model.SearchBox )
+
+<a href="@Model.ReturnUrl"><< @T("Back to the Forums")</a>
+<h2>@T("New Posts")</h2>
+
+
+@if (Model.Posts.Count == 0)
+{
+    <p class="info">@T("There are no new posts.")</p>
+} else {
+    <div id="new-post-list">
+
+        @Display(Model.Posts)
+    </div>
+    @Display(Model.Pager)
+}

@@ -1,6 +1,62 @@
 ﻿
-<ul id="forum-menu-items" class="list-inline">
-    <li class="forum-menu-item">@Html.ActionLink( T("Subscriptions").ToString(), "ViewSubscriptions", "Subscription", new { area = "NGM.Forum" }, null )  </li>
-    <li class="forum-menu-item">@Html.ActionLink( T("Discussions").ToString(), "ListDiscussions", "Discussions", new { area = "NGM.Forum" }, null )  </li>
+<ul id="forum-menu-items">
+    <li class="forum-menu-item lvl1">@Html.ActionLink( T("Subscriptions").ToString(), "ViewSubscriptions", "Subscription", new { area = "NGM.Forum", forumsHomeId = @Model.ForumsHomePagePart.Id }, null )</li>
+
+    <li class="forum-menu-item lvl1">@Html.ActionLink( T("Discussions").ToString(), "ListDiscussions", "Discussions", new { area = "NGM.Forum", forumsHomeId = @Model.ForumsHomePagePart.Id }, null )  </li>
+
+    @if ( @Model.ShowMarkAll == true ) {
+        <li  class="forum-menu-item lvl1">
+            @T("View New")
+            <ul>        
+                <li class="forum-menu-item">@Html.ActionLink( T("Posts").ToString(), "ListNewPosts", "ForumsHomePage", new { area = "NGM.Forum", forumsHomeId = @Model.ForumsHomePagePart.Id, returnUrl = @Model.ReturnUrl}, null )  </li>
+                <li class="forum-menu-item">@Html.ActionLink( T("Posts By Thread").ToString(), "ListNewPostsByThread", "ForumsHomePage", new { area = "NGM.Forum", forumsHomeId = @Model.ForumsHomePagePart.Id, returnUrl = @Model.ReturnUrl}, null )  </li>
+            </ul>
+        </li>
+        
+
+    }
+
+    @if ( @Model.ShowRecent == true ) {
+        <li class="forum-menu-item lvl1">@Html.ActionLink( @T("Mark All Read").ToString(), "MarkAllRead", "ForumsHomePage", new { area = "NGM.Forum", forumsHomeId = @Model.ForumsHomePagePart.Id}, null ) </li>
+    }
 </ul>
 
+@using (Script.Foot())
+{
+    <script type="text/javascript">
+        //<![CDATA[
+       
+            var timeout = 500;
+            var closetimer = 0;
+            var ddmenuitem = 0;
+
+            function jsddm_open() {
+                jsddm_canceltimer();
+                jsddm_close();
+                ddmenuitem = $(this).find('ul').css('visibility', 'visible');
+            }
+
+            function jsddm_close()
+            { if (ddmenuitem) ddmenuitem.css('visibility', 'hidden'); }
+
+            function jsddm_timer()
+            { closetimer = window.setTimeout(jsddm_close, timeout); }
+
+            function jsddm_canceltimer() {
+                if (closetimer) {
+                    window.clearTimeout(closetimer);
+                    closetimer = null;
+                }
+            }
+
+            $(document).ready(function () {
+                $('#forum-menu-items > li').bind('mouseover', jsddm_open)
+                $('#forum-menu-items > li').bind('mouseout', jsddm_timer)
+            });
+
+            document.onclick = jsddm_close;
+   
+        //]]>
+    </script>
+
+}

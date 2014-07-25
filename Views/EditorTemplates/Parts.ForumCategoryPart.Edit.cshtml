@@ -15,7 +15,7 @@
     
         <div>
             @Html.LabelFor(m => m.Description, @T("Description"))
-            @Html.EditorFor(m => m.Description)
+            @Html.TextBoxFor(m => m.Description, new { @class="text large" })
             @Html.ValidationMessageFor(m => m.Description, "*")
         </div>
         <div>

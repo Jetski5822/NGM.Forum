@@ -163,7 +163,6 @@
     <Compile Include="Drivers\ForumCategoryPartDriver.cs" />
     <Compile Include="Models\ForumCategoryPart.cs" />
     <Compile Include="Models\ForumCategoryPartRecord.cs" />
-    <Compile Include="ViewModels\ThreadPager.cs" />
     <Compile Include="Handlers\ForumSearchPartHandler.cs" />
     <Compile Include="Drivers\ForumSearchPartDriver.cs" />
     <Compile Include="ViewModels\ViewEditHistoryViewModel.cs" />
@@ -311,9 +310,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Thread\Create.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Forum\List_this_can_be_Deleted.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Parts.Forums.Thread.ListAdmin.cshtml" />
@@ -551,6 +547,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="NotesAndDocs\" />
+    <Folder Include="Views\Forum\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Discussions\ListDiscussions.cshtml" />
@@ -700,6 +697,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Parts.Threads.Post.Body.Editor.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ForumsHomePage\ListNewPosts.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ForumsHomePage\ListNewPostsByThread.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

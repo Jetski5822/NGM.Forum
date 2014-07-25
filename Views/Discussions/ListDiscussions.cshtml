@@ -13,13 +13,20 @@
     //var contentTypeClassName = ((string)contentPart.ContentItem.ContentType + "-threads").HtmlClassify();
     String contentTypeClassName = "subscription-threads";
     Model.ContentItems.Classes.Add(contentTypeClassName);
+    ForumsHomePagePart homepagePart = Model.ForumsHomepagePart;    
 }
 
 @Display( Model.ForumMenu)
-<div class='menu-clear'></div>
-<h2>@T("Discussions ")</h2>
-<h3>@T("Discussions started by you or that you have participated in:")</h3>
 
+<div class='menu-clear'></div>
+
+@if ( @homepagePart != null ) {
+    <h2>@T("Discussions For ") <a href="@Url.ItemDisplayUrl( @homepagePart.ContentItem)">@homepagePart.Title</a> </h2>
+} else {
+    <h2>@T("Discussions For All Forums")</h2>
+}
+
+<h3>@T("Discussions started by you or that you have participated in:")</h3>
 
 @Display(Model.ContentItems)
 

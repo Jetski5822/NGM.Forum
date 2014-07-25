@@ -117,7 +117,7 @@ namespace NGM.Forum.Controllers {
         }
 
 
-        public ActionResult ViewSubscriptions()
+        public ActionResult ViewSubscriptions( int forumsHomeId)
         {
 
             if (!_orchardServices.WorkContext.HttpContext.User.Identity.IsAuthenticated)
@@ -125,7 +125,14 @@ namespace NGM.Forum.Controllers {
 
             if (!_orchardServices.Authorizer.Authorize(Permissions.CanPostToForums, T("You do not have permissions to view subscriptions.")))
                 return new HttpUnauthorizedResult();
-
+            ForumsHomePagePart forumsHomepagePart = null;
+            var siteForums = _orchardServices.ContentManager.Query<ForumsHomePagePart>().List().ToList();
+            
+            if (forumsHomeId != 0)
+            {
+                forumsHomepagePart = siteForums.Where(forumsHomePart => forumsHomePart.Id == forumsHomeId).FirstOrDefault();
+            } 
+            
             var userId = _orchardServices.WorkContext.CurrentUser.Id;
 
             var threadSubscriptionList = _subscriptionService.GetSubscribedThreads(userId);
@@ -138,8 +145,8 @@ namespace NGM.Forum.Controllers {
 
             var list = Shape.List();
             list.AddRange(threadDisplay);
-            var menuShape = Shape.Parts_ForumMenu();
-            dynamic viewModel = _orchardServices.New.ViewModel().ContentItems(list).ForumMenu(menuShape).SubscriptionSettings( settings ) ;
+            var menuShape = Shape.Parts_ForumMenu(ForumsHomePagePart: forumsHomepagePart, ShowRecent: false, ShowMarkAll: false, ReturnUrl: HttpContext.Request.Url.AbsoluteUri);
+            dynamic viewModel = _orchardServices.New.ViewModel().ContentItems(list).ForumMenu(menuShape).SubscriptionSettings(settings).ForumsHomepagePart(forumsHomepagePart).SiteForumsList(siteForums);
 
             return View((object)viewModel);
 

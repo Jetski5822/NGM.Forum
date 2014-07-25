@@ -10,6 +10,14 @@ namespace NGM.Forum.Models
         public virtual int Id { get; set; }
         public virtual int ThreadId { get; set; }
         public virtual int UserId { get; set; }
-        public virtual DateTime? LastReadDate { get; set; } //used for sorting only
+        public virtual DateTime? LastReadDate { get; set; } 
+    }
+
+    public class ForumsHomePageLastReadRecord
+    {
+        public virtual int Id { get; set; }
+        public virtual int ForumsHomePageId { get; set; }
+        public virtual int UserId { get; set; }
+        public virtual DateTime? LastReadDate { get; set; } 
     }
 }

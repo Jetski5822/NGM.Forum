@@ -63,7 +63,7 @@ namespace NGM.Forum.Handlers {
                      {"Area", Constants.LocalArea},
                      {"Controller", "ForumsHomePage"},
                      {"Action", "Item"},
-                     {"forumsHomePageId", context.ContentItem.Id}
+                     {"forumsHomepageId", context.ContentItem.Id}
                  };
 
      

@@ -84,7 +84,7 @@ namespace NGM.Forum.Controllers {
 
             part.Text = string.Format("<blockquote>{0}</blockquote>{1}", contentItem.As<PostPart>().Text, "<p></p>");
 
-            var model = _orchardServices.ContentManager.BuildDisplay(part, "Editor");
+            var model = _orchardServices.ContentManager.BuildEditor(part);
 
             return View("Create", (object)model);
         }
@@ -254,6 +254,7 @@ namespace NGM.Forum.Controllers {
 
             return View((object)viewModel);
         }
+
 
         //http://stackoverflow.com/questions/2577496/how-can-i-get-the-clients-ip-address-in-asp-net-mvc
         private static string GetClientIpAddress(HttpRequestBase request)

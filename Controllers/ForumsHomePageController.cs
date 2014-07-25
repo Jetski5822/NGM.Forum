@@ -12,6 +12,9 @@ using Orchard.Themes;
 using Orchard.UI.Navigation;
 using NGM.Forum.Models;
 using Orchard.Core.Common.Models;
+using System.Collections.Generic;
+using Orchard.Search.Services;
+using Orchard.Indexing;
 
 namespace NGM.Forum.Controllers {
     [Themed]
@@ -24,6 +27,10 @@ namespace NGM.Forum.Controllers {
         private readonly IThreadLastReadService _threadLastReadService;
         private readonly IForumCategoryService _forumCategoryService;
 
+        //private readonly ISearchBuilder _searchBuilder;
+       // private readonly ISearchService _searchService;
+       // private readonly IIndexManager _indexManager;
+       // private readonly IIndexProvider _indexProvider;
 
         public ForumsHomePageController(
             IOrchardServices orchardServices, 
@@ -32,7 +39,8 @@ namespace NGM.Forum.Controllers {
             IThreadService threadService,
             ISiteService siteService,
             IShapeFactory shapeFactory,
-            IThreadLastReadService threadLastReadService            
+            IThreadLastReadService threadLastReadService
+         //   IIndexManager indexManager
          ) {
             _orchardServices = orchardServices;
             _forumService = forumService;
@@ -40,6 +48,8 @@ namespace NGM.Forum.Controllers {
             _siteService = siteService;
             _threadLastReadService = threadLastReadService;
             _forumCategoryService = forumCategoryService;
+            //string searchIndex = ForumSearchService.FORUMS_INDEX_NAME;
+           // _searchBuilder = _indexManager.HasIndexProvider() ? _indexManager.GetSearchIndexProvider().CreateSearchBuilder(searchIndex) : new NullSearchBuilder();
 
             Shape = shapeFactory;
             Logger = NullLogger.Instance;
@@ -50,7 +60,90 @@ namespace NGM.Forum.Controllers {
         protected ILogger Logger { get; set; }
         public Localizer T { get; set; }
 
-       
+        public ActionResult ListNewPosts(int forumsHomeId, string returnUrl, PagerParameters pagerParameters)
+        {
+            Pager pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
+
+            var forumsHomePagePart = _orchardServices.ContentManager.Get(forumsHomeId);
+            if (forumsHomePagePart == null)
+                return HttpNotFound();
+
+            if (_orchardServices.WorkContext.CurrentUser == null)
+                return new HttpUnauthorizedResult();
+            var userId = _orchardServices.WorkContext.CurrentUser.Id;
+            
+            
+            //should get the threads that the user has read already... then compare. All other threads are unread.
+
+            var posts = _threadLastReadService.GetNewPosts(forumsHomeId, userId, 30, pager.GetStartIndex(), pager.PageSize);
+
+
+            var menu = Shape.Parts_ForumMenu(ShowMarkAll: true, ShowRecent: true, ForumsHomePagePart: forumsHomePagePart, ReturnUrl:returnUrl);
+            var search = Shape.Parts_Forum_Search(ForumsHomeId: forumsHomeId);
+
+            var list = Shape.List();
+            list.AddRange(posts.Select(post => _orchardServices.ContentManager.BuildDisplay(post)));
+
+            dynamic viewModel = _orchardServices.New.ViewModel().Posts(list).ForumMenu(menu).Pager( Shape.Pager(pager).TotalItemCount(posts.Count)).SearchBox(search).ReturnUrl(returnUrl);
+
+            return View((object)viewModel);
+        }
+
+        public ActionResult ListNewPostsByThread(int forumsHomeId, string returnUrl, PagerParameters pagerParameters)
+        {
+
+            Pager pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
+
+            var forumsHomePagePart = _orchardServices.ContentManager.Get<ForumsHomePagePart>(forumsHomeId);
+            if (forumsHomePagePart == null)
+                return HttpNotFound();
+
+            if (_orchardServices.WorkContext.CurrentUser == null)
+                return new HttpUnauthorizedResult();
+
+            var userId = _orchardServices.WorkContext.CurrentUser.Id;
+            var postsByThread = _threadLastReadService.GetNewPostsByThread(forumsHomeId, userId, 30, pager.GetStartIndex(), pager.PageSize );
+
+            var threadDic = postsByThread.Item1;
+            var postsDic = postsByThread.Item2;
+
+            var menu = Shape.Parts_ForumMenu(ShowMarkAll: true, ShowRecent: true, ForumsHomePagePart: forumsHomePagePart, ReturnUrl: returnUrl);
+            var search = Shape.Parts_Forum_Search(ForumsHomeId: forumsHomeId);
+
+            Dictionary<int, dynamic> postDisplays = new Dictionary<int, dynamic>();
+
+            foreach (var key in postsDic.Keys)
+            {
+                var posts = postsDic[key].Select(post => _orchardServices.ContentManager.BuildDisplay(post));
+
+                var list = Shape.List();
+                list.AddRange(posts);
+                postDisplays.Add(key, list);
+            }
+
+            dynamic viewModel = _orchardServices.New.ViewModel().PostByThreadDic(postDisplays).ThreadDic(threadDic).Pager(Shape.Pager(pager).TotalItemCount(threadDic.Count)).ForumMenu(menu).SearchBox(search).ReturnUrl(returnUrl);
+
+            return View((object)viewModel);
+        }
+
+        public ActionResult MarkAllRead(int forumsHomeId)
+        {
+            var forumsHomePagePart = _orchardServices.ContentManager.Get<ForumsHomePagePart>( forumsHomeId, VersionOptions.Published);
+            if ( forumsHomePagePart == null ) 
+                return HttpNotFound();
+
+            if ( _orchardServices.WorkContext.CurrentUser == null ) 
+                return new HttpUnauthorizedResult();
+
+            var userId = _orchardServices.WorkContext.CurrentUser.Id;
+
+            _orchardServices.Notifier.Add(Orchard.UI.Notify.NotifyType.Information, (T("All threads in the current forum where marked as read")));
+
+            _threadLastReadService.MarkAllRead( forumsHomeId, userId );
+
+            return Redirect(HttpContext.Request.UrlReferrer.AbsoluteUri);
+
+        }
     
     }
 }

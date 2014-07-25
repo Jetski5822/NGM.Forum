@@ -8,6 +8,7 @@ using Orchard.Core.Title.Models;
 
 namespace NGM.Forum.Models {
     public class ThreadPart : ContentPart<ThreadPartRecord>, IThreadPart {
+
         private readonly LazyField<IUser> _closedBy = new LazyField<IUser>();
         private readonly LazyField<PostPart> _firstPost = new LazyField<PostPart>();
         private readonly LazyField<PostPart> _latestPost = new LazyField<PostPart>();
@@ -58,6 +59,14 @@ namespace NGM.Forum.Models {
             set { _latestPost.Value = value; }
         }
 
+        //this is to optimize the lookup of 'new posts', and must be manually syncronized on every post 
+        //it should also change such as when the lastest post is inappropriate.
+        public DateTime? LastestValidPostDate
+        {
+            get { return Record.LatestValidPostDate; }
+            set { Record.LatestValidPostDate = value; }
+        }
+
         public string ClosedDescription {
             get { return Record.ClosedDescription; }
             set { Record.ClosedDescription = value; }
@@ -96,10 +105,17 @@ namespace NGM.Forum.Models {
             set { Record.IsInappropriate = value; }
         }
 
+        public int ForumsHomepageId {
+            get { return Record.ForumsHomepageId; }
+            set { Record.ForumsHomepageId = value; }
+        }
+
         public ReadStateEnum ReadState { get; set; }
 
         /*not db stored.  Used by the subscription system*/
         public bool UserIsSubscribedByEmail { get;set;}
+
+        
     }
 
     public interface IThreadPart : IContent {
@@ -118,5 +134,10 @@ namespace NGM.Forum.Models {
 
         public virtual bool IsDeleted { get; set; }
         public virtual bool IsInappropriate { get; set; }
+
+        public virtual DateTime? LatestValidPostDate { get; set; }
+
+        //redundant information required for speed purposes
+        public virtual int ForumsHomepageId { get; set; }
     }
 }

@@ -12,7 +12,7 @@
   <!-- NOT USED?? -->
   <Place Parts_ForumCategoryPart="Content:before"/>
 <Place ForumPartSettings="Content:0"/>
-  <Place Parts_ContentPermissions_Edit="-" />
+    
   <Match ContentType="ForumCategory">
     <Match DisplayType="Detail">
       <Place
@@ -130,7 +130,7 @@
   </Match>
   
   <Match ContentType="Post">
-    
+    <Place Parts_ContentPermissions_Edit="-" />
     <Match DisplayType="Detail">
       <Place
             Parts_UserPhotosSmallImagePart ="User:1"

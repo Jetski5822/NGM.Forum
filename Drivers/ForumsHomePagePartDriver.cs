@@ -59,7 +59,7 @@ namespace NGM.Forum.Drivers {
             }
             if (displayType.Equals("Detail", StringComparison.OrdinalIgnoreCase))
             {
-                results.Add(ContentShape("Parts_ForumMenu", () => shapeHelper.Parts_ForumMenu()));
+                results.Add(ContentShape("Parts_ForumMenu", () => shapeHelper.Parts_ForumMenu(ForumsHomePagePart: part, ShowRecent: true, ShowMarkAll: true, ReturnUrl: HttpContext.Current.Request.Url.AbsoluteUri)));
             }
             results.Add(ContentShape("Parts_ForumsHomePage",
                 () => shapeHelper.Parts_ForumsHomePage(

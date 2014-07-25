@@ -1,0 +1,64 @@
+﻿@using NGM.Forum.Models;
+
+@model dynamic
+
+@{
+    Script.Require("UtcToLocal");
+    Style.Require("Forum").AtHead();
+    var postsDic = (Dictionary<int, dynamic> ) Model.PostByThreadDic;
+    var threadDic = (Dictionary<int, ThreadPart>) Model.ThreadDic;
+}
+
+@Display(Model.ForumMenu )
+@Display(Model.SearchBox )
+
+<a href="@Model.ReturnUrl"><< @T("Back to the Forums")</a>
+
+<h2>@T("New Posts By Thread")</h2>
+
+
+
+
+    @if (threadDic.Count == 0)
+    {
+        <p class="info">@T("There are no new posts.")</p>
+    } else {
+        <p>@T("Click title to see the posts in a thread.")</p>    
+        foreach ( var threadKey in threadDic.Keys ) {
+        <ul>
+            <li><h3 class="new-posts-thread-title">@threadDic[threadKey].Title <span class="new-post-count">@postsDic[threadKey].Items.Count @T("New Posts")  <a href="@Url.ItemDisplayUrl( threadDic[threadKey])"> @T("View") </a></span></h3>
+                
+            <ul class="new-post-list">
+
+            @foreach (var post in postsDic[threadKey])
+            {
+            
+                <li>
+                    @Display(post)
+                </li>
+                
+            }
+            </ul>
+            </li>
+        </ul>        
+        }
+        @Display(Model.Pager)
+    }
+
+@using (Script.Foot())
+{
+    <script type="text/javascript">
+        //<![CDATA[
+        $(document).ready(function () {
+
+            $(".new-post-list").slideUp();
+
+            $(".new-posts-thread-title").click(function (e) {
+                $(this).next().slideToggle();
+            });
+                
+        });
+        //]]>
+    </script>
+
+}

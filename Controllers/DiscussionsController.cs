@@ -58,7 +58,7 @@ namespace NGM.Forum.Controllers {
         dynamic Shape { get; set; }
         public Localizer T { get; set; }
 
-        public ActionResult ListDiscussions()
+        public ActionResult ListDiscussions(int forumsHomeId)
         {
 
             if (!_orchardServices.WorkContext.HttpContext.User.Identity.IsAuthenticated)
@@ -66,6 +66,15 @@ namespace NGM.Forum.Controllers {
 
             if (!_orchardServices.Authorizer.Authorize(Permissions.CanPostToForums, T("You do not have permissions to view this area.")))
                 return new HttpUnauthorizedResult();
+
+            ForumsHomePagePart forumsHomepagePart = null;
+            var siteForums = _orchardServices.ContentManager.Query<ForumsHomePagePart>().List().ToList();
+
+            if (forumsHomeId != 0) //0 flags 'all forums'
+            {
+                forumsHomepagePart = siteForums.Where(forumsHomePart => forumsHomePart.Id == forumsHomeId).FirstOrDefault();
+            } 
+            
 
             var userId = _orchardServices.WorkContext.CurrentUser.Id;
 
@@ -88,8 +97,8 @@ namespace NGM.Forum.Controllers {
 
             var list = Shape.List();
             list.AddRange(threadDisplay);
-            var menuShape = Shape.Parts_ForumMenu();
-            dynamic viewModel = _orchardServices.New.ViewModel().ContentItems(list).ForumMenu(menuShape);
+            var menuShape = Shape.Parts_ForumMenu(ForumsHomePagePart: forumsHomepagePart, ShowRecent: false, ShowMarkAll: false, ReturnUrl: HttpContext.Request.Url.AbsoluteUri);
+            dynamic viewModel = _orchardServices.New.ViewModel().ContentItems(list).ForumMenu(menuShape).ForumsHomepagePart(forumsHomepagePart).SiteForumsList(siteForums); ;
             //viewModel.Content.Add(Shape.Parts_Thread_Subscription_List( ContentItems: list), "5");
             return View((object)viewModel);
 

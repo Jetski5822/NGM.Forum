@@ -329,6 +329,7 @@ namespace NGM.Forum.Controllers {
 
             return this.RedirectLocal(returnUrl, "~/");
         }
+
         bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties) {
             return TryUpdateModel(model, prefix, includeProperties, excludeProperties);
         }

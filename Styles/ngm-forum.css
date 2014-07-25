@@ -161,18 +161,99 @@ background: rgb(242, 242, 242);
 margin-right: 18px;
     /* background-image:url("img/unread.png"); */
 }
-#forum-menu-items {
-    margin:0;
-    float:left;
-}
-.forum-menu-item + .forum-menu-item::before{
-    content: " | ";
-}
+
+
+
 .list-inline {    
     list-style: none;
 }
 .list-inline li {
     display:inline-block;
+}
+
+/*
+
+#forum-menu-items li{
+	float:left;
+	margin-right:10px;
+	position:relative;
+}
+#forum-menu-items a{
+	display:block;
+	padding:5px;
+	color:#fff;
+	background:#333;
+	text-decoration:none;
+}
+#forum-menu-items a:hover{
+	color:#fff;
+	background:#6b0c36;
+	text-decoration:underline;
+}
+    */
+
+
+ li.forum-menu-item.lvl1 + li.forum-menu-item.lvl1::before{
+    content: " | ";
+    display: inline-block;
+    padding: 0px 6px 0px 6px;
+}
+   
+
+#forum-menu-items{	
+    margin: 0;
+	padding: 0;
+    color:#5f97af;
+}
+
+
+#forum-menu-items li{	
+    float: left;
+	list-style: none;	
+    display:block;
+}
+
+#forum-menu-items  li.lvl1 a {	
+    display: inline;
+	text-decoration: none;
+	border-right: 1px solid white;
+	white-space: nowrap
+}
+
+#forum-menu-items li a {	
+    display: inline;
+	text-decoration: none;
+	border-right: 1px solid white;
+	white-space: nowrap
+}
+    #forum-menu-items li lu {
+        display:block;
+    }
+#forum-menu-items >li a:hover{
+    border-bottom:3px solid black;
+}
+		
+#forum-menu-items li ul{
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    visibility: hidden;
+    border-top: 1px solid white
+}
+		
+#forum-menu-items li ul li{	
+    float: none;
+	display: inline
+}
+		
+#forum-menu-items li ul li a
+{	width: auto;
+     border:1px solid #F2f2f2;
+
+}
+		
+#forum-menu-items li ul li a:hover{	
+
 }
 
 #forum-breadcrumbs li::before {
@@ -349,7 +430,8 @@ form.forum-search-form input {
 }
 
 #forum-breadcrumbs {
-    clear:both;
+    clear: both;
+    padding-top: 1em;
 }
 
 .search-resut-thread-title {
@@ -372,3 +454,14 @@ ul.post-body-editor-buttons li {
     margin-right: 30px;
     margin-left: 6px;
 }
+
+/*for new posts lists*/
+ul li article.post.content-item{
+   list-style-type:none;
+   border: 1px solid lightgray;
+}
+
+#new-post-list ul li {
+    list-style-type:none;
+}
+

@@ -12,6 +12,8 @@ using Orchard.ContentManagement.Handlers;
 using Orchard.Security;
 using Orchard.UI.Navigation;
 using Orchard.Autoroute.Models;
+using System.Web;
+
 
 namespace NGM.Forum.Drivers {
     [UsedImplicitly]
@@ -68,7 +70,8 @@ namespace NGM.Forum.Drivers {
             //TODO: is this really needed?  is there a path that will reach this?
             if (userId != null && part.ReadState == ThreadPart.ReadStateEnum.NOT_SET)
             {
-                part.ReadState = _threadLastReadService.GetReadState(userId.Value, part);
+                int i = 1;
+                //part.ReadState = _threadLastReadService.GetReadState(userId.Value, part);
             }
 
             if (displayType.Equals("Detail"))
@@ -96,7 +99,7 @@ namespace NGM.Forum.Drivers {
                 results.Add(ContentShape("Parts_BreadCrumb",
                     () => shapeHelper.Parts_BreadCrumb(ForumsHomePagePart: forumsHomePagePart, ForumCategoryPart: categoryPart, ForumPart: forumPart, ThreadPart: null)
                 ));
-                results.Add(ContentShape("Parts_ForumMenu", () => shapeHelper.Parts_ForumMenu()));
+                results.Add(ContentShape("Parts_ForumMenu", () => shapeHelper.Parts_ForumMenu(ForumsHomePagePart: part.ForumPart.ForumCategoryPart.ForumsHomePagePart, ShowRecent: true, ShowMarkAll: true, ReturnUrl: HttpContext.Current.Request.Url.AbsoluteUri)));
             }
 
             if (displayType.Equals("SummaryAdmin", StringComparison.OrdinalIgnoreCase)) {

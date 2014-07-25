@@ -226,6 +226,48 @@ namespace NGM.Forum
                                                 },
                         new MvcRouteHandler())
                 },
+                new RouteDescriptor {
+                    Route = new Route(
+                        "Forums/ListNewPostsByThread/{forumsHomeId}",
+                        new RouteValueDictionary {
+                                                    {"area", Constants.LocalArea},
+                                                    {"controller", "ForumsHomePage"},
+                                                    {"action", "ListNewPostsByThread"}
+                                                },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                                                    {"area", Constants.LocalArea}
+                                                },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Route = new Route(
+                        "Forums/ListNewPosts/{forumsHomeId}",
+                        new RouteValueDictionary {
+                                                    {"area", Constants.LocalArea},
+                                                    {"controller", "ForumsHomePage"},
+                                                    {"action", "ListNewPosts"}
+                                                },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                                                    {"area", Constants.LocalArea}
+                                                },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Route = new Route(
+                        "Forums/MarkAllRead/{forumsHomeId}",
+                        new RouteValueDictionary {
+                                                    {"area", Constants.LocalArea},
+                                                    {"controller", "ForumsHomePage"},
+                                                    {"action", "MarkAllRead"}
+                                                },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                                                    {"area", Constants.LocalArea}
+                                                },
+                        new MvcRouteHandler())
+                },
             };
         }
     }

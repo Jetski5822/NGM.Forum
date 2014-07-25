@@ -40,10 +40,18 @@ namespace NGM.Forum.Handlers {
             OnUpdateEditorShape<PostPart>(SetModelProperties);
 
             OnCreated<PostPart>((context, part) => _countersService.UpdateCounters(part));
+
             OnPublished<PostPart>((context, part) => {
                 _countersService.UpdateCounters(part);
                 UpdateThreadVersioningDates(part);
                 SendNewPostNotification(part);
+
+                //for purposes of 'last read' need to know the last valid post to the thread.  The last time the user read the thread is tracked
+                //and is compared to the lastest posts in the thread to determine if the thread has unread posts.
+                if (!part.IsInappropriate)
+                {
+                    part.ThreadPart.LastestValidPostDate = part.As<CommonPart>().PublishedUtc.Value;
+                }
             });
             OnUnpublished<PostPart>((context, part) => _countersService.UpdateCounters(part));
             OnVersioned<PostPart>((context, part, newVersionPart) => _countersService.UpdateCounters(newVersionPart));
@@ -58,10 +66,14 @@ namespace NGM.Forum.Handlers {
             OnRemoved<ThreadPart>((context, b) =>
                 _postService.Delete(context.ContentItem.As<ThreadPart>()));
 
+            
             OnIndexing<PostPart>((context, postPart) => context.DocumentIndex        
                                                     .Add("body", postPart.Record.Text).RemoveTags().Analyze()
                                                     .Add("format", postPart.Record.Format).Store()
                                                     .Add("forumsHomeId", postPart.ThreadPart.ForumPart.ForumCategoryPart.ForumsHomePagePart.Id)
+                                                    .Add("categoryId", postPart.ThreadPart.ForumPart.ForumCategoryPart.Id)
+                                                    .Add("forumId", postPart.ThreadPart.ForumPart.Id)
+                                                    .Add("threadId", postPart.ThreadPart.Id)
                                                     );
 
             OnIndexing<ThreadPart>((context, threadPart) => context.DocumentIndex.Add("Title", threadPart.As<TitlePart>().Title ));

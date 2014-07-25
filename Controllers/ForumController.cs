@@ -60,6 +60,7 @@ namespace NGM.Forum.Controllers {
         }
          * */
 
+
         /// <summary>
         /// Gets a list of threads found in the specified forum
         /// </summary>
@@ -88,12 +89,8 @@ namespace NGM.Forum.Controllers {
             //get the read state of each thread part to be displayed
             if (userId != null)
             {
-                var threadIds = threadList.Select(t => t.Id);
-                var threadReadRecords = _threadLastReadService.GetThreadsReadRecords(userId.Value, threadList.Select(t => t.Id).ToList()).ToDictionary( e=> e.Id );
-                foreach (var threadPart in threadList)
-                {
-                    threadPart.ReadState = _threadLastReadService.GetReadState(userId.Value, threadPart);
-                }
+
+                _threadLastReadService.GetThreadReadState(userId.Value, forumPart.ForumCategoryPart.ForumsHomePagePart.Id, threadList);
             }
 
             var threads = threadList.Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Summary"));
