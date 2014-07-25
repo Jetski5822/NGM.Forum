@@ -26,7 +26,10 @@ Advancing the forum functionality to include
   - breadcrumb navigation
   - change url to be the hierachy of the titles (i.e. /forum-home-name/category-name/forum-name/post-name ) 
 		-each level can be truncated to a set number of characters via settings
-  -html sanitization
+  - html sanitization
+
+  TODO:
+  https://github.com/jon123/NGM.Forum/wiki/TODO
 
   Vocabulary
    - forums' homepage  -> the landing page for a group of forums such as 'Community Forums' or 'Tech Support Forums'

@@ -70,14 +70,7 @@ namespace NGM.Forum.Services {
                     periodEnd = forumLastReadDate.Value;
                 }
             }
-            // lookup every thread for the current forum 
-            //the following is extremely inefficient... need to implement a better approach if required.  Get it working first .. 
-            //var categories = _contentManager.Query<ForumCategoryPart, ForumCategoryPartRecord>().Join<CommonPartRecord>().Where( cat=>cat.Container.Id == forumsHomepageId).List().Select( t=>t.Id).ToList();
-            //var forums = _contentManager.Query<ForumPart, ForumPartRecord>().Join<CommonPartRecord>().Where( forum=>categories.Contains( forum.Container.Id )).List().Select( forum=>forum.Id).ToList();
-
-            
-
-            //need to find which threads belong to this forum. This could be an extremely large number of Ids                        
+                        
             var threads = _contentManager.Query<ThreadPart, ThreadPartRecord>(VersionOptions.Published)
                            .Where(  thread => thread.IsDeleted == false && 
                                     thread.IsInappropriate == false && 
