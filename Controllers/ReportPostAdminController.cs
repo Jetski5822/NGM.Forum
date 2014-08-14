@@ -18,7 +18,6 @@ using Orchard.UI.Zones;
 using Orchard.Core.Common.Models;
 using NGM.Forum.ViewModels;
 using System;
-using PagedList;
 using Html.Helpers;
 
 namespace NGM.Forum.Controllers {
