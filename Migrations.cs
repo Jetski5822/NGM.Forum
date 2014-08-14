@@ -472,14 +472,5 @@ namespace NGM.Forum {
 
             return 21;
         }
-        public int UpdateFrom21()
-        {
-            ContentDefinitionManager.AlterTypeDefinition("ForumsHomePage", cfg => cfg
-                 .WithPart("ForumSearchPart"));
-            ContentDefinitionManager.AlterTypeDefinition("Forum", cfg => cfg
-                 .WithPart("ForumSearchPart"));
-
-            return 22;
-        }
     }
 }
