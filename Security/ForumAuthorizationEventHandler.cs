@@ -11,12 +11,22 @@ namespace NGM.Forum.Security {
         public void Complete(CheckAccessContext context) { }
 
         public void Adjust(CheckAccessContext context) {
-            if (!context.Granted &&
-                context.Content.Is<ICommonPart>()) {
-                if (OwnerVariationExists(context.Permission) &&
-                    HasOwnership(context.User, context.Content)) {
+            //this won't work if checking permission without passing a part
+            //if (!context.Granted && context.Content.Is<ICommonPart>()) { 
+            if (!context.Granted)
+            {
+                if (OwnerVariationExists(context.Permission) && !context.Content.Is<ICommonPart>())
+                {
                     context.Adjusted = true;
                     context.Permission = GetOwnerVariation(context.Permission);
+                }
+                else if (OwnerVariationExists(context.Permission) && context.Content.Is<ICommonPart>() )
+                {
+                    if (HasOwnership(context.User, context.Content))
+                    {
+                        context.Adjusted = true;
+                        context.Permission = GetOwnerVariation(context.Permission);
+                    }
                 }
             }
         }
@@ -45,6 +55,10 @@ namespace NGM.Forum.Security {
                 return Permissions.StickyOwnThread;
             if (permission.Name == Permissions.CloseThread.Name)
                 return Permissions.CloseOwnThread;
+            if (permission.Name == Permissions.EditPosts.Name)
+                return Permissions.EditOwnPosts;
+            if (permission.Name == Permissions.DeleteThreadsAndPosts.Name)
+                return Permissions.DeleteOwnThreadsAndPosts;
             return null;
         }
     }

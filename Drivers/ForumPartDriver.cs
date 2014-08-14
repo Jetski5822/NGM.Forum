@@ -59,7 +59,10 @@ namespace NGM.Forum.Drivers {
                 results.Add(ContentShape("Parts_BreadCrumb",
                     () => shapeHelper.Parts_BreadCrumb(ForumsHomePagePart: rootPart, ForumCategoryPart: categoryPart, ForumPart:null, ThreadPart: null)
                 ));
-                results.Add(ContentShape("Parts_ForumMenu", () => shapeHelper.Parts_ForumMenu(ForumsHomePagePart:part.ForumCategoryPart.ForumsHomePagePart, ShowRecent:true, ShowMarkAll:true, ReturnUrl: HttpContext.Current.Request.Url.AbsoluteUri)));
+                if (userId != null)
+                {
+                    results.Add(ContentShape("Parts_ForumMenu", () => shapeHelper.Parts_ForumMenu(ForumsHomePagePart: part.ForumCategoryPart.ForumsHomePagePart, ShowRecent: true, ShowMarkAll: true, ReturnUrl: HttpContext.Current.Request.Url.AbsoluteUri)));
+                }
             }
             
             results.AddRange(new [] { 

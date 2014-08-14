@@ -16,15 +16,14 @@ using System.Linq;
 namespace NGM.Forum.Services {
 
     public interface IThreadLastReadService : IDependency {
-        IEnumerable<ThreadLastReadRecord> GetThreadsReadRecords(int userId, IEnumerable<int> threadIds);
+        
         void MarkThreadAsRead(int userId, int threadId);
 
-        void GetThreadReadState(int userId, int forumsHomepageId, IEnumerable<ThreadPart> threadParts);
+        void SetThreadsReadState(int userId, int forumsHomepageId, IEnumerable<ThreadPart> threadParts);
        
         List<PostPart> GetNewPosts(int forumsHomePageId, int userId, int daysPrior, int pageStartIndex, int pageSize);
         Tuple<Dictionary<int, ThreadPart>, Dictionary<int, List<PostPart>>> GetNewPostsByThread(int forumsHomePageId, int userId, int daysPrior, int pageStartIndex, int pageIndex);
-        ForumsHomePageLastReadRecord GetForumsHomePageLastReadRecord(int forumsHomepageId, int userId);
-        DateTime? GetForumsHomePageLastReadDate(int forumsHomepageId, int userId);
+                
         void MarkAllRead(int forumsHomeId, int userId);
     }
 
@@ -59,7 +58,12 @@ namespace NGM.Forum.Services {
 
         public List<PostPart> GetNewPosts(int forumsHomepageId, int userId, int daysPrior, int pageStartIndex, int pageSize)
         {
-
+            //find all threads in the current forum that are newer than the last 'all read date' or 30 days (whichever is newer)          
+            // from the second repository get the individual last read dates of the threads read since the last 'all read' date and remove those form the list where appropriate
+            //so now have a list of threads with valid new posts
+            //get the posts for those threads and filter based on the last 'all ready date'.  
+            //for threads in the second repository filter those posts based on its last read date
+            
             var forumLastReadDate = GetForumsHomePageLastReadDate(forumsHomepageId, userId);
             if (daysPrior > 30) daysPrior = 30; //ensure this number is realistic to stop huge queries
             var periodEnd = DateTime.UtcNow.AddDays(daysPrior * -1);
@@ -71,40 +75,56 @@ namespace NGM.Forum.Services {
                 }
             }
                         
+            //find all threads in the forums that are candidates for having new posts
             var threads = _contentManager.Query<ThreadPart, ThreadPartRecord>(VersionOptions.Published)
                            .Where(  thread => thread.IsDeleted == false && 
                                     thread.IsInappropriate == false && 
-                                    thread.LatestValidPostDate >= periodEnd &&
+                                    thread.LatestValidPostDate > periodEnd &&
                                     thread.ForumsHomepageId == forumsHomepageId
-                                 ).List().Select(thread => thread.Id).ToList();
+                                 ).List().ToList();
 
+            //get the list of last read for the individual read threads 
+            var threadLastReadDic = _threadLastReadRepository.Table.Where(e => e.UserId == userId).ToDictionary(e => e.ThreadId, e => e.LastReadDate);
+
+            var alreadyReadThreadIds = threads.Where(thread => threadLastReadDic.ContainsKey(thread.Id) && thread.LastestValidPostDate <= threadLastReadDic[thread.Id].Value).Select( thread=>thread.Id).ToList();
+            threads.RemoveAll( thread=> alreadyReadThreadIds.Contains( thread.Id ));
+
+            var threadsWithUnreadPosts = threads.Select( thread=>thread.Id).ToList();
+            //now have a list of threads that are known to have unread posts.  So need to get posts for those threads and filter them
             var postsByThread = _contentManager.Query<PostPart, PostPartRecord>().ForVersion(VersionOptions.Published)
                 .Where(p => p.IsInappropriate == false)
                 .WithQueryHints(new QueryHints().ExpandRecords<CommonPartRecord>())
                 .Join<CommonPartRecord>()
-                .Where(commonPart => threads.Contains(commonPart.Container.Id) && commonPart.PublishedUtc > periodEnd).List().ToList()
+                .Where(commonPart => threadsWithUnreadPosts.Contains(commonPart.Container.Id)  //filter by the ID
+                                     && commonPart.PublishedUtc > periodEnd  //filter out posts that too old to be candidates to be new posts
+                ).List().ToList()
                 .OrderBy(p => p.ThreadPart.Id).ToList();
 
+            
+            List<int> readPostIds = new List<int>();
 
-            var lastReadDic = _threadLastReadRepository.Table.Where( e=>e.UserId == userId ).ToDictionary( e=>e.ThreadId, e=>e.LastReadDate);
-
-            foreach (var post in postsByThread)
+            for (int i = 0; i < postsByThread.Count(); i++)
             {
-                DateTime? lastReadDate =  null;
-                if (lastReadDic.TryGetValue(post.As<CommonPart>().Container.Id, out lastReadDate))
+                var post = postsByThread[i];
+                DateTime? lastReadDate = null;
+                if (threadLastReadDic.TryGetValue(post.As<CommonPart>().Container.Id, out lastReadDate))
                 {
-                    if (post.As<CommonPart>().PublishedUtc > lastReadDate.Value)
+                    if (post.As<CommonPart>().PublishedUtc < lastReadDate.Value)
                     {
-                        postsByThread.Remove(post);
+                        readPostIds.Add(post.Id);
                     }
-                }                              
+                }
             }
+
+            postsByThread.RemoveAll(post => readPostIds.Contains(post.Id));
+
             return postsByThread.Skip(pageStartIndex).Take(pageSize).ToList(); 
         }
 
         public Tuple<Dictionary<int, ThreadPart>, Dictionary<int, List<PostPart>>> GetNewPostsByThread(int forumsHomepageId, int userId, int daysPrior, int pageStartIndex, int pageSize)
         {
 
+            //get the last date all forums have been markesd as read or the last 30 days whichever is more recent.
             var forumLastReadDate = GetForumsHomePageLastReadDate(forumsHomepageId, userId);
 
             if (daysPrior > 30) daysPrior = 30; //ensure this number is realistic to stop huge queries
@@ -117,29 +137,32 @@ namespace NGM.Forum.Services {
                 }
             }
 
+            //get all threads with new posts based on the last time all forums where marked as read.
+            //this is not a perfect selection of unread threads but will limit the query to start with.
             var threads = _contentManager.Query<ThreadPart, ThreadPartRecord>()
                 .Where(thread => thread.IsDeleted == false && 
                        thread.IsInappropriate == false && 
-                       thread.LatestValidPostDate >= periodEnd && 
+                       thread.LatestValidPostDate > periodEnd && 
                        thread.ForumsHomepageId == forumsHomepageId).List().ToList();
 
-            //or could just do it with sql
-            //var result = _session.CreateSQLQuery("SELECT * FROM Sometable");                       
+            //could just do it with sql var result = _session.CreateSQLQuery("SELECT * FROM Sometable");                       
             var threadIds = threads.Select(t => t.Id).ToList();
+
+            //get the individual threads ids that have beeen read
             var lastReadDic = _threadLastReadRepository.Table.Where(e => e.UserId == userId).ToDictionary(e => e.ThreadId, e => e.LastReadDate);
 
-            var threadsWithNewPosts = threads.Where(t => 
-                (lastReadDic.ContainsKey(t.Id) && t.LastestValidPostDate > lastReadDic[t.Id].Value) 
-                || !lastReadDic.ContainsKey(t.Id)).ToList();
+            //now further filters the threads based on those that are in the repository of individually read threads
+            var threadsWithNewPosts = threads.Where(t => ( lastReadDic.ContainsKey(t.Id) && t.LastestValidPostDate > lastReadDic[t.Id].Value) 
+                                                           || !lastReadDic.ContainsKey(t.Id)).ToList();
 
 
-            var threadDict = threadsWithNewPosts.Skip(pageStartIndex).Take(pageSize).ToDictionary(t => t.Id, t => t);
+            var threadsWithNewPostsDict = threadsWithNewPosts.Skip(pageStartIndex).Take(pageSize).ToDictionary(t => t.Id, t => t);
 
             var postsByThread = _contentManager.Query<PostPart, PostPartRecord>()
                 .Where(p => p.IsInappropriate == false)
                 .WithQueryHints(new QueryHints().ExpandRecords<CommonPartRecord>())
                 .Join<CommonPartRecord>()
-                .Where(post => threadIds.Contains(post.Container.Id) && post.PublishedUtc >= periodEnd).List().ToList().OrderBy(p => p.ThreadPart.Id).ToList();
+                .Where(post => threadsWithNewPostsDict.Keys.Contains(post.Container.Id) && post.PublishedUtc >= periodEnd).List().ToList().OrderBy(p => p.ThreadPart.Id).ToList();
 
 
             Dictionary<int, List<PostPart>> threadPostDic = new Dictionary<int, List<PostPart>>();
@@ -156,15 +179,15 @@ namespace NGM.Forum.Services {
             }
 
             //var threadList = _contentManager.GetMany<ThreadPart>(threadIds, VersionOptions.Published, QueryHints.Empty).Where( t=>t.IsInappropriate == false).ToList();
-            return new Tuple<Dictionary<int, ThreadPart>, Dictionary<int, List<PostPart>>>(threadDict, threadPostDic);
+            return new Tuple<Dictionary<int, ThreadPart>, Dictionary<int, List<PostPart>>>(threadsWithNewPostsDict, threadPostDic);
 
         }
 
-        public ForumsHomePageLastReadRecord  GetForumsHomePageLastReadRecord( int forumsHomepageId, int userId) {
+        private ForumsHomePageLastReadRecord  GetForumsHomePageLastReadRecord( int forumsHomepageId, int userId) {
             return _forumsHomepageLastReadRepository.Table.Where(row => row.ForumsHomePageId == forumsHomepageId && row.UserId == userId).FirstOrDefault();
         }
 
-        public DateTime? GetForumsHomePageLastReadDate(int forumsHomepageId, int userId)
+        private DateTime? GetForumsHomePageLastReadDate(int forumsHomepageId, int userId)
         {
             //can cache this later for optimization
             DateTime? lastRead = null;
@@ -183,7 +206,9 @@ namespace NGM.Forum.Services {
             DateTime newAllReadDate = DateTime.UtcNow;
             var forumsHomePageLastReadDateRecord = GetForumsHomePageLastReadRecord(forumsHomepageId, userId);
             if (forumsHomePageLastReadDateRecord != null)
-            {              
+            {
+                forumsHomePageLastReadDateRecord.LastReadDate = newAllReadDate;
+                _forumsHomepageLastReadRepository.Update(forumsHomePageLastReadDateRecord);
             } else {
                 _forumsHomepageLastReadRepository.Create( new ForumsHomePageLastReadRecord{ LastReadDate = newAllReadDate, UserId = userId, ForumsHomePageId = forumsHomepageId } );
             }
@@ -200,7 +225,7 @@ namespace NGM.Forum.Services {
             }               
         }
 
-        public IEnumerable<ThreadLastReadRecord> GetThreadsReadRecords(int userId, IEnumerable<int> threadIds)
+        private IEnumerable<ThreadLastReadRecord> GetThreadsReadRecords(int userId, IEnumerable<int> threadIds)
         {
 
             var threads = _threadLastReadRepository.Table.Where(e => e.UserId == userId && threadIds.Contains( e.Id)).ToList();
@@ -229,30 +254,35 @@ namespace NGM.Forum.Services {
             }         
         }
 
-        public void GetThreadReadState(int userId, int forumsHomepageId, IEnumerable<ThreadPart> threadParts)
+        public void SetThreadsReadState(int userId, int forumsHomepageId, IEnumerable<ThreadPart> threadParts)
         {            
 
             List<int> threadIds = threadParts.Select(thread => thread.Id).ToList();
             //var lastReadRecords = _threadLastReadRepository.Table.Where(e => e.UserId == userId && threadIds.Contains(e.ThreadId)).OrderByDescending(e => e.LastReadDate).ToList();
-            var lastReadRecords = _threadLastReadRepository.Table.Where(e => e.UserId == userId && threadIds.Contains(e.ThreadId)).ToList();
-            if (lastReadRecords != null)
-            {
-                threadParts.Select(thread => thread.ReadState = ThreadPart.ReadStateEnum.Unread);
-                foreach (var lastReadRecord in lastReadRecords)
-                {
-                    var threadPart = threadParts.Where(thread => thread.Id == lastReadRecord.ThreadId).First();
 
-                    // the LastestPost will be null if all reply posts have been marked inappropriate
-                    // In this case, the thread may have been read (before being marked inappropriate) but that cannot be determined            
-                    if (threadPart.LatestPost != null)
+            var lastReadDict = _threadLastReadRepository.Table.Where(e => e.UserId == userId && threadIds.Contains(e.ThreadId)).ToList().ToDictionary( e=>e.ThreadId, e=>e.LastReadDate );
+
+            DateTime? forumsHomepageLastReadDate = null;
+            forumsHomepageLastReadDate = GetForumsHomePageLastReadDate(forumsHomepageId, userId);
+
+            if ( forumsHomepageLastReadDate == null ) {
+                forumsHomepageLastReadDate = DateTime.UtcNow.AddDays(-30);            
+            }
+
+            foreach ( var thread in threadParts ) {
+
+                DateTime? lastReadDate = new DateTime();
+                if ( lastReadDict.TryGetValue( thread.Id, out lastReadDate )) {
+
+                    if (thread.LatestPost != null)
                     {
-                        if (threadPart.LatestPost.IsPublished() && threadPart.LatestPost.As<CommonPart>().PublishedUtc.Value > lastReadRecord.LastReadDate.Value)
+                        if (thread.LatestPost.IsPublished() && thread.LastestValidPostDate > lastReadDate)
                         {
-                            threadPart.ReadState = ThreadPart.ReadStateEnum.NewPosts;
+                            thread.ReadState = ThreadPart.ReadStateEnum.NewPosts;
                         }
                         else
                         {
-                            threadPart.ReadState = ThreadPart.ReadStateEnum.ReadNoNewPosts;
+                            thread.ReadState = ThreadPart.ReadStateEnum.ReadNoNewPosts;
                         }
                     }
                     else
@@ -261,31 +291,23 @@ namespace NGM.Forum.Services {
                         //show it as read with no new posts since in theory, any replies marked as inappropriate are no long relevant to the admin 
                         //(i.e. someone else took care of it).  This is not a *perfect* solution but it is good-enough otherwise the lastpost implementation
                         //would need total reworking.
-                        threadPart.ReadState = ThreadPart.ReadStateEnum.ReadNoNewPosts;
+                        thread.ReadState = ThreadPart.ReadStateEnum.ReadNoNewPosts;
                     }
                 }
-            }
-            else //no read threads where found .. so use the 'mark all date' from the forums home page 
-            {
-                DateTime? forumsHomepageLastReadDate = null;
-                forumsHomepageLastReadDate = GetForumsHomePageLastReadDate(forumsHomepageId, userId);
-
-                if (forumsHomepageLastReadDate.HasValue)
+                else if (thread.LastestValidPostDate > forumsHomepageLastReadDate)
                 {
-                    foreach (var threadPart in threadParts)
-                    {
-                        if (threadPart.LastestValidPostDate > forumsHomepageLastReadDate)
-                        {
-                            threadPart.ReadState = ThreadPart.ReadStateEnum.NewPosts;
-                        }
-                    }
+                    //unread because its not in the last read dict therefore it has never been opened
+                    thread.ReadState = ThreadPart.ReadStateEnum.Unread;
                 }
                 else
                 {
-                    //there is no last read at the forums home page level nor last read on any threads, so everything is unread
-                }
+                    //everything older than the forumsHomepageLastReadDate is treated a read
 
+                    thread.ReadState = ThreadPart.ReadStateEnum.ReadNoNewPosts;
+                }
             }
+
         }
+
     }
 }

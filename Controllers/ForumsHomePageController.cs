@@ -70,21 +70,28 @@ namespace NGM.Forum.Controllers {
 
             if (_orchardServices.WorkContext.CurrentUser == null)
                 return new HttpUnauthorizedResult();
-            var userId = _orchardServices.WorkContext.CurrentUser.Id;
-            
-            
-            //should get the threads that the user has read already... then compare. All other threads are unread.
 
+            var userId = _orchardServices.WorkContext.CurrentUser.Id;                        
+
+            //get the threads that the user has read already... then compare. All other threads are unread.
             var posts = _threadLastReadService.GetNewPosts(forumsHomeId, userId, 30, pager.GetStartIndex(), pager.PageSize);
-
 
             var menu = Shape.Parts_ForumMenu(ShowMarkAll: true, ShowRecent: true, ForumsHomePagePart: forumsHomePagePart, ReturnUrl:returnUrl);
             var search = Shape.Parts_Forum_Search(ForumsHomeId: forumsHomeId);
 
             var list = Shape.List();
-            list.AddRange(posts.Select(post => _orchardServices.ContentManager.BuildDisplay(post)));
+            list.AddRange(posts.Select(post => _orchardServices.ContentManager.BuildDisplay(post, "NewPostPreview")));
 
-            dynamic viewModel = _orchardServices.New.ViewModel().Posts(list).ForumMenu(menu).Pager( Shape.Pager(pager).TotalItemCount(posts.Count)).SearchBox(search).ReturnUrl(returnUrl);
+            var breadCrumb = Shape.Parts_BreadCrumb(ForumsHomePagePart: forumsHomePagePart.As<ForumsHomePagePart>());
+
+            dynamic viewModel = _orchardServices.New.ViewModel()
+                                    .ForumMenu(menu)
+                                    .ForumSearch(search)
+                                    .BreadCrumb(breadCrumb)
+                                    .Posts(list)
+                                    .Pager( Shape.Pager(pager).TotalItemCount(posts.Count))
+                                    .ReturnUrl(returnUrl)
+                                    ;
 
             return View((object)viewModel);
         }
@@ -121,7 +128,16 @@ namespace NGM.Forum.Controllers {
                 postDisplays.Add(key, list);
             }
 
-            dynamic viewModel = _orchardServices.New.ViewModel().PostByThreadDic(postDisplays).ThreadDic(threadDic).Pager(Shape.Pager(pager).TotalItemCount(threadDic.Count)).ForumMenu(menu).SearchBox(search).ReturnUrl(returnUrl);
+            var breadCrumb = Shape.Parts_BreadCrumb(ForumsHomePagePart: forumsHomePagePart.As<ForumsHomePagePart>());
+
+            dynamic viewModel = _orchardServices.New.ViewModel()
+                                    .PostByThreadDic(postDisplays)
+                                    .ThreadDic(threadDic)
+                                    .Pager(Shape.Pager(pager).TotalItemCount(threadDic.Count))
+                                    .ForumMenu(menu)
+                                    .ForumSearch(search)
+                                    .BreadCrumb(breadCrumb)
+                                    .ReturnUrl(returnUrl);
 
             return View((object)viewModel);
         }
@@ -137,9 +153,8 @@ namespace NGM.Forum.Controllers {
 
             var userId = _orchardServices.WorkContext.CurrentUser.Id;
 
-            _orchardServices.Notifier.Add(Orchard.UI.Notify.NotifyType.Information, (T("All threads in the current forum where marked as read")));
-
-            _threadLastReadService.MarkAllRead( forumsHomeId, userId );
+            _threadLastReadService.MarkAllRead(forumsHomeId, userId);
+            _orchardServices.Notifier.Add(Orchard.UI.Notify.NotifyType.Information, (T("All threads in the current forum were marked as read")));
 
             return Redirect(HttpContext.Request.UrlReferrer.AbsoluteUri);
 

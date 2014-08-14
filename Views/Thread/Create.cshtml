@@ -1,48 +1,16 @@
 @using System.Web.Mvc.Html
 @using NGM.Forum.Extensions
 @using Orchard.Mvc.Html
-
-@model NGM.Forum.ViewModels.ThreadCreateViewModel
-
 @{
   Script.Require("jQuery");
-
-  Layout.Title = T("Create Thread").ToString();
+  Style.Require("Forum").AtHead();   
+  Layout.Title = T("Create Thread").ToString(); //<==not working
 }
 
-
-<Legend>@Layout.Title</Legend>
-
+<h2>@Layout.Title</h2>
 @using (Html.BeginFormAntiForgeryPost(Url.ThreadCreate(int.Parse(Request.QueryString["forumId"])), FormMethod.Post, new { @id = "thread-create" })) {
-        
-    @Html.ValidationSummary()    
-    @Html.HiddenFor( model => model.ForumId )
-
-    <fieldset>
-        @Html.Label("Title")
-        @Html.TextBoxFor( model => model.ThreadTitle,  new { @class="wide"} )
-    </fieldset>
+    @Html.ValidationSummary()
     
-    if ( Model.ShowIsSticky )
-    {
-        <fieldset>
-            @Html.Label("Sticky")
-            <span class="hint">@T("Maintains the thread at the top of the thread list.")</span>
-            @Html.CheckBoxFor(model => model.isSticky)
-        </fieldset>    
-    }
-   
-
-    
-    @Display.Post_Body_Editor();
-    
-    <div class="edit-item-secondary group">
-        <div class="edit-item-sidebar group">
-            <fieldset class="save-button">
-                <button class="primaryAction" type="submit" name="submit.Save" value="submit.Save">Save</button>
-                
-                <a id="button-cancel" href="@Model.ReturnUrl" class="button">Cancel</a>
-            </fieldset>
-         </div>    </div>
-
+    @Display(Model.Thread)
+    @Display(Model.Post)
 }

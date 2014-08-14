@@ -85,12 +85,13 @@ namespace NGM.Forum.Controllers {
             {
                 userId = _orchardServices.WorkContext.CurrentUser.Id;
             }
-            
+
+            int forumsHomePageId = forumPart.ForumCategoryPart.ForumsHomePagePart.Id;
             //get the read state of each thread part to be displayed
             if (userId != null)
             {
 
-                _threadLastReadService.GetThreadReadState(userId.Value, forumPart.ForumCategoryPart.ForumsHomePagePart.Id, threadList);
+                _threadLastReadService.SetThreadsReadState(userId.Value, forumsHomePageId, threadList);
             }
 
             var threads = threadList.Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Summary"));
@@ -103,7 +104,7 @@ namespace NGM.Forum.Controllers {
 
             var totalItemCount = forumPart.ThreadCount;
             forum.Content.Add(Shape.Pager(pager).TotalItemCount(totalItemCount), "Content:after");
-
+            forum.Header.Add(Shape.Parts_Forum_Search(ForumsHomeId: forumsHomePageId), "1");
             return new ShapeResult(this, forum);
         }
     }

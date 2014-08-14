@@ -309,7 +309,12 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Thread\Create.cshtml" />
+    <Content Include="Views\Content.Edit-Thread-Title.cshtml" />
+    <Content Include="Views\PlacementNamedAlt_Thread_Parts_Title_Edit.cshtml" />
+    <Content Include="Views\Content-Post.SearchResult.cshtml" />
+    <Content Include="Views\Parts.Post.ViewInThread.cshtml" />
+    <Content Include="Views\Content-Post.NewPostPreview.cshtml" />
+    <None Include="Views\Thread\Create.cshtml_new" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Parts.Forums.Thread.ListAdmin.cshtml" />
@@ -525,7 +530,7 @@
     <Content Include="Views\Subscription\ViewSubscriptions.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Parts.Thread.Subscribe.cshtml" />
+    <None Include="Views\Parts.Thread.Subscribe.cshtml_Deleted" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Parts.Thread.SubscribeButton.cshtml" />
@@ -661,7 +666,7 @@
     <Content Include="Views\Content.Edit-Thread.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Thread\Create_FrontEndEdit.cshtml" />
+    <Content Include="Views\Thread\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\EditorTemplates\Parts.Forums.SiteSettings.cshtml" />

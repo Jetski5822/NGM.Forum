@@ -36,7 +36,7 @@
         <li>
             <label>@T("Email Title")</label>
             <p class="hint">@T("The text to go into the title of the email. Note the title is plain text and will not work with html tags")</p>
-            @Html.TextBoxFor( m=>m.Title, T("Title"))        
+            @Html.TextBoxFor(m => m.Title, new { @class = "text large" })        
         </li>
         <li>
             <label>@T("Email Body - plain text version")</label>

@@ -8,6 +8,9 @@
         public int EndPosition { get; set; }
         public dynamic ContentItems { get; set; }
         public dynamic Pager { get; set; }
+        public dynamic ForumSearch { get; set; }
+        public dynamic ForumMenu { get; set; }
+        public dynamic BreadCrumb { get; set; }
     }
 
 }

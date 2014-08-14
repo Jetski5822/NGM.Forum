@@ -19,17 +19,12 @@ namespace NGM.Forum.Handlers {
     public class ForumsHomePagePartHandler : ContentHandler {
 
         private readonly IOrchardServices _orchardServices;
-        private readonly IIndexingService _indexingService;
-        private readonly IIndexManager _indexManager;
         public ILogger Logger { get; set; }
         public Localizer T { get; set; }
 
         public ForumsHomePagePartHandler(
             IRepository<ForumsHomePagePartRecord> repository,
-            IOrchardServices orchardServices,
-            IIndexingService indexingService,
-            IIndexManager indexManager
-            
+            IOrchardServices orchardServices
             ) {
             _orchardServices = orchardServices;
             Filters.Add(StorageFilter.For(repository));

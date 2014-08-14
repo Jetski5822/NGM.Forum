@@ -249,17 +249,25 @@ namespace NGM.Forum.Services {
             int totalCount = reportedPosts.Count();
             var list = reportedPosts.Skip(page.Value).Take(pageSize.Value).ToList(); ;
 
+            var userNameMapping = new List<int>();
 
             //lookup the user names that are in the resulting list.  This may be a duplicate lookup of the filtered names but not going to worry about it.
             //this would have been more efficient if the reports used the user name instead of Id but userd Id so in case the name were to change
             var reportedByIds = list.Select(l => l.ReportedByUserId).ToList();
-            var reportedBy = _contentManager.Query<UserPart, UserPartRecord>().Where(user => reportedByIds.Contains(user.Id)).List().ToList().Select(i => new { UserName = i.UserName, Id = i.Id }).ToDictionary(i => i.Id, i => i.UserName);
+            userNameMapping = list.Select(l => l.ReportedByUserId).ToList();
+            //var reportedBy = _contentManager.Query<UserPart, UserPartRecord>().Where(user => reportedByIds.Contains(user.Id)).List().ToList().Select(i => new { UserName = i.UserName, Id = i.Id }).ToDictionary(i => i.Id, i => i.UserName);
 
             var reportedIds = list.Select(l => l.PostedByUserId).ToList();
-            var reported = _contentManager.Query<UserPart, UserPartRecord>().Where(user => reportedIds.Contains(user.Id)).List().ToList().Select(i => new { UserName = i.UserName, Id = i.Id }).ToDictionary(i => i.Id, i => i.UserName);
+            userNameMapping.AddRange(reportedIds);         
+            //var reported = _contentManager.Query<UserPart, UserPartRecord>().Where(user => reportedIds.Contains(user.Id)).List().ToList().Select(i => new { UserName = i.UserName, Id = i.Id }).ToDictionary(i => i.Id, i => i.UserName);
 
             var resolvedByIds = list.Select( r=> r.ResolvedByUserId ).ToList();
-            var resolvedBy = _contentManager.Query<UserPart, UserPartRecord>().Where(user => resolvedByIds.Contains(user.Id)).List().Select(i => new { UserName = i.UserName, Id = i.Id }).ToDictionary(i => i.Id, i => i.UserName);
+            userNameMapping.AddRange(resolvedByIds);
+            //var resolvedBy = _contentManager.Query<UserPart, UserPartRecord>().Where(user => resolvedByIds.Contains(user.Id)).List().Select(i => new { UserName = i.UserName, Id = i.Id }).ToDictionary(i => i.Id, i => i.UserName);
+
+            userNameMapping = userNameMapping.Distinct().ToList();
+
+            var userMappingDict = _contentManager.Query<UserPart, UserPartRecord>().Where(user => userNameMapping.Contains(user.Id)).List().Select(i => new { UserName = i.UserName, Id = i.Id }).ToDictionary(i => i.Id, i => i.UserName);
 
             var resultx = list.ToList().Select(a => new ReportedPostRecordViewModel
             {
@@ -268,12 +276,12 @@ namespace NGM.Forum.Services {
                 IsResolved= a.IsResolved,                                 
                 ResolvedDate = a.ResolvedDate,
                 ReportedDate = a.ReportedDate,                
-                PostByUserId = a.PostedByUserId,                 
-                PostByUserName = a.ReportedByUserId == 0 ? null : reported[a.PostedByUserId],
+                PostByUserId = a.PostedByUserId,
+                PostByUserName = a.ReportedByUserId == 0 ? null : userMappingDict[a.PostedByUserId],
                 ResolvedByUserId = a.ResolvedByUserId,
-                ResolvedByUserName = a.ResolvedByUserId == 0 ? null : resolvedBy[a.ResolvedByUserId],                
+                ResolvedByUserName = a.ResolvedByUserId == 0 ? null : userMappingDict[a.ResolvedByUserId],                
                 ReportedByUserId = a.ReportedByUserId,
-                ReportedByUserName = a.ReportedByUserId == 0 ? null : reportedBy[a.ReportedByUserId],
+                ReportedByUserName = a.ReportedByUserId == 0 ? null : userMappingDict[a.ReportedByUserId],
                 ReasonReported = a.ReasonReported,
                 Note = a.Note, 
             }).ToList().OrderByDescending( date=>date.ReportedDate);

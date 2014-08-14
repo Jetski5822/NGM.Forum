@@ -7,7 +7,7 @@ using System.Web;
 namespace NGM.Forum.Services
 {
 
-    //  *See comments in IUserPreferredCultureService
+    //  *See comments in the interface IUserPreferredCultureService
     public class UserPreferredCultureService : IUserPreferredCultureService
     {
         private readonly ICultureManager _cultureManager;
@@ -21,12 +21,13 @@ namespace NGM.Forum.Services
 
         public Dictionary<string, IEnumerable<int>> GetUsersCultures(IEnumerable<int> userIds)
         {
-            //this is the default implementation that returns all users using the sites default culture.
-            //this is meant to be customized if your site allows users to select a preferred culture.
-            //*See comments in IUserPreferredCultureService 
+            //since there is no built in management of user culture, this is a stub to tie the forums into your own implementation.
+            //i.e. inject your service and get your user's prefered culture
             var userCultureDict = new Dictionary<string, IEnumerable<int>>();
-            //userCultureDict.Add(_cultureManager.GetSiteCulture(), userIds);
-            userCultureDict.Add("fr-FR", userIds);
+            userCultureDict.Add(_cultureManager.GetSiteCulture(), userIds);
+
+            //used to test translation
+            //userCultureDict.Add("fr-FR", userIds);
             return userCultureDict;
         }
 

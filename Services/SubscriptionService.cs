@@ -144,26 +144,6 @@ namespace NGM.Forum.Services {
             .WithQueryHints(new QueryHints().ExpandRecords<AutoroutePartRecord, TitlePartRecord, CommonPartRecord>())
             .Where(x => subscribedThreadIDs.Contains(x.Id)).List().ToList();
 
-/* from the thread service.. used to get the threads for a forum
-            return _contentManager.Query()
-            .Join<ThreadPartRecord>()
-            .OrderByDescending(o => o.IsSticky)
-            .Join<CommonPartRecord>()
-            .OrderByDescending(o => o.ModifiedUtc)
-            .ForPart<ThreadPart>().List().ToList();
-            //.Slice(skip, count)
-            //.ToList();
-            */
-
-            //order them based on the subscription date and return
-            /*
-            var sorted = from threadPart in threadPartList
-                                 join subscription in subscribedThreads
-                                 on threadPart.Id equals subscription.ThreadId
-                                 orderby subscription.SubscribedDate
-                                 select threadPart;
-             */
-
             return threadPartList;
         }
 

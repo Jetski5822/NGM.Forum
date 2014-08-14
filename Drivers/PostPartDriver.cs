@@ -17,6 +17,7 @@ using Orchard.UI.Navigation;
 using NGM.Forum.Services;
 using Orchard.Core.Common.Models;
 using System.Threading;
+using Orchard.Localization;
 
 namespace NGM.Forum.Drivers {
 
@@ -48,39 +49,57 @@ namespace NGM.Forum.Drivers {
             _orchardServices = orchardServices;
             _postEditHistoryService = postEditHistoryService;
             _userTimeZoneService = userTimeZoneService;
+            T = NullLocalizer.Instance;
 
         }
-
+        public Localizer T { get; set; }
         protected override string Prefix {
             get { return "PostPart"; }
         }
 
         protected override DriverResult Display(PostPart part, string displayType, dynamic shapeHelper) {
             
-            //need a timezone info that is 'c
-            if (displayType == "Editor")
+            int? userId = null;
+            if (_orchardServices.WorkContext.CurrentUser != null)
             {
-                var view = BuildEditorViewModel(part, this._requestContext);
-                return Combined(ContentShape("Post_Body_Editor",
-                    () => shapeHelper.Post_Body_Editor(ViewModel: view)));
+                userId = _orchardServices.WorkContext.CurrentUser.Id;
             }
-            else
-            {
-                int? userId = null;
-                if (_orchardServices.WorkContext.CurrentUser != null)
+
+            _workContextAccessor.GetContext().CurrentTimeZone = _userTimeZoneService.GetUserTimeZoneInfo(userId);
+
+            var results = new List<DriverResult>();
+
+            if ( displayType.ToLowerInvariant().Equals("newpostpreview")){
+                results.Add(ContentShape("Parts_Post_ViewInThread", () => shapeHelper.Parts_Post_ViewInThread(ContentItem: part)));
+            }
+
+
+        //    if (displayType.ToLowerInvariant().Equals("searchresult") )
+      //      {
+                results.Add(ContentShape("Parts_Threads_Post_Body_Summary", () =>
                 {
-                    userId = _orchardServices.WorkContext.CurrentUser.Id;
-                }
+                    var site = _workContextAccessor.GetContext().CurrentSite;
+                    var pager = new Pager(site, (int)Math.Ceiling((decimal)part.ThreadPart.PostCount / (decimal)site.PageSize), site.PageSize);
+                    //var pager = new ThreadPager(_workContextAccessor.GetContext().CurrentSite, part.ThreadPart.PostCount);
+                    var bodyText = _htmlFilters.Aggregate(part.Text, (text, filter) => filter.ProcessContent(text, GetFlavor(part)));
+                    return shapeHelper.Parts_Threads_Post_Body_Summary(Html: new HtmlString(bodyText), Pager: pager);
+                }));
 
-                _workContextAccessor.GetContext().CurrentTimeZone = _userTimeZoneService.GetUserTimeZoneInfo(userId);
+                results.Add(ContentShape("Parts_Thread_Post_Metadata_SummaryAdmin", () =>
+                        shapeHelper.Parts_Thread_Post_Metadata_SummaryAdmin(ContentPart: part))
+                );
+        //    }
+         //   else
+        //    {
 
-                var results = new List<DriverResult>();
-
-                if (userId != null)  //if user is authenticated all reporting posts ??TODO: review permission here
+                if (userId != null)
                 {
                     results.Add(ContentShape("Parts_Thread_Post_ReportPost", () =>
                     {
-                        return shapeHelper.Parts_Thread_Post_ReportPost(ReportedById: userId);
+                        //TODO: is this going to be a cached look up for all posts, or gets called constantly?                        
+                        var forumsHomePage = _orchardServices.ContentManager.Get(part.ThreadPart.ForumsHomepageId, VersionOptions.Published);
+                        var canManageForums = _orchardServices.Authorizer.Authorize(Permissions.ManageForums, forumsHomePage);
+                        return shapeHelper.Parts_Thread_Post_ReportPost(ReportedById: userId, CanManageForums: canManageForums);
                     }));
                 }
 
@@ -92,14 +111,6 @@ namespace NGM.Forum.Drivers {
                     return shapeHelper.Parts_Threads_Post_Body(Html: saneBody);
                 }));
 
-                results.Add(ContentShape("Parts_Threads_Post_Body_Summary", () =>
-                {
-                    var site = _workContextAccessor.GetContext().CurrentSite;
-                    var pager = new Pager(site, (int)Math.Ceiling((decimal)part.ThreadPart.PostCount / (decimal)site.PageSize), site.PageSize);
-                    //var pager = new ThreadPager(_workContextAccessor.GetContext().CurrentSite, part.ThreadPart.PostCount);
-                    var bodyText = _htmlFilters.Aggregate(part.Text, (text, filter) => filter.ProcessContent(text, GetFlavor(part)));
-                    return shapeHelper.Parts_Threads_Post_Body_Summary(Html: new HtmlString(bodyText), Pager: pager);
-                }));
                 results.Add(ContentShape("Parts_Post_Manage", () =>
                 {
                     var newPost = _contentManager.New<PostPart>(part.ContentItem.ContentType);
@@ -120,9 +131,9 @@ namespace NGM.Forum.Drivers {
                 results.Add(ContentShape("Parts_Thread_Post_Metadata_SummaryAdmin", () =>
                         shapeHelper.Parts_Thread_Post_Metadata_SummaryAdmin(ContentPart: part))
                 );
+        //    }
 
-                return Combined(results.ToArray());
-            }
+            return Combined(results.ToArray());
 
         }
 
@@ -139,12 +150,19 @@ namespace NGM.Forum.Drivers {
 
 
             if (updater.TryUpdateModel(model, Prefix, null, null)) {
-                part.Format = model.EditorFlavor;
-                //when first created there is no last edited date
-                if (model.PostPart.LastEdited != null)
+                if (String.IsNullOrWhiteSpace(model.Text))
                 {
-                    var editRecord = new PostEditHistoryRecord { PostId = model.PostPart.Id, EditDate = DateTime.UtcNow, Text = text, UserId = userId, Format = model.PostPart.Format };
-                    _postEditHistoryService.SaveEdit(editRecord);
+                    updater.AddModelError("Text", T("The post cannot be empty."));
+                }
+                else
+                {
+                    part.Format = model.EditorFlavor;
+                    //when first created there is no last edited date
+                    if (model.PostPart.LastEdited != null)
+                    {
+                        var editRecord = new PostEditHistoryRecord { PostId = model.PostPart.Id, EditDate = DateTime.UtcNow, Text = text, UserId = userId, Format = model.PostPart.Format };
+                        _postEditHistoryService.SaveEdit(editRecord);
+                    }
                 }
             }
 

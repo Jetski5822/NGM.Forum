@@ -68,7 +68,7 @@ namespace NGM.Forum.Controllers {
             if (!_orchardServices.WorkContext.HttpContext.User.Identity.IsAuthenticated)
                 return new HttpUnauthorizedResult(T("You must be logged in to report an inappropriate post.").ToString());
 
-            if (!_orchardServices.Authorizer.Authorize(Permissions.CanPostToForums, T("You require permission to post to the forums in order to report posts as inappropriate.")))
+            if (!_orchardServices.Authorizer.Authorize(Permissions.CreateThreadsAndPosts, T("You require permission to post to the forums in order to report posts as inappropriate.")))
                 return new HttpUnauthorizedResult();
 
             var userId = _orchardServices.WorkContext.CurrentUser.Id;
@@ -92,7 +92,7 @@ namespace NGM.Forum.Controllers {
             if (!_orchardServices.WorkContext.HttpContext.User.Identity.IsAuthenticated)
                 return new HttpUnauthorizedResult(T("You must be logged in to report an inappropriate post.").ToString());
 
-            if (!_orchardServices.Authorizer.Authorize(Permissions.CanPostToForums, T("You do not have permissions to post on the forums and therefore cannot report posts.")))
+            if (!_orchardServices.Authorizer.Authorize(Permissions.CreateThreadsAndPosts, T("You do not have permissions to post on the forums and therefore cannot report posts.")))
                 return new HttpUnauthorizedResult();
 
             var userId = _orchardServices.WorkContext.CurrentUser.Id;

@@ -16,13 +16,10 @@
 
 @Display( Model.SubscribeButton) 
 
-
 @Display(Model.ContentItems)   
-
-
 
 @if (noReplies) {
     <p class="nocontentitems">@T("There are no replies to this post.")</p>
-} else { 
-  @Display(Model.Pager)
+} else if ( Model.Pager.TotalItemCount > Model.Pager.PageSize ) {
+    @Display( Model.Pager )   
 }

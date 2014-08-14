@@ -13,18 +13,18 @@
     }
 }
 
-@if (Authorizer.Authorize(Orchard.Core.Contents.Permissions.DeleteContent, postPart.ContentItem) && !postPart.IsParentThread()) {
+@if (Authorizer.Authorize(Permissions.DeleteThreadsAndPosts) && !postPart.IsParentThread())
+{
     <a href="@Url.PostDelete(postPart)" class="delete btn-post-option admin">@T("Delete")</a>
 }
 
-@if (Authorizer.Authorize(Orchard.Core.Contents.Permissions.PublishContent, newPostPart)) {
+@if (Authorizer.Authorize(Permissions.CreateThreadsAndPosts, newPostPart)) {
     <a href="@Url.PostReply(postPart)" class="create btn-post-option user">@T("Reply")</a>
     <a href="@Url.PostReplyWithQuote(postPart)" class="create btn-post-option user">@T("Reply with Quote")</a>
 }
 
-@if ( isOwner ) {
-    if (Authorizer.Authorize(Orchard.Core.Contents.Permissions.EditOwnContent, newPostPart))
-    {    
-        <a href="@Url.PostEdit(postPart)" class="edit btn-post-option user">@T("Edit")</a> 
-    }
+@if (Authorizer.Authorize(Permissions.EditPosts, newPostPart))
+{    
+    <a href="@Url.PostEdit(postPart)" class="edit btn-post-option user">@T("Edit")</a> 
 }
+

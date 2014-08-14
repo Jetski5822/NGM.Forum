@@ -57,7 +57,8 @@ namespace NGM.Forum.Controllers {
             var part = _orchardServices.ContentManager.New<PostPart>(forumPart.PostType);
             part.ThreadPart = HierarchyHelpers.GetThreadPart(contentItem);
 
-            if (!_orchardServices.Authorizer.Authorize(Orchard.Core.Contents.Permissions.PublishContent, part, T("Not allowed to create post")))
+            var forumsHomePage = _orchardServices.ContentManager.Get(part.ThreadPart.ForumsHomepageId);
+            if (!_orchardServices.Authorizer.Authorize(Permissions.CreateThreadsAndPosts, forumsHomePage, T("Not allowed to create posts.")))
                 return new HttpUnauthorizedResult();
 
             ///var model = _orchardServices.ContentManager.BuildDisplay(part, "Editor");
@@ -79,7 +80,9 @@ namespace NGM.Forum.Controllers {
             var part = _orchardServices.ContentManager.New<PostPart>(forumPart.PostType);
             part.ThreadPart = HierarchyHelpers.GetThreadPart(contentItem);
 
-            if (!_orchardServices.Authorizer.Authorize(Orchard.Core.Contents.Permissions.PublishContent, part, T("Not allowed to create post")))
+            var forumsHomePage = _orchardServices.ContentManager.Get(part.ThreadPart.ForumsHomepageId);
+
+            if (!_orchardServices.Authorizer.Authorize(Permissions.CreateThreadsAndPosts, forumsHomePage, T("Not allowed to create post")))
                 return new HttpUnauthorizedResult();
 
             part.Text = string.Format("<blockquote>{0}</blockquote>{1}", contentItem.As<PostPart>().Text, "<p></p>");
@@ -115,7 +118,9 @@ namespace NGM.Forum.Controllers {
                 post.RepliedOn = contentItem.As<PostPart>().Id;
             }
 
-            if (!_orchardServices.Authorizer.Authorize(Orchard.Core.Contents.Permissions.PublishContent, post, T("Not allowed to create post")))
+            var forumsHomePage = _orchardServices.ContentManager.Get(threadPart.ForumsHomepageId);
+
+            if (!_orchardServices.Authorizer.Authorize(Permissions.CreateThreadsAndPosts, forumsHomePage, T("Not allowed to create post")))
                 return new HttpUnauthorizedResult();
 
            // post.Text = Text;
@@ -148,8 +153,9 @@ namespace NGM.Forum.Controllers {
 
             var thread = contentItem.As<ThreadPart>();
 
+            var forumsHomePage = _orchardServices.ContentManager.Get(thread.ForumsHomepageId);
             if (thread != null) {
-                if (!_orchardServices.Authorizer.Authorize(Orchard.Core.Contents.Permissions.DeleteContent, contentItem, T("Not allowed to delete thread")))
+                if (!_orchardServices.Authorizer.Authorize(Permissions.DeleteThreadsAndPosts, forumsHomePage, T("Not allowed to delete thread")))
                     return new HttpUnauthorizedResult();
 
                 _orchardServices.ContentManager.Remove(contentItem);
@@ -160,7 +166,7 @@ namespace NGM.Forum.Controllers {
             var post = contentItem.As<PostPart>();
 
             if (post != null) {
-                if (!_orchardServices.Authorizer.Authorize(Orchard.Core.Contents.Permissions.DeleteContent, contentItem, T("Not allowed to delete post")))
+                if (!_orchardServices.Authorizer.Authorize(Permissions.DeleteThreadsAndPosts, forumsHomePage , T("Not allowed to delete post")))
                     return new HttpUnauthorizedResult();
 
                 if (post.IsParentThread()) {
@@ -190,8 +196,8 @@ namespace NGM.Forum.Controllers {
 
             if (post != null)
             {
-                
-                if (!_orchardServices.Authorizer.Authorize(Orchard.Core.Contents.Permissions.EditOwnContent, contentItem, T("Not allowed to edit post")))
+                var forumsHomePage = _orchardServices.ContentManager.Get(post.ThreadPart.ForumsHomepageId);
+                if (!_orchardServices.Authorizer.Authorize(Permissions.EditPosts, forumsHomePage, T("Not allowed to edit post")))
                     return new HttpUnauthorizedResult();
 
                 //pass the existing post to the editor as-is
@@ -211,7 +217,8 @@ namespace NGM.Forum.Controllers {
 
              if (post != null)
              {
-                 if (!_orchardServices.Authorizer.Authorize(Orchard.Core.Contents.Permissions.EditOwnContent, contentItem, T("Not allowed to delete post")))
+                 var forumsHomePage = _orchardServices.ContentManager.Get(post.ThreadPart.ForumsHomepageId);
+                 if (!_orchardServices.Authorizer.Authorize(Permissions.EditPosts, forumsHomePage, T("Not allowed to edit post")))
                      return new HttpUnauthorizedResult();
                  string edited  = T("Last Edited on :").ToString() + DateTime.UtcNow.ToShortDateString();
 

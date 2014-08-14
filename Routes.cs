@@ -49,6 +49,20 @@ namespace NGM.Forum
                 },
                 new RouteDescriptor {
                     Route = new Route(
+                        "Admin/Forums/EditSubscriptionEmailTemplate",
+                        new RouteValueDictionary {
+                                                    {"area", Constants.LocalArea},
+                                                    {"controller", "SubscriptionEmailTemplateAdmin"},
+                                                    {"action", "EditSubscriptionEmailTemplate"}
+                                                },
+                        new RouteValueDictionary (),
+                        new RouteValueDictionary {
+                                                    {"area", Constants.LocalArea}
+                                                },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Route = new Route(
                         "Admin/Forums/{forumId}",
                         new RouteValueDictionary {
                                                     {"area", Constants.LocalArea},
@@ -75,6 +89,7 @@ namespace NGM.Forum
                                                 },
                         new MvcRouteHandler())
                 },
+
 
 
                 /*

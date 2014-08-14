@@ -50,10 +50,10 @@ namespace NGM.Forum {
            // var forumCategoriesCount = forumCategories.Count();
 
             menu.Add(T("blah"), "1.0",
-                item => item.Action("ListForumsHomePages", "ForumAdmin", new { area = Constants.LocalArea }).Permission(Permissions.ManageForums));
+                item => item.Action("ListForumsHomePages", "ForumAdmin", new { area = Constants.LocalArea }).Permission(Permissions.ManageForums).Permission(Permissions.ManageOwnForums));
             //by default this menu will also be shown.  It is the starting point for creating forums
             menu.Add(T("Manage Forums"), "1.1",
-                 item => item.Action("ListForumsHomePages", "ForumAdmin", new { area = Constants.LocalArea }).Permission(Permissions.ManageForums));
+                 item => item.Action("ListForumsHomePages", "ForumAdmin", new { area = Constants.LocalArea }).Permission(Permissions.ManageForums).Permission(Permissions.ManageOwnForums));
 
 
             /*
@@ -70,7 +70,7 @@ namespace NGM.Forum {
             }
             */
             menu.Add(T("Reported Posts"), "1.4",
-                    item => item.Action("ListPostReports", "ReportPostAdmin", new { area = Constants.LocalArea }).Permission(Permissions.ManageForums));
+                    item => item.Action("ListPostReports", "ReportPostAdmin", new { area = Constants.LocalArea }).Permission(Permissions.ModerateInappropriatePosts).Permission(Permissions.ModerateOwnInappropriatePosts));
             menu.Add(T("Subscription Translations"), "1.5",
                     item => item.Action("EditSubscriptionEmailTemplate", "SubscriptionEmailTemplateAdmin", new { area = Constants.LocalArea }).Permission(Permissions.ManageForums));
         }

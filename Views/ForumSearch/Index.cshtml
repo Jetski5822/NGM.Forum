@@ -1,12 +1,24 @@
 ﻿@model NGM.Forum.ViewModels.ForumsSearchViewModel
 @{
     Style.Require("Search");
+    Script.Require("jQuery").AtHead();
+    Script.Require("UtcToLocal");
 
     IEnumerable<object> searchResults = Model.ContentItems;
     Model.ContentItems.Classes.Add("content-items");
     Model.ContentItems.Classes.Add("search-results");
 }
-<h1>@Html.TitleForPage(T("Search").Text)</h1>
+
+@if (Model.ForumMenu != null ) {
+    @Display( Model.ForumMenu )
+}
+
+@Display( Model.ForumSearch)
+
+@Display( Model.BreadCrumb)
+
+
+<h1 class="clearfix">@Html.TitleForPage(T("Search Results").Text)</h1>
 
 @if (HasText(Model.Query)) {
     if (!searchResults.Any()) { 
@@ -17,5 +29,9 @@
 }
 @if (searchResults != null && searchResults.Any()) {
     @Display(searchResults)
-    @Display(Model.Pager)
+
+   if ( Model.Pager.TotalItemCount > Model.Pager.PageSize ) {
+        @Display( Model.Pager )   
+    }
+
 } 

@@ -1,4 +1,5 @@
 ﻿
+@model dynamic
 <ul id="forum-menu-items">
     <li class="forum-menu-item lvl1">@Html.ActionLink( T("Subscriptions").ToString(), "ViewSubscriptions", "Subscription", new { area = "NGM.Forum", forumsHomeId = @Model.ForumsHomePagePart.Id }, null )</li>
 
@@ -12,8 +13,6 @@
                 <li class="forum-menu-item">@Html.ActionLink( T("Posts By Thread").ToString(), "ListNewPostsByThread", "ForumsHomePage", new { area = "NGM.Forum", forumsHomeId = @Model.ForumsHomePagePart.Id, returnUrl = @Model.ReturnUrl}, null )  </li>
             </ul>
         </li>
-        
-
     }
 
     @if ( @Model.ShowRecent == true ) {

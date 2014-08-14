@@ -16,9 +16,10 @@ using Orchard.UI.Navigation;
 using Orchard.UI.Notify;
 using System.Collections.Generic;
 using Orchard.UI.Zones;
+using Orchard.UI.Admin;
 
 namespace NGM.Forum.Controllers {
-    [Themed]
+    [Admin]
     [ValidateInput(false)]
     public class SubscriptionEmailTemplateAdmin : Controller
     {
@@ -61,8 +62,6 @@ namespace NGM.Forum.Controllers {
             };
 
             return View(rec);
-            
-
         }
     }
 

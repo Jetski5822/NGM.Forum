@@ -58,6 +58,7 @@ namespace NGM.Forum.Controllers {
         #region FORUM ROOOT CONTROLLER ACTIONS
         public ActionResult ListForumsHomePages()
         {
+            //this could be filtered to show only the forums the user has permission to see (i.e. is the general admin or owner) but its a nice to have for now
             if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Not allowed to manage forum roots")))
                 return new HttpUnauthorizedResult();
 
@@ -72,21 +73,21 @@ namespace NGM.Forum.Controllers {
 
             return View((object)viewModel);
         }
-
+        //permissions good
         public ActionResult CreateForumsHomePage()
         {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Not allowed to create forum categories")))
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Not allowed to create forum categories"))
+                && !_orchardServices.Authorizer.Authorize(Permissions.ManageOwnForums, T("Not allowed to create forum categories")))
                 return new HttpUnauthorizedResult();
 
             var category = _orchardServices.ContentManager.New<ForumsHomePagePart>("ForumsHomePage");
-            if (category == null)
-                return HttpNotFound();
+
 
             var model = _orchardServices.ContentManager.BuildEditor(category);
             return View((object)model);
 
         }
-
+        //permissions good
         [HttpPost, ActionName("CreateForumsHomePage")]
         public ActionResult CreateForumsHomePagePOST()
         {
@@ -110,28 +111,32 @@ namespace NGM.Forum.Controllers {
 
         }
 
+        //permissions good
         public ActionResult EditForumsHomePage(int forumsHomePagePartId)
         {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Not allowed to create forums")))
-                return new HttpUnauthorizedResult();
-
             var root = _forumsHomePageService.Get(forumsHomePagePartId, VersionOptions.Published);
+            if (root == null)
+                return HttpNotFound();
+
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, root, T("Not allowed to create forums")))
+                return new HttpUnauthorizedResult();
+            
             var model = _orchardServices.ContentManager.UpdateEditor(root, this);
             return View((object)model);
 
         }
 
+        //permissions good
         [HttpPost, ActionName("EditForumsHomePage")]
         public ActionResult EditForumsHomePagePOST(int forumsHomePagePartId)
         {
-
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Not allowed to edit forum")))
-                return new HttpUnauthorizedResult();
-
             var root = _forumsHomePageService.Get(forumsHomePagePartId, VersionOptions.Published);
-
             if (root == null)
                 return HttpNotFound();
+
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, root, T("Not allowed to edit forum")))
+                return new HttpUnauthorizedResult();
+
 
             dynamic model = _orchardServices.ContentManager.UpdateEditor(root, this);
             if (!ModelState.IsValid)
@@ -151,34 +156,42 @@ namespace NGM.Forum.Controllers {
         #endregion
 
         #region FORUM CATEGORY CONTROLLER ACTIONS
+        //permissions good
         public ActionResult CreateForumCategory(int forumsHomePagePartId)
         {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Not allowed to create forum categories")))
+            var forumsHomePagePart = _forumsHomePageService.Get(forumsHomePagePartId, VersionOptions.Latest);
+            if ( forumsHomePagePart == null )
+                return HttpNotFound();
+
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, forumsHomePagePart.ContentItem, T("Not allowed to create forum categories")))
                 return new HttpUnauthorizedResult();
 
             var category = _orchardServices.ContentManager.New<ForumCategoryPart>("ForumCategory");
-            if (category == null)
-                return HttpNotFound();
 
             dynamic viewModel = _orchardServices.New.ViewModel();
-            var forumsHomePagePart = _forumsHomePageService.Get(forumsHomePagePartId,VersionOptions.Latest);
+            
             var model = _orchardServices.ContentManager.BuildEditor(category);
-            viewModel.Editor(model)
-                      .ForumsHomePagePart( forumsHomePagePart);
+
+            viewModel.Editor(model).ForumsHomePagePart( forumsHomePagePart);
 
             return View((object)viewModel);
         }
 
+        //permissions good
         [HttpPost, ActionName("CreateForumCategory")]
         public ActionResult CreateForumCategoryPOST(int forumsHomePagePartId)
         {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Not allowed to manage the forum categories")))
+            var forumsHomePage = _forumsHomePageService.Get(forumsHomePagePartId, VersionOptions.Published);
+            if (forumsHomePage == null)
+                return HttpNotFound();
+
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, forumsHomePage.ContentItem, T("Not allowed to manage the forum categories")))
                 return new HttpUnauthorizedResult();
            
             var category = _orchardServices.ContentManager.New<ForumCategoryPart>("ForumCategory");
             _orchardServices.ContentManager.Create(category, VersionOptions.Draft);
 
-            var forumsHomePage = _forumsHomePageService.Get(forumsHomePagePartId, VersionOptions.Published);
+            
             category.As<CommonPart>().Container = forumsHomePage.ContentItem;
 
             var model = _orchardServices.ContentManager.UpdateEditor(category, this);
@@ -194,15 +207,15 @@ namespace NGM.Forum.Controllers {
             return Redirect(Url.CategoriesForAdmin(forumsHomePage));
         }
 
+        //good permissions
         public ActionResult EditForumCategory(int forumCategoryPartId)
         {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Not allowed to edit forum categories")))
-                return new HttpUnauthorizedResult();
-
             var category = _forumCategoryService.Get(forumCategoryPartId, VersionOptions.Latest);
-
             if (category == null)
                 return HttpNotFound();
+
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, category.ContentItem, T("Not allowed to edit forum categories")))
+                return new HttpUnauthorizedResult();
 
             // Casting to avoid invalid (under medium trust) reflection over the protected View method and force a static invocation.
             var viewModel = _orchardServices.New.ViewModel();            
@@ -214,19 +227,17 @@ namespace NGM.Forum.Controllers {
             return View((object)viewModel);
 
         }
-
+        //good permissions
         [HttpPost, ActionName("EditForumCategory")]
         [InternalFormValueRequired("submit.Save")]
         public ActionResult EditForumCategoryPOST(int forumCategoryPartId)
         {
-
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Not allowed to edit forum")))
-                return new HttpUnauthorizedResult();
-
             var category = _forumCategoryService.Get(forumCategoryPartId, VersionOptions.DraftRequired);
-
             if (category == null)
                 return HttpNotFound();
+
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, category, T("Not allowed to edit forum categories.")))
+                return new HttpUnauthorizedResult();
 
             dynamic model = _orchardServices.ContentManager.UpdateEditor(category, this);
             if (!ModelState.IsValid)
@@ -242,10 +253,14 @@ namespace NGM.Forum.Controllers {
             return Redirect(Url.CategoriesForAdmin( category.ForumsHomePagePart));
         }
 
+        //good permissions
         public ActionResult ListForumCategories(int forumsHomePagePartId)
         {
+            var forumsHomePage = _forumsHomePageService.Get(forumsHomePagePartId, VersionOptions.Published);
+            if (forumsHomePage == null)
+                return HttpNotFound();
 
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Not allowed to manage the forum categories")))
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, forumsHomePage, T("Not allowed to manage this forum's categories. You are either not the owner or do not have Manage Forums permissions.")))
                 return new HttpUnauthorizedResult();
 
             var categoriesWithForums = _forumCategoryService.GetCategoriesInForumsHomePage(forumsHomePagePartId, VersionOptions.Latest).ToList();
@@ -258,22 +273,20 @@ namespace NGM.Forum.Controllers {
                                     .ContentItems(listOfCategories)
                                     .ForumsHomePagePart(forumsHomePagePart);
 
-
             // Casting to avoid invalid (under medium trust) reflection over the protected View method and force a static invocation.
-
             return View((object)viewModel);
 
         }
 
+        //good permissions
         public ActionResult ForumCategoryItem(int forumCategoryPartId)
         {
-
             ForumCategoryPart forumCategory = _forumCategoryService.Get(forumCategoryPartId, VersionOptions.Latest);
 
             if (forumCategory == null)
                 return HttpNotFound();
 
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, forumCategory, T("Not allowed to view forum")))
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, forumCategory, T("Not allowed to view forum category")))
                 return new HttpUnauthorizedResult();
 
             var forumCategories = _forumCategoryService.GetForumsForCategory(forumCategory, VersionOptions.AllVersions).ToArray();
@@ -291,11 +304,9 @@ namespace NGM.Forum.Controllers {
         }
         #endregion
 
-
+        //permissions good
         public ActionResult CreateForum(string type, int forumCategoryPartId )
         {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Not allowed to create forums")))
-                return new HttpUnauthorizedResult();
 
             if (string.IsNullOrWhiteSpace(type)) {
                 var forumTypes = _forumService.GetForumTypes();
@@ -312,8 +323,15 @@ namespace NGM.Forum.Controllers {
 
             var forum = _orchardServices.ContentManager.New<ForumPart>(type);
             var forumCategoryPart = _forumCategoryService.Get(forumCategoryPartId, VersionOptions.Latest);
+
             if (forum == null)
                 return HttpNotFound();
+
+            if (forumCategoryPart == null)
+                return HttpNotFound();
+
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, forumCategoryPart.ContentItem, T("Not allowed to create forums")))
+                return new HttpUnauthorizedResult();
 
             var model = _orchardServices.ContentManager.BuildEditor(forum);
             dynamic viewModel = _orchardServices.New.ViewModel()
@@ -323,10 +341,16 @@ namespace NGM.Forum.Controllers {
             return View((object)viewModel);
         }
 
+        //good permissions
         [HttpPost, ActionName("CreateForum")]
         public ActionResult CreateForumPOST(string type, int forumCategoryPartId)
         {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("Not allowed to create forums")))
+
+            var forumCategoryPart = _forumCategoryService.Get(forumCategoryPartId, VersionOptions.Latest);
+            if (forumCategoryPart == null )
+                return HttpNotFound();
+
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums,forumCategoryPart.ContentItem, T("Not allowed to create forums")))
                 return new HttpUnauthorizedResult();
 
             if (string.IsNullOrWhiteSpace(type)) {
@@ -346,7 +370,6 @@ namespace NGM.Forum.Controllers {
 
             _orchardServices.ContentManager.Create(forum, VersionOptions.Draft);
 
-            var forumCategoryPart = _forumCategoryService.Get(forumCategoryPartId, VersionOptions.Latest);
 
             forum.As<CommonPart>().Container = forumCategoryPart.ContentItem;
 
@@ -372,6 +395,7 @@ namespace NGM.Forum.Controllers {
             return View(model);
         }
 
+        //good permissions
         public ActionResult EditForum(int forumId) {
             var forum = _forumService.Get(forumId, VersionOptions.Latest);
 
@@ -393,7 +417,7 @@ namespace NGM.Forum.Controllers {
             // Casting to avoid invalid (under medium trust) reflection over the protected View method and force a static invocation.
             return View((object)viewModel);
         }
-
+        //good permissions
         [HttpPost, ActionName("EditForum")]
         [InternalFormValueRequired("submit.Save")]
         public ActionResult EditForumPOST(int forumId, int forumCategoryId ) {
@@ -421,7 +445,7 @@ namespace NGM.Forum.Controllers {
             return Redirect(Url.ForumsForAdmin( forum.ForumCategoryPart));
         }
 
-
+        //good permissions
         [HttpPost, ActionName("Edit")]
         [InternalFormValueRequired("submit.Delete")]
         public ActionResult EditDeletePOST(int forumId) {
@@ -430,7 +454,7 @@ namespace NGM.Forum.Controllers {
             if (forum == null)
                 return HttpNotFound();
 
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, forum, T("Not allowed to edit forum")))
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, forum, T("Not allowed to delete forums")))
                 return new HttpUnauthorizedResult();
 
             return RemoveForum(forumId);
@@ -443,7 +467,7 @@ namespace NGM.Forum.Controllers {
             if (forum == null)
                 return HttpNotFound();
 
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, forum, T("Not allowed to edit forum")))
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, forum, T("Not allowed to delete forums")))
                 return new HttpUnauthorizedResult();
 
             var forumCategoryPart = forum.As<CommonPart>().Container.As<ForumCategoryPart>();
@@ -455,6 +479,14 @@ namespace NGM.Forum.Controllers {
         }
 
         public ActionResult ListForums( int forumCategoryPartId ) {
+
+            var forumCategory = _forumCategoryService.Get(forumCategoryPartId, VersionOptions.Latest);
+            if (forumCategory == null)
+                return HttpNotFound();
+
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, forumCategory.ContentItem, T("Not allowed to delete forums")))
+                return new HttpUnauthorizedResult();
+
             var list = _orchardServices.New.List();
             list.AddRange(_forumService.Get(VersionOptions.Latest)
                               .Select(b => {
@@ -462,9 +494,10 @@ namespace NGM.Forum.Controllers {
                                   forum.TotalPostCount = _threadService.Get(b, VersionOptions.Latest).Count();
                                   return forum;
                               }));
-            var forumCategory = _forumCategoryService.Get(forumCategoryPartId, VersionOptions.Latest);
+            
             dynamic viewModel = _orchardServices.New.ViewModel()
                 .ContentItems(list).ParentForumCategory(forumCategory);
+
             // Casting to avoid invalid (under medium trust) reflection over the protected View method and force a static invocation.
             return View((object)viewModel);
         }

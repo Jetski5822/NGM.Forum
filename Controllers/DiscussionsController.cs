@@ -30,6 +30,7 @@ namespace NGM.Forum.Controllers {
         private readonly IAuthorizationService _authorizationService;
         private readonly IAuthenticationService _authenticationService;
         private readonly ISubscriptionService _subscriptionService;
+        private readonly IThreadLastReadService _threadLastReadService;
 
         public DiscussionsController(IOrchardServices orchardServices,
             IForumService forumService,
@@ -39,7 +40,8 @@ namespace NGM.Forum.Controllers {
             IShapeFactory shapeFactory,
             IAuthorizationService authorizationService,
             IAuthenticationService authenticationService,
-            ISubscriptionService subscriptionService
+            ISubscriptionService subscriptionService,
+            IThreadLastReadService threadLastReadService
             )
         {
             _orchardServices = orchardServices;
@@ -50,7 +52,7 @@ namespace NGM.Forum.Controllers {
             _subscriptionService = subscriptionService;
             _authorizationService = authorizationService;
             _authenticationService = authenticationService;
-
+            _threadLastReadService = threadLastReadService;
             T = NullLocalizer.Instance;
             Shape = shapeFactory;
         }
@@ -58,14 +60,17 @@ namespace NGM.Forum.Controllers {
         dynamic Shape { get; set; }
         public Localizer T { get; set; }
 
-        public ActionResult ListDiscussions(int forumsHomeId)
+        public ActionResult ListDiscussions(int forumsHomeId, PagerParameters pagerParameters)
         {
+            
 
             if (!_orchardServices.WorkContext.HttpContext.User.Identity.IsAuthenticated)
                 return new HttpUnauthorizedResult(T("You must be logged in to view your discussions").ToString());
 
-            if (!_orchardServices.Authorizer.Authorize(Permissions.CanPostToForums, T("You do not have permissions to view this area.")))
+            if (!_orchardServices.Authorizer.Authorize(Permissions.CreateThreadsAndPosts, T("You do not have permissions to view this area.")))
                 return new HttpUnauthorizedResult();
+
+            Pager pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
 
             ForumsHomePagePart forumsHomepagePart = null;
             var siteForums = _orchardServices.ContentManager.Query<ForumsHomePagePart>().List().ToList();
@@ -78,28 +83,47 @@ namespace NGM.Forum.Controllers {
 
             var userId = _orchardServices.WorkContext.CurrentUser.Id;
 
-            //get all threads started by this user
-            var threadParts = _orchardServices.ContentManager.Query<ThreadPart>(VersionOptions.Published)
-                              .Join<CommonPartRecord>().Where(cpr => cpr.OwnerId == userId).List().ToList();
+            //get all posts that this user has made and get the unique thread ids from them
+            var posts = _orchardServices.ContentManager.Query<CommonPart, CommonPartRecord>(VersionOptions.Published)                                                    
+                        .Where( common => common.OwnerId == userId )         
+                        .Join<PostPartRecord>()
+                        .List().Select( common=>common.Container.Id ).ToList().Distinct().ToList();
 
-            var threadPartsFromPosts = _orchardServices.ContentManager.Query<ThreadPart>(VersionOptions.Published)
-                              .Join<CommonPartRecord>().Where(cpr => cpr.OwnerId == userId)
-                              .Where(cpr => cpr.OwnerId == userId)
-                              .Join<PostPartRecord>()
-                              .List().ToList();
-            /*
-             *             return _contentManager.Query<CommonPart, CommonPartRecord>(versionOptions)
-                                  .Where(cpr => cpr.Container == parentPart.ContentItem.Record);
-             */
-            threadParts.AddRange(threadPartsFromPosts);
 
-            var threadDisplay = threadParts.Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Summary")); ;
+            //get all threads for this user
+            var threadParts = _orchardServices.ContentManager.Query<ThreadPart,ThreadPartRecord>(VersionOptions.Published)
+                                .Where( thread=>thread.IsDeleted==false && thread.IsInappropriate == false && posts.Contains( thread.Id));
+
+            //filter for current forum if necessary -- TODO: need to do this UI still
+            if (forumsHomeId != 0) {
+                 threadParts = threadParts.Where<ThreadPartRecord>( thread => thread.ForumsHomepageId == forumsHomeId );
+            }
+
+            var totalItemCount = threadParts.Count();
+            var discussions = threadParts.Slice(pager.GetStartIndex(), pager.PageSize).ToList();
+            _threadLastReadService.SetThreadsReadState(userId, forumsHomeId, discussions);
+
+            var threadDisplay = discussions.Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Summary")); ;
 
             var list = Shape.List();
             list.AddRange(threadDisplay);
-            var menuShape = Shape.Parts_ForumMenu(ForumsHomePagePart: forumsHomepagePart, ShowRecent: false, ShowMarkAll: false, ReturnUrl: HttpContext.Request.Url.AbsoluteUri);
-            dynamic viewModel = _orchardServices.New.ViewModel().ContentItems(list).ForumMenu(menuShape).ForumsHomepagePart(forumsHomepagePart).SiteForumsList(siteForums); ;
-            //viewModel.Content.Add(Shape.Parts_Thread_Subscription_List( ContentItems: list), "5");
+
+
+            bool showMenuOptions = forumsHomeId != 0;
+            var menuShape = Shape.Parts_ForumMenu(ForumsHomePagePart: forumsHomepagePart, ShowRecent: showMenuOptions, ShowMarkAll: showMenuOptions, ReturnUrl: HttpContext.Request.Url.AbsoluteUri);
+
+            var breadCrumb = Shape.Parts_BreadCrumb(ForumsHomePagePart: forumsHomepagePart);
+            var searchShape = Shape.Parts_Forum_Search(ForumsHomeId: forumsHomepagePart.Id); ;
+
+            dynamic viewModel = _orchardServices.New.ViewModel()
+                                .ForumMenu(menuShape)
+                                .BreadCrumb(breadCrumb)
+                                .ForumSearch(searchShape)
+                                .ContentItems(list)
+                                .ForumsHomepagePart(forumsHomepagePart)
+                                .SiteForumsList(siteForums)
+                                .Pager(Shape.Pager(pager).TotalItemCount(totalItemCount)); 
+            
             return View((object)viewModel);
 
         }

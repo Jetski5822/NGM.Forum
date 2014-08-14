@@ -29,8 +29,10 @@ namespace NGM.Forum.Controllers {
         private readonly IAuthorizationService _authorizationService;
         private readonly IAuthenticationService _authenticationService;
         private readonly ISubscriptionService _subscriptionService;
+        private readonly IThreadLastReadService _threadLastReadService;
 
-        public SubscriptionController(IOrchardServices orchardServices,
+        public SubscriptionController(
+            IOrchardServices orchardServices,
             IForumService forumService,
             IThreadService threadService,
             IPostService postService,
@@ -38,7 +40,8 @@ namespace NGM.Forum.Controllers {
             IShapeFactory shapeFactory,
             IAuthorizationService authorizationService,
             IAuthenticationService authenticationService,
-            ISubscriptionService subscriptionService
+            ISubscriptionService subscriptionService,
+            IThreadLastReadService threadLastReadService
             )
         {
             _orchardServices = orchardServices;
@@ -49,6 +52,7 @@ namespace NGM.Forum.Controllers {
             _subscriptionService = subscriptionService;
             _authorizationService = authorizationService;
             _authenticationService = authenticationService;
+            _threadLastReadService = threadLastReadService;
 
             T = NullLocalizer.Instance;
             Shape = shapeFactory;
@@ -62,7 +66,7 @@ namespace NGM.Forum.Controllers {
             if (!_orchardServices.WorkContext.HttpContext.User.Identity.IsAuthenticated)
                 return new HttpUnauthorizedResult(T("You must be logged in to subscribe to a thread.").ToString());
 
-            if (!_orchardServices.Authorizer.Authorize(Permissions.CanPostToForums, T("You do not have permissions to subscribe to a thread.")))
+            if (!_orchardServices.Authorizer.Authorize(Permissions.CreateThreadsAndPosts, T("You do not have permissions to subscribe to a thread.")))
                 return new HttpUnauthorizedResult();
 
             if ( _orchardServices.WorkContext.CurrentUser == null )
@@ -83,7 +87,7 @@ namespace NGM.Forum.Controllers {
             if (!_orchardServices.WorkContext.HttpContext.User.Identity.IsAuthenticated)
                 return new HttpUnauthorizedResult(T("You must be logged in to unsubscribe to a discussion").ToString());
 
-            if (!_orchardServices.Authorizer.Authorize(Permissions.CanPostToForums, T("You do not have permissions to subscribe to a thread.")))
+            if (!_orchardServices.Authorizer.Authorize(Permissions.CreateThreadsAndPosts, T("You do not have permissions to subscribe to a thread.")))
                 return new HttpUnauthorizedResult();
 
             var userId = _orchardServices.WorkContext.CurrentUser.Id;
@@ -117,14 +121,17 @@ namespace NGM.Forum.Controllers {
         }
 
 
-        public ActionResult ViewSubscriptions( int forumsHomeId)
+        public ActionResult ViewSubscriptions(int forumsHomeId, PagerParameters pagerParameters)
         {
 
             if (!_orchardServices.WorkContext.HttpContext.User.Identity.IsAuthenticated)
                 return new HttpUnauthorizedResult(T("You must be logged in to view your subscriptions.").ToString());
 
-            if (!_orchardServices.Authorizer.Authorize(Permissions.CanPostToForums, T("You do not have permissions to view subscriptions.")))
+            if (!_orchardServices.Authorizer.Authorize(Permissions.CreateThreadsAndPosts, T("You do not have permissions to view subscriptions.")))
                 return new HttpUnauthorizedResult();
+
+            Pager pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
+
             ForumsHomePagePart forumsHomepagePart = null;
             var siteForums = _orchardServices.ContentManager.Query<ForumsHomePagePart>().List().ToList();
             
@@ -136,17 +143,39 @@ namespace NGM.Forum.Controllers {
             var userId = _orchardServices.WorkContext.CurrentUser.Id;
 
             var threadSubscriptionList = _subscriptionService.GetSubscribedThreads(userId);
+            var totalItemCount = threadSubscriptionList.Count();
             var settings = _subscriptionService.GetSubscriptionSettings(userId);
+
+            threadSubscriptionList = threadSubscriptionList.Skip(pager.GetStartIndex()).Take(pager.PageSize).ToList();
+
             foreach (var thread in threadSubscriptionList)
             {
                 thread.UserIsSubscribedByEmail = settings[thread.Id].EmailUpdates;
             }
+
+            _threadLastReadService.SetThreadsReadState(userId, forumsHomeId, threadSubscriptionList);
+
             var threadDisplay = threadSubscriptionList.Select(b => _orchardServices.ContentManager.BuildDisplay(b, "Subscription")); ;
 
             var list = Shape.List();
             list.AddRange(threadDisplay);
-            var menuShape = Shape.Parts_ForumMenu(ForumsHomePagePart: forumsHomepagePart, ShowRecent: false, ShowMarkAll: false, ReturnUrl: HttpContext.Request.Url.AbsoluteUri);
-            dynamic viewModel = _orchardServices.New.ViewModel().ContentItems(list).ForumMenu(menuShape).SubscriptionSettings(settings).ForumsHomepagePart(forumsHomepagePart).SiteForumsList(siteForums);
+
+            bool showMenuOptions = forumsHomeId != 0;
+            dynamic menuShape = Shape.Parts_ForumMenu(ForumsHomePagePart: forumsHomepagePart, ShowRecent: showMenuOptions, ShowMarkAll: showMenuOptions, ReturnUrl: HttpContext.Request.Url.AbsoluteUri);
+
+            var breadCrumb = Shape.Parts_BreadCrumb(ForumsHomePagePart: forumsHomepagePart);
+            var searchShape = Shape.Parts_Forum_Search(ForumsHomeId: forumsHomepagePart.Id); ;
+
+
+            dynamic viewModel = _orchardServices.New.ViewModel()
+                                    .ForumMenu(menuShape)
+                                    .BreadCrumb(breadCrumb)
+                                    .ForumSearch(searchShape)
+                                    .ContentItems(list)
+                                    .SubscriptionSettings(settings)
+                                    .ForumsHomepagePart(forumsHomepagePart)
+                                    .SiteForumsList(siteForums)
+                                    .Pager(Shape.Pager(pager).TotalItemCount(totalItemCount)); 
 
             return View((object)viewModel);
 

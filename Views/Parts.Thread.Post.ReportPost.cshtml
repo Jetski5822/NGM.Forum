@@ -9,14 +9,14 @@
 }
 
 @* Only when the user is a moderator or administrator will there be inappropriate posts included in the list so don't need to check permissions at this level *@
-@if (postPart.IsInappropriate)
+@if (postPart.IsInappropriate == true)
 {
     <div class="report-post-link"><a href="@Url.PostRemoveInappropriate(postPart )">@T("Unmark as Inappropriate")</a></div>
 } else {
-    
-    if (Authorizer.Authorize(Permissions.ManageForums, Model.ContentItem)) {
-        @*if the user is a mod or admin then allow them to report inappropriate links *@
-                    
+
+    if (Model.CanManageForums == true)
+    {
+        @*if the user is a mod or admin then allow them to report inappropriate links *@                    
         <div class="report-post-link"><a href="@Url.PostMarkInappropriate(postPart)" class="inapprorpriate">@T("Mark as Inappropriate")</a></div>
     } else {
         @*if the user is not a mod or admin then allow them to report inappropriate links *@

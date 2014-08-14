@@ -17,7 +17,17 @@ namespace NGM.Forum.Models {
         public LazyField<PostPart> FirstPostField { get { return _firstPost; } }
         public LazyField<PostPart> LatestPostField { get { return _latestPost; } }
 
-        public  enum ReadStateEnum { NOT_SET, Unread, NewPosts, ReadNoNewPosts };
+        /// <summary>
+        /// Unread = a thread that is not in the last read repository and newer than the last 'all read' date (or X days max )
+        /// NewPosts = a thread that is in the last read repository with posts newer than the last read date
+        /// ReadNoNewPosts = a thread that is in the last read repository but the latest post is older than the last read date 
+        /// </summary>
+        public  enum ReadStateEnum { 
+            NOT_SET, 
+            Unread,
+            NewPosts, 
+            ReadNoNewPosts 
+        };
 
         public string Title {
             get { return this.As<ITitleAspect>().Title; }

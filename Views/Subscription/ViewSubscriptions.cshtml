@@ -17,14 +17,16 @@
     ForumsHomePagePart homepagePart = Model.ForumsHomepagePart;
 }
 
-@Display(Model.ForumMenu)
-<div class='menu-clear'></div>
+@Display( Model.ForumMenu)
+@Display( Model.ForumSearch )
 
-@if ( @homepagePart != null ) {
-    <h2>@T("Subscriptions For ") <a href="@Url.ItemDisplayUrl( @homepagePart.ContentItem)">@homepagePart.Title</a> </h2>
+@if ( homepagePart != null ) {
+    @Display( Model.BreadCrumb )
+    <h2>@T("Subscriptions")</h2>
 } else {
     <h2>@T("Subscriptions For All Forums")</h2>
 }
+
 
     <h3>@T("Forum topics you are subscribed to:")</h3>
 
@@ -35,6 +37,8 @@
 
         if (threads == null || threads.Count() < 1) {
             <p class="nocontentitems">@T("You are not subscribed to any discussions.")</p>
-        } 
+        } else if ( Model.Pager.TotalItemCount > Model.Pager.PageSize ) {
+            @Display( Model.Pager )   
+        }
     }
 

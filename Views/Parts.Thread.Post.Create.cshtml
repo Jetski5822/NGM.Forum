@@ -14,10 +14,6 @@
 
         <div id="content-editor">
             @Display(Model.ContentEditor)
-            <ul class="post-body-editor-buttons">
-                <li><button type="submit">Submit</button></li>
-                <li><button id="btn-cancel" type="button">Cancel</button></li>
-            </ul>
         </div>
         <input type="hidden" id="contentid" name="contentid" value="@Model.ContentId"/>
     }
@@ -29,14 +25,14 @@
         //<![CDATA[
         $(document).ready(function () {
             $(".quick-reply").show(); @*show if javascript enabled*@
+
             $("#btn-add-quick-reply").click(function () {
-                $('#content-editor').slideDown('fast');
+                $('#content-editor').toggle( "fast", function() {
+                    $('html, body').animate({ scrollTop: $(document).height() }, 'slow');
+                });
             });
             $('#content-editor').hide();
 
-            $("#btn-cancel").click(function () {
-                $('#content-editor').slideUp('fast');
-            });
 
         });
     //]]>

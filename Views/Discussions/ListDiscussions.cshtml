@@ -17,13 +17,13 @@
 }
 
 @Display( Model.ForumMenu)
+@Display( Model.ForumSearch )
 
-<div class='menu-clear'></div>
-
-@if ( @homepagePart != null ) {
-    <h2>@T("Discussions For ") <a href="@Url.ItemDisplayUrl( @homepagePart.ContentItem)">@homepagePart.Title</a> </h2>
+@if ( homepagePart != null ) {
+    @Display( Model.BreadCrumb )
+    <h2  class="clearfix">@T("Discussions")</h2>
 } else {
-    <h2>@T("Discussions For All Forums")</h2>
+    <h2  class="clearfix">@T("Discussions For All Forums")</h2>
 }
 
 <h3>@T("Discussions started by you or that you have participated in:")</h3>
@@ -32,8 +32,8 @@
 
 @if (threads == null || threads.Count() < 1) {
     <p class="nocontentitems">@T("You have not started nor participated in any discussions.")</p>
-} else { 
-
+} else if ( Model.Pager.TotalItemCount > Model.Pager.PageSize ) {
+    @Display( Model.Pager )   
 }
-
+ 
 

@@ -5,12 +5,15 @@
 
 @{
     
-       <div class="forum-category-description">@Model.Category.ForumCategoryPart.Description</div>    
+        <div class="forum-category-content">
+            <h2 class="forum-category-title">@Model.Category.ForumCategoryPart.Title</h2>    
+            <div class="forum-category-description">@Model.Category.ForumCategoryPart.Description</div>    
+        </div>
         
        <div class="forum-category-forum-list">
-        @foreach( var forum in Model.Forums ){
-            @Display( forum )
-        }
+            @foreach( var forum in Model.Forums ){
+                @Display( forum )
+            }
        </div>
 
     

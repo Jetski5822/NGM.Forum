@@ -336,20 +336,20 @@ namespace NGM.Forum {
             var defaultSubscriptionEmailTemplate = new SubscriptionEmailTemplateRecord();
             defaultSubscriptionEmailTemplate.Title = "A new post was made to a forum topic you subscribed to at [SiteName]";
             defaultSubscriptionEmailTemplate.BodyPlainText = "You are receiving this email because you subscribed to receive post notifications on the thread:" + Environment.NewLine +
-                                                             "'[ThreadName]' " + Environment.NewLine + Environment.NewLine +
+                                                             "'[ThreadTitle]' " + Environment.NewLine + Environment.NewLine +
 
                                                              "The contents of the new post are as follows:" + Environment.NewLine + Environment.NewLine +
 
-                                                             "[NewPostContents]" + Environment.NewLine + Environment.NewLine +
+                                                             "[PostText]" + Environment.NewLine + Environment.NewLine +
 
-                                                             "To view this post or respond go to [PostUrl]"  + Environment.NewLine ;
+                                                             "To view this post or respond go to [PostUrl]" + Environment.NewLine;
 
             defaultSubscriptionEmailTemplate.BodyHtml = "<html><body>" + 
                                                         "<p>{\"You received this email because you subscribed to receive post notification on the thread:\"}</p>" +
-                                                        "<p><i>[ThreadName]</i></p>" +
+                                                        "<p><i>[ThreadTitle]</i></p>" +
                                                         "<p>{(\"The contents of the new post is as follows:\"} </p>" +
-                                                        "<p>[NewPostContents]</p>" +
-                                                        "<p>{(\"To view this post or to respond go to\"} [PostLink]</p>"+
+                                                        "<p>[PostText]</p>" +
+                                                        "<p>{(\"To view this post or to respond go to\"} [PostUrl]</p>" +
                                                         "</body></html>";
 
             _subscriptionEmailTemplateRepository.Create(defaultSubscriptionEmailTemplate);
@@ -471,6 +471,15 @@ namespace NGM.Forum {
             );
 
             return 21;
+        }
+        public int UpdateFrom21()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("ForumsHomePage", cfg => cfg
+                 .WithPart("ForumSearchPart"));
+            ContentDefinitionManager.AlterTypeDefinition("Forum", cfg => cfg
+                 .WithPart("ForumSearchPart"));
+
+            return 22;
         }
     }
 }

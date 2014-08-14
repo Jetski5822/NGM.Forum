@@ -11,6 +11,6 @@
 @Display(Model.ContentItems)
 @if (threads == null || threads.Count() < 1) {
     <p class="nocontentitems">@T("There are no threads for this forum. Be the first to <a href=\"{0}\">create one</a>?", Url.ThreadCreate(contentPart))</p>
-} else { 
-  @Display(Model.Pager)
 }
+
+@Display( Model.Pager )   

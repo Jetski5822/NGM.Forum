@@ -6,12 +6,12 @@
     Script.Require("UtcToLocal");
     Style.Require("Forum").AtHead();    
 }
+
+@Display(Model.ForumSearch )
 @Display(Model.ForumMenu )
-@Display(Model.SearchBox )
+@Display(Model.BreadCrumb )
 
-<a href="@Model.ReturnUrl"><< @T("Back to the Forums")</a>
-<h2>@T("New Posts")</h2>
-
+<h2 class="clearfix">@T("View New Posts")</h2>
 
 @if (Model.Posts.Count == 0)
 {
@@ -21,5 +21,7 @@
 
         @Display(Model.Posts)
     </div>
-    @Display(Model.Pager)
+    if ( Model.Pager.TotalItemCount > Model.Pager.PageSize ) {
+        @Display( Model.Pager )   
+    }
 }

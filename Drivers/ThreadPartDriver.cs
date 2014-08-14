@@ -13,6 +13,7 @@ using Orchard.Security;
 using Orchard.UI.Navigation;
 using Orchard.Autoroute.Models;
 using System.Web;
+using Orchard.Core.Title.Models;
 
 
 namespace NGM.Forum.Drivers {
@@ -66,6 +67,8 @@ namespace NGM.Forum.Drivers {
 
             _workContextAccessor.GetContext().CurrentTimeZone = _userTimeZoneService.GetUserTimeZoneInfo(userId);
 
+            var forumsHomePage = _contentManager.Get(part.ForumsHomepageId, VersionOptions.Published, new QueryHints().ExpandParts<TitlePart, ForumsHomePagePart>());  //TOOO: is this going to be cached or looked up on each thread?
+
             //the read state may have already been looked up and set in a controller.. if not, set it
             //TODO: is this really needed?  is there a path that will reach this?
             if (userId != null && part.ReadState == ThreadPart.ReadStateEnum.NOT_SET)
@@ -73,12 +76,17 @@ namespace NGM.Forum.Drivers {
                 int i = 1;
                 //part.ReadState = _threadLastReadService.GetReadState(userId.Value, part);
             }
+            else if (!userId.HasValue)
+            {
+                //if user is not logged in make a default
+                part.ReadState = ThreadPart.ReadStateEnum.Unread;
+            }
 
             if (displayType.Equals("Detail"))
             {
                 //subscription logic
                 bool isSubscribed = false;
-                bool canSubscribe = _orchardServices.Authorizer.Authorize(Permissions.CanPostToForums); ;
+                bool canSubscribe = _orchardServices.Authorizer.Authorize(Permissions.CreateThreadsAndPosts); ;
                 if (_orchardServices.WorkContext.CurrentUser != null)
                 {
                     isSubscribed = _subscriptionService.IsSubscribed(userId.Value, part.Id);
@@ -91,15 +99,20 @@ namespace NGM.Forum.Drivers {
                     _threadLastReadService.MarkThreadAsRead(userId.Value, part.Id);
                 }
                 results.Add(ContentShape( "Parts_Thread_SubscribeButton", ()=>shapeHelper.Parts_Thread_SubscribeButton(IsSubscribed: isSubscribed, CanSubscribe: canSubscribe, ThreadId: part.Id)));
-               //TODO: is this optimal or high overhead?
-                var forumsHomePagePart = part.ForumPart.ForumCategoryPart.ForumsHomePagePart;
+
+                //results.Add( ContentShape("Parts_Forum_Search", ()=> shapeHelper.Parts_foru(ForumsHomeId: forumsHomePagePart.Id); ;
+               //TODO: is this optimal or high overhead -- only used in the detail view .. but ??
                 var categoryPart = part.ForumPart.ForumCategoryPart;
                 var forumPart = part.ForumPart;
                
                 results.Add(ContentShape("Parts_BreadCrumb",
-                    () => shapeHelper.Parts_BreadCrumb(ForumsHomePagePart: forumsHomePagePart, ForumCategoryPart: categoryPart, ForumPart: forumPart, ThreadPart: null)
+                    () => shapeHelper.Parts_BreadCrumb(ForumsHomePagePart: forumsHomePage.As<ForumsHomePagePart>(), ForumCategoryPart: categoryPart, ForumPart: forumPart, ThreadPart: null)
                 ));
-                results.Add(ContentShape("Parts_ForumMenu", () => shapeHelper.Parts_ForumMenu(ForumsHomePagePart: part.ForumPart.ForumCategoryPart.ForumsHomePagePart, ShowRecent: true, ShowMarkAll: true, ReturnUrl: HttpContext.Current.Request.Url.AbsoluteUri)));
+
+                if (userId != null)
+                {
+                    results.Add(ContentShape("Parts_ForumMenu", () => shapeHelper.Parts_ForumMenu(ForumsHomePagePart: forumsHomePage.As<ForumsHomePagePart>(), ShowRecent: true, ShowMarkAll: true, ReturnUrl: HttpContext.Current.Request.Url.AbsoluteUri)));
+                }
             }
 
             if (displayType.Equals("SummaryAdmin", StringComparison.OrdinalIgnoreCase)) {
@@ -124,9 +137,10 @@ namespace NGM.Forum.Drivers {
                 ContentShape("Parts_Threads_Thread_ThreadReplyCount",
                     () => shapeHelper.Parts_Threads_Thread_ThreadReplyCount(ReplyCount: part.ReplyCount)),
                 ContentShape("Parts_Thread_Manage", () => {
-                    var newPost = _contentManager.New<PostPart>(part.FirstPost.ContentItem.ContentType);
+                    var newPost = _contentManager.New<PostPart>(part.FirstPost.ContentItem.ContentType);                    
                     newPost.ThreadPart = part;
-                    return shapeHelper.Parts_Thread_Manage(FirstPost: part.FirstPost, NewPost: newPost);
+                    
+                    return shapeHelper.Parts_Thread_Manage(FirstPost: part.FirstPost, NewPost: newPost, ForumsHomePagePart: forumsHomePage.As<ForumsHomePagePart>() );
                 }),
                 ContentShape("Forum_Metadata_First", () => shapeHelper.Forum_Metadata_First(Post: part.FirstPost)),
                 ContentShape("Forum_Metadata_Latest", () => {
@@ -145,33 +159,12 @@ namespace NGM.Forum.Drivers {
             return Combined(results.ToArray());
         }
 
-        /*
-         * 
-        // GET
-        protected override DriverResult Editor(CommentPart part, dynamic shapeHelper) {
-            if (UI.Admin.AdminFilter.IsApplied(_workContextAccessor.GetContext().HttpContext.Request.RequestContext)) {
-                return ContentShape("Parts_Comment_AdminEdit", 
-                    () => shapeHelper.EditorTemplate(TemplateName: "Parts.Comment.AdminEdit", Model: part, Prefix: Prefix));
-            }
-            else {
-                return ContentShape("Parts_Comment_Edit", 
-                    () => shapeHelper.EditorTemplate(TemplateName: "Parts.Comment", Model: part, Prefix: Prefix));
-	        }
-        }
-         */
 
         protected override DriverResult Editor(ThreadPart part, dynamic shapeHelper)
         {
-            if (Orchard.UI.Admin.AdminFilter.IsApplied(_workContextAccessor.GetContext().HttpContext.Request.RequestContext))
-            {
+
                 return ContentShape("Parts_Threads_Thread_Fields", () =>
                     shapeHelper.EditorTemplate(TemplateName: "Parts.Threads.Thread.Fields", Model: part, Prefix: Prefix));
-            }
-            else
-            {
-                return ContentShape("Parts_Threads_FrontEndEdit", () =>
-                    shapeHelper.EditorTemplate(TemplateName: "Parts.Threads.CreateFrontEnd", Model: part, Prefix: Prefix));
-            }
         }
 
         protected override DriverResult Editor(ThreadPart part, IUpdateModel updater, dynamic shapeHelper)
