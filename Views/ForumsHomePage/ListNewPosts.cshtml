@@ -6,22 +6,32 @@
     Script.Require("UtcToLocal");
     Style.Require("Forum").AtHead();    
 }
+@* this is technically not correct use of html5 elements but this is not search engine material and will help
+   to keep the css more consistent/minimal *@
+<header>
+    <nav  role="navigation">
+        <div class="navbar navbar-default">
+            @Display(Model.ForumSearch )
+            @Display(Model.ForumMenu )
+        </div>
+        @Display(Model.BreadCrumb )
+    </nav>
 
-@Display(Model.ForumSearch )
-@Display(Model.ForumMenu )
-@Display(Model.BreadCrumb )
+    <h1>@T("View New Posts")</h1>
+</header>
+    
+<section>
+    @if (Model.Posts.Items.Count == 0)
+    {
+        <p class="text-info">@T("There are no new posts.")</p>
+    } else {
+        <div id="new-post-list">
 
-<h2 class="clearfix">@T("View New Posts")</h2>
-
-@if (Model.Posts.Count == 0)
-{
-    <p class="info">@T("There are no new posts.")</p>
-} else {
-    <div id="new-post-list">
-
-        @Display(Model.Posts)
-    </div>
-    if ( Model.Pager.TotalItemCount > Model.Pager.PageSize ) {
-        @Display( Model.Pager )   
+            @Display(Model.Posts)
+        </div>
+        if ( Model.Pager.TotalItemCount > Model.Pager.PageSize ) {
+            @Display( Model.Pager )   
+        }
     }
-}
+
+</section>

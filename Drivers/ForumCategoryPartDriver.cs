@@ -54,12 +54,6 @@ namespace NGM.Forum.Drivers
                 results.Add(ContentShape("Parts_ForumCategory_Menu_SummaryAdmin",
                     () => shapeHelper.Parts_ForumCategory_Menu_SummaryAdmin()                 
                 ));
-                /*
-                results.Add(ContentShape("Parts_ForumCategory_ForumList",
-                    () => shapeHelper.Parts_ForumCategory_ForumList(
-                            forums: _contentManager.Query<ForumPart, ForumPartRecord>().ForVersion(VersionOptions.Published).List().ToList()
-                )));
-                 */
 
             }
             else
@@ -72,14 +66,6 @@ namespace NGM.Forum.Drivers
                         //this has been optimized a bit .. the controller has already loaded and divided the forum parts between the categories
                         Forums: part.Forums.Select(forum => _contentManager.BuildDisplay(forum, "Summary")).ToList()
                 )));
-
-                /*
-                results.Add(ContentShape("Parts_ForumCategory_ForumList",
-                    () => shapeHelper.Parts.ForumCategory_ForumList(
-                            forums: _contentManager.Query<ForumPart, ForumPartRecord>().ForVersion(VersionOptions.Published)
-                    )));
-                 * 
-                 * */
             }
 
             return Combined(results.ToArray());

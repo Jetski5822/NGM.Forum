@@ -4,7 +4,8 @@
     Script.Require("UtcToLocal");
 }
 @{
-    if (Model.Title != null) {
+    if (Model.Title != null)
+    {
         Layout.Title = Model.Title;
     }
 
@@ -21,7 +22,7 @@
     {
         Model.Classes.Add(stickyClass);
     }
-        
+
     if (Model.ContentItem.ThreadPart.FirstPost.IsInappropriate == true)
     {
         Model.Classes.Add("inappropriate-thread");
@@ -32,50 +33,64 @@
 
 }
 @tag.StartElement
-    <header>
-
-        @Display(Model.Header)
-
-        @if (Model.Meta != null) {
-            <div class="metadata">
-                @Display(Model.Meta)
+<header>
+    @if (Model.Nav != null || Model.NavBar != null)
+    {
+        <nav  role="navigation">
+            <div class="navbar navbar-default">
+                @Display(Model.NavBar)
             </div>
-        }
-
-        @if (Model.Actions != null) {
-            <div class="actions">
-                @Display(Model.Actions)
-            </div>
-        }
-
-        @if (Model.ThreadTitle != null)
-        {
-            <div class="thread-title">
-                @Display(Model.ThreadTitle)
-            </div>
-        }
-    </header>
-    
-
-    @Display(Model.Content)
-
-    @if(Model.Footer != null) {
-        
-        <footer>
-            @Display(Model.Footer)
-        </footer>
-        
+            @if ( Model.Nav != null ) {
+                @Display(Model.Nav )
+            }
+        </nav>
     }
+    @if ( Model.Header != null ) {
+        @Display(Model.Header)
+    }
+
+    @if (Model.Meta != null)
+    {
+        <div class="metadata">
+            @Display(Model.Meta)
+        </div>
+    }
+
+    @if (Model.Actions != null)
+    {
+        <div class="actions">
+            @Display(Model.Actions)
+        </div>
+    }
+
+    @if (Model.ThreadTitle != null)
+    {
+        <div class="thread-title">
+            @Display(Model.ThreadTitle)
+        </div>
+    }
+</header>
+<section>
+    @Display(Model.Content)
+</section>
+@if (Model.Footer != null)
+{
+        
+    <footer>
+        @Display(Model.Footer)
+    </footer>
+        
+}
 @tag.EndElement
 
 @using (Script.Foot())
 {
     <script type="text/javascript">
 
-    //<![CDATA[
-    $(document).ready(function () {
-        $(".delete.btn-post-option.admin").click(function () {
-            return confirm( "@T("Do you want to delete this post? Deletion is permanent and cannot be undone.").ToString()");
+        //<![CDATA[
+        $(document).ready(function () {
+            $(".delete.btn-post-option.btn-admin").click(function () {
+                return confirm("@T("Do you want to delete this post? Deletion is permanent and cannot be undone.").ToString()");
         });
     });
     //]]>

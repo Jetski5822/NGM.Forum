@@ -9,16 +9,26 @@
     var threadDic = (Dictionary<int, ThreadPart>) Model.ThreadDic;
 }
 
-@Display(Model.ForumSearch )
-@Display(Model.ForumMenu )
-@Display(Model.BreadCrumb )
+@* this is technically not correct use of html5 elements but this is not search engine material and will help
+   to keep the css more consistent/minimal *@
+ 
+<header>
+    <nav role="navigation">
+        <div class="navbar navbar-default">
+            @Display(Model.ForumSearch )
+            @Display(Model.ForumMenu )
+        </div>
+        @Display(Model.BreadCrumb )
+    </nav>
 
-<h2 class="clearfix">@T("View New Posts By Thread")</h2>
-
+    <h1>@T("View New Posts By Thread")</h1>
+</header>
+    
+<section>
 
     @if (threadDic.Count == 0)
     {
-        <p class="info">@T("There are no new posts.")</p>
+        <p class="text-info">@T("There are no new posts.")</p>
     } else {
         <p>@T("Click the title to see the posts in a thread.")</p>    
         foreach ( var threadKey in threadDic.Keys ) {
@@ -54,6 +64,8 @@
             @Display( Model.Pager )   
         }
     }
+
+</section>
 
 @using (Script.Foot())
 {

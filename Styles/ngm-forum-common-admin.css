@@ -75,6 +75,7 @@ border-bottom:none;
 .label-info {
     font-size:smaller;
     font-style:italic;
+    background-color:inherit;
 }
 
 td.note2{
@@ -103,4 +104,8 @@ width: auto;
 .post-edit-history-entry {
     border: 1px solid lightgray;
     padding: 10px;
+}
+
+header h1 {
+    font-size:2em;
 }

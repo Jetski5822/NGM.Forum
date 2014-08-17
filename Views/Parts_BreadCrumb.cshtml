@@ -19,7 +19,8 @@
     }
 
 }
-<ul id="forum-breadcrumbs" class="list-inline">   
+ 
+<ol id="forum-breadcrumbs" class="breadcrumb">
     <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="@rootUrl">@homePage.Title</a> </li>
 
     @if ( category != null ) {
@@ -33,6 +34,5 @@
     @if (thread != null){            
         <li class="forum-breadcrumb" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">@Html.ItemDisplayLink( thread.Title, thread.ContentItem) </li>
     }
-</ul>
-
+</ol>
 

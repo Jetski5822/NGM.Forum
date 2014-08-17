@@ -25,10 +25,15 @@
 <span class ="lastest-post">
 
     @if ( postPart != null ) {
-        <a href="@Url.PostView(postPart, pager)">
-        @T("Latest post by {0} ", commonPart.Owner.UserName)
+        
+        <a href="@Url.PostView(postPart, pager)">        
+            @T("Latest by ") 
+            <i class="icon-user"></i>
+            @commonPart.Owner.UserName
+
         @if ( WorkContext.CurrentTimeZone == TimeZoneInfo.Utc){
             DateTime date = @commonPart.CreatedUtc.Value;
+            <i class="icon-calendar"></i>
             <span class="published utc-date-time">@date.ToString("yyyy-MM-ddTHH:mm:ss Z")</span>    
         } else {
             <span class="published">@Display.PublishedState(createdDateTimeUtc:commonPart.CreatedUtc, publisheddateTimeUtc:  commonPart.PublishedUtc) </span>    

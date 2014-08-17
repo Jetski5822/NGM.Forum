@@ -2,13 +2,14 @@
 @using Orchard.Mvc.Html
 @{
 	Script.Require("jQuery");
+    Style.Require("ForumsAdmin");
 }
 
 @{ 
     Layout.Title = T("New Post").ToString(); 
  }
 
-<h2>@Layout.Title</h2>
+<h2 class="page-title">@Layout.Title</h2>
 
 @using (Html.BeginFormAntiForgeryPost(Url.Action("Create", new { contentId = Request.QueryString["contentId"] }))) {
     @Html.ValidationSummary()

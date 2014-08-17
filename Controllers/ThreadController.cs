@@ -61,94 +61,6 @@ namespace NGM.Forum.Controllers {
         dynamic Shape { get; set; }
         public Localizer T { get; set; }
 
-/*
-        public ActionResult Create(int forumId) {
-            //removed the use of dashboard editors on the front end because as of 1.8 there is no way to make alts
-            //and re-style the parts
-            // https://orchard.codeplex.com/discussions/434112
-            // https://orchard.codeplex.com/workitem/19479
-
-            if (!_orchardServices.Authorizer.Authorize(Permissions.CreateThreadsAndPosts, T("Not allowed to create thread")))
-                return new HttpUnauthorizedResult();
-
-            var forumPart = _forumService.Get(forumId, VersionOptions.Latest);
-            if (forumPart == null)
-                return HttpNotFound();            
-
-            var viewModel = new ThreadCreateViewModel();
-            viewModel.ReturnUrl = Request.Url.AbsoluteUri;
-
-            //TODO: this needs  to take into account 'own forums as well' but need to rework permissions in general
-            //so leaving it for now
-            viewModel.ShowIsSticky = _orchardServices.Authorizer.Authorize(Permissions.ManageForums);
-
-            return View((object)viewModel);
-        }
-
-        [HttpPost, ActionName("Create")]
-        public ActionResult CreatePOST(ThreadCreateViewModel threadViewModel)
-        {
-            //removed the use of dashboard editors on the front end because as of 1.8 there is no way to make alts
-            //and re-style the parts
-            // https://orchard.codeplex.com/discussions/434112
-            // https://orchard.codeplex.com/workitem/19479
-
-            var forumPart = _forumService.Get(threadViewModel.ForumId, VersionOptions.Latest);
-            if (forumPart == null)
-                return HttpNotFound();
-
-            var forumSettings = _orchardServices.WorkContext.CurrentSite.As<ForumsSettingsPart>();
-            if (threadViewModel.ThreadTitle.Length > forumSettings.ThreadTitleMaximumLength)
-            {
-                _orchardServices.Notifier.Add(NotifyType.Error, T("The thread title is too long.  The title can have a maximum of {0} characters but {1} characters were entered.", forumSettings.ThreadTitleMaximumLength, threadViewModel.ThreadTitle.Length));
-
-                return View((object)threadViewModel);
-            }
-
-            var thread = _orchardServices.ContentManager.Create<ThreadPart>(forumPart.ThreadType, VersionOptions.Draft, o => { o.ForumPart = forumPart; });
-
-            //removing this as it requires the content item persmission  module 
-            //if (!_orchardServices.Authorizer.Authorize(Orchard.Core.Contents.Permissions.PublishContent, thread, T("Not allowed to create thread")))
-            if (!_orchardServices.Authorizer.Authorize( Permissions.CreateThreadsAndPosts, T("Not allowed to create thread")))
-                return new HttpUnauthorizedResult();
-
-            thread.ForumPart = forumPart;
-            thread.As<TitlePart>().Title =  threadViewModel.ThreadTitle.Substring(0, Math.Min( threadViewModel.ThreadTitle.Length, forumSettings.ThreadTitleMaximumLength));            
-            thread.IsSticky = threadViewModel.isSticky;
-            
-            var post = _orchardServices.ContentManager.Create<PostPart>(forumPart.PostType, VersionOptions.Draft, o => { o.ThreadPart = thread; });
-            post.ThreadPart = thread;
-            post.Text = threadViewModel.Text;
-
-            if (!_orchardServices.Authorizer.Authorize(Permissions.CreateThreadsAndPosts, post, T("Not allowed to create post")))
-                return new HttpUnauthorizedResult();
-
-            if (!ModelState.IsValid)
-            {
-                _orchardServices.TransactionManager.Cancel();
-
-                return View((object)threadViewModel);
-            }
-            _orchardServices.ContentManager.Publish(thread.ContentItem);
-           
-            //needed to publish before the autoroute has values
-            var url = thread.As<AutoroutePart>().DisplayAlias;
-            if (forumSettings.ThreadTitleMaximumLength > 0)
-            {
-                url = url.Substring(0, Math.Min(forumSettings.ThreadTitleMaximumLength, url.Length));          
-            }
-
-            thread.As<AutoroutePart>().DisplayAlias = url;
-
-            _orchardServices.ContentManager.Publish(post.ContentItem);
-
-            _orchardServices.Notifier.Information(T("Your {0} has been created.", thread.TypeDefinition.DisplayName));
-            return Redirect(Url.ThreadView(thread));
-        }
-     */
-        /*
-         * ORIGINAL CODE USING THE ADMIN VIEW EDITORS ON THE FRONT END WHEN MAKING A NEW THREAD
-         */
          public ActionResult Create(int forumId) {
             var forumPart = _forumService.Get(forumId, VersionOptions.Latest);
             if (forumPart == null)
@@ -251,7 +163,7 @@ namespace NGM.Forum.Controllers {
             var list = Shape.List();
             list.AddRange(posts);
             thread.Content.Add(Shape.Parts_Threads_Post_List(ContentPart: threadPart, ContentItems: list, Pager: pagerObject), "5");
-            thread.Header.Add(Shape.Parts_Forum_Search(ForumsHomeId: threadPart.ForumsHomepageId), "1");
+            thread.NavBar.Add(Shape.Parts_Forum_Search(ForumsHomeId: threadPart.ForumsHomepageId), "2");
 
             var part = _orchardServices.ContentManager.New<PostPart>(threadPart.ForumPart.PostType);
 

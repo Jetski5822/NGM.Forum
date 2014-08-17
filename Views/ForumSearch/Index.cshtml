@@ -9,29 +9,31 @@
     Model.ContentItems.Classes.Add("search-results");
 }
 
-@if (Model.ForumMenu != null ) {
-    @Display( Model.ForumMenu )
-}
+<header>
+    <nav class="navbar navbar-default" role="navigation">
+        @if (Model.ForumMenu != null ) {
+            @Display( Model.ForumMenu )
+        }    
+        @Display( Model.ForumSearch)
+    </nav>
+    @Display( Model.BreadCrumb)
+</header>
+<section>
+    <h1>@Html.TitleForPage(T("Search Results").Text)</h1>
 
-@Display( Model.ForumSearch)
-
-@Display( Model.BreadCrumb)
-
-
-<h1 class="clearfix">@Html.TitleForPage(T("Search Results").Text)</h1>
-
-@if (HasText(Model.Query)) {
-    if (!searchResults.Any()) { 
-        <p class="search-summary">@T.Plural("There is <em>one</em> result", "<em>zero</em> results", searchResults.Count())</p>
-    } else { 
-        <p class="search-summary">@T.Plural("There is <em>one</em> result", "<em>{1} - {2}</em> of <em>{0}</em> results", Model.TotalItemCount, Model.StartPosition, Model.EndPosition)</p>
+    @if (HasText(Model.Query)) {
+        if (!searchResults.Any()) { 
+            <p class="search-summary">@T.Plural("There is <em>one</em> result", "<em>zero</em> results", searchResults.Count())</p>
+        } else { 
+            <p class="search-summary">@T.Plural("There is <em>one</em> result", "<em>{1} - {2}</em> of <em>{0}</em> results", Model.TotalItemCount, Model.StartPosition, Model.EndPosition)</p>
+        }
     }
-}
-@if (searchResults != null && searchResults.Any()) {
-    @Display(searchResults)
+    @if (searchResults != null && searchResults.Any()) {
+        @Display(searchResults)
 
-   if ( Model.Pager.TotalItemCount > Model.Pager.PageSize ) {
-        @Display( Model.Pager )   
-    }
+       if ( Model.Pager.TotalItemCount > Model.Pager.PageSize ) {
+            @Display( Model.Pager )   
+        }
 
-} 
+    } 
+</section>

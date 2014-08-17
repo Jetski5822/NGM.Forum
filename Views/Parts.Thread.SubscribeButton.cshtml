@@ -5,10 +5,10 @@
 @if (Model.CanSubscribe)
 {
     if ( Model.IsSubscribed ) {
-        @Html.ActionLink( T("Unsubscribe").ToString(), "DeleteSubscription", "Subscription",  new { @id = Model.ThreadId }, new {@class = "btn-subscribe"})
+        @Html.ActionLink( T("Unsubscribe").ToString(), "DeleteSubscription", "Subscription", null, new {@class = "btn-subscribe btn btn-warning btn-sm"})
         
     } else {
-        @Html.ActionLink( T("Subscribe").ToString(), "AddSubscription", "Subscription",  new { @id = Model.ThreadId }, new {@class = "btn-subscribe"} )   
+        @Html.ActionLink( T("Subscribe").ToString(), "AddSubscription", "Subscription", null, new {@class = "btn-subscribe btn btn-info btn-sm"} )   
     }
     
 }

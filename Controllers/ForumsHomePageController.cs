@@ -27,11 +27,6 @@ namespace NGM.Forum.Controllers {
         private readonly IThreadLastReadService _threadLastReadService;
         private readonly IForumCategoryService _forumCategoryService;
 
-        //private readonly ISearchBuilder _searchBuilder;
-       // private readonly ISearchService _searchService;
-       // private readonly IIndexManager _indexManager;
-       // private readonly IIndexProvider _indexProvider;
-
         public ForumsHomePageController(
             IOrchardServices orchardServices, 
             IForumCategoryService forumCategoryService,
@@ -40,7 +35,7 @@ namespace NGM.Forum.Controllers {
             ISiteService siteService,
             IShapeFactory shapeFactory,
             IThreadLastReadService threadLastReadService
-         //   IIndexManager indexManager
+
          ) {
             _orchardServices = orchardServices;
             _forumService = forumService;
@@ -48,8 +43,6 @@ namespace NGM.Forum.Controllers {
             _siteService = siteService;
             _threadLastReadService = threadLastReadService;
             _forumCategoryService = forumCategoryService;
-            //string searchIndex = ForumSearchService.FORUMS_INDEX_NAME;
-           // _searchBuilder = _indexManager.HasIndexProvider() ? _indexManager.GetSearchIndexProvider().CreateSearchBuilder(searchIndex) : new NullSearchBuilder();
 
             Shape = shapeFactory;
             Logger = NullLogger.Instance;

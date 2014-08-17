@@ -30,13 +30,6 @@
             </div>
         }
 
-        @*make an area to wrap the title/description of the forum *@
-        @if (Model.ForumText != null){
-            <div class="forum-text">
-                @Display(Model.ForumText)
-            </div>
-        }
-
         @if (Model.Actions != null) {
             <div class="actions">
                 @Display(Model.Actions)

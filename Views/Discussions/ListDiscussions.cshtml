@@ -15,25 +15,35 @@
     Model.ContentItems.Classes.Add(contentTypeClassName);
     ForumsHomePagePart homepagePart = Model.ForumsHomepagePart;    
 }
+@* this is technically not correct use of html5 elements but this is not search engine material and will help
+   to keep the css more consistent/minimal *@
+<header>
+    <nav role="navigation">
+        <div class="navbar navbar-default">
+            @Display( Model.ForumMenu)
+            @Display( Model.ForumSearch )
+        </div>
+        @Display( Model.BreadCrumb )
+    </nav>
 
-@Display( Model.ForumMenu)
-@Display( Model.ForumSearch )
+    @if ( homepagePart != null ) {        
+        <h1>@T("Discussions")</h1>
+    } else {
+        <h1>@T("Discussions For All Forums")</h1>
+    }
 
-@if ( homepagePart != null ) {
-    @Display( Model.BreadCrumb )
-    <h2  class="clearfix">@T("Discussions")</h2>
-} else {
-    <h2  class="clearfix">@T("Discussions For All Forums")</h2>
-}
+    <p>@T("Discussions started by you or that you have participated in:")</p>
+</header>
+<section>
 
-<h3>@T("Discussions started by you or that you have participated in:")</h3>
+    @Display(Model.ContentItems)
 
-@Display(Model.ContentItems)
+    @if (threads == null || threads.Count() < 1) {
+        <p class="nocontentitems">@T("You have not started nor participated in any discussions.")</p>
+    } else if ( Model.Pager.TotalItemCount > Model.Pager.PageSize ) {
+        @Display( Model.Pager )   
+    }
 
-@if (threads == null || threads.Count() < 1) {
-    <p class="nocontentitems">@T("You have not started nor participated in any discussions.")</p>
-} else if ( Model.Pager.TotalItemCount > Model.Pager.PageSize ) {
-    @Display( Model.Pager )   
-}
+</section>
  
 

@@ -7,7 +7,7 @@
 
 @*only shown if javascript enabled *@
 <div class="quick-reply" style="display:none;">
-    <div id="btn-add-quick-reply" class="btn btn-add-reply">@T("Add a Reply")</div>
+    <div id="btn-add-quick-reply" class="btn-add-reply btn btn-default">@T("Quick Reply")</div>
 
     @using (Html.BeginFormAntiForgeryPost(Url.Action("Create", "Post"))) {
         @Html.ValidationSummary()

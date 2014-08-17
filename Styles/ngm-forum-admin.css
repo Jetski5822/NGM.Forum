@@ -1,4 +1,18 @@
-﻿#main .forum-description p {
+﻿#main .forum-description {
 	margin-bottom:1em;
 }
 
+.hint {
+    display:block;
+    font-style:italic;
+    font-size:small;
+    margin-left:10px;
+}
+
+.title-hint {
+    margin-left:35px;
+}
+
+.save-button{
+    margin-top:10px !important;
+}

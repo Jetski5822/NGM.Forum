@@ -63,6 +63,7 @@ namespace NGM.Forum.Drivers {
                 {
                     results.Add(ContentShape("Parts_ForumMenu", () => shapeHelper.Parts_ForumMenu(ForumsHomePagePart: part, ShowRecent: true, ShowMarkAll: true, ReturnUrl: HttpContext.Current.Request.Url.AbsoluteUri)));
                 }
+                results.Add(ContentShape( "Parts_Forum_Search", () => shapeHelper.Parts_Forum_Search(ForumsHomeId: part.Id)));
             }
             results.Add(ContentShape("Parts_ForumsHomePage",
                 () => shapeHelper.Parts_ForumsHomePage(

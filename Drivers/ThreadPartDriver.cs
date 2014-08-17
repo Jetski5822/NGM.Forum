@@ -147,7 +147,7 @@ namespace NGM.Forum.Drivers {
                         var post = part.LatestPost;
                         var site = _workContextAccessor.GetContext().CurrentSite;
                         var pager = new Pager(site, (int) Math.Ceiling((decimal) part.PostCount/(decimal) site.PageSize), site.PageSize);
-                        //var pager = new Pager(_workContextAccessor.GetContext().CurrentSite, part.PostCount);
+
                         return shapeHelper.Forum_Metadata_Latest(Post: post, Pager: pager);
                     }),
                 ContentShape("Parts_Thread_Posts_Users", () => {

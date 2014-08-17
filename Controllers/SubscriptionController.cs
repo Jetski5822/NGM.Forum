@@ -81,6 +81,27 @@ namespace NGM.Forum.Controllers {
             return Redirect(_orchardServices.WorkContext.HttpContext.Request.UrlReferrer.AbsoluteUri); ;
         }
 
+        public ActionResult DeleteSubscription(int threadId)
+        {
+            if (!_orchardServices.WorkContext.HttpContext.User.Identity.IsAuthenticated)
+                return new HttpUnauthorizedResult(T("You must be logged in to unsubscribe from a thread.").ToString());
+
+            if (!_orchardServices.Authorizer.Authorize(Permissions.CreateThreadsAndPosts, T("You do not have permissions to unsubscribe from a thread.")))
+                return new HttpUnauthorizedResult();
+
+            if (_orchardServices.WorkContext.CurrentUser == null)
+                return new HttpUnauthorizedResult();
+
+            var userId = _orchardServices.WorkContext.CurrentUser.Id;
+
+            _subscriptionService.DeleteSubscription(userId, threadId);
+
+            _orchardServices.Notifier.Add(NotifyType.Information, T("You have unsubscribed from the thread."));
+
+            return Redirect(_orchardServices.WorkContext.HttpContext.Request.UrlReferrer.AbsoluteUri); ;
+
+        }
+
         [HttpPost]
         public ActionResult ManageSubscription(string unsubscribe, string sendNotificationsByEmail)
         {

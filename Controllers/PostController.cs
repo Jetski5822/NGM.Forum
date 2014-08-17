@@ -109,7 +109,6 @@ namespace NGM.Forum.Controllers {
             var threadPart = HierarchyHelpers.GetThreadPart(contentItem);
             post.ThreadPart = threadPart;
 
-            //post.Text = Text;
             if (isThread) {
                 // Attach to parent post and NOT to the thread
                 post.RepliedOn = contentItem.As<ThreadPart>().FirstPost.Id;
@@ -122,8 +121,6 @@ namespace NGM.Forum.Controllers {
 
             if (!_orchardServices.Authorizer.Authorize(Permissions.CreateThreadsAndPosts, forumsHomePage, T("Not allowed to create post")))
                 return new HttpUnauthorizedResult();
-
-           // post.Text = Text;
 
             //this has to have 'draft' specified so it triggers the antispam correctly (i.e. after the values are set in the updateEditor)
             _orchardServices.ContentManager.Create(post.ContentItem, VersionOptions.Draft);
@@ -142,7 +139,6 @@ namespace NGM.Forum.Controllers {
                 _orchardServices.Notifier.Information(T("Your {0} has been created.", post.TypeDefinition.DisplayName));
             }
             var site = _orchardServices.WorkContext.CurrentSite;
-            //var pager = new ThreadPager(_orchardServices.WorkContext.CurrentSite, post.ThreadPart.PostCount);
             var pager = new Pager(site, (int)Math.Ceiling((decimal)post.ThreadPart.PostCount / (decimal)site.PageSize), site.PageSize);
             return Redirect(Url.PostView(post, pager));
         }

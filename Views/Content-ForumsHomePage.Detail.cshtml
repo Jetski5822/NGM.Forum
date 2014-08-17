@@ -17,17 +17,32 @@
 }
 @tag.StartElement
     <header>
+        @if (Model.Nav != null || Model.NavBar != null)
+        {
+            <nav  role="navigation">
+                <div class="navbar navbar-default">
+                    @Display(Model.NavBar)
+                </div>
+                @if ( Model.Nav != null ) {
+                    @Display(Model.Nav )
+                }
+            </nav>
+        }
+
         @Display(Model.Header)
+
         @if (Model.Meta != null) {
             <div class="metadata">
                 @Display(Model.Meta)
             </div>
         }
+
         @if (Model.Actions != null) {
             <div class="actions">
                 @Display(Model.Actions)
             </div>
-        }      
+        }    
+          
     </header>
     <content>
         @if (Model.Content != null) {

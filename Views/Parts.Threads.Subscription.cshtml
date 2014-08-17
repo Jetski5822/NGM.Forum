@@ -8,13 +8,14 @@
 
 @*Posting multiple buttons to the same controller action and using the button name to distinguish which option was selected.  This is perhaps a bit hacksih but the needs are simple. *@
 
+<button type="submit" class='subscription-option-button btn btn-primary' name="unsubscribe" value="@threadPart.Id">@T("Unsubscribe")</button>
+
 @if (threadPart.UserIsSubscribedByEmail == true ) {
-    <button type="submit" class='subscription-option-button' name="sendNotificationsByEmail" value="remove-@threadPart.Id">@T("Do Not Notify by Email")</button>
+    <button type="submit" class='subscription-option-button btn btn-warning' name="sendNotificationsByEmail" value="remove-@threadPart.Id">@T("Do Not Email")</button>
 } else {
-    <button type="submit" class='subscription-option-button' name="sendNotificationsByEmail" value="add-@threadPart.Id">@T("Notify by Email")</button>   
+    <button type="submit" class='subscription-option-button btn btn-info' name="sendNotificationsByEmail" value="add-@threadPart.Id">@T("Notify by Email")</button>   
 }
 
-<button type="submit" class='subscription-option-button' name="unsubscribe" value="@threadPart.Id">@T("Unsubscribe")</button>
 
 
 

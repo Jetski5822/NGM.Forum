@@ -9,29 +9,30 @@
 }
 
 @using(Html.BeginFormAntiForgeryPost()) { 
-    
+
+        <h1 class="page-title">@T("Mark Post Inappropriate")</h1>
+
     <fieldset>
-        <legend>@T("Mark Post Inappropriate")</legend>
+        
 
         @Html.ValidationSummary()
-
         <div class="editor-label">
-            @Html.LabelFor( model => model.Report.Note, T("Enter a note describing why the post is inappropriate and any actions taken such as deleting the post, banning the user, etc.") )
+            @Html.LabelFor( model => model.Report.Note, T("Note") )
+            <div class='label-info'>@T("Enter a note describing why the post is inappropriate and any actions taken such as deleting the post, banning the user, etc.")</div>
         </div>
+
         <div class="editor-field" >
             @Html.TextAreaFor( model => model.Report.Note, new { @class= "wide" } )
             @Html.ValidationMessageFor(model => model.Report.Note)
         </div>
-        <div class="editor-label">
-            @Html.LabelFor( model => model.Report.IsResolved, T("Is Resolved"))            
-            <div class='label-info'>@T("Mark the post as resolved to remove it from the list of pending reports.")</div>
-        </div>
-        <div class="editor-field" >
-            @Html.CheckBoxFor( model => model.Report.IsResolved)
-            @Html.ValidationMessageFor(model => model.Report.IsResolved)
-            
-        </div>
+        <br />
+        <div class='label-info'>@T("Mark the post as resolved to remove it from the list of pending reports.")</div>
 
+        <div class="editor-field" >
+             @Html.CheckBoxFor( model => model.Report.IsResolved)
+            @T("Is Resolved")
+            @Html.ValidationMessageFor(model => model.Report.IsResolved)            
+        </div>
         @Html.HiddenFor( model => model.Report.PostId )
         @Html.HiddenFor( model => model.Report.Id )
         @Html.HiddenFor( model=>model.ReturnUrl )
@@ -40,9 +41,9 @@
     
 <br />
 
-<input type="submit" value="Mark Post Inappropriate."/>
+<input class='btn btn-primary' type="submit" value="Mark Post Inappropriate"/>
 
-<a style="display:inline-block" class='btn' href="@Model.ReturnUrl">@T("Cancel").ToString()</a>
+<a style="display:inline-block" class='btn btn-default' href="@Model.ReturnUrl">@T("Cancel").ToString()</a>
 } 
 
 

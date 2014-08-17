@@ -8,27 +8,29 @@
     Style.Include("ngm-forum-common-admin").AtHead();
 }
 
+<h1 class="page-title">@T("Remove Inappropriate Flag from Post")</h1>
 @using(Html.BeginFormAntiForgeryPost()) { 
     
+    
     <fieldset>
-        <legend>@T("Remove Inappropriate Flag from Post")</legend>
-
+        
         @Html.ValidationSummary()
 
         <div class="editor-label">
             @Html.LabelFor( model => model.Report.Note, T("Note") )
-            <div class='label-info'>@T("Please review the previous notes and enter why the post is now deemed appropriate.")</div>
+            <div class='label-info'>@T("Please review the previous note(s) below and enter at the end why the post is now concidered appropriate.")</div>
         </div>
         <div class="editor-field" >
             @Html.TextAreaFor( model => model.Report.Note, new { @class= "wide" } )
             @Html.ValidationMessageFor(model => model.Report.Note)
         </div>
-        <div class="editor-label">
-            @Html.LabelFor( model => model.Report.IsResolved, T("Is Resolved"))            
+        <br />
+        <div class="editor-label">            
             <div class='label-info'>@T("Marking a report as resolved removes it from the list of posts reported as inappropriate.")</div>
         </div>
         <div class="editor-field" >
-            @Html.CheckBoxFor( model=> model.Report.IsResolved)
+            @Html.CheckBoxFor( model=> model.Report.IsResolved) 
+            <label>@T("Is Resolved")</label>
             @Html.ValidationMessageFor(model => model.Report.IsResolved)
             
         </div>
@@ -40,9 +42,9 @@
     
 <br />
 
-<input type="submit" value="Remove Inappropriate flag from post."/>
+<input class="btn btn-primary" type="submit" value="@T("Remove Inappropriate flag from post")"/>
 
-<a style="display:inline-block" class='btn' href="@Model.ReturnUrl">@T("Cancel").ToString()</a>
+<a style="display:inline-block" class='btn btn-default' href="@Model.ReturnUrl">@T("Cancel").ToString()</a>
 } 
 
 

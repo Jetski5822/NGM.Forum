@@ -17,28 +17,44 @@
     ForumsHomePagePart homepagePart = Model.ForumsHomepagePart;
 }
 
-@Display( Model.ForumMenu)
-@Display( Model.ForumSearch )
+@* this is technically not correct use of html5 elements but this is not search engine material and will help
+   to keep the css more consistent/minimal *@
+<header>
+    <nav role="navigation">
+        <div class="navbar navbar-default"  >
+            @Display(Model.ForumMenu)
+            @Display(Model.ForumSearch)
+        </div>
+         @Display(Model.BreadCrumb)
+    </nav>
 
-@if ( homepagePart != null ) {
-    @Display( Model.BreadCrumb )
-    <h2>@T("Subscriptions")</h2>
-} else {
-    <h2>@T("Subscriptions For All Forums")</h2>
-}
+    @if (homepagePart != null)
+    {       
+        <h1>@T("Subscriptions")</h1>
+    }
+    else
+    {
+        <h1>@T("Subscriptions For All Forums")</h1>
+    }
+    <p>@T("Forum topics you are subscribed to:")</p>
+    <p class="info" ><small>@T("*Subscribed topics can optionally be emailed to you.")</small></p>
+</header>
 
 
-    <h3>@T("Forum topics you are subscribed to:")</h3>
-
-
-   @using(Html.BeginFormAntiForgeryPost(Url.Action("ManageSubscription", "Subscription"))) {
+    @using (Html.BeginFormAntiForgeryPost(Url.Action("ManageSubscription", "Subscription")))
+    {
        
         @Display(Model.ContentItems)
 
-        if (threads == null || threads.Count() < 1) {
+       if (threads == null || threads.Count() < 1)
+       {
             <p class="nocontentitems">@T("You are not subscribed to any discussions.")</p>
-        } else if ( Model.Pager.TotalItemCount > Model.Pager.PageSize ) {
-            @Display( Model.Pager )   
-        }
+       }
+       else if (Model.Pager.TotalItemCount > Model.Pager.PageSize)
+       {
+            @Display(Model.Pager)   
+       }
     }
+
+
 

@@ -6,13 +6,14 @@
 }
 
 @{
-    if (Model.Title != null) {
+    if (Model.Title != null)
+    {
         Layout.Title = Model.Title;
     }
-    
+
     Model.Classes.Add("content-item");
     Model.Attributes.Add("data-contentitem-id", Model.ContentItem.Id.ToString());
-    
+
     var contentTypeClassName = ((string)Model.ContentItem.ContentType).HtmlClassify();
     Model.Classes.Add(contentTypeClassName);
 
@@ -20,33 +21,49 @@
 }
 @tag.StartElement
 
-    <header>
-
+<header>
+    @if (Model.Nav != null || Model.NavBar != null)
+    {
+        <nav  role="navigation">
+            <div class="navbar navbar-default">
+                @Display(Model.NavBar)
+            </div>
+            @if ( Model.Nav != null ) {
+                @Display(Model.Nav )
+            }
+        </nav>
+    }
+    @if ( Model.Header != null ) {
         @Display(Model.Header)
-        <div class="header-break"></div>
-        @if (Model.Meta != null) {
-            <div class="metadata">
-                @Display(Model.Meta)
-            </div>
-        }
+    }
+    <div class="header-break"></div>
+    @if (Model.Meta != null)
+    {
+        <div class="metadata">
+            @Display(Model.Meta)
+        </div>
+    }
 
-        @*make an area to wrap the title/description of the forum *@
-        @if (Model.ForumText != null){
-            <div class="forum-text">
-                @Display(Model.ForumText)
-            </div>
-        }
+@*make an area to wrap the title/description of the forum *@
+    @if (Model.ForumText != null)
+    {
+        <div class="forum-text">
+            @Display(Model.ForumText)
+        </div>
+    }
 
-        @if (Model.Actions != null) {
-            <div class="actions">
-                @Display(Model.Actions)
-            </div>
-        }
-    </header>
-    @Display(Model.Content)
-    @if(Model.Footer != null) {
+    @if (Model.Actions != null)
+    {
+        <div class="actions">
+            @Display(Model.Actions)
+        </div>
+    }
+</header>
+@Display(Model.Content)
+@if (Model.Footer != null)
+{
     <footer>
         @Display(Model.Footer)
     </footer>
-    }
+}
 @tag.EndElement
