@@ -96,7 +96,7 @@ namespace NGM.Forum.Services {
                 .WithQueryHints(new QueryHints().ExpandRecords<CommonPartRecord>())
                 .Join<CommonPartRecord>()
                 .Where(commonPart => threadsWithUnreadPosts.Contains(commonPart.Container.Id)  //filter by the ID
-                                     && commonPart.PublishedUtc > periodEnd  //filter out posts that too old to be candidates to be new posts
+                                     && commonPart.PublishedUtc >= periodEnd  //filter out posts that too old to be candidates to be new posts
                 ).List().ToList()
                 .OrderBy(p => p.ThreadPart.Id).ToList();
 
@@ -158,12 +158,28 @@ namespace NGM.Forum.Services {
 
             var threadsWithNewPostsDict = threadsWithNewPosts.Skip(pageStartIndex).Take(pageSize).ToDictionary(t => t.Id, t => t);
 
-            var postsByThread = _contentManager.Query<PostPart, PostPartRecord>()
+            var postsByThread = _contentManager.Query<PostPart, PostPartRecord>().ForVersion(VersionOptions.Published)
                 .Where(p => p.IsInappropriate == false)
                 .WithQueryHints(new QueryHints().ExpandRecords<CommonPartRecord>())
                 .Join<CommonPartRecord>()
                 .Where(post => threadsWithNewPostsDict.Keys.Contains(post.Container.Id) && post.PublishedUtc >= periodEnd).List().ToList().OrderBy(p => p.ThreadPart.Id).ToList();
 
+            List<int> readPostIds = new List<int>();
+
+            for (int i = 0; i < postsByThread.Count(); i++)
+            {
+                var post = postsByThread[i];
+                DateTime? lastReadDate = null;
+                if (lastReadDic.TryGetValue(post.As<CommonPart>().Container.Id, out lastReadDate))
+                {
+                    if (post.As<CommonPart>().PublishedUtc < lastReadDate.Value)
+                    {
+                        readPostIds.Add(post.Id);
+                    }
+                }
+            }
+
+            postsByThread.RemoveAll(post => readPostIds.Contains(post.Id));
 
             Dictionary<int, List<PostPart>> threadPostDic = new Dictionary<int, List<PostPart>>();
 

@@ -105,6 +105,7 @@ namespace NGM.Forum.Controllers {
             var totalItemCount = forumPart.ThreadCount;
             forum.Content.Add(Shape.Pager(pager).TotalItemCount(totalItemCount), "Content:after");
             forum.NavBar.Add(Shape.Parts_Forum_Search(ForumsHomeId: forumsHomePageId), "1");
+            forum.Actions.Add(Shape.Parts_Thread_ReadLegend(),"2");
             return new ShapeResult(this, forum);
         }
     }

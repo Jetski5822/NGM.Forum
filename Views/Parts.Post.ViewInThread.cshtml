@@ -1,6 +1,6 @@
 ﻿
 <div>
-    <div class="new-post-title">@Model.ContentItem.ThreadPart.Title</div>
-    @Html.ActionLink("View", "ViewPostInThread", "Thread", new { postId = Model.ContentItem.Id }, new { @class = "view-new-post" })
+    @Html.ActionLink( T("View").ToString(), "ViewPostInThread", "Thread", new { postId = Model.ContentItem.Id }, new { @class = "view-new-post" })
+    <div class="new-post-title">@Model.ContentItem.ThreadPart.Title</div>    
 </div>
 

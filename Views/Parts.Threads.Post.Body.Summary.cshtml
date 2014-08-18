@@ -18,7 +18,8 @@
     Pager pager = (Pager)Model.Pager;
     var title = post.ThreadPart.As<TitlePart>().Title;
 }
-<div class="search-resut-thread-title">@title</div>
+<a class="view-new-post" href="@Url.PostView(post, pager)">@T("View")</a>
+<div class="search-result-thread-title">@title</div>
 
-<p>@Html.Raw( HtmlSanitizer.sanitizer(body).html ) <a href="@Url.PostView(post, pager)">@T("more")</a></p>
+<p>@Html.Raw( HtmlSanitizer.sanitizer(body).html ) </p>
 

@@ -30,7 +30,7 @@
     {
         <p class="text-info">@T("There are no new posts.")</p>
     } else {
-        <p>@T("Click the title to see the posts in a thread.")</p>    
+        <p>@T("Click the title to see the new posts in a thread.")</p>    
         foreach ( var threadKey in threadDic.Keys ) {
         <ul id="new-posts-by-thread-list" class="list-no-style">
 
@@ -43,7 +43,11 @@
                 }
             }
 
-            <li><p class="new-posts-thread-title">@threadDic[threadKey].Title <span class="new-post-count">@postsDic[threadKey].Items.Count @postCountDisplay </span> <a class="view-new-post" href="@Url.ItemDisplayUrl( threadDic[threadKey])" > @T("View") </a></p>
+            <li>
+                <a class="view-new-post" href="@Url.ItemDisplayUrl( threadDic[threadKey])" > @T("View") </a>
+                <span class="new-post-count">@postsDic[threadKey].Items.Count @postCountDisplay </span> 
+                <span class="new-posts-thread-title">@threadDic[threadKey].Title</span>                
+
             <ul class="new-post-list list-no-style">
 
             @foreach (var post in postsDic[threadKey])
