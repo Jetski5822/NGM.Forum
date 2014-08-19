@@ -3,6 +3,7 @@
 <fieldset>
     <legend>@T("Forums Settings")</legend>
     <div>
+        <h2>@T("Url Settings")</h2>
         <p>These settings control the URL length of at each level of the forum.
             
             The levels are: forums home, category, forum and thread. 
@@ -77,9 +78,18 @@
         @Html.ValidationMessage("ThreadTitleMaximumLength", "*")
         <span class="hint">@T("The maximum number of character that can be entered as a Thread Title.")</span>
 
-                @Html.LabelFor(m => m.ThreadUrlMaximumLength)
+        @Html.LabelFor(m => m.ThreadUrlMaximumLength)
         @Html.EditorFor(m => m.ThreadUrlMaximumLength)
         @Html.ValidationMessage("ThreadUrlMaximumLength", "*")
+        <span class="hint">@T("Truncate the thread url to this length if the title is longer than the value.  Enter 0 to allow url length to match title length.")</span>
+    </div>
+    <div>
+        <h2>@T("Thread Read Display")</h2>
+        <p>@T("Any threads older than this date are automatically displayed as read.  Internally this setting controls the tracking of the last read date on individual threads and is used to prune records older than the given number of days. On a busy forum is it recommended that the number of days is kept smaller and on a slower forum it can be increased")</p>               
+
+        @Html.LabelFor(m => m.DaysUntilThreadReadByDefault)
+        @Html.EditorFor(m => m.DaysUntilThreadReadByDefault)
+        @Html.ValidationMessage("DaysUntilThreadReadByDefault", "*")
         <span class="hint">@T("Truncate the thread url to this length if the title is longer than the value.  Enter 0 to allow url length to match title length.")</span>
     </div>
 </fieldset>

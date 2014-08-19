@@ -44,6 +44,12 @@ namespace NGM.Forum.Models {
             set { this.Record.ThreadUrlMaximumLength = value; }
         }
 
+        public int DaysUntilThreadReadByDefault
+        {
+            get { return this.Record.DaysUntilThreadReadByDefault; }
+            set { this.Record.DaysUntilThreadReadByDefault = value; }
+        }
+
     }
 
 
@@ -64,6 +70,7 @@ namespace NGM.Forum.Models {
         public virtual int CategoryUrlMaximumLength { get; set; }
         public virtual int ThreadTitleMaximumLength {get;set;}
         public virtual int ThreadUrlMaximumLength { get; set; }
+        public virtual int DaysUntilThreadReadByDefault { get; set; }
     }
 
 }

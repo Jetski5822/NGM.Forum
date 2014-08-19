@@ -10,6 +10,7 @@ using Orchard.Core.Common.Models;
 using Orchard.Data;
 using Orchard.Security;
 using System;
+using Orchard;
 
 namespace NGM.Forum.Handlers {
     [UsedImplicitly]
@@ -18,18 +19,24 @@ namespace NGM.Forum.Handlers {
         private readonly IThreadService _threadService;
         private readonly IContentManager _contentManager;
         private readonly ICountersService _countersService;
+        private readonly ISubscriptionService _subscriptionService;
+        private readonly IOrchardServices _orchardServices;
 
         public ThreadPartHandler(IRepository<ThreadPartRecord> repository, 
             IPostService postService,
             IThreadService threadService,
             IContentManager contentManager,
-            ICountersService countersService
+            ICountersService countersService,
+            ISubscriptionService subscriptionService,
+            IOrchardServices orchardServices
             
             ) {
             _postService = postService;
             _threadService = threadService;
             _contentManager = contentManager;
             _countersService = countersService;
+            _subscriptionService = subscriptionService;
+            _orchardServices = orchardServices;
 
             Filters.Add(StorageFilter.For(repository));
 
@@ -56,7 +63,7 @@ namespace NGM.Forum.Handlers {
             OnUnpublished<ThreadPart>((context, part) => _countersService.UpdateForumPartCounters(part));
             OnVersioning<ThreadPart>((context, part, newVersionPart) => LazyLoadHandlers(newVersionPart));
             OnVersioned<ThreadPart>((context, part, newVersionPart) => _countersService.UpdateForumPartCounters(newVersionPart));
-            OnRemoved<ThreadPart>((context, part) => _countersService.UpdateForumPartCounters(part));
+            OnRemoved<ThreadPart>((context, part) => OnThreadRemoved(context, part));
             
             OnRemoved<ForumPart>((context, b) =>
                 _threadService.Delete(context.ContentItem.As<ForumPart>()));
@@ -67,6 +74,12 @@ namespace NGM.Forum.Handlers {
             context.Shape.StickyClass = threadPart.IsSticky ? "Sticky" : string.Empty;
         }
 
+        private void OnThreadRemoved(RemoveContentContext context, ThreadPart part)
+        {
+            _countersService.UpdateForumPartCounters(part);
+            var userId = _orchardServices.WorkContext.CurrentUser.Id; 
+            _subscriptionService.DeleteSubscription(userId, part.Id);
+        }
         /* refactored into its own service 
         private void UpdateForumPartCounters(ThreadPart threadPart) {
             var commonPart = threadPart.As<CommonPart>();

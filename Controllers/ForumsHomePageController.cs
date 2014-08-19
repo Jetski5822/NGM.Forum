@@ -67,6 +67,7 @@ namespace NGM.Forum.Controllers {
             var userId = _orchardServices.WorkContext.CurrentUser.Id;                        
 
             //get the threads that the user has read already... then compare. All other threads are unread.
+            //TODO: the '30' (days) is included here so that it can be an option selected in the page but it is not yet implemented
             var posts = _threadLastReadService.GetNewPosts(forumsHomeId, userId, 30, pager.GetStartIndex(), pager.PageSize);
 
             var menu = Shape.Parts_ForumMenu(ShowMarkAll: true, ShowRecent: true, ForumsHomePagePart: forumsHomePagePart, ReturnUrl:returnUrl);

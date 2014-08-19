@@ -11,6 +11,8 @@ using Orchard.Data;
 using System;
 using Orchard.ContentManagement.Aspects;
 using System.Linq;
+using Orchard.Caching;
+using Orchard.Services;
 
 
 namespace NGM.Forum.Services {
@@ -25,6 +27,8 @@ namespace NGM.Forum.Services {
         Tuple<Dictionary<int, ThreadPart>, Dictionary<int, List<PostPart>>> GetNewPostsByThread(int forumsHomePageId, int userId, int daysPrior, int pageStartIndex, int pageIndex);
                 
         void MarkAllRead(int forumsHomeId, int userId);
+
+        void PurgeLastReadRepository();
     }
 
     public class ThreadLastReadService : IThreadLastReadService
@@ -42,20 +46,38 @@ namespace NGM.Forum.Services {
         private readonly IRepository<ThreadLastReadRecord> _threadLastReadRepository;
         private readonly IRepository<ForumsHomePageLastReadRecord> _forumsHomepageLastReadRepository;
         private readonly IThreadService _threadService;
+        private readonly IOrchardServices _orchardServices;
+        private readonly ICacheManager _cacheManager;
+        private readonly IClock _clock;
 
         public ThreadLastReadService(
             IContentManager contentManager,
             IRepository<ThreadLastReadRecord> threadLastReadRepository,
             IRepository<ForumsHomePageLastReadRecord> forumsHomepageLastReadRepository,
-            IThreadService threadService
+            IThreadService threadService,
+            IOrchardServices orchardServices,
+            ICacheManager cacheManager,
+            IClock clock
        )
         {
             _contentManager = contentManager;
             _threadLastReadRepository = threadLastReadRepository;
             _forumsHomepageLastReadRepository = forumsHomepageLastReadRepository;
             _threadService = threadService;
+            _orchardServices = orchardServices;
+            _cacheManager = cacheManager;
+            _clock = clock;
         }
 
+        /// <summary>
+        /// Returns a list of new posts
+        /// </summary>
+        /// <param name="forumsHomepageId"></param>
+        /// <param name="userId"></param>
+        /// <param name="daysPrior"></param>
+        /// <param name="pageStartIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public List<PostPart> GetNewPosts(int forumsHomepageId, int userId, int daysPrior, int pageStartIndex, int pageSize)
         {
             //find all threads in the current forum that are newer than the last 'all read date' or 30 days (whichever is newer)          
@@ -65,7 +87,9 @@ namespace NGM.Forum.Services {
             //for threads in the second repository filter those posts based on its last read date
             
             var forumLastReadDate = GetForumsHomePageLastReadDate(forumsHomepageId, userId);
-            if (daysPrior > 30) daysPrior = 30; //ensure this number is realistic to stop huge queries
+            var forumSettings = _orchardServices.WorkContext.CurrentSite.As<ForumsSettingsPart>();
+            int daysUntilReadByDefault = forumSettings.DaysUntilThreadReadByDefault;
+            if (daysPrior > daysUntilReadByDefault) daysPrior = daysUntilReadByDefault; //ensure this number is realistic to stop huge queries
             var periodEnd = DateTime.UtcNow.AddDays(daysPrior * -1);
             if (forumLastReadDate.HasValue)
             {
@@ -126,8 +150,10 @@ namespace NGM.Forum.Services {
 
             //get the last date all forums have been markesd as read or the last 30 days whichever is more recent.
             var forumLastReadDate = GetForumsHomePageLastReadDate(forumsHomepageId, userId);
+            var forumSettings = _orchardServices.WorkContext.CurrentSite.As<ForumsSettingsPart>();
+            int daysUntilReadByDefault = forumSettings.DaysUntilThreadReadByDefault;
 
-            if (daysPrior > 30) daysPrior = 30; //ensure this number is realistic to stop huge queries
+            if (daysPrior > daysUntilReadByDefault) daysPrior = daysUntilReadByDefault; //ensure this number is realistic to stop huge queries
             var periodEnd = DateTime.UtcNow.AddDays(daysPrior * -1);
             if (forumLastReadDate.HasValue)
             {
@@ -229,16 +255,8 @@ namespace NGM.Forum.Services {
                 _forumsHomepageLastReadRepository.Create( new ForumsHomePageLastReadRecord{ LastReadDate = newAllReadDate, UserId = userId, ForumsHomePageId = forumsHomepageId } );
             }
 
-            //if there are existing last read records at the thread level, find and delete them. The last read at the forums home page level will take priority.
-            var lastReadThreads = _threadLastReadRepository.Table.Where(e => e.UserId == userId ).ToList();
-            var lastReadThreadIds = lastReadThreads.Select(thread => thread.ThreadId).ToList();
-            var threadIdsFromCurrentForum = _contentManager.Query<ThreadPart, ThreadPartRecord>().Where(thread => thread.ForumsHomepageId == forumsHomepageId && lastReadThreadIds.Contains(thread.Id)).List().Select(thread => thread.Id).ToList();
-            foreach (var thread in lastReadThreads)
-            {
-                if ( threadIdsFromCurrentForum.Contains( thread.ThreadId )) {
-                    _threadLastReadRepository.Delete( thread );
-                }
-            }               
+            //if there are existing last read records in the thread repository, find and delete those that are older than the default last read date
+            PurgeLastReadRepository(userId, forumsHomepageId);
         }
 
         private IEnumerable<ThreadLastReadRecord> GetThreadsReadRecords(int userId, IEnumerable<int> threadIds)
@@ -246,6 +264,39 @@ namespace NGM.Forum.Services {
 
             var threads = _threadLastReadRepository.Table.Where(e => e.UserId == userId && threadIds.Contains( e.Id)).ToList();
             return threads;
+        }
+
+        /// <summary>
+        /// purges all last read records for a given user/forums home.
+        /// </summary>
+        private void PurgeLastReadRepository(int userId, int forumsHomepageId )
+        {
+            var lastReadThreads = _threadLastReadRepository.Table.Where(e => e.UserId == userId).ToList();
+            var lastReadThreadIds = lastReadThreads.Select(thread => thread.ThreadId).ToList();
+            var threadIdsFromCurrentForum = _contentManager.Query<ThreadPart, ThreadPartRecord>().Where(thread => thread.ForumsHomepageId == forumsHomepageId && lastReadThreadIds.Contains(thread.Id)).List().Select(thread => thread.Id).ToList();
+            foreach (var thread in lastReadThreads)
+            {
+                if (threadIdsFromCurrentForum.Contains(thread.ThreadId))
+                {
+                    _threadLastReadRepository.Delete(thread);
+                }
+            }               
+        }
+
+        /// <summary>
+        /// purges all last read records older than the DaysUntilThreadReadByDefult setting
+        /// </summary>
+        public void PurgeLastReadRepository()
+        {
+            var forumSettings = _orchardServices.WorkContext.CurrentSite.As<ForumsSettingsPart>();
+            int daysUntilReadByDefault = forumSettings.DaysUntilThreadReadByDefault;
+            var curDate = DateTime.UtcNow.AddDays( - daysUntilReadByDefault );
+            var lastReadThreads = _threadLastReadRepository.Table.Where(e => e.LastReadDate <  curDate ).ToList();
+
+            foreach (var thread in lastReadThreads)
+            {
+                _threadLastReadRepository.Delete(thread);
+            }
         }
 
         public void MarkThreadAsRead(int userId, int threadId)
@@ -270,8 +321,15 @@ namespace NGM.Forum.Services {
             }         
         }
 
+        /// <summary>
+        /// Given a list of threads, sets each thread part's read status and returns the list of given threadparts
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="forumsHomepageId"></param>
+        /// <param name="threadParts"></param>
         public void SetThreadsReadState(int userId, int forumsHomepageId, IEnumerable<ThreadPart> threadParts)
         {            
+
 
             List<int> threadIds = threadParts.Select(thread => thread.Id).ToList();
             //var lastReadRecords = _threadLastReadRepository.Table.Where(e => e.UserId == userId && threadIds.Contains(e.ThreadId)).OrderByDescending(e => e.LastReadDate).ToList();
@@ -282,7 +340,9 @@ namespace NGM.Forum.Services {
             forumsHomepageLastReadDate = GetForumsHomePageLastReadDate(forumsHomepageId, userId);
 
             if ( forumsHomepageLastReadDate == null ) {
-                forumsHomepageLastReadDate = DateTime.UtcNow.AddDays(-30);            
+                var forumSettings = _orchardServices.WorkContext.CurrentSite.As<ForumsSettingsPart>();
+                int daysUntilReadByDefault = forumSettings.DaysUntilThreadReadByDefault;
+                forumsHomepageLastReadDate = DateTime.UtcNow.AddDays(-daysUntilReadByDefault);            
             }
 
             foreach ( var thread in threadParts ) {

@@ -86,6 +86,7 @@
     <Compile Include="Models\SubscriptionEmailTemplateRecord.cs" />
     <Compile Include="Models\ForumsSettingsPartRecord.cs" />
     <Compile Include="Models\PostEditHistoryRecord.cs" />
+    <Compile Include="ScheduledTasks\PurgeLastReadRepositoryTask.cs" />
     <Compile Include="Services\CurrentContentAccessor.cs" />
     <Compile Include="Services\ForumSearchService.cs" />
     <Compile Include="Services\UserPreferredCultureService.cs" />

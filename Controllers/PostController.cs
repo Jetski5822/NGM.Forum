@@ -16,6 +16,7 @@ using Orchard.UI.Navigation;
 using Orchard.Core.Common.Models;
 using Html.Helpers;
 using System.Web;
+using Orchard.DisplayManagement;
 
 namespace NGM.Forum.Controllers {
     [Themed]
@@ -29,7 +30,8 @@ namespace NGM.Forum.Controllers {
         public PostController(
             IOrchardServices orchardServices,
             IReportPostService reportPostService,
-            IPostEditHistoryService postEditHistoryService
+            IPostEditHistoryService postEditHistoryService,
+            IShapeFactory shapeFactory
             
         ) {
             _orchardServices = orchardServices;
@@ -38,9 +40,10 @@ namespace NGM.Forum.Controllers {
 
             Logger = NullLogger.Instance;
             T = NullLocalizer.Instance;
-            
+            Shape = shapeFactory;
         }
 
+        dynamic Shape { get; set; }
         public ILogger Logger { get; set; }
         public Localizer T { get; set; }
 
@@ -61,10 +64,20 @@ namespace NGM.Forum.Controllers {
             if (!_orchardServices.Authorizer.Authorize(Permissions.CreateThreadsAndPosts, forumsHomePage, T("Not allowed to create posts.")))
                 return new HttpUnauthorizedResult();
 
-            ///var model = _orchardServices.ContentManager.BuildDisplay(part, "Editor");
-            var model = _orchardServices.ContentManager.BuildEditor(part);
+            //will manually track return url so it can be maintained if there is an error with the post's creation
+            //this fixes a bug where a model error on post causes the return url to be lost (and therefore the cancel button to not work )
+            string returnUrl = "";
+            if (Url.IsLocalUrl(this.Request.Form["returnUrl"]))
+            {
+                returnUrl = this.Request.Form["returnUrl"];
+            };
 
-            return View((object)model);
+            var postModel = _orchardServices.ContentManager.BuildEditor(part);
+            var viewModel = Shape.ViewModel()
+                .Post(postModel)
+                .ReturnUrl(returnUrl);
+
+            return View((object)viewModel);
         }
 
         public ActionResult CreateWithQuote(int contentId) {
@@ -96,7 +109,13 @@ namespace NGM.Forum.Controllers {
         public ActionResult CreatePOST(int contentId ) //, string Text)
         {
             var contentItem = _orchardServices.ContentManager.Get(contentId, VersionOptions.Latest);
-
+            string returnUrl = "";
+            //will manually track return url so it can be maintained if there is an error with the post's creation
+            //this fixes a bug where a model error on post causes the return url to be lost (and therefore the cancel button to not work )
+            if (Url.IsLocalUrl(this.Request.Form["returnUrl"]))
+            {
+                returnUrl = this.Request.Form["returnUrl"];
+            };
             bool isPost = contentItem.Has<PostPart>();
             bool isThread = contentItem.Has<ThreadPart>();
 
@@ -124,14 +143,17 @@ namespace NGM.Forum.Controllers {
 
             //this has to have 'draft' specified so it triggers the antispam correctly (i.e. after the values are set in the updateEditor)
             _orchardServices.ContentManager.Create(post.ContentItem, VersionOptions.Draft);
-           var model = _orchardServices.ContentManager.UpdateEditor(post, this);
+            var postModel = _orchardServices.ContentManager.UpdateEditor(post, this);
 
             post.IP = GetClientIpAddress(this.Request);
 
             if (!ModelState.IsValid )// || String.IsNullOrWhiteSpace( Text ))
             {
                 _orchardServices.TransactionManager.Cancel();
-                return View((object)model);
+                var viewModel = Shape.ViewModel()
+                .Post(postModel)
+                .ReturnUrl(returnUrl);
+                return View((object)viewModel);
             }
             else
             {

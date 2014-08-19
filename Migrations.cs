@@ -472,5 +472,16 @@ namespace NGM.Forum {
 
             return 21;
         }
+        public int UpdateFrom21()
+        {
+            SchemaBuilder.AlterTable("ForumsSettingsPartRecord",
+                 table => table
+                     //default to one month
+                     .AddColumn<int>("DaysUntilThreadReadByDefault", column=>column.WithDefault( 30 ))
+            );
+
+            return 22;
+        }
+        
     }
 }

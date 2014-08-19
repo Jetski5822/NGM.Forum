@@ -11,9 +11,12 @@
 
 <h2 class="page-title">@Layout.Title</h2>
 
-@using (Html.BeginFormAntiForgeryPost(Url.Action("Create", new { contentId = Request.QueryString["contentId"] }))) {
+@using (Html.BeginFormAntiForgeryPost(Url.Action("Create", new { contentId = Request.QueryString["contentId"], returnUrl = Model.ReturnUrl })))
+{
     @Html.ValidationSummary()
-    // Model is a Shape, calling Display() so that it is rendered using the most specific template for its Shape type
-    @Display(Model)
+    // Model is a Shape, calling Display() so that it is rendered using the most specific template for its Shape type\
+    
+
+    @Display(Model.Post)
     
 }
