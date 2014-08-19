@@ -6,6 +6,14 @@ Provides Orchard CMS with a bare bones fully working forum
 Original Documentation: https://github.com/Jetski5822/NGM.Forum/wiki
 New Documentation: Not yet sorry.
 
+- A more functionally complete forum for Orchard CMS.  
+- The theme boostrap 3.x based, made using the PJS.Bootstrap Theme for 1.7.  It may require some tweaking depending on the Orchard Theme used.
+- Made in Orchard 1.7.x.  Will run in 1.8.x (+?) but not making use of the document DB at present.
+- Note the Orchard 1.7.2 Caching module has a bug that creates a session variable in the URL. 
+  This will break the orchard pager so the module must be disabled.
+
+- This module is currently stable but could use some internal cleanup and optimization.
+
 ==================
 
 Advancing the forum functionality to include
