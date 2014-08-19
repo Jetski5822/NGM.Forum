@@ -86,7 +86,8 @@ namespace NGM.Forum.Controllers {
                 userId = _orchardServices.WorkContext.CurrentUser.Id;
             }
 
-            int forumsHomePageId = forumPart.ForumCategoryPart.ForumsHomePagePart.Id;
+            ForumsHomePagePart forumsHomePagePart  = forumPart.ForumCategoryPart.ForumsHomePagePart;
+            int forumsHomePageId = forumsHomePagePart.Id;
             //get the read state of each thread part to be displayed
             if (userId != null)
             {
@@ -105,7 +106,7 @@ namespace NGM.Forum.Controllers {
             var totalItemCount = forumPart.ThreadCount;
             forum.Content.Add(Shape.Pager(pager).TotalItemCount(totalItemCount), "Content:after");
             forum.NavBar.Add(Shape.Parts_Forum_Search(ForumsHomeId: forumsHomePageId), "1");
-            forum.Actions.Add(Shape.Parts_Thread_ReadLegend(),"2");
+            forum.Actions.Add(Shape.Parts_Thread_ReadLegend(ForumsHomePage: forumsHomePagePart.ContentItem), "2");
             return new ShapeResult(this, forum);
         }
     }

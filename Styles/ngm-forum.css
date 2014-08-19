@@ -720,3 +720,13 @@ header h1, .page-title h1 {
     background-repeat: no-repeat;
     height:28px;
 }
+
+.inappropriate-thread {
+    color: #333;
+    font-family: arial;
+    text-decoration: none;
+    background: rgb(255, 221, 221);
+    margin-right: 18px;
+    padding-left: 10px;
+    padding-top: 5px;
+}

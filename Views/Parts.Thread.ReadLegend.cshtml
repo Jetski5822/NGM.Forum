@@ -1,14 +1,26 @@
 ﻿<div id="read-legend" class="list-no-style">
     <div class="legend-entry">
         <span class="legend-image thread-readstate newposts"></span>
-        <span class="legend-title">New</span>
+        <span class="legend-title">@T("New")</span>
     </div>
     <div class="legend-entry">
         <span class="thread-readstate unread"></span>            
-        <span class="legend-title">Unread</span>
+        <span class="legend-title">@T("Unread")</span>
     </div>
     <div class="legend-entry">
         <span class="legend-image thread-readstate read"></span>
-        <span class="legend-title">Read</span>
+        <span class="legend-title">@T("Read")</span>
     </div>
+
+    @if (Authorizer.Authorize(NGM.Forum.Permissions.ManageOwnForums, Model.ForumsHomePage) ||
+         Authorizer.Authorize(NGM.Forum.Permissions.ManageForums, Model.ForumsHomePage) ||
+         Authorizer.Authorize(NGM.Forum.Permissions.ModerateInappropriatePosts, Model.ForumsHomePage))
+    {
+      
+        <div class="legend-entry">
+            <span class="legend-image thread-readstate inappropriate-thread">@T("Inappropriate")</span>
+            <span class="legend-title"></span>
+        </div>
+
+    }
 </div>
