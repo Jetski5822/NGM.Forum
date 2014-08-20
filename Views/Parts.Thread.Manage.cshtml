@@ -9,13 +9,20 @@
 }
 
 <div class="thread-user-options">
+
+    @*  show the reply button regardless of the user's permissions.. most likely they need to log in or sign up 
     @if (Authorizer.Authorize(Permissions.CreateThreadsAndPosts))
     {
-        if (!firstPostPart.ThreadPart.IsClosed)
+    *@
+
+        @if (!firstPostPart.ThreadPart.IsClosed)
         {
         <a href="@Url.PostReply(firstPostPart)" class="create btn-thread-option btn-user btn btn-primary btn-sm">@T("Reply to Thread")</a>
         }
+
+    @*
     }
+    *@
 </div>
 
 <div class="thread-management-options">

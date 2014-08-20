@@ -70,7 +70,7 @@ namespace NGM.Forum.Controllers {
 
         [HttpGet]
         public ActionResult ListPostReports(ReportPostSearchViewModel model, PagerParameters pagerParameters) {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("You do not have the proper permissions to administer inappropriate posts")))
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ModerateInappropriatePosts, T("You do not have the proper permissions to administer inappropriate posts")))
                 return new HttpUnauthorizedResult();
 
             Pager pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
@@ -133,7 +133,7 @@ namespace NGM.Forum.Controllers {
         [ActionName("RemoveInappropriate"), HttpGet]
         public ActionResult RemoveInappropriate_GET(int contentId)
         {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("You do not have the proper permissions to administer inappropriate posts")))
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ModerateInappropriatePosts, T("You do not have the proper permissions to administer inappropriate posts")))
                 return new HttpUnauthorizedResult();
      
             var report = _reportPostService.GetReportsForPost(contentId).FirstOrDefault();
@@ -150,7 +150,7 @@ namespace NGM.Forum.Controllers {
         [ActionName("RemoveInappropriate"), HttpPost]
         public ActionResult RemoveInappropriate_POST(RemoveInappropriateFlagViewModel model)
         {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("You do not have the proper permissions to administer inappropriate posts")))
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ModerateInappropriatePosts, T("You do not have the proper permissions to administer inappropriate posts")))
                 return new HttpUnauthorizedResult();
 
             //update the report with any new notes and new status
@@ -189,10 +189,11 @@ namespace NGM.Forum.Controllers {
         //this will mark the post as inappriopriate so its not viewed by general users 
         // the moderator enters a note about what is inappropriate, any actions taken, etc. 
         // leaving a 'report' as well so that there is viewable history of bad posts for the given poster
+        //THIS IS NOT *REPORTING* an inapprorpriate reports ... it is marking it as inappropriate.
         [ActionName("MarkInappropriate"), HttpGet]
         public ActionResult MarkInappropriate_GET(int contentId)
         {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("You do not have the proper permissions to administer inappropriate posts")))
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ModerateInappropriatePosts, T("You do not have the proper permissions to administer inappropriate posts")))
                 return new HttpUnauthorizedResult();
 
             var contentItem = _orchardServices.ContentManager.Get(contentId);
@@ -227,9 +228,27 @@ namespace NGM.Forum.Controllers {
         {
             var contentItem = _orchardServices.ContentManager.Get(model.Report.PostId);
 
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, contentItem, T("You do not have the proper permissions to administer inappropriate posts")))
+            /*  This is what should be done so people can only manage reports on their own forums
+             *  however for now, allowing anyone with ManageForum permissions to administer reports regardless of if its
+             *  their forum because there is no filtering in place to show reports only for a particular user (owner)
+             *  nor to give permissions to moderators to mod only particular forums. For now.. if you can mod reports or are an owner
+             *  you can manage all innapropriate posts
+             *
+            ContentItem forumsHomePage = null;
+            if (contentItem.Is<ThreadPart>())
+            {
+                forumsHomePage = _orchardServices.ContentManager.Get(contentItem.As<ThreadPart>().ForumsHomepageId);
+            }
+            else
+            {
+                forumsHomePage = _orchardServices.ContentManager.Get(contentItem.As<PostPart>().ThreadPart.ForumsHomepageId);
+            }
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ModerateInappropriatePosts, forumsHomePage, T("You do not have the proper permissions to administer inappropriate posts")))
                 return new HttpUnauthorizedResult();
-
+            
+            */
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ModerateInappropriatePosts,  T("You do not have the proper permissions to administer inappropriate posts")))
+                return new HttpUnauthorizedResult();
             //see if there is an existing report
             ReportedPostRecord report = _reportPostService.GetReportsForPost(model.Report.PostId).FirstOrDefault();
             
@@ -301,7 +320,7 @@ namespace NGM.Forum.Controllers {
         public ActionResult ResolveReport_Post(ResolvePostReportViewModel model)
         {
 
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("You do not have the proper permissions to administer inappropriate posts")))
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ModerateInappropriatePosts, T("You do not have the proper permissions to administer inappropriate posts")))
                 return new HttpUnauthorizedResult();
 
             var report = _reportPostService.GetPostReport(model.Report.Id);
@@ -323,7 +342,7 @@ namespace NGM.Forum.Controllers {
         [ActionName("ResolveReport"), HttpGet]
         public ActionResult ResolveReport_GET(int reportId)
         {
-            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageForums, T("You do not have the proper permissions to administer inappropriate posts")))
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ModerateInappropriatePosts, T("You do not have the proper permissions to administer inappropriate posts")))
                 return new HttpUnauthorizedResult();
 
             var report = _reportPostService.GetPostReport(reportId);

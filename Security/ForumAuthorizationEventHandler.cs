@@ -57,6 +57,8 @@ namespace NGM.Forum.Security {
                 return Permissions.CloseOwnThread;
             if (permission.Name == Permissions.EditPosts.Name)
                 return Permissions.EditOwnPosts;
+            if (permission.Name == Permissions.ModerateInappropriatePosts.Name)
+                return Permissions.ModerateOwnInappropriatePosts;
             if (permission.Name == Permissions.DeleteThreadsAndPosts.Name)
                 return Permissions.DeleteOwnThreadsAndPosts;
             return null;

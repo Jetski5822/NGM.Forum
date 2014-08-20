@@ -380,6 +380,7 @@ blockquote {
 
 .create.btn-thread-option {
     color:white;
+    margin-bottom:5px; /*for mozilla*/
 }
 
 .thread .btn-subscribe {
