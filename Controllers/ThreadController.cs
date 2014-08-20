@@ -137,7 +137,7 @@ namespace NGM.Forum.Controllers {
         /// <param name="pagerParameters"></param>
         /// <returns></returns>
         public ActionResult Item(int forumId, int threadId, PagerParameters pagerParameters) {
-            var threadPart = _threadService.Get(forumId, threadId, VersionOptions.Published);
+            var threadPart = _threadService.Get(forumId, threadId, true, VersionOptions.Published);
             if (threadPart == null)
                 return HttpNotFound();
 
@@ -205,7 +205,7 @@ namespace NGM.Forum.Controllers {
 
         public ActionResult Move(int threadId)
         {
-            var threadPart = _threadService.Get(threadId, VersionOptions.Latest);
+            var threadPart = _threadService.Get(threadId, true, VersionOptions.Latest);
 
             if (threadPart == null)
                 return HttpNotFound(T("could not find thread").Text);
@@ -231,7 +231,7 @@ namespace NGM.Forum.Controllers {
         [HttpPost]
         public ActionResult Move(int threadId, string returnUrl, ThreadMoveAdminViewModel viewModel)
         {
-            var threadPart = _threadService.Get(threadId, VersionOptions.Latest);
+            var threadPart = _threadService.Get(threadId, true, VersionOptions.Latest);
 
             if (threadPart == null)
                 return HttpNotFound(T("Could not find thread").Text);
@@ -258,7 +258,7 @@ namespace NGM.Forum.Controllers {
 
         public ActionResult Close(int threadId)
         {
-            var threadPart = _threadService.Get(threadId, VersionOptions.Latest);
+            var threadPart = _threadService.Get(threadId, true, VersionOptions.Latest);
 
             if (threadPart == null)
                 return HttpNotFound(T("could not find thread").Text);
@@ -277,7 +277,7 @@ namespace NGM.Forum.Controllers {
         [HttpPost]
         public ActionResult Close(int threadId, string returnUrl, ThreadCloseAdminViewModel viewModel)
         {
-            var threadPart = _threadService.Get(threadId, VersionOptions.Latest);
+            var threadPart = _threadService.Get(threadId, true, VersionOptions.Latest);
 
             if (threadPart == null)
                 return HttpNotFound(T("Could not find thread").Text);
@@ -298,7 +298,7 @@ namespace NGM.Forum.Controllers {
 
         public ActionResult Open(int threadId, string returnUrl)
         {
-            var threadPart = _threadService.Get(threadId, VersionOptions.Latest);
+            var threadPart = _threadService.Get(threadId, true, VersionOptions.Latest);
 
             if (threadPart == null)
                 return HttpNotFound(T("could not find thread").Text);

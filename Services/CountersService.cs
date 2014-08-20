@@ -43,7 +43,7 @@ namespace NGM.Forum.Services
                 var forumPart = threadPart.ForumPart ?? _forumService.Get(commonPart.Record.Container.Id, VersionOptions.Published);
 
                 // TODO: Refactor this to do the count in the DB and not make 3 DB calls.
-                var threads = _threadService.Get(forumPart, VersionOptions.Published).Where(t => t.IsInappropriate == false).ToList();
+                var threads = _threadService.Get(forumPart, false, VersionOptions.Published).ToList();
                 forumPart.ThreadCount = threads.Count();
                 
                 var threadIds = threads.Select(t => t.Id).ToList();
@@ -68,10 +68,11 @@ namespace NGM.Forum.Services
             {
 
                 ThreadPart threadPart = postPart.ThreadPart ??
-                                        _threadService.Get(commonPart.Record.Container.Id, VersionOptions.Published);
+                                        _threadService.Get(commonPart.Record.Container.Id, true, VersionOptions.Published);
 
                 //threadPart.PostCount = _postService.Count(threadPart, VersionOptions.Published);
-                threadPart.PostCount = _contentManager.Query<PostPart, PostPartRecord>(VersionOptions.Published).Where(p => p.IsInappropriate == false).Join<CommonPartRecord>().Where(c => c.Container.Id == threadPart.Id).List().Count();
+                threadPart.PostCount = _contentManager.Query<PostPart, PostPartRecord>(VersionOptions.Published)
+                                .Where(p => p.IsInappropriate == false).Join<CommonPartRecord>().Where(c => c.Container.Id == threadPart.Id).List().Count();
 
                 UpdateForumPartCounters(threadPart);
             }

@@ -58,8 +58,7 @@ namespace NGM.Forum.Controllers {
 
             var list = _orchardServices.New.List();
 
-            list.AddRange(_threadService.Get(forum)
-                              .Select(b => _orchardServices.ContentManager.BuildDisplay(b, "SummaryAdmin")));
+            list.AddRange(_threadService.Get(forum, true).Select(b => _orchardServices.ContentManager.BuildDisplay(b, "SummaryAdmin")));
 
             dynamic viewModel = _orchardServices.New.ViewModel()
                 .ContentItems(list);
@@ -69,7 +68,7 @@ namespace NGM.Forum.Controllers {
 
         public ActionResult Item(int threadId, PagerParameters pagerParameters) {
             var pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
-            var threadPart = _threadService.Get(threadId, VersionOptions.Latest);
+            var threadPart = _threadService.Get(threadId, true, VersionOptions.Latest);
 
             if (threadPart == null)
                 return HttpNotFound();

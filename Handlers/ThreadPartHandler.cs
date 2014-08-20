@@ -66,7 +66,7 @@ namespace NGM.Forum.Handlers {
             OnRemoved<ThreadPart>((context, part) => OnThreadRemoved(context, part));
             
             OnRemoved<ForumPart>((context, b) =>
-                _threadService.Delete(context.ContentItem.As<ForumPart>()));
+                _threadService.Delete(context.ContentItem.As<ForumPart>(), true));
         }
 
         private void SetModelProperties(BuildShapeContext context, ThreadPart threadPart) {

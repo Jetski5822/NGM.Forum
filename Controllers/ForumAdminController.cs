@@ -491,7 +491,7 @@ namespace NGM.Forum.Controllers {
             list.AddRange(_forumService.Get(VersionOptions.Latest)
                               .Select(b => {
                                   var forum = _orchardServices.ContentManager.BuildDisplay(b, "SummaryAdmin");
-                                  forum.TotalPostCount = _threadService.Get(b, VersionOptions.Latest).Count();
+                                  forum.TotalPostCount = _threadService.Get(b, true, VersionOptions.Latest).Count();
                                   return forum;
                               }));
             
@@ -514,7 +514,7 @@ namespace NGM.Forum.Controllers {
 
             Pager pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
 
-            var threads = _threadService.Get(forum, pager.GetStartIndex(), pager.PageSize, VersionOptions.Latest).ToArray();
+            var threads = _threadService.Get(forum, pager.GetStartIndex(), pager.PageSize, true, VersionOptions.Latest).ToArray();
             var threadsShapes = threads.Select(bp => _contentManager.BuildDisplay(bp, "SummaryAdmin")).ToArray();
 
             dynamic forumShape = _orchardServices.ContentManager.BuildDisplay(forum, "DetailAdmin");

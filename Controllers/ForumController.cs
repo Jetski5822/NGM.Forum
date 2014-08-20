@@ -77,8 +77,17 @@ namespace NGM.Forum.Controllers {
                 return new HttpUnauthorizedResult();
 
             Pager pager = new Pager(_siteService.GetSiteSettings(), pagerParameters);
-            
-            var threadList = _threadService.Get(forumPart, pager.GetStartIndex(), pager.PageSize, VersionOptions.Published);
+
+            ForumsHomePagePart forumsHomePagePart  = forumPart.ForumCategoryPart.ForumsHomePagePart;
+            int forumsHomePageId = forumsHomePagePart.Id;
+
+            var showInappropriate = _orchardServices.Authorizer.Authorize(NGM.Forum.Permissions.ManageForums, forumsHomePagePart) ||
+                    _orchardServices.Authorizer.Authorize(NGM.Forum.Permissions.ManageOwnForums, forumsHomePagePart) ||
+                    _orchardServices.Authorizer.Authorize(NGM.Forum.Permissions.ModerateInappropriatePosts, forumsHomePagePart) ||
+                    _orchardServices.Authorizer.Authorize(NGM.Forum.Permissions.ModerateOwnInappropriatePosts, forumsHomePagePart);
+
+
+            var threadList = _threadService.Get(forumPart, pager.GetStartIndex(), pager.PageSize, showInappropriate,  VersionOptions.Published);
 
             int? userId = null;
             if (_orchardServices.WorkContext.CurrentUser != null)
@@ -86,8 +95,7 @@ namespace NGM.Forum.Controllers {
                 userId = _orchardServices.WorkContext.CurrentUser.Id;
             }
 
-            ForumsHomePagePart forumsHomePagePart  = forumPart.ForumCategoryPart.ForumsHomePagePart;
-            int forumsHomePageId = forumsHomePagePart.Id;
+
             //get the read state of each thread part to be displayed
             if (userId != null)
             {
