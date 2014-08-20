@@ -41,6 +41,7 @@ namespace NGM.Forum.Tokens
                 .Token("PostMessage", content => content.As<PostPart>().Text)
                 .Chain("PostMessage", "Text", content => content.As<PostPart>().Text)
 
+                //viagra-test-123 is used by https://akismet.com/ to flag a subsmission as spam for testing purposes 
                 .Token("PostAuthor", content => content.As<CommonPart>().Owner.UserName) //content => { return "viagra-test-123"; }) 
                 .Chain("PostAuthor", "Text", content => content.As<CommonPart>().Owner.UserName) //content => { return "viagra-test-123"; }) 
 
