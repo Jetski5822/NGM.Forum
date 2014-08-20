@@ -10,7 +10,6 @@ using Orchard.Core.Title.Models;
 using Orchard.Data;
 using System;
 using Orchard.ContentManagement.Aspects;
-using System.Linq;
 using Orchard.Caching;
 using Orchard.Services;
 

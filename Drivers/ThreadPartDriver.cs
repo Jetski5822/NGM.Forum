@@ -73,7 +73,7 @@ namespace NGM.Forum.Drivers {
             //TODO: is this really needed?  is there a path that will reach this?
             if (userId != null && part.ReadState == ThreadPart.ReadStateEnum.NOT_SET)
             {
-                int i = 1;
+              //  int i = 1;
                 //part.ReadState = _threadLastReadService.GetReadState(userId.Value, part);
             }
             else if (!userId.HasValue)

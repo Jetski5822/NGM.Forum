@@ -80,7 +80,7 @@ namespace NGM.Forum.Controllers
             {
 
                 searchHits = _forumSearchService.Query(q, forumsHomeId, pager.Page, pager.PageSize,
-                                                  _orchardServices.WorkContext.CurrentSite.As<SearchSettingsPart>().Record.FilterCulture,
+                                                  _orchardServices.WorkContext.CurrentSite.As<SearchSettingsPart>().FilterCulture,
                                                   searchIndex,
                                                   searchSettingPart.SearchedFields,
                                                   searchHit => searchHit);

@@ -20,7 +20,7 @@
         
     } else if ( result == NGM.Forum.Services.ReportPostService.CreatePostResultEnum.CannotBeReportedByCreator ) {
     
-        @T("You cannot report your own posts as inappropriate. If you have mistakenly posted something inappropriate then edit the post.");
+        <p>@T("You cannot report your own posts as inappropriate.")</p>
     
     } else if( result == NGM.Forum.Services.ReportPostService.CreatePostResultEnum.Accepted
                || result == NGM.Forum.Services.ReportPostService.CreatePostResultEnum.AlreadyReportByUser
