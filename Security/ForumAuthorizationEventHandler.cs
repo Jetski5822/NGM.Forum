@@ -1,11 +1,9 @@
-﻿using JetBrains.Annotations;
-using Orchard.ContentManagement;
+﻿using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
 using Orchard.Security;
 using Orchard.Security.Permissions;
 
 namespace NGM.Forum.Security {
-    [UsedImplicitly]
     public class ForumAuthorizationEventHandler : IAuthorizationServiceEventHandler {
         public void Checking(CheckAccessContext context) { }
         public void Complete(CheckAccessContext context) { }

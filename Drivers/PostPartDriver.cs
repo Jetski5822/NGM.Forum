@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Routing;
-using JetBrains.Annotations;
 using NGM.Forum.Models;
 using NGM.Forum.Settings;
 using NGM.Forum.ViewModels;
@@ -14,7 +12,6 @@ using Orchard.ContentManagement.Handlers;
 using Orchard.Services;
 
 namespace NGM.Forum.Drivers {
-    [UsedImplicitly]
     public class PostPartDriver : ContentPartDriver<PostPart> {
         private readonly IWorkContextAccessor _workContextAccessor;
         private readonly IEnumerable<IHtmlFilter> _htmlFilters;

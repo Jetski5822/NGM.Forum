@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using NGM.Forum.Models;
 using NGM.Forum.Settings;
 using Orchard.ContentManagement;
@@ -8,7 +7,6 @@ using Orchard.ContentManagement.Drivers;
 using Orchard.ContentManagement.Handlers;
 
 namespace NGM.Forum.Drivers {
-    [UsedImplicitly]
     public class ForumPartDriver : ContentPartDriver<ForumPart> {
         protected override string Prefix {
             get { return "ForumPart"; }

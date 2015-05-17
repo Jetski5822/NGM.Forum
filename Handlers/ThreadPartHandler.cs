@@ -1,6 +1,5 @@
 using System.Linq;
 using System.Web.Routing;
-using JetBrains.Annotations;
 using NGM.Forum.Extensions;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
@@ -11,7 +10,6 @@ using Orchard.Data;
 using Orchard.Security;
 
 namespace NGM.Forum.Handlers {
-    [UsedImplicitly]
     public class ThreadPartHandler : ContentHandler {
         private readonly IPostService _postService;
         private readonly IThreadService _threadService;

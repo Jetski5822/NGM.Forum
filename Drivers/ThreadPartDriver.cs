@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml;
-using JetBrains.Annotations;
 using NGM.Forum.Models;
 using NGM.Forum.Services;
 using NGM.Forum.ViewModels;
@@ -12,7 +11,6 @@ using Orchard.ContentManagement.Handlers;
 using Orchard.Security;
 
 namespace NGM.Forum.Drivers {
-    [UsedImplicitly]
     public class ThreadPartDriver : ContentPartDriver<ThreadPart> {
         private readonly IPostService _postService;
         private readonly IWorkContextAccessor _workContextAccessor;
