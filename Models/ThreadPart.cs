@@ -1,8 +1,8 @@
 ﻿using System;
 using Orchard.ContentManagement;
+using Orchard.ContentManagement.Utilities;
 using Orchard.ContentManagement.Aspects;
 using Orchard.ContentManagement.Records;
-using Orchard.Core.Common.Utilities;
 using Orchard.Security;
 
 namespace NGM.Forum.Models {
